@@ -1,0 +1,6 @@
+name: ${project.name}
+version: ${project.version}
+author: DSH105
+description: Advanced Hologram management
+website: ${project.url}
+main: ${main.class}
