@@ -33,6 +33,9 @@ public class HoloPlugin extends DSHPlugin {
     public ChatColor secondaryColour = ChatColor.AQUA;
     public String prefix = "" + ChatColor.BLUE + "HoloAPI" + ChatColor.WHITE + " ••• " + ChatColor.RESET;
 
+    public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
+    public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
+
     public static HoloPlugin getInstance() {
         return (HoloPlugin) getPluginInstance();
     }

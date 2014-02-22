@@ -1,6 +1,5 @@
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.util.ReflectionUtil;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.reflection.SafeField;
@@ -9,8 +8,6 @@ import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class Hologram {
 
