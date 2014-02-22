@@ -7,7 +7,6 @@ import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.ShortIdGenerator;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -82,7 +81,7 @@ public class Hologram {
     public void show(Player observer) {
         for (int index = 0; index < this.getTagCount(); index++) {
             for (Packet packet : this.generate(index, -index * this.spacing)) {
-                ((CraftPlayer) observer).getHandle().playerConnection.sendPacket(packet);
+                ReflectionUtil.sendPacket(observer, packet);
             }
         }
     }
