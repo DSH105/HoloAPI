@@ -16,6 +16,8 @@ import java.io.InputStream;
 
 public class ImageGenerator {
 
+    private final static char TRANSPARENT_CHAR = ' ';
+
     private String lines[];
 
     public ImageGenerator(String pathToImage, int height, ImageChar imgChar) {
@@ -41,7 +43,11 @@ public class ImageGenerator {
         for (int y = 0; y < colors[0].length; y++) {
             String line = "";
             for (int x = 0; x < colors.length; x++) {
-                line += colors[x][y].toString() + imgchar;
+                if (colors[x][y] != null) {
+                    line += colors[x][y].toString() + imgchar;
+                } else {
+                    line += TRANSPARENT_CHAR;
+                }
             }
             lines[y] = line + ChatColor.RESET;
         }
@@ -52,7 +58,7 @@ public class ImageGenerator {
         double ratio = (double) image.getHeight() / image.getWidth();
         int width = (int) (height / ratio);
         if (width > 10) width = 10;
-        BufferedImage resized = resize(image, (int) (height / ratio), height);
+        BufferedImage resized = resize(image, width, height);
 
         ChatColor[][] chatImg = new ChatColor[resized.getWidth()][resized.getHeight()];
         for (int x = 0; x < resized.getWidth(); x++) {

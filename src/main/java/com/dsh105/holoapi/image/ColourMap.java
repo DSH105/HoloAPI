@@ -25,7 +25,7 @@ public class ColourMap {
     };
 
     protected static ChatColor getClosest(Color color) {
-        if (color.getAlpha() < 128) return ChatColor.BLACK;
+        if (color.getAlpha() < 128) return null;
 
         int index = 0;
         double best = -1;
