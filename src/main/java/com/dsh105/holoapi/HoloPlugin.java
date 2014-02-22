@@ -111,11 +111,11 @@ public class HoloPlugin extends DSHPlugin {
 
         config.reloadConfig();
 
-        ChatColor colour1 = ChatColor.getByChar(this.getConfig(ConfigType.MAIN).getString("primaryChatColour", "a"));
+        ChatColor colour1 = ChatColor.getByChar(this.getConfig(ConfigType.MAIN).getString("primaryChatColour", "3"));
         if (colour1 != null) {
             this.primaryColour = colour1;
         }
-        ChatColor colour2 = ChatColor.getByChar(this.getConfig(ConfigType.MAIN).getString("secondaryChatColour", "e"));
+        ChatColor colour2 = ChatColor.getByChar(this.getConfig(ConfigType.MAIN).getString("secondaryChatColour", "b"));
         if (colour2 != null) {
             this.secondaryColour = colour2;
         }

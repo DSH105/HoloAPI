@@ -19,5 +19,7 @@ public class ConfigOptions extends Options {
 
         set("autoUpdate", false);
         set("checkForUpdates", true);
+
+        config.saveConfig();
     }
 }
