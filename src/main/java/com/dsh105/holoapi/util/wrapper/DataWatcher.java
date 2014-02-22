@@ -8,7 +8,7 @@ public class DataWatcher extends AbstractWrapper {
 
     public DataWatcher() {
         try {
-            super.setHandle(ReflectionUtil.getClass("DataWatcher").getConstructor(ReflectionUtil.getNMSClass("Entity")).newInstance(null));
+            super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").getConstructor(ReflectionUtil.getNMSClass("Entity")).newInstance(null));
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
