@@ -9,6 +9,7 @@ import com.dsh105.dshutils.util.VersionUtil;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
+import com.dsh105.holoapi.listeners.GlobalHologramListener;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -63,6 +64,7 @@ public class HoloPlugin extends DSHPlugin {
         this.loadConfiguration();
         this.registerCommands();
         this.manager = new HoloManager();
+        manager.registerEvents(new GlobalHologramListener(), this);
 
         try {
             Metrics metrics = new Metrics(this);
