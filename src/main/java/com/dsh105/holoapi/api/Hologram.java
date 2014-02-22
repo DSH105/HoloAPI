@@ -139,7 +139,7 @@ public class Hologram {
         return new Packet[] {teleportHorse, teleportSkull};
     }
 
-    public Packet[] generate(int index, double diffY) {
+    protected Packet[] generate(int index, double diffY) {
         PacketPlayOutSpawnEntityLiving horse = new PacketPlayOutSpawnEntityLiving();
         new SafeField<Integer>(horse.getClass(), "a").set(horse, this.getHorseIndex(index));
         new SafeField<Byte>(horse.getClass(), "b").set(horse, (byte) EntityType.HORSE.getTypeId());
