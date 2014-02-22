@@ -25,7 +25,7 @@ public class HoloPlugin extends DSHPlugin {
     private YAMLConfig langConfig;
 
     private ConfigOptions options;
-    private HologramFactory factory;
+    private HoloManager manager;
 
     public CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
@@ -34,6 +34,10 @@ public class HoloPlugin extends DSHPlugin {
 
     public static HoloPlugin getInstance() {
         return (HoloPlugin) getPluginInstance();
+    }
+
+    public HoloManager getManager() {
+        return manager;
     }
 
     public String getCommandLabel() {
@@ -58,7 +62,7 @@ public class HoloPlugin extends DSHPlugin {
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
         this.registerCommands();
-        this.factory = new HologramFactory();
+        this.manager = new HoloManager();
 
         try {
             Metrics metrics = new Metrics(this);

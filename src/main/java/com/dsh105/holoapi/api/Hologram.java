@@ -18,22 +18,58 @@ public class Hologram {
 
     private int id;
 
-    public Hologram(double x, double y, double z, String... lines) {
+    private boolean persistent;
+    private String saveId = null;
+
+    protected Hologram(double x, double y, double z, String... lines) {
         this(x, y, z);
         this.tags = lines;
         this.id = ShortIdGenerator.nextId(this.tags.length);
     }
 
-    public Hologram(double x, double y, double z, ImageGenerator image) {
+    protected Hologram(double x, double y, double z, ImageGenerator image) {
         this(x, y, z);
         this.tags = image.getLines();
         this.id = ShortIdGenerator.nextId(this.tags.length);
     }
 
-    protected Hologram(double x, double y, double z) {
+    private Hologram(double x, double y, double z) {
         this.coords[0] = x;
         this.coords[1] = y;
         this.coords[2] = z;
+    }
+
+    public boolean isPersistent() {
+        return persistent;
+    }
+
+    public String getSaveId() {
+        return saveId;
+    }
+
+    public void setSaveId(String saveId) {
+        this.saveId = saveId;
+        this.persistent = true;
+    }
+
+    public double[] getCoords() {
+        return coords;
+    }
+
+    public String[] getLines() {
+        return tags;
+    }
+
+    public double getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(double spacing) {
+        this.spacing = spacing;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void show(Player observer) {
