@@ -99,6 +99,6 @@ public class HoloManager {
     }
 
     private boolean isValid(String saveId) {
-        return saveId != null && saveId != "" && saveId.length() > 4;
+        return saveId != null && !"".equals(saveId) && saveId.length() > 4;
     }
 }
