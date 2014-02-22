@@ -3,10 +3,8 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.util.ReflectionUtil;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ShortIdGenerator;
-import net.minecraft.server.v1_7_R1.DataWatcher;
-import net.minecraft.server.v1_7_R1.Packet;
-import net.minecraft.server.v1_7_R1.PacketPlayOutAttachEntity;
-import net.minecraft.server.v1_7_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_7_R1.*;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -24,19 +22,23 @@ public class Hologram {
     protected Hologram(double x, double y, double z, String... lines) {
         this(x, y, z);
         this.tags = lines;
-        this.id = ShortIdGenerator.nextId(this.tags.length);
+        this.id = ShortIdGenerator.nextId(this.getTagCount());
     }
 
     protected Hologram(double x, double y, double z, ImageGenerator image) {
         this(x, y, z);
         this.tags = image.getLines();
-        this.id = ShortIdGenerator.nextId(this.tags.length);
+        this.id = ShortIdGenerator.nextId(this.getTagCount());
     }
 
     private Hologram(double x, double y, double z) {
         this.coords[0] = x;
         this.coords[1] = y;
         this.coords[2] = z;
+    }
+
+    public int getTagCount() {
+        return this.tags.length;
     }
 
     public boolean isPersistent() {
@@ -73,11 +75,75 @@ public class Hologram {
     }
 
     public void show(Player observer) {
-        for (int index = 0; index < this.tags.length; index++) {
+        for (int index = 0; index < this.getTagCount(); index++) {
             for (Packet packet : this.generate(index, -index * this.spacing)) {
                 ReflectionUtil.sendPacket(observer, packet);
             }
         }
+    }
+
+    public void move(Player player, Location location) {
+        Location loc = location.clone();
+        for (int i = 0; i < this.getTagCount(); i++) {
+            for (Packet p : this.moveTag(i, loc)) {
+                ReflectionUtil.sendPacket(player, p);
+            }
+            loc.setY(loc.getY() - this.spacing);
+        }
+    }
+
+    public void remove(Player player) {
+        this.clearTags(player);
+    }
+
+    public void clearTags(Player observer) {
+        int[] ids = new int[this.getTagCount()];
+
+        for (int i = 0; i < this.getTagCount(); i++) {
+            ids[i] = i;
+        }
+        clearTags(observer, ids);
+    }
+
+    public void clearTags(Player observer, int... indices) {
+        PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy();
+        int[] ids = new int[indices.length * 2];
+
+        for (int i = 0; i < indices.length; i++) {
+            if (indices[i] <= this.getTagCount()) {
+                ids[i * 2] = this.getId() + indices[i] * 2;
+                ids[i * 2 + 1] = this.getId() + (indices[i] * 2) * 2 + 1;
+            }
+        }
+        try {
+            ReflectionUtil.setValue(destroy, "a", ids);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ReflectionUtil.sendPacket(observer, destroy);
+    }
+
+    public Packet[] moveTag(int index, Location to) {
+        PacketPlayOutEntityTeleport teleportHorse = new PacketPlayOutEntityTeleport();
+        try {
+            ReflectionUtil.setValue(teleportHorse, "a", id + index * 2);
+            ReflectionUtil.setValue(teleportHorse, "b", to.getX());
+            ReflectionUtil.setValue(teleportHorse, "c", to.getY() + 55);
+            ReflectionUtil.setValue(teleportHorse, "d", to.getZ());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        PacketPlayOutEntityTeleport teleportSkull = new PacketPlayOutEntityTeleport();
+        try {
+            ReflectionUtil.setValue(teleportSkull, "a", id + index * 2 + 1);
+            ReflectionUtil.setValue(teleportHorse, "b", to.getX());
+            ReflectionUtil.setValue(teleportHorse, "c", to.getY() + 55);
+            ReflectionUtil.setValue(teleportHorse, "d", to.getZ());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Packet[] {teleportHorse, teleportSkull};
     }
 
     public Packet[] generate(int index, double diffY) {
