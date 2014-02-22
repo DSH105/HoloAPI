@@ -148,6 +148,7 @@ public class HoloPlugin extends DSHPlugin {
             Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (language.yml).", e, true);
         }
         langConfig.reloadConfig();
+        this.prefix = Lang.PREFIX.getValue();
     }
 
     public enum ConfigType {
