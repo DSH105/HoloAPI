@@ -59,7 +59,7 @@ public class HologramFactory {
         if (this.tags.isEmpty()) {
             throw new HologramNotPreparedException("Hologram lines cannot be empty.");
         }
-        if (this.prepared) {
+        if (!this.prepared) {
             throw new HologramNotPreparedException("Hologram location cannot be null.");
         }
         ArrayList<String> tags = new ArrayList<String>();
