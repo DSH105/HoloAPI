@@ -4,6 +4,8 @@ import com.dsh105.dshutils.util.ReflectionUtil;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.ShortIdGenerator;
+import com.dsh105.holoapi.util.wrapper.*;
+import com.dsh105.holoapi.util.wrapper.DataWatcher;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -77,27 +79,19 @@ public class Hologram {
 
     public void show(Player observer) {
         for (int index = 0; index < this.getTagCount(); index++) {
-            for (Packet packet : this.generate(index, -index * this.spacing)) {
-                ReflectionUtil.sendPacket(observer, packet);
-            }
+            this.generate(observer, index, -index * this.spacing);
         }
     }
 
-    public void move(Player player, Location location) {
+    public void move(Player observer, Location location) {
         Location loc = location.clone();
         for (int i = 0; i < this.getTagCount(); i++) {
-            for (Packet p : this.moveTag(i, loc)) {
-                ReflectionUtil.sendPacket(player, p);
-            }
+            this.moveTag(observer, i, loc);
             loc.setY(loc.getY() - this.spacing);
         }
     }
 
-    public void remove(Player player) {
-        this.clearTags(player);
-    }
-
-    public void clearTags(Player observer) {
+    public void clear(Player observer) {
         int[] ids = new int[this.getTagCount()];
 
         for (int i = 0; i < this.getTagCount(); i++) {
@@ -106,7 +100,7 @@ public class Hologram {
         clearTags(observer, ids);
     }
 
-    public void clearTags(Player observer, int... indices) {
+    protected void clearTags(Player observer, int... indices) {
         PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy();
         int[] ids = new int[indices.length * 2];
 
@@ -120,48 +114,52 @@ public class Hologram {
         ReflectionUtil.sendPacket(observer, destroy);
     }
 
-    public Packet[] moveTag(int index, Location to) {
+    protected void moveTag(Player observer, int index, Location to) {
         PacketPlayOutEntityTeleport teleportHorse = new PacketPlayOutEntityTeleport();
         new SafeField<Integer>(teleportHorse.getClass(), "a").set(teleportHorse, this.getHorseIndex(index));
-        new SafeField<Integer>(teleportHorse.getClass(), "b").set(teleportHorse, to.getBlockX());
-        new SafeField<Integer>(teleportHorse.getClass(), "c").set(teleportHorse, to.getBlockY() + 55);
-        new SafeField<Integer>(teleportHorse.getClass(), "d").set(teleportHorse, to.getBlockZ());
+        new SafeField<Integer>(teleportHorse.getClass(), "b").set(teleportHorse, (int) Math.floor(to.getBlockX() * 32.0D));
+        new SafeField<Integer>(teleportHorse.getClass(), "c").set(teleportHorse, (int) Math.floor((to.getBlockY() + 55) * 32.0D));
+        new SafeField<Integer>(teleportHorse.getClass(), "d").set(teleportHorse, (int) Math.floor(to.getBlockZ() * 32.0D));
 
         PacketPlayOutEntityTeleport teleportSkull = new PacketPlayOutEntityTeleport();
         new SafeField<Integer>(teleportSkull.getClass(), "a").set(teleportSkull, this.getSkullIndex(index));
-        new SafeField<Integer>(teleportSkull.getClass(), "b").set(teleportSkull, to.getBlockX());
-        new SafeField<Integer>(teleportSkull.getClass(), "c").set(teleportSkull, to.getBlockY() + 55);
-        new SafeField<Integer>(teleportSkull.getClass(), "d").set(teleportSkull, to.getBlockZ());
+        new SafeField<Integer>(teleportSkull.getClass(), "b").set(teleportSkull, (int) Math.floor(to.getBlockX() * 32.0D));
+        new SafeField<Integer>(teleportSkull.getClass(), "c").set(teleportSkull, (int) Math.floor((to.getBlockY() + 55) * 32.0D));
+        new SafeField<Integer>(teleportSkull.getClass(), "d").set(teleportSkull, (int) Math.floor(to.getBlockZ() * 32.0D));
 
-        return new Packet[] {teleportHorse, teleportSkull};
+        ReflectionUtil.sendPacket(observer, teleportHorse);
+        ReflectionUtil.sendPacket(observer, teleportSkull);
     }
 
-    protected Packet[] generate(int index, double diffY) {
+    protected void generate(Player observer, int index, double diffY) {
+        PacketPlayOutAttachEntity attach = new PacketPlayOutAttachEntity();
+        new SafeField<Integer>(attach.getClass(), "b").set(attach, getHorseIndex(index));
+        new SafeField<Integer>(attach.getClass(), "c").set(attach, getSkullIndex(index));
+
         PacketPlayOutSpawnEntityLiving horse = new PacketPlayOutSpawnEntityLiving();
         new SafeField<Integer>(horse.getClass(), "a").set(horse, this.getHorseIndex(index));
-        new SafeField<Byte>(horse.getClass(), "b").set(horse, (byte) EntityType.HORSE.getTypeId());
-        new SafeField<Integer>(horse.getClass(), "c").set(horse, (int) this.coords[0]);
-        new SafeField<Integer>(horse.getClass(), "d").set(horse, (int) (this.coords[1] + diffY + 55));
-        new SafeField<Integer>(horse.getClass(), "e").set(horse, (int) this.coords[2]);
+        new SafeField<Integer>(horse.getClass(), "b").set(horse, (int) EntityType.HORSE.getTypeId());
+        new SafeField<Integer>(horse.getClass(), "c").set(horse, (int) Math.floor(this.coords[0] * 32.0D));
+        new SafeField<Integer>(horse.getClass(), "d").set(horse, (int) Math.floor((this.coords[1] + diffY + 55) * 32.0D));
+        new SafeField<Integer>(horse.getClass(), "e").set(horse, (int) Math.floor(this.coords[2] * 32.0D));
 
-        DataWatcher dw = new DataWatcher(null);
-        dw.a(10, this.tags[index]);
-        dw.a(11, (byte) 1);
-        dw.a(12, -1700000);
-        new SafeField<DataWatcher>(horse.getClass(), "l").set(horse, dw);
+        DataWatcher dw = new DataWatcher();
+        dw.watch(10, this.tags[index]);
+        dw.watch(11, (byte) 1);
+        dw.watch(12, -170000);
+        new SafeField<net.minecraft.server.v1_7_R1.DataWatcher>(horse.getClass(), "l").set(horse, (net.minecraft.server.v1_7_R1.DataWatcher) dw.getHandle());
 
         PacketPlayOutSpawnEntity skull = new PacketPlayOutSpawnEntity();
         new SafeField<Integer>(skull.getClass(), "a").set(skull, this.getSkullIndex(index));
-        new SafeField<Integer>(skull.getClass(), "b").set(skull, (int) this.coords[0]);
-        new SafeField<Integer>(skull.getClass(), "c").set(skull, (int) (this.coords[1] + diffY + 55));
-        new SafeField<Integer>(skull.getClass(), "d").set(skull, (int) this.coords[2]);
+        new SafeField<Integer>(skull.getClass(), "b").set(skull, (int) Math.floor(this.coords[0] * 32.0D));
+        new SafeField<Integer>(skull.getClass(), "c").set(skull, (int) Math.floor((this.coords[1] + diffY + 55) * 32.0D));
+        new SafeField<Integer>(skull.getClass(), "d").set(skull, (int) Math.floor(this.coords[2] * 32.0D));
         new SafeField<Integer>(skull.getClass(), "j").set(skull, 66); // From EntityTrackerEntry
 
-        PacketPlayOutAttachEntity attach = new PacketPlayOutAttachEntity();
-        new SafeField<Integer>(attach.getClass(), "b").set(attach, new SafeField<Integer>(horse.getClass(), "a").get(horse));
-        new SafeField<Integer>(attach.getClass(), "c").set(attach, new SafeField<Integer>(skull.getClass(), "a").get(skull));
-
-        return new Packet[]{horse, skull, attach};
+        ReflectionUtil.sendPacket(observer, horse);
+        ReflectionUtil.sendPacket(observer, skull);
+        ReflectionUtil.sendPacket(observer, horse);
+        ReflectionUtil.sendPacket(observer, attach);
     }
 
     private int getHorseIndex(int index) {

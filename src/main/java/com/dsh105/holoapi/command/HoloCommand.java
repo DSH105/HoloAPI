@@ -42,7 +42,7 @@ public class HoloCommand implements CommandExecutor {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    h.remove(p);
+                    h.clear(p);
                     p.sendMessage("Despawned");
                 }
             }.runTaskLater(HoloPlugin.getInstance(), 60L);
