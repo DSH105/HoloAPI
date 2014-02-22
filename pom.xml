@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dsh105</groupId>
     <artifactId>HoloAPI</artifactId>
-    <name>SparkTrail</name>
+    <name>HoloAPI</name>
     <version>1.0.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
