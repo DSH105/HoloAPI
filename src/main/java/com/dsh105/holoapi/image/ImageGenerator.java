@@ -18,7 +18,7 @@ public class ImageGenerator {
 
     private String lines[];
 
-    public ImageGenerator(String pathToImage, int height, char imgChar) {
+    public ImageGenerator(String pathToImage, int height, ImageChar imgChar) {
         InputStream input = HoloPlugin.getInstance().getResource(pathToImage);
         if (input == null) {
             throw new ImageResourceNotFound(pathToImage);
@@ -29,7 +29,7 @@ public class ImageGenerator {
         } catch (IOException e) {
             throw new ImageResourceNotFound("Image cannot be located. Path: " + pathToImage);
         }
-        this.lines = this.generate(generateColours(image, height), imgChar);
+        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
     }
 
     public String[] getLines() {

@@ -1,4 +1,4 @@
-package com.dsh105.holoapi.hologram;
+package com.dsh105.holoapi.api;
 
 import com.dsh105.dshutils.util.ReflectionUtil;
 import com.dsh105.holoapi.image.ImageGenerator;
@@ -30,7 +30,7 @@ public class Hologram {
         this.id = ShortIdGenerator.nextId(this.tags.length);
     }
 
-    Hologram(double x, double y, double z) {
+    protected Hologram(double x, double y, double z) {
         this.coords[0] = x;
         this.coords[1] = y;
         this.coords[2] = z;
