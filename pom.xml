@@ -11,7 +11,7 @@
         <minecraft.version>1.7.2</minecraft.version>
         <craftbukkit.version>R0.3</craftbukkit.version>
         <cb_package>v1_7_R1</cb_package>
-        <main.class>com.dsh105.holoAPI.HoloPlugin</main.class>
+        <main.class>com.dsh105.holoapi.HoloPlugin</main.class>
     </properties>
     <dependencies>
         <dependency>
