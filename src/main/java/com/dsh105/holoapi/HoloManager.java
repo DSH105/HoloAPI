@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,8 @@ public class HoloManager {
                     this.config.getDouble(saveId + ".y"),
                     this.config.getDouble(saveId + ".z")
             };
-            List<String> lines = (ArrayList<String>) this.config.getList(saveId + ".lines");
+            List<String> lines = Arrays.asList(this.config.getList(saveId + ".lines").toString());
+            //List<String> lines = (ArrayList<String>) this.config.getList(saveId + ".lines");
             if (lines == null) {
                 return null;
             }
