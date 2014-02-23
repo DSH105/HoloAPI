@@ -1,10 +1,12 @@
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.util.ReflectionUtil;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.ShortIdGenerator;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -12,7 +14,9 @@ import org.bukkit.entity.Player;
 
 public class Hologram {
 
-    private double[] coords = new double[3];
+    private double defX;
+    private double defY;
+    private double defZ;
     private String[] tags;
     private double spacing = 0.25D;
 
@@ -34,9 +38,9 @@ public class Hologram {
     }
 
     private Hologram(double x, double y, double z) {
-        this.coords[0] = x;
-        this.coords[1] = y;
-        this.coords[2] = z;
+        this.defX = x;
+        this.defY = y;
+        this.defZ = z;
     }
 
     public int getTagCount() {
@@ -56,8 +60,16 @@ public class Hologram {
         this.persistent = true;
     }
 
-    public double[] getCoords() {
-        return coords;
+    public double getDefaultX() {
+        return defX;
+    }
+
+    public double getDefaultY() {
+        return defY;
+    }
+
+    public double getDefaultZ() {
+        return defZ;
     }
 
     public String[] getLines() {
@@ -77,8 +89,16 @@ public class Hologram {
     }
 
     public void show(Player observer) {
+        this.show(observer, (int) this.getDefaultX(), (int) this.getDefaultY(), (int) this.getDefaultZ());
+    }
+
+    public void show(Player observer, Location location) {
+        this.show(observer, location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
+
+    public void show(Player observer, int x, int y, int z) {
         for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, index, -index * this.spacing);
+            this.generate(observer, index, -index * this.spacing, x, y, z);
         }
     }
 
@@ -130,8 +150,36 @@ public class Hologram {
         ReflectionUtil.sendPacket(observer, teleportSkull);
     }
 
-    protected void generate(Player observer, int index, double diffY) {
-        PacketPlayOutAttachEntity attach = new PacketPlayOutAttachEntity();
+    protected void generate(Player observer, int index, double diffY, int x, int y, int z) {
+        WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
+
+        WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
+        horse.setEntityId(this.getHorseIndex(index));
+        horse.setEntityType(EntityType.HORSE.getTypeId());
+        horse.setX(x);
+        horse.setY((int) (y + diffY + 55));
+        horse.setZ(z);
+
+        DataWatcher dw = new DataWatcher(null);
+        dw.a(10, this.tags[index]);
+        dw.a(11, Byte.valueOf((byte) 1));
+        dw.a(12, Integer.valueOf(-170000));
+        horse.setDataWatcher(dw);
+
+        WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
+        skull.setEntityId(this.getSkullIndex(index));
+        skull.setX(x);
+        skull.setY((int) (y + diffY + 55));
+        skull.setZ(z);
+        skull.setEntityType(66);
+
+        attach.setEntityId(horse.getEntityId());
+        attach.setVehicleId(skull.getEntityId());
+
+        horse.send(observer);
+        skull.send(observer);
+        attach.send(observer);
+        /*PacketPlayOutAttachEntity attach = new PacketPlayOutAttachEntity();
         new SafeField<Integer>(attach.getClass(), "b").set(attach, getHorseIndex(index));
         new SafeField<Integer>(attach.getClass(), "c").set(attach, getSkullIndex(index));
 
@@ -157,7 +205,7 @@ public class Hologram {
 
         ReflectionUtil.sendPacket(observer, horse);
         ReflectionUtil.sendPacket(observer, skull);
-        ReflectionUtil.sendPacket(observer, attach);
+        ReflectionUtil.sendPacket(observer, attach);*/
     }
 
     private int getHorseIndex(int index) {

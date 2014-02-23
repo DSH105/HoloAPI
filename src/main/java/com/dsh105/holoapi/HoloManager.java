@@ -68,9 +68,9 @@ public class HoloManager {
 
     public void saveToFile(Hologram hologram) {
         if (hologram.isPersistent() && this.isValid(hologram.getSaveId())) {
-            this.config.set(hologram.getSaveId() + ".x", hologram.getCoords()[0]);
-            this.config.set(hologram.getSaveId() + ".y", hologram.getCoords()[1]);
-            this.config.set(hologram.getSaveId() + ".z", hologram.getCoords()[2]);
+            this.config.set(hologram.getSaveId() + ".x", hologram.getDefaultX());
+            this.config.set(hologram.getSaveId() + ".y", hologram.getDefaultY());
+            this.config.set(hologram.getSaveId() + ".z", hologram.getDefaultZ());
             this.config.set(hologram.getSaveId() + ".lines", hologram.getLines());
         }
     }
