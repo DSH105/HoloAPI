@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public enum Lang {
 
-    PREFIX("prefix", "&9Holo&3API &r••• "),
+    PREFIX("prefix", "&9[&bHolo&rAPI&9] &r••• "),
 
     NO_PERMISSION("no_permission", "&3You are not permitted to do that."),
     COMMAND_ERROR("cmd_error", "&3Error for input string: &b%cmd%&3. Use &b/" + HoloPlugin.getInstance().getCommandLabel() + " help &3for help."),
