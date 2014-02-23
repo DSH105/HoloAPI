@@ -54,7 +54,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public double getMotionY() {
-        return (int) (((Integer) this.read("f")) / 8000.0D);
+        return (((Integer) this.read("f")) / 8000.0D);
     }
 
     public void setMotionZ(double value) {
@@ -70,7 +70,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public float getYaw() {
-        return (int) (((Integer) this.read("h")) * 360.0F / 256.0F);
+        return (((Integer) this.read("h")) * 360.0F / 256.0F);
     }
 
     public void setPitch(float value) {
@@ -78,7 +78,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public float getPitch() {
-        return (int) (((Integer) this.read("i")) * 360.0F / 256.0F);
+        return (((Integer) this.read("i")) * 360.0F / 256.0F);
     }
 
     public void setEntityType(int value) {

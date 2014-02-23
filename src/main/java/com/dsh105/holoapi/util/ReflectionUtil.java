@@ -1,6 +1,6 @@
 package com.dsh105.holoapi.util;
 
-import com.dsh105.holoapi.HoloPlugin;
+import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
@@ -23,7 +23,7 @@ public class ReflectionUtil {
         try {
             return Class.forName(name);
         } catch (ClassNotFoundException e) {
-            HoloPlugin.LOGGER.warning("Could not find class: " + name + "!");
+            HoloAPI.LOGGER.warning("Could not find class: " + name + "!");
             return null;
         }
     }
@@ -46,7 +46,7 @@ public class ReflectionUtil {
 
             return field;
         } catch (NoSuchFieldException e) {
-            HoloPlugin.LOGGER.warning("No such field: " + fieldName + "!");
+            HoloAPI.LOGGER.warning("No such field: " + fieldName + "!");
             return null;
         }
     }
@@ -55,7 +55,7 @@ public class ReflectionUtil {
         try {
             return (T) getField(clazz, fieldName).get(instance);
         } catch (IllegalAccessException e) {
-            HoloPlugin.LOGGER.warning("Failed to access field: " + fieldName + "!");
+            HoloAPI.LOGGER.warning("Failed to access field: " + fieldName + "!");
             return null;
         }
     }
@@ -64,7 +64,7 @@ public class ReflectionUtil {
         try {
             getField(clazz, fieldName).set(instance, value);
         } catch (IllegalAccessException e) {
-            HoloPlugin.LOGGER_REFLECTION.warning("Could not set new field value for: " + fieldName);
+            HoloAPI.LOGGER_REFLECTION.warning("Could not set new field value for: " + fieldName);
         }
     }
 
@@ -76,7 +76,7 @@ public class ReflectionUtil {
         try {
             return clazz.getDeclaredMethod(methodName, params);
         } catch (NoSuchMethodException e) {
-            HoloPlugin.LOGGER.warning("No such method: " + methodName + "!");
+            HoloAPI.LOGGER.warning("No such method: " + methodName + "!");
             return null;
         }
     }
@@ -85,10 +85,10 @@ public class ReflectionUtil {
         try {
             return (T) method.invoke(instance, args);
         } catch (IllegalAccessException e) {
-            HoloPlugin.LOGGER.warning("Failed to access method: " + method.getName() + "!");
+            HoloAPI.LOGGER.warning("Failed to access method: " + method.getName() + "!");
             return null;
         } catch (InvocationTargetException e) {
-            HoloPlugin.LOGGER.warning("Failed to invoke method: " + method.getName() + "!");
+            HoloAPI.LOGGER.warning("Failed to invoke method: " + method.getName() + "!");
             return null;
         }
     }

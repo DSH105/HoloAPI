@@ -7,6 +7,8 @@ public class PacketFactory {
     public enum PacketType {
         ENTITY_SPAWN(Protocol.PLAY, Sender.SERVER, 14),
         ENTITY_LIVING_SPAWN(Protocol.PLAY, Sender.SERVER, 15),
+        ENTITY_DESTROY(Protocol.PLAY, Sender.SERVER, 19),
+        ENTITY_TELEPORT(Protocol.PLAY, Sender.SERVER, 24),
         ENTITY_ATTACH(Protocol.PLAY, Sender.SERVER, 27);
 
         private Protocol protocol;

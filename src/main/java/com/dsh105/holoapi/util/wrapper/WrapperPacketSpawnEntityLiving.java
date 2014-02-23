@@ -53,27 +53,27 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setYaw(float value) {
-        this.write("i", (int) (value * 256.0F / 360.0F));
+        this.write("i", (byte) (value * 256.0F / 360.0F));
     }
 
     public float getYaw() {
-        return (int) (((Integer) this.read("i")) * 360.0F / 256.0F);
+        return (((Byte) this.read("i")) * 360.0F / 256.0F);
     }
 
     public void setHeadPitch(float value) {
-        this.write("j", (int) (value * 256.0F / 360.0F));
+        this.write("j", (byte) (value * 256.0F / 360.0F));
     }
 
     public float getHeadPitch() {
-        return (int) (((Integer) this.read("j")) * 360.0F / 256.0F);
+        return (((Byte) this.read("j")) * 360.0F / 256.0F);
     }
 
     public void setHeadYaw(float value) {
-        this.write("k", (int) (value * 256.0F / 360.0F));
+        this.write("k", (byte) (value * 256.0F / 360.0F));
     }
 
     public float getHeadYaw() {
-        return (int) (((Integer) this.read("k")) * 360.0F / 256.0F);
+        return (((Byte) this.read("k")) * 360.0F / 256.0F);
     }
 
     public Vector getVelocity() {

@@ -1,30 +1,34 @@
-package com.dsh105.holoapi;
+package com.dsh105.holoapi.api;
 
 import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class HoloManager {
+public class SimpleHoloManager implements HoloManager {
 
     YAMLConfig config;
     private HashMap<Hologram, Plugin> holograms = new HashMap<Hologram, Plugin>();
 
-    public HoloManager() {
-        this.config = HoloPlugin.getInstance().getConfig(HoloPlugin.ConfigType.DATA);
+    public SimpleHoloManager() {
+        this.config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA);
     }
 
     public HashMap<Hologram, Plugin> getAllHolograms() {
         return holograms;
     }
 
+    public void clearAll() {
+        Iterator<Hologram> i = holograms.keySet().iterator();
+        while (i.hasNext()) {
+            i.next().clearPlayerLocationMap();
+            i.remove();
+        }
+    }
+
+    @Override
     public ArrayList<Hologram> getHologramsFor(Plugin owningPlugin) {
         ArrayList<Hologram> list = new ArrayList<Hologram>();
         for (Map.Entry<Hologram, Plugin> entry : this.holograms.entrySet()) {
@@ -35,6 +39,7 @@ public class HoloManager {
         return list;
     }
 
+    @Override
     public Hologram getHologram(int id) {
         for (Hologram hologram : this.holograms.keySet()) {
             if (hologram.getId() == id) {
@@ -44,14 +49,17 @@ public class HoloManager {
         return null;
     }
 
+    @Override
     public void track(Hologram hologram, Plugin owningPlugin) {
         this.holograms.put(hologram, owningPlugin);
     }
 
+    @Override
     public void stopTracking(Hologram hologram) {
         this.holograms.remove(hologram);
     }
 
+    @Override
     public void stopTracking(int id) {
         Hologram hologram = this.getHologram(id);
         if (hologram != null) {
@@ -59,6 +67,7 @@ public class HoloManager {
         }
     }
 
+    @Override
     public void saveToFile(int id) {
         Hologram hologram = this.getHologram(id);
         if (hologram != null) {
@@ -66,8 +75,10 @@ public class HoloManager {
         }
     }
 
+    @Override
     public void saveToFile(Hologram hologram) {
         if (hologram.isPersistent() && this.isValid(hologram.getSaveId())) {
+            this.config.set(hologram.getSaveId() + ".world", hologram.getWorldName());
             this.config.set(hologram.getSaveId() + ".x", hologram.getDefaultX());
             this.config.set(hologram.getSaveId() + ".y", hologram.getDefaultY());
             this.config.set(hologram.getSaveId() + ".z", hologram.getDefaultZ());
@@ -75,6 +86,7 @@ public class HoloManager {
         }
     }
 
+    @Override
     public Hologram createFromFile(String saveId) {
         ConfigurationSection cs = this.config.getConfigurationSection(saveId);
         if (cs != null) {
@@ -84,17 +96,16 @@ public class HoloManager {
                     this.config.getDouble(saveId + ".z")
             };
             List<String> lines = Arrays.asList(this.config.getList(saveId + ".lines").toString());
-            //List<String> lines = (ArrayList<String>) this.config.getList(saveId + ".lines");
             if (lines == null) {
                 return null;
             }
 
             Hologram hologram = new HologramFactory()
-                    .withCoords(coords[0], coords[1], coords[2])
+                    .withLocation(new org.bukkit.util.Vector(coords[0], coords[1], coords[2]), this.config.getString(saveId + ".world"))
                     .withText(lines.toArray(new String[lines.size()]))
                     .build();
             hologram.setSaveId(saveId);
-            this.track(hologram, HoloPlugin.getInstance());
+            this.track(hologram, HoloAPI.getInstance());
             return hologram;
         }
         return null;

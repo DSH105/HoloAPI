@@ -1,7 +1,5 @@
 package com.dsh105.holoapi.image;
 
-import com.dsh105.holoapi.HoloPlugin;
-import com.dsh105.holoapi.exceptions.ImageResourceNotFound;
 import org.bukkit.ChatColor;
 
 import javax.imageio.ImageIO;
@@ -10,7 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URI;
 
 /**
  * Credit to bobacadodl for this one <3
@@ -26,16 +24,13 @@ public class ImageGenerator {
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
     }
 
-    public ImageGenerator(String pathToImage, int height, ImageChar imgChar) {
-        InputStream input = HoloPlugin.getInstance().getResource(pathToImage);
-        if (input == null) {
-            throw new ImageResourceNotFound(pathToImage);
-        }
+    public ImageGenerator(String imageUrl, int height, ImageChar imgChar) {
+        URI uri = URI.create(imageUrl);
         BufferedImage image;
         try {
-            image = ImageIO.read(input);
+            image = ImageIO.read(uri.toURL());
         } catch (IOException e) {
-            throw new ImageResourceNotFound("Image cannot be located. Path: " + pathToImage);
+            throw new RuntimeException("Cannot read image " + uri, e);
         }
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
     }

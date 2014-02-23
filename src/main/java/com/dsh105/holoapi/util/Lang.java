@@ -1,6 +1,6 @@
 package com.dsh105.holoapi.util;
 
-import com.dsh105.holoapi.HoloPlugin;
+import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ public enum Lang {
     PREFIX("prefix", "&e[&9HoloAPI&e] &r••• "),
 
     NO_PERMISSION("no_permission", "&3You are not permitted to do that."),
-    COMMAND_ERROR("cmd_error", "&3Error for input string: &b%cmd%&3. Use &b/" + HoloPlugin.getInstance().getCommandLabel() + " help &3for help."),
+    COMMAND_ERROR("cmd_error", "&3Error for input string: &b%cmd%&3. Use &b/" + HoloAPI.getInstance().getCommandLabel() + " help &3for help."),
     HELP_INDEX_TOO_BIG("help_index_too_big", "&3Page &b%index% &3does not exist."),
     IN_GAME_ONLY("in_game_only", "&3Please log in to do that."),
     STRING_ERROR("string_error", "&3Error parsing &b%string%&3. Please revise command arguments."),
@@ -44,13 +44,13 @@ public enum Lang {
 
     public static void sendTo(CommandSender sender, String msg) {
         if (msg != null || !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
-            sender.sendMessage(HoloPlugin.getInstance().prefix + msg);
+            sender.sendMessage(HoloAPI.getInstance().prefix + msg);
         }
     }
 
     public static void sendTo(Player p, String msg) {
         if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !(msg.equalsIgnoreCase("none"))) {
-            p.sendMessage(HoloPlugin.getInstance().prefix + msg);
+            p.sendMessage(HoloAPI.getInstance().prefix + msg);
         }
     }
 
@@ -60,15 +60,15 @@ public enum Lang {
     }
 
     public String getValue() {
-        String result = HoloPlugin.getInstance().getConfig(HoloPlugin.ConfigType.LANG).getString(this.path, this.def);
+        String result = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
         if (result != null && result != "" && result != "none") {
-            return ChatColor.translateAlternateColorCodes('&', HoloPlugin.getInstance().getConfig(HoloPlugin.ConfigType.LANG).getString(this.path, this.def));
+            return ChatColor.translateAlternateColorCodes('&', HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def));
         } else {
             return "";
         }
     }
 
     public String getRaw() {
-        return HoloPlugin.getInstance().getConfig(HoloPlugin.ConfigType.LANG).getString(this.path, this.def);
+        return HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
     }
 }

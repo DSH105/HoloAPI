@@ -6,7 +6,8 @@ import com.dsh105.dshutils.command.CustomCommand;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.dshutils.util.VersionUtil;
-import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
 import com.dsh105.holoapi.listeners.GlobalHologramListener;
@@ -19,14 +20,15 @@ import org.bukkit.plugin.PluginManager;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
-public class HoloPlugin extends DSHPlugin {
+public class HoloAPI extends DSHPlugin {
+
+    private static HoloManager MANAGER;
+    private ConfigOptions OPTIONS;
 
     private YAMLConfig config;
+
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
-
-    private ConfigOptions options;
-    private HoloManager manager;
 
     public CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
@@ -36,16 +38,16 @@ public class HoloPlugin extends DSHPlugin {
     public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
 
-    public static HoloPlugin getInstance() {
-        return (HoloPlugin) getPluginInstance();
+    public static HoloAPI getInstance() {
+        return (HoloAPI) getPluginInstance();
     }
 
-    public HoloManager getManager() {
-        return manager;
+    public static HoloManager getManager() {
+        return MANAGER;
     }
 
     public String getCommandLabel() {
-        return this.options.getConfig().getString("command", "holo");
+        return OPTIONS.getConfig().getString("command", "holo");
     }
 
     public YAMLConfig getConfig(ConfigType type) {
@@ -66,7 +68,7 @@ public class HoloPlugin extends DSHPlugin {
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
         this.registerCommands();
-        this.manager = new HoloManager();
+        MANAGER = new SimpleHoloManager();
         manager.registerEvents(new GlobalHologramListener(), this);
 
         try {
@@ -77,6 +79,12 @@ public class HoloPlugin extends DSHPlugin {
         }
 
         //this.checkUpdates(this, this.getConfig(ConfigType.MAIN), ID_HERE_PLZ);
+    }
+
+    @Override
+    public void onDisable() {
+        ((SimpleHoloManager) getManager()).clearAll();
+        super.onDisable();
     }
 
     private void registerCommands() {
@@ -107,7 +115,7 @@ public class HoloPlugin extends DSHPlugin {
                 "See the HoloAPI Wiki before editing this file"};
         try {
             config = this.getConfigManager().getNewConfig("config.yml", header);
-            this.options = new ConfigOptions(config);
+            OPTIONS = new ConfigOptions(config);
         } catch (Exception e) {
             Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (config.yml).", e, true);
         }
