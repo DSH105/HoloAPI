@@ -17,52 +17,52 @@ public class WrapperPacketSpawnEntity extends Packet {
         return (Integer) this.read("a");
     }
 
-    public void setX(int value) {
+    public void setX(double value) {
         this.write("b", (int) Math.floor(value * 32.0D));
     }
 
-    public int getX() {
-        return (int) (((Integer) this.read("b")) / 32.0D);
+    public double getX() {
+        return (((Integer) this.read("b")) / 32.0D);
     }
 
-    public void setY(int value) {
+    public void setY(double value) {
         this.write("c", (int) Math.floor(value * 32.0D));
     }
 
-    public int getY() {
-        return (int) (((Integer) this.read("c")) / 32.0D);
+    public double getY() {
+        return (((Integer) this.read("c")) / 32.0D);
     }
 
-    public void setZ(int value) {
+    public void setZ(double value) {
         this.write("d", (int) Math.floor(value * 32.0D));
     }
 
-    public int getZ() {
-        return (int) (((Integer) this.read("d")) / 32.0D);
+    public double getZ() {
+        return (((Integer) this.read("d")) / 32.0D);
     }
 
-    public void setMotionX(int value) {
+    public void setMotionX(double value) {
         this.write("e", (int) Math.floor(value * 8000.0D));
     }
 
-    public int getMotionX() {
-        return (int) (((Integer) this.read("e")) / 8000.0D);
+    public double getMotionX() {
+        return (((Integer) this.read("e")) / 8000.0D);
     }
 
-    public void setMotionY(int value) {
+    public void setMotionY(double value) {
         this.write("f", (int) Math.floor(value * 8000.0D));
     }
 
-    public int getMotionY() {
+    public double getMotionY() {
         return (int) (((Integer) this.read("f")) / 8000.0D);
     }
 
-    public void setMotionZ(int value) {
+    public void setMotionZ(double value) {
         this.write("g", (int) Math.floor(value * 8000.0D));
     }
 
-    public int getMotionZ() {
-        return (int) (((Integer) this.read("g")) / 8000.0D);
+    public double getMotionZ() {
+        return (((Integer) this.read("g")) / 8000.0D);
     }
 
     public void setYaw(float value) {

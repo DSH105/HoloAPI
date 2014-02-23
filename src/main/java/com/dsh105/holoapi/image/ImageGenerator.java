@@ -22,6 +22,10 @@ public class ImageGenerator {
 
     private String lines[];
 
+    public ImageGenerator(BufferedImage image, int height, ImageChar imgChar) {
+        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
+    }
+
     public ImageGenerator(String pathToImage, int height, ImageChar imgChar) {
         InputStream input = HoloPlugin.getInstance().getResource(pathToImage);
         if (input == null) {
@@ -60,7 +64,7 @@ public class ImageGenerator {
         double ratio = (double) image.getHeight() / image.getWidth();
         int width = (int) (height / ratio);
         if (width > 10) width = 10;
-        BufferedImage resized = resize(image, width, height);
+        BufferedImage resized = resize(image, (int) (height / ratio), height);
 
         ChatColor[][] chatImg = new ChatColor[resized.getWidth()][resized.getHeight()];
         for (int x = 0; x < resized.getWidth(); x++) {

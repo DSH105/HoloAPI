@@ -38,6 +38,11 @@ public class HologramFactory {
         return this;
     }
 
+    public HologramFactory withImage(ImageGenerator imageGenerator) {
+        this.tags.put(new TextData(imageGenerator.getLines()), TagType.IMAGE);
+        return this;
+    }
+
     public HologramFactory withImage(String imagePath, int imageHeight) {
         this.tags.put(new ImageData(imagePath, imageHeight, ImageChar.MEDIUM_SHADE), TagType.IMAGE_PATH);
         return this;

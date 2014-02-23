@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.util.ReflectionUtil;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.reflection.SafeField;
@@ -157,19 +158,21 @@ public class Hologram {
         horse.setEntityId(this.getHorseIndex(index));
         horse.setEntityType(EntityType.HORSE.getTypeId());
         horse.setX(x);
-        horse.setY((int) (y + diffY + 55));
+        horse.setY(y + diffY + 55);
         horse.setZ(z);
+
+        ConsoleLogger.log("" + horse.getX() + ":" + x + "," + horse.getY() + ":" + y + "," + horse.getZ() + ":" + z);
 
         DataWatcher dw = new DataWatcher(null);
         dw.a(10, this.tags[index]);
         dw.a(11, Byte.valueOf((byte) 1));
-        dw.a(12, Integer.valueOf(-170000));
+        dw.a(12, Integer.valueOf(-1700000));
         horse.setDataWatcher(dw);
 
         WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
         skull.setEntityId(this.getSkullIndex(index));
         skull.setX(x);
-        skull.setY((int) (y + diffY + 55));
+        skull.setY(y + diffY + 55);
         skull.setZ(z);
         skull.setEntityType(66);
 

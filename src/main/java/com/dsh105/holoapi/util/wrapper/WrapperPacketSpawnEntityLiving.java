@@ -28,28 +28,28 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
         return (Integer) this.read("b");
     }
 
-    public void setX(int value) {
+    public void setX(double value) {
         this.write("c", (int) Math.floor(value * 32.0D));
     }
 
-    public int getX() {
-        return (int) (((Integer) this.read("c")) / 32.0D);
+    public double getX() {
+        return (((Integer) this.read("c")) / 32.0D);
     }
 
-    public void setY(int value) {
+    public void setY(double value) {
         this.write("d", (int) Math.floor(value * 32.0D));
     }
 
-    public int getY() {
-        return (int) (((Integer) this.read("d")) / 32.0D);
+    public double getY() {
+        return (((Integer) this.read("d")) / 32.0D);
     }
 
-    public void setZ(int value) {
+    public void setZ(double value) {
         this.write("e", (int) Math.floor(value * 32.0D));
     }
 
-    public int getZ() {
-        return (int) (((Integer) this.read("e")) / 32.0D);
+    public double getZ() {
+        return (((Integer) this.read("e")) / 32.0D);
     }
 
     public void setYaw(float value) {

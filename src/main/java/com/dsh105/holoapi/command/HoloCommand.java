@@ -5,7 +5,9 @@ import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloPlugin;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.api.stored.ImageData;
 import com.dsh105.holoapi.image.ImageChar;
+import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,6 +16,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class HoloCommand implements CommandExecutor {
@@ -35,17 +41,29 @@ public class HoloCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0 && sender instanceof Player) {
             final Player p = (Player) sender;
-            final Hologram h = new HologramFactory().withCoords(p.getLocation().getX(), p.getLocation().getX(), p.getLocation().getX()).withText("Hi, how's it going?", "Morning", ChatColor.BLUE + "" + ImageChar.MEDIUM_SHADE + ImageChar.BLOCK + ChatColor.MAGIC + ImageChar.MEDIUM_SHADE).build();
-            h.show(p);
-            p.sendMessage("Spawned");
+            URI uri = URI.create("http://dev.bukkit.org/media/images/70/44/Banner_PNG.png");
+            BufferedImage image;
+            try {
+                image = ImageIO.read(uri.toURL());
+            } catch (IOException e) {
+                throw new RuntimeException("Cannot read image " + uri, e);
+            }
+            if (image != null) {
+                /*final Hologram h = new HologramFactory().withCoords(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ())//withText("Hi, how's it going?", "Morning", ChatColor.BLUE + "" + ImageChar.MEDIUM_SHADE.getImageChar() + ImageChar.BLOCK.getImageChar() + ' ').build();
+                        .withImage(new ImageData("creepermap.png", 8, ImageChar.MEDIUM_SHADE)).build();*/
+                final Hologram h = new HologramFactory().withCoords(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ()).withText(new ImageGenerator(image, 25, ImageChar.BLOCK).getLines()).build();
+                h.show(p);
+                p.sendMessage(Lang.PREFIX.getValue() + "Spawned");
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    h.clear(p);
-                    p.sendMessage("Despawned");
-                }
-            }.runTaskLater(HoloPlugin.getInstance(), 60L);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        h.clear(p);
+                        p.sendMessage(Lang.PREFIX.getValue() + "Despawned");
+                    }
+                }.runTaskLater(HoloPlugin.getInstance(), 300L);
+                return true;
+            }
         }
         Lang.sendTo(sender, Lang.COMMAND_ERROR.getValue()
                 .replace("%cmd%", "/" + cmd.getLabel() + " " + (args.length == 0 ? "" : StringUtil.combineSplit(0, args, " "))));
