@@ -6,6 +6,8 @@ import org.bukkit.ChatColor;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +66,7 @@ public class ImageGenerator {
         for (int x = 0; x < resized.getWidth(); x++) {
             for (int y = 0; y < resized.getHeight(); y++) {
                 int rgb = resized.getRGB(x, y);
-                ChatColor closest = ColourMap.getClosest(new Color(rgb));
+                ChatColor closest = ColourMap.getClosest(new Color(rgb, true));
                 chatImg[x][y] = closest;
             }
         }
@@ -72,7 +74,11 @@ public class ImageGenerator {
     }
 
     private BufferedImage resize(BufferedImage originalImage, int width, int height) {
-        BufferedImage resizedImage = new BufferedImage(width, height, 6);
+        AffineTransform af = new AffineTransform();
+        af.scale(width / (double)originalImage.getWidth(), height / (double)originalImage.getHeight());
+        AffineTransformOp operation = new AffineTransformOp(af, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        return operation.filter(originalImage, null);
+        /*BufferedImage resizedImage = new BufferedImage(width, height, 6);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(originalImage, 0, 0, width, height, null);
         g.dispose();
@@ -80,7 +86,7 @@ public class ImageGenerator {
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        return resizedImage;
+        return resizedImage;*/
     }
 
 }
