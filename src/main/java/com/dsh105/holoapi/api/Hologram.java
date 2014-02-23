@@ -1,11 +1,10 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.util.ReflectionUtil;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.ShortIdGenerator;
-import com.dsh105.holoapi.util.wrapper.*;
-import com.dsh105.holoapi.util.wrapper.DataWatcher;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -138,27 +137,26 @@ public class Hologram {
 
         PacketPlayOutSpawnEntityLiving horse = new PacketPlayOutSpawnEntityLiving();
         new SafeField<Integer>(horse.getClass(), "a").set(horse, this.getHorseIndex(index));
-        new SafeField<Integer>(horse.getClass(), "b").set(horse, (int) EntityType.HORSE.getTypeId());
+        new SafeField<Byte>(horse.getClass(), "b").set(horse, (byte) EntityType.HORSE.getTypeId());
         new SafeField<Integer>(horse.getClass(), "c").set(horse, (int) Math.floor(this.coords[0] * 32.0D));
         new SafeField<Integer>(horse.getClass(), "d").set(horse, (int) Math.floor((this.coords[1] + diffY + 55) * 32.0D));
         new SafeField<Integer>(horse.getClass(), "e").set(horse, (int) Math.floor(this.coords[2] * 32.0D));
 
-        DataWatcher dw = new DataWatcher();
-        dw.watch(10, this.tags[index]);
-        dw.watch(11, (byte) 1);
-        dw.watch(12, -170000);
-        new SafeField<net.minecraft.server.v1_7_R1.DataWatcher>(horse.getClass(), "l").set(horse, (net.minecraft.server.v1_7_R1.DataWatcher) dw.getHandle());
+        DataWatcher dw = new DataWatcher(null);
+        dw.a(10, this.tags[index]);
+        dw.a(11, Byte.valueOf((byte) 1));
+        dw.a(12, Integer.valueOf(-170000));
+        new SafeField<DataWatcher>(horse.getClass(), "l").set(horse, dw);
 
         PacketPlayOutSpawnEntity skull = new PacketPlayOutSpawnEntity();
         new SafeField<Integer>(skull.getClass(), "a").set(skull, this.getSkullIndex(index));
         new SafeField<Integer>(skull.getClass(), "b").set(skull, (int) Math.floor(this.coords[0] * 32.0D));
         new SafeField<Integer>(skull.getClass(), "c").set(skull, (int) Math.floor((this.coords[1] + diffY + 55) * 32.0D));
         new SafeField<Integer>(skull.getClass(), "d").set(skull, (int) Math.floor(this.coords[2] * 32.0D));
-        new SafeField<Integer>(skull.getClass(), "j").set(skull, 66); // From EntityTrackerEntry
+        new SafeField<Byte>(skull.getClass(), "j").set(skull, (byte) 66); // From EntityTrackerEntry
 
         ReflectionUtil.sendPacket(observer, horse);
         ReflectionUtil.sendPacket(observer, skull);
-        ReflectionUtil.sendPacket(observer, horse);
         ReflectionUtil.sendPacket(observer, attach);
     }
 
