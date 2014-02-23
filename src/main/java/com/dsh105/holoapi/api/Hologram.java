@@ -161,8 +161,6 @@ public class Hologram {
         horse.setY(y + diffY + 55);
         horse.setZ(z);
 
-        ConsoleLogger.log("" + horse.getX() + ":" + x + "," + horse.getY() + ":" + y + "," + horse.getZ() + ":" + z);
-
         DataWatcher dw = new DataWatcher(null);
         dw.a(10, this.tags[index]);
         dw.a(11, Byte.valueOf((byte) 1));
