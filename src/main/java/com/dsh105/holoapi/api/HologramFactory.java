@@ -34,9 +34,7 @@ public class HologramFactory {
     }
 
     public HologramFactory withText(String... text) {
-        for (String tag : text) {
-            this.tags.put(new TextData(text), TagType.TEXT);
-        }
+        this.tags.put(new TextData(text), TagType.TEXT);
         return this;
     }
 
