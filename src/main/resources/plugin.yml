@@ -1,6 +1,6 @@
 name: ${project.name}
 version: ${project.version}
-author: DSH105
+author: [DSH105, Frostalf, CaptainBern]
 description: Advanced Hologram management
 website: ${project.url}
 main: ${main.class}

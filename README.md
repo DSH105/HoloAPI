@@ -2,5 +2,5 @@
 
 ----
 
-## Hologram API and standalone plugin
-### By DSH105
+## Hologram API and plugin
+### DSH105, CaptainBern and Frostalf
