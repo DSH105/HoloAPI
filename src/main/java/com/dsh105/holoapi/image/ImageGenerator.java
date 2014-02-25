@@ -29,11 +29,11 @@ public class ImageGenerator {
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
     }
 
-    protected ImageGenerator(String imageUrl, int height, ImageChar imgChar) {
+    public ImageGenerator(String imageUrl, int height, ImageChar imgChar) {
         this(imageUrl, height, imgChar, true);
     }
 
-    protected ImageGenerator(String imageUrl, int height, ImageChar imgChar, boolean loadUrl) {
+    public ImageGenerator(String imageUrl, int height, ImageChar imgChar, boolean loadUrl) {
         if (loadUrl) {
             this.loadUrlImage();
         } else {
