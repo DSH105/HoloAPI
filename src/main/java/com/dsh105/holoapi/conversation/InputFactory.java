@@ -13,7 +13,7 @@ public class InputFactory {
     public static ConversationFactory buildBasicConversation() {
         return new ConversationFactory(HoloAPI.getInstance())
                 .withModality(true)
-                .withLocalEcho(true)
+                .withLocalEcho(false)
                 .withPrefix(new InputConversationPrefix())
                 .withTimeout(90)
                 .withEscapeSequence("exit");

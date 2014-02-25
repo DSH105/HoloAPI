@@ -4,6 +4,7 @@ import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.EnumUtil;
 import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -30,7 +31,8 @@ public class SimpleImageLoader implements ImageLoader {
                     continue;
                 }
                 ImageLoader.ImageLoadType type = ImageLoader.ImageLoadType.valueOf(imageType.toUpperCase());
-                ImageGenerator generator = this.findGenerator(type, imagePath, imageHeight, imageChar);
+
+                ImageGenerator generator = findGenerator(type, imagePath, imageHeight, imageChar);
                 if (generator != null) {
                     this.KEY_TO_IMAGE_MAP.put(key, generator);
                 }
@@ -47,7 +49,7 @@ public class SimpleImageLoader implements ImageLoader {
             case URL:
                 return new ImageGenerator(imagePath, imageHeight, c);
             case FILE:
-                File f = new File(HoloAPI.getInstance().getDataFolder() + File.separator + "images" + imagePath);
+                File f = new File(HoloAPI.getInstance().getDataFolder() + File.separator + "images" + File.separator + imagePath);
                 return new ImageGenerator(f, imageHeight, c);
         }
         return null;

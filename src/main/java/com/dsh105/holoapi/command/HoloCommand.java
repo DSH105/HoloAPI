@@ -25,14 +25,11 @@ import java.util.Map;
 
 public class HoloCommand implements CommandExecutor {
 
-    public String label;
     private Paginator help;
 
     private String[] HELP_CREATE;
 
-    public HoloCommand(String name) {
-        this.label = name;
-
+    public HoloCommand() {
         ArrayList<String> list = new ArrayList<String>();
         for (HelpEntry he : HelpEntry.values()) {
             list.add(he.getLine());
@@ -99,6 +96,21 @@ public class HoloCommand implements CommandExecutor {
                     InputFactory.promptHoloInput((Player) sender);
                     return true;
                 } else return true;
+            } else if (args.length == 3) {
+                if (args[1].equalsIgnoreCase("image")) {
+                    if (Perm.CREATE.hasPerm(sender, true, false)) {
+                        String key = args[2];
+                        ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(key);
+                        if (generator == null) {
+                            Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
+                            return true;
+                        }
+                        Location loc = ((Player) sender).getLocation().clone();
+                        loc.add(0D, 1.5D, 0D);
+                        Hologram h = new HologramFactory().withImage(generator).withLocation(loc).build();
+                        Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getFirstId() + ""));
+                    } else return true;
+                }
             }
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("info")) {
@@ -107,9 +119,9 @@ public class HoloCommand implements CommandExecutor {
                         Lang.sendTo(sender, Lang.NO_ACTIVE_HOLOGRAMS.getValue());
                         return true;
                     }
-                    sender.sendMessage(ChatColor.AQUA + " Active Holographic Displays:");
+                    Lang.sendTo(sender, Lang.ACTIVE_DISPLAYS.getValue());
                     for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllHolograms().entrySet()) {
-                        sender.sendMessage("•• " + ChatColor.DARK_AQUA + entry.getKey().getFirstId() + "(" + entry.getValue().getName() + ")");
+                        sender.sendMessage("•• " + ChatColor.AQUA + entry.getKey().getFirstId() + ChatColor.DARK_AQUA + " (" + entry.getValue().getName() + ")");
                     }
                     return true;
                 } else return true;
@@ -122,10 +134,11 @@ public class HoloCommand implements CommandExecutor {
                         return true;
                     }
                     Hologram h = HoloAPI.getManager().getHologram(Integer.parseInt(args[1]));
-                    final int holoId = h.getFirstId();
                     if (h == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue());
                         return true;
                     }
+                    final int holoId = h.getFirstId();
                     HoloAPI.getManager().stopTracking(h);
                     Lang.sendTo(sender, Lang.HOLOGRAM_REMOVED.getValue().replace("%id%", args[1]));
 
@@ -153,23 +166,6 @@ public class HoloCommand implements CommandExecutor {
 
                     return true;
                 } else return true;
-            }
-        } else if (args.length == 3) {
-            if (args[0].equalsIgnoreCase("create")) {
-                if (args[1].equalsIgnoreCase("image")) {
-                    if (Perm.CREATE.hasPerm(sender, true, false)) {
-                        String key = args[2];
-                        ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(key);
-                        if (generator == null) {
-                            Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
-                            return true;
-                        }
-                        Location loc = ((Player) sender).getLocation().clone();
-                        loc.add(0D, 1.5D, 0D);
-                        Hologram h = new HologramFactory().withImage(generator).withLocation(loc).build();
-                        Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getFirstId() + ""));
-                    } else return true;
-                }
             }
         }
         Lang.sendTo(sender, Lang.COMMAND_ERROR.getValue()

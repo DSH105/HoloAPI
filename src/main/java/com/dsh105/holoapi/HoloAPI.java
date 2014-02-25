@@ -47,7 +47,7 @@ public class HoloAPI extends DSHPlugin {
     private CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
     public ChatColor secondaryColour = ChatColor.AQUA;
-    private String prefix = ChatColor.YELLOW + "[" + ChatColor.BLUE + "%text%" + ChatColor.YELLOW + "]" + ChatColor.WHITE + " •••" + ChatColor.RESET + " ";
+    private String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "] •••" + ChatColor.RESET + " ";
 
     public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
@@ -96,7 +96,7 @@ public class HoloAPI extends DSHPlugin {
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
-        IMAGE_LOADER.loadImageConfiguration(this.getConfig(ConfigType.MAIN));
+        this.getCommand("holo").setExecutor(new HoloCommand());
         manager.registerEvents(new HoloListener(), this);
         this.loadHolograms();
 
@@ -140,11 +140,19 @@ public class HoloAPI extends DSHPlugin {
     }
 
     private void loadHolograms() {
+
+        getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
+            }
+        });
+
         // TODO: LOAD THIS STUFF :DDD
         // Load all saved holograms and set the IDs based on those saved. Store the next ID in the generator so that there's no double-up
     }
 
-    private void registerCommands() {
+    /*private void registerCommands() {
         try {
             Class craftServer = Class.forName("org.bukkit.craftbukkit." + VersionUtil.getServerVersion() + ".CraftServer");
             if (craftServer.isInstance(Bukkit.getServer())) {
@@ -165,7 +173,7 @@ public class HoloAPI extends DSHPlugin {
         this.commandMap.register("holoapi", cmd);
         cmd.setExecutor(new HoloCommand(cmdString));
         //cmd.setTabCompleter(new CommandComplete());
-    }
+    }*/
 
     private void loadConfiguration() {
         String[] header = {"HoloAPI Configuration File", "---------------------",

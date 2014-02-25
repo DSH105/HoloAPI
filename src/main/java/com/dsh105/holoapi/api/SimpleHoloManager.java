@@ -99,6 +99,7 @@ public class SimpleHoloManager implements HoloManager {
         this.config.set(hologram.getFirstId() + ".y", hologram.getDefaultY());
         this.config.set(hologram.getFirstId() + ".z", hologram.getDefaultZ());
         this.config.set(hologram.getFirstId() + ".lines", hologram.getLines());
+        this.config.saveConfig();
     }
 
     @Override
@@ -112,6 +113,7 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public void clearFromFile(Hologram hologram) {
         //TODO
+        this.config.saveConfig();
     }
 
     @Override

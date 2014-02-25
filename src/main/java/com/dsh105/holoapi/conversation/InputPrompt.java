@@ -31,7 +31,7 @@ public class InputPrompt extends ValidatingPrompt {
     @Override
     protected Prompt acceptValidatedInput(ConversationContext conversationContext, String s) {
         if (s.equalsIgnoreCase("DONE")) {
-            conversationContext.setSessionData("lines", this.lines);
+            conversationContext.setSessionData("lines", this.lines.toArray(new String[this.lines.size()]));
             return new InputSuccessPrompt();
         }
         this.lines.add(ChatColor.translateAlternateColorCodes('&', s));
@@ -40,7 +40,9 @@ public class InputPrompt extends ValidatingPrompt {
 
     @Override
     public String getPromptText(ConversationContext conversationContext) {
-        return Lang.PROMPT_INPUT.getValue();
+        if (this.first) {
+            return Lang.PROMPT_INPUT.getValue();
+        } else return Lang.PROMPT_INPUT_NEXT.getValue();
     }
 
     @Override
