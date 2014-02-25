@@ -23,23 +23,16 @@ public class Hologram {
     private String[] tags;
     private double spacing = 0.25D;
 
-    private int id;
+    private int firstId;
 
-    private boolean persistent;
-    private String saveId = null;
+    private boolean visibleToAll = true;
 
     private HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
 
-    protected Hologram(String worldName, double x, double y, double z, String... lines) {
+    protected Hologram(int id, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
+        this.firstId = id;
         this.tags = lines;
-        this.id = ShortIdGenerator.nextId(this.getTagCount());
-    }
-
-    protected Hologram(String worldName, double x, double y, double z, ImageGenerator image) {
-        this(worldName, x, y, z);
-        this.tags = image.getLines();
-        this.id = ShortIdGenerator.nextId(this.getTagCount());
     }
 
     private Hologram(String worldName, double x, double y, double z) {
@@ -51,19 +44,6 @@ public class Hologram {
 
     public int getTagCount() {
         return this.tags.length;
-    }
-
-    public boolean isPersistent() {
-        return persistent;
-    }
-
-    public String getSaveId() {
-        return saveId;
-    }
-
-    public void setSaveId(String saveId) {
-        this.saveId = saveId;
-        this.persistent = true;
     }
 
     public double getDefaultX() {
@@ -86,6 +66,14 @@ public class Hologram {
         return tags;
     }
 
+    public boolean isVisibleToAll() {
+        return visibleToAll;
+    }
+
+    public void setVisibleToAll(boolean flag) {
+        this.visibleToAll = flag;
+    }
+
     public double getSpacing() {
         return spacing;
     }
@@ -94,18 +82,19 @@ public class Hologram {
         this.spacing = spacing;
     }
 
-    public int getId() {
-        return id;
+    public int getFirstId() {
+        return firstId;
     }
 
     protected void clearPlayerLocationMap() {
-        Iterator<String> i = playerToLocationMap.keySet().iterator();
+        Iterator<String> i = this.playerToLocationMap.keySet().iterator();
         while (i.hasNext()) {
             Player p = Bukkit.getPlayerExact(i.next());
             if (p != null) {
                 this.clear(p);
             }
         }
+        this.playerToLocationMap.clear();
     }
 
     public Vector getLocationFor(Player player) {
@@ -209,11 +198,11 @@ public class Hologram {
     }
 
     private int getHorseIndex(int index) {
-        return id + index * 2;
+        return firstId + index * 2;
     }
 
     private int getSkullIndex(int index) {
-        return id + index * 2 + 1;
+        return firstId + index * 2 + 1;
     }
 
 }

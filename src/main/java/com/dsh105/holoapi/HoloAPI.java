@@ -2,27 +2,39 @@ package com.dsh105.holoapi;
 
 import com.dsh105.dshutils.DSHPlugin;
 import com.dsh105.dshutils.Metrics;
+import com.dsh105.dshutils.Updater;
 import com.dsh105.dshutils.command.CustomCommand;
 import com.dsh105.dshutils.config.YAMLConfig;
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
+import com.dsh105.dshutils.util.EnumUtil;
 import com.dsh105.dshutils.util.VersionUtil;
 import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
-import com.dsh105.holoapi.listeners.GlobalHologramListener;
+import com.dsh105.holoapi.image.ImageChar;
+import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.image.ImageLoader;
+import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class HoloAPI extends DSHPlugin {
 
-    private static HoloManager MANAGER;
+    private static SimpleHoloManager MANAGER;
+    private static ImageLoader IMAGE_LOADER;
     private ConfigOptions OPTIONS;
 
     private YAMLConfig config;
@@ -30,10 +42,15 @@ public class HoloAPI extends DSHPlugin {
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
 
-    public CommandMap commandMap;
+    // Update Checker stuff
+    public boolean updateAvailable = false;
+    public String updateName = "";
+    public boolean updateChecked = false;
+
+    private CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
     public ChatColor secondaryColour = ChatColor.AQUA;
-    public String prefix;
+    private String prefix = ChatColor.YELLOW + "[" + ChatColor.BLUE + "%text%" + ChatColor.YELLOW + "]" + ChatColor.WHITE + " •••" + ChatColor.RESET + " ";
 
     public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
@@ -42,8 +59,20 @@ public class HoloAPI extends DSHPlugin {
         return (HoloAPI) getPluginInstance();
     }
 
+    public String getPrefix() {
+        return this.getPrefix("HoloAPI");
+    }
+
+    public String getPrefix(String internalText) {
+        return this.prefix.replace("%text%", internalText);
+    }
+
     public static HoloManager getManager() {
         return MANAGER;
+    }
+
+    public static ImageLoader getImageLoader() {
+        return IMAGE_LOADER;
     }
 
     public String getCommandLabel() {
@@ -67,9 +96,13 @@ public class HoloAPI extends DSHPlugin {
         PluginManager manager = getServer().getPluginManager();
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
-        this.registerCommands();
+        //this.registerCommands();
         MANAGER = new SimpleHoloManager();
-        manager.registerEvents(new GlobalHologramListener(), this);
+        IMAGE_LOADER = new ImageLoader();
+        IMAGE_LOADER.loadImageConfiguration(this.getConfig(ConfigType.MAIN));
+        manager.registerEvents(new HoloListener(), this);
+
+        //TODO: Load all saved holograms and set the IDs based on those saved. Store the next ID in the generator so that there's no double-up
 
         try {
             Metrics metrics = new Metrics(this);
@@ -78,13 +111,35 @@ public class HoloAPI extends DSHPlugin {
             Logger.log(Logger.LogLevel.WARNING, "Plugin Metrics (MCStats) has failed to start.", e, false);
         }
 
-        //this.checkUpdates(this, this.getConfig(ConfigType.MAIN), ID_HERE_PLZ);
+        this.checkUpdates();
     }
 
     @Override
     public void onDisable() {
-        ((SimpleHoloManager) getManager()).clearAll();
+        MANAGER.clearAll();
         super.onDisable();
+    }
+
+    protected void checkUpdates() {
+        if (this.getConfig(ConfigType.MAIN).getBoolean("checkForUpdates", true)) {
+            final File file = this.getFile();
+            final Updater.UpdateType updateType = this.getConfig(ConfigType.MAIN).getBoolean("autoUpdate", false) ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
+            getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+                @Override
+                public void run() {
+                    Updater updater = new Updater(getInstance(), 74914, file, updateType, false);
+                    updateAvailable = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
+                    if (updateAvailable) {
+                        updateName = updater.getLatestName();
+                        ConsoleLogger.log(ChatColor.DARK_AQUA + "An update is available: " + updateName);
+                        ConsoleLogger.log(ChatColor.DARK_AQUA + "Type /holoupdate to update.");
+                        if (!updateChecked) {
+                            updateChecked = true;
+                        }
+                    }
+                }
+            });
+        }
     }
 
     private void registerCommands() {
@@ -111,7 +166,7 @@ public class HoloAPI extends DSHPlugin {
     }
 
     private void loadConfiguration() {
-        String[] header = {"HoloAPI By DSH105", "---------------------",
+        String[] header = {"HoloAPI Configuration File", "---------------------",
                 "See the HoloAPI Wiki before editing this file"};
         try {
             config = this.getConfigManager().getNewConfig("config.yml", header);
@@ -138,7 +193,7 @@ public class HoloAPI extends DSHPlugin {
         }
         dataConfig.reloadConfig();
 
-        String[] langHeader = {"HoloAPI By DSH105", "---------------------",
+        String[] langHeader = {"HoloAPI", "---------------------",
                 "Language Configuration File"};
         try {
             langConfig = this.getConfigManager().getNewConfig("language.yml", langHeader);
@@ -159,7 +214,24 @@ public class HoloAPI extends DSHPlugin {
             Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (language.yml).", e, true);
         }
         langConfig.reloadConfig();
-        this.prefix = Lang.PREFIX.getValue();
+        //this.prefix = Lang.PREFIX.getValue();
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        if (commandLabel.equalsIgnoreCase("holoupdate")) {
+            if (Perm.UPDATE.hasPerm(sender, true, true)) {
+                if (updateChecked) {
+                    @SuppressWarnings("unused")
+                    Updater updater = new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+                    return true;
+                } else {
+                    Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.getValue());
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public enum ConfigType {

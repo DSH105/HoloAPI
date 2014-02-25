@@ -4,6 +4,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageChar;
 import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.util.ShortIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -15,9 +16,17 @@ public class HologramFactory {
     private double locX;
     private double locY;
     private double locZ;
+    private int id;
+    private boolean preparedId = false;
     private boolean prepared = false;
 
     private ArrayList<String> tags = new ArrayList<String>();
+
+    protected HologramFactory withFirstId(int firstId) {
+        this.id = firstId;
+        this.preparedId = true;
+        return this;
+    }
 
     private HologramFactory withCoords(double x, double y, double z) {
         this.locX = x;
@@ -71,7 +80,11 @@ public class HologramFactory {
             throw new HologramNotPreparedException("Hologram location cannot be null.");
         }
 
-        Hologram hologram = new Hologram(this.worldName, this.locX, this.locY, this.locZ, this.tags.toArray(new String[this.tags.size()]));
+        String[] lines = this.tags.toArray(new String[this.tags.size()]);
+        if (!this.preparedId) {
+            this.id = ShortIdGenerator.nextId(lines.length);
+        }
+        Hologram hologram = new Hologram(this.id, this.worldName, this.locX, this.locY, this.locZ, lines);
         HoloAPI.getManager().track(hologram, HoloAPI.getInstance());
         return hologram;
     }

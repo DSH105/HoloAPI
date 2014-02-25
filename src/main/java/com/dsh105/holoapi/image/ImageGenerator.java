@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
@@ -31,6 +32,16 @@ public class ImageGenerator {
             image = ImageIO.read(uri.toURL());
         } catch (IOException e) {
             throw new RuntimeException("Cannot read image " + uri, e);
+        }
+        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
+    }
+
+    public ImageGenerator(File imageFile, int height, ImageChar imgChar) {
+        BufferedImage image;
+        try {
+            image = ImageIO.read(imageFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot read image " + imageFile.getPath(), e);
         }
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
     }

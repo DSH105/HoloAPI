@@ -42,7 +42,7 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public Hologram getHologram(int id) {
         for (Hologram hologram : this.holograms.keySet()) {
-            if (hologram.getId() == id) {
+            if (hologram.getFirstId() == id) {
                 return hologram;
             }
         }
@@ -77,18 +77,16 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void saveToFile(Hologram hologram) {
-        if (hologram.isPersistent() && this.isValid(hologram.getSaveId())) {
-            this.config.set(hologram.getSaveId() + ".world", hologram.getWorldName());
-            this.config.set(hologram.getSaveId() + ".x", hologram.getDefaultX());
-            this.config.set(hologram.getSaveId() + ".y", hologram.getDefaultY());
-            this.config.set(hologram.getSaveId() + ".z", hologram.getDefaultZ());
-            this.config.set(hologram.getSaveId() + ".lines", hologram.getLines());
-        }
+        this.config.set(hologram.getFirstId() + ".world", hologram.getWorldName());
+        this.config.set(hologram.getFirstId() + ".x", hologram.getDefaultX());
+        this.config.set(hologram.getFirstId() + ".y", hologram.getDefaultY());
+        this.config.set(hologram.getFirstId() + ".z", hologram.getDefaultZ());
+        this.config.set(hologram.getFirstId() + ".lines", hologram.getLines());
     }
 
     @Override
-    public Hologram createFromFile(String saveId) {
-        ConfigurationSection cs = this.config.getConfigurationSection(saveId);
+    public Hologram createFromFile(int saveId) {
+        ConfigurationSection cs = this.config.getConfigurationSection("" + saveId);
         if (cs != null) {
             double[] coords = new double[] {
                     this.config.getDouble(saveId + ".x"),
@@ -103,15 +101,11 @@ public class SimpleHoloManager implements HoloManager {
             Hologram hologram = new HologramFactory()
                     .withLocation(new org.bukkit.util.Vector(coords[0], coords[1], coords[2]), this.config.getString(saveId + ".world"))
                     .withText(lines.toArray(new String[lines.size()]))
+                    .withFirstId(saveId)
                     .build();
-            hologram.setSaveId(saveId);
             this.track(hologram, HoloAPI.getInstance());
             return hologram;
         }
         return null;
-    }
-
-    private boolean isValid(String saveId) {
-        return saveId != null && !"".equals(saveId) && saveId.length() > 4;
     }
 }

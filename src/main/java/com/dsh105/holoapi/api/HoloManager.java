@@ -28,5 +28,5 @@ public interface HoloManager {
 
     public void saveToFile(Hologram hologram);
 
-    public Hologram createFromFile(String saveId);
+    public Hologram createFromFile(int saveId);
 }

@@ -2,29 +2,20 @@ package com.dsh105.holoapi.command;
 
 import com.dsh105.dshutils.pagination.Paginator;
 import com.dsh105.dshutils.util.StringUtil;
-import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.HologramFactory;
-import com.dsh105.holoapi.image.ImageChar;
-import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 
 public class HoloCommand implements CommandExecutor {
 
     public String label;
     private Paginator help;
+
+    private String[] HELP_CREATE;
 
     public HoloCommand(String name) {
         this.label = name;
@@ -38,31 +29,58 @@ public class HoloCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length == 0 && sender instanceof Player) {
-            final Player p = (Player) sender;
-            URI uri = URI.create("http://www.gstatic.com/webp/gallery3/2.png");
-            BufferedImage image;
-            try {
-                image = ImageIO.read(uri.toURL());
-            } catch (IOException e) {
-                throw new RuntimeException("Cannot read image " + uri, e);
-            }
-            if (image != null) {
-                /*final Hologram h = new HologramFactory().withCoords(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ())//withText("Hi, how's it going?", "Morning", ChatColor.BLUE + "" + ImageChar.MEDIUM_SHADE.getImageChar() + ImageChar.BLOCK.getImageChar() + ' ').build();
-                        .withImage(new ImageData("creepermap.png", 8, ImageChar.MEDIUM_SHADE)).build();*/
-                final Hologram h = new HologramFactory().withLocation(new Vector(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ()), p.getWorld().getName()).withText(new ImageGenerator(image, 25, ImageChar.BLOCK).getLines()).build();
-                h.show(p);
-                p.sendMessage(Lang.PREFIX.getValue() + "Spawned");
+        /**
+         * Possible commands:
+         *
+         * ----------------------
+         * NOTE: ALL COMMAND CREATED HOLOGRAMS ARE VISIBLE TO ALL PLAYERS
+         * ----------------------
+         *
+         * /holo create [-i <image></image>] [-t <text>] -> Creates hologram. Each switch can be followed by multiple lines, until a new switch is specified. (-i loads an image from config.yml images section)
+         * /holo create -> Start conversation for multiple lines -> "Done" when finished
+         * /holo info -> Print info on all active holograms (with ids)
+         * /holo remove <id> -> remove hologram of id
+         */
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        h.clear(p);
-                        p.sendMessage(Lang.PREFIX.getValue() + "Despawned");
-                    }
-                }.runTaskLater(HoloAPI.getInstance(), 500L);
+        if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
+            if (args.length == 1) {
+                String[] help = this.help.getPage(1);
+                sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help 1/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
+                for (String s : help) {
+                    sender.sendMessage(s);
+                }
+                sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                 return true;
+            } else if (args.length == 2) {
+                if (StringUtil.isInt(args[1])) {
+                    String[] help = this.help.getPage(Integer.parseInt(args[1]));
+                    if (help == null) {
+                        Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.toString().replace("%index%", args[1]));
+                        return true;
+                    }
+                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                    for (String s : help) {
+                        sender.sendMessage(s);
+                    }
+                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
+                    return true;
+                } else {
+                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + ChatColor.DARK_AQUA + "----------------");
+                    if (args[1].equalsIgnoreCase("create")) {
+                        for (String s : HELP_CREATE) {
+                            sender.sendMessage(s);
+                        }
+                    } else {
+                        sender.sendMessage(ChatColor.DARK_AQUA + "Help could not be found for \"" + ChatColor.AQUA + args[1] + ChatColor.DARK_AQUA + "\".");
+                    }
+                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
+                    return true;
+                }
             }
+            return true;
+        } else if (args.length == 1) {
+
         }
         Lang.sendTo(sender, Lang.COMMAND_ERROR.getValue()
                 .replace("%cmd%", "/" + cmd.getLabel() + " " + (args.length == 0 ? "" : StringUtil.combineSplit(0, args, " "))));

@@ -4,3 +4,7 @@ author: [DSH105, Frostalf, CaptainBern]
 description: Advanced Hologram management
 website: ${project.url}
 main: ${main.class}
+commands:
+    holo:
+        description: Create, remove and view information on Holographic displays
+        permission: holoapi.holo

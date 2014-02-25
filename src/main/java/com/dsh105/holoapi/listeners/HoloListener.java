@@ -5,10 +5,11 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class GlobalHologramListener implements Listener {
+public class HoloListener implements Listener {
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
@@ -26,6 +27,15 @@ public class GlobalHologramListener implements Listener {
         for (Hologram h : ((SimpleHoloManager) HoloAPI.getManager()).getAllHolograms().keySet()) {
             if (h.getLocationFor(event.getPlayer()) != null) {
                 h.clear(event.getPlayer());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        for (Hologram h : ((SimpleHoloManager) HoloAPI.getManager()).getAllHolograms().keySet()) {
+            if (event.getPlayer().getLocation().getWorld().getName().equals(h.getWorldName()) && h.isVisibleToAll()) {
+                h.show(event.getPlayer());
             }
         }
     }
