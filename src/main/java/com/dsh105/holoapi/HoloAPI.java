@@ -44,10 +44,10 @@ public class HoloAPI extends DSHPlugin {
     public String updateName = "";
     public boolean updateChecked = false;
 
-    private CommandMap commandMap;
+    //private CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
     public ChatColor secondaryColour = ChatColor.AQUA;
-    private String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "] •••" + ChatColor.RESET + " ";
+    private String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
 
     public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
@@ -57,7 +57,7 @@ public class HoloAPI extends DSHPlugin {
     }
 
     public String getPrefix() {
-        return this.getPrefix("HoloAPI");
+        return this.getPrefix("HoloAPI") + "••• ";
     }
 
     public String getPrefix(String internalText) {

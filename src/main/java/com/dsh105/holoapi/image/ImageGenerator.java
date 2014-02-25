@@ -21,19 +21,26 @@ public class ImageGenerator {
 
     private String lines[];
 
+    private String storedImageUrl;
+    private int sotredImageHeight;
+    private ImageChar storedImgChar = ImageChar.BLOCK;
+
     public ImageGenerator(BufferedImage image, int height, ImageChar imgChar) {
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
     }
 
-    public ImageGenerator(String imageUrl, int height, ImageChar imgChar) {
-        URI uri = URI.create(imageUrl);
-        BufferedImage image;
-        try {
-            image = ImageIO.read(uri.toURL());
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot read image " + uri, e);
+    protected ImageGenerator(String imageUrl, int height, ImageChar imgChar) {
+        this(imageUrl, height, imgChar, true);
+    }
+
+    protected ImageGenerator(String imageUrl, int height, ImageChar imgChar, boolean loadUrl) {
+        if (loadUrl) {
+            this.loadUrlImage();
+        } else {
+            this.storedImageUrl = imageUrl;
+            this.sotredImageHeight = height;
+            this.storedImgChar = imgChar;
         }
-        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
     }
 
     public ImageGenerator(File imageFile, int height, ImageChar imgChar) {
@@ -44,6 +51,20 @@ public class ImageGenerator {
             throw new RuntimeException("Cannot read image " + imageFile.getPath(), e);
         }
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
+    }
+
+    protected void loadUrlImage() {
+        if (this.storedImageUrl == null) {
+            throw new NullPointerException("URL not initiated for ImageGenerator.");
+        }
+        URI uri = URI.create(this.storedImageUrl);
+        BufferedImage image;
+        try {
+            image = ImageIO.read(uri.toURL());
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot read image " + uri, e);
+        }
+        this.lines = this.generate(generateColours(image, this.sotredImageHeight), this.storedImgChar.getImageChar());
     }
 
     public String[] getLines() {

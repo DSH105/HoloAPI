@@ -99,8 +99,12 @@ public class HoloCommand implements CommandExecutor {
             } else if (args.length == 3) {
                 if (args[1].equalsIgnoreCase("image")) {
                     if (Perm.CREATE.hasPerm(sender, true, false)) {
+                        if (!HoloAPI.getImageLoader().isLoaded()) {
+                            Lang.sendTo(sender, Lang.IMAGES_NOT_LOADED.getValue());
+                            return true;
+                        }
                         String key = args[2];
-                        ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(key);
+                        ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(sender, key);
                         if (generator == null) {
                             Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
                             return true;
@@ -109,6 +113,7 @@ public class HoloCommand implements CommandExecutor {
                         loc.add(0D, 1.5D, 0D);
                         Hologram h = new HologramFactory().withImage(generator).withLocation(loc).build();
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getFirstId() + ""));
+                        return true;
                     } else return true;
                 }
             }

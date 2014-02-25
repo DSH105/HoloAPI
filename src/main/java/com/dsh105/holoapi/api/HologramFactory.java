@@ -68,7 +68,7 @@ public class HologramFactory {
     }
 
     public HologramFactory withImage(String imageUrl, int imageHeight) {
-        return this.withImage(new ImageGenerator(imageUrl, imageHeight, ImageChar.DARK_SHADE));
+        return this.withImage(new ImageGenerator(imageUrl, imageHeight, ImageChar.BLOCK));
     }
 
     public HologramFactory withImage(String imageUrl, int imageHeight, ImageChar imageChar) {

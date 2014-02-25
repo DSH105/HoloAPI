@@ -8,6 +8,6 @@ public class InputConversationPrefix implements ConversationPrefix {
 
     @Override
     public String getPrefix(ConversationContext conversationContext) {
-        return HoloAPI.getInstance().getPrefix() + " " + HoloAPI.getInstance().getPrefix("Builder");
+        return HoloAPI.getInstance().getPrefix("HoloAPI") + HoloAPI.getInstance().getPrefix("Builder") + "••• ";
     }
 }

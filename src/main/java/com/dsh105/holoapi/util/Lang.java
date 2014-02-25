@@ -19,9 +19,11 @@ public enum Lang {
     INT_ONLY("int_only", "&b%string% &3must to be an integer."),
     WHUPS("whups", "&3Whups. Something bad happened."),
 
+    LOADING_URL_IMAGE("loading_image_display", "&3Loading custom URL image of key &b%key%&3..."),
     ACTIVE_DISPLAYS("active_displays", "&3Active Holographic Displays:"),
+    IMAGES_NOT_LOADED("images_not_loaded", "&3Images are not loaded yet. Try again later."),
 
-    FAILED_IMAGE_LOAD("failed_image_load", "&3Failed to load custom image. Make sure that the image is placed in the &bimages &3folder of HoloAPI and is correctly configured in &bconfig.yml&3."),
+    FAILED_IMAGE_LOAD("failed_image_load", "&3Failed to load custom image. Make sure that it is correctly configured in &bconfig.yml&3."),
     HOLOGRAM_NOT_FOUND("hologram_not_found", "&3Hologram of ID &b%id% &3not found."),
     NO_ACTIVE_HOLOGRAMS("no_active_holograms", "&3There are currently no active holographic displays."),
     HOLOGRAM_CREATED("hologram_created", "&3Hologram of ID &b%id% &3created."),
@@ -32,7 +34,7 @@ public enum Lang {
     YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),
 
     PROMPT_INPUT("prompt_input", "&3Enter the desired lines of the new hologram. Enter &bDone &3when finished."),
-    PROMPT_INPUT_NEXT("prompt_input", "&3Enter next line."),
+    PROMPT_INPUT_NEXT("prompt_input_next", "&3Enter next line."),
     PROMPT_INPUT_FAILED("prompt_input_failed", "&3Hologram lines cannot be empty and must not exceed 32 characters. Retry or enter &bExit &3 to cancel."),
     ;
 
