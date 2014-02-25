@@ -1,23 +1,32 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.dshutils.config.YAMLConfig;
+import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
 public class SimpleHoloManager implements HoloManager {
 
     YAMLConfig config;
+    private UpdateDisplayTask updateDisplayTask;
     private HashMap<Hologram, Plugin> holograms = new HashMap<Hologram, Plugin>();
 
     public SimpleHoloManager() {
         this.config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA);
     }
 
+    @Override
     public HashMap<Hologram, Plugin> getAllHolograms() {
-        return holograms;
+        HashMap<Hologram, Plugin> map = new HashMap<Hologram, Plugin>();
+        map.putAll(this.holograms);
+        return map;
     }
 
     public void clearAll() {
@@ -52,11 +61,19 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public void track(Hologram hologram, Plugin owningPlugin) {
         this.holograms.put(hologram, owningPlugin);
+        if (this.updateDisplayTask == null) {
+            this.updateDisplayTask = new UpdateDisplayTask();
+        }
     }
 
     @Override
     public void stopTracking(Hologram hologram) {
+        hologram.clearPlayerLocationMap();
         this.holograms.remove(hologram);
+        if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
+            this.updateDisplayTask.cancel();
+            this.updateDisplayTask = null;
+        }
     }
 
     @Override
@@ -85,6 +102,19 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
+    public void clearFromFile(int id) {
+        Hologram hologram = this.getHologram(id);
+        if (hologram != null) {
+            this.clearFromFile(hologram);
+        }
+    }
+
+    @Override
+    public void clearFromFile(Hologram hologram) {
+        //TODO
+    }
+
+    @Override
     public Hologram createFromFile(int saveId) {
         ConfigurationSection cs = this.config.getConfigurationSection("" + saveId);
         if (cs != null) {
@@ -107,5 +137,31 @@ public class SimpleHoloManager implements HoloManager {
             return hologram;
         }
         return null;
+    }
+
+    class UpdateDisplayTask extends BukkitRunnable {
+
+        public UpdateDisplayTask() {
+            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20*30);
+        }
+
+        private ArrayList<Hologram> toUpdate = new ArrayList<Hologram>();
+
+        @Override
+        public void run() {
+            Iterator<Hologram> i = toUpdate.iterator();
+            while (i.hasNext()) {
+                Hologram h = i.next();
+                HashMap<String, Vector> map = new HashMap<String, Vector>();
+                map.putAll(h.playerToLocationMap);
+
+                for (String name : map.keySet()) {
+                    Player p = Bukkit.getPlayerExact(name);
+                    if (!GeometryUtil.getNearbyEntities(h.getDefaultLocation(), 50).contains(p)) {
+                        h.clear(p);
+                    }
+                }
+            }
+        }
     }
 }

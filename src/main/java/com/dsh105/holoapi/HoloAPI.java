@@ -7,15 +7,13 @@ import com.dsh105.dshutils.command.CustomCommand;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
-import com.dsh105.dshutils.util.EnumUtil;
 import com.dsh105.dshutils.util.VersionUtil;
 import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
-import com.dsh105.holoapi.image.ImageChar;
-import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.image.ImageLoader;
+import com.dsh105.holoapi.image.SimpleImageLoader;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
@@ -24,7 +22,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.File;
@@ -34,7 +31,7 @@ import java.lang.reflect.Field;
 public class HoloAPI extends DSHPlugin {
 
     private static SimpleHoloManager MANAGER;
-    private static ImageLoader IMAGE_LOADER;
+    private static SimpleImageLoader IMAGE_LOADER;
     private ConfigOptions OPTIONS;
 
     private YAMLConfig config;
@@ -98,11 +95,10 @@ public class HoloAPI extends DSHPlugin {
         this.loadConfiguration();
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
-        IMAGE_LOADER = new ImageLoader();
+        IMAGE_LOADER = new SimpleImageLoader();
         IMAGE_LOADER.loadImageConfiguration(this.getConfig(ConfigType.MAIN));
         manager.registerEvents(new HoloListener(), this);
-
-        //TODO: Load all saved holograms and set the IDs based on those saved. Store the next ID in the generator so that there's no double-up
+        this.loadHolograms();
 
         try {
             Metrics metrics = new Metrics(this);
@@ -117,6 +113,7 @@ public class HoloAPI extends DSHPlugin {
     @Override
     public void onDisable() {
         MANAGER.clearAll();
+        this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
     }
 
@@ -140,6 +137,11 @@ public class HoloAPI extends DSHPlugin {
                 }
             });
         }
+    }
+
+    private void loadHolograms() {
+        // TODO: LOAD THIS STUFF :DDD
+        // Load all saved holograms and set the IDs based on those saved. Store the next ID in the generator so that there's no double-up
     }
 
     private void registerCommands() {

@@ -16,13 +16,20 @@ public enum Lang {
     IN_GAME_ONLY("in_game_only", "&3Please log in to do that."),
     STRING_ERROR("string_error", "&3Error parsing &b%string%&3. Please revise command arguments."),
     NULL_PLAYER("null_player", "&b%player% &3is not online. Please try a different Player."),
-    INT_ONLY("int_only", "&b%string% &3needs to be an integer."),
-    INT_ONLY_WITH_ARGS("int_only_with_args", "&b%string% &3[Argument &b%argNum%&3] needs to be an integer."),
+    INT_ONLY("int_only", "&b%string% &3must to be an integer."),
     WHUPS("whups", "&3Whups. Something bad happened."),
+
+    FAILED_IMAGE_LOAD("failed_image_load", "&3Failed to load custom image. Make sure that the image is placed in the &bimages &3folder of HoloAPI and is correctly configured in &bimages.yml&3."),
+    NO_ACTIVE_HOLOGRAMS("no_active_holograms", "&3There are currently no active holographic displays."),
+    HOLOGRAM_CREATED("hologram_created", "&3Hologram of ID &b%id% &3created."),
+    HOLOGRAM_REMOVED("hologram_removed", "&3Hologram of ID &b%id% &3removed."),
+    HOLOGRAM_CLEARED("hologram_cleared", "&3Hologram cleared from file."),
+
+    YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),
+    YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),
 
     PROMPT_INPUT("prompt_input", "&3Enter the desired lines of the new hologram. Enter &bDone &3when finished."),
     PROMPT_INPUT_FAILED("prompt_input_failed", "&3Hologram lines cannot be empty and must not exceed 32 characters. Retry or enter &bExit &3 to cancel."),
-    PROMPT_INPUT_SUCCESS("prompt_input_success", "&3Hologram created of ID &b%id%&3."),
     ;
 
     private String path;

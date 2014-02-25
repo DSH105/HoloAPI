@@ -14,6 +14,8 @@ import java.util.*;
 
 public interface HoloManager {
 
+    public HashMap<Hologram, Plugin> getAllHolograms();
+
     public ArrayList<Hologram> getHologramsFor(Plugin owningPlugin);
 
     public Hologram getHologram(int id);
@@ -27,6 +29,10 @@ public interface HoloManager {
     public void saveToFile(int id);
 
     public void saveToFile(Hologram hologram);
+
+    public void clearFromFile(int id);
+
+    public void clearFromFile(Hologram hologram);
 
     public Hologram createFromFile(int saveId);
 }

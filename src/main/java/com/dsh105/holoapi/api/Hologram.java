@@ -27,7 +27,7 @@ public class Hologram {
 
     private boolean visibleToAll = true;
 
-    private HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
+    protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
 
     protected Hologram(int id, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
@@ -62,17 +62,22 @@ public class Hologram {
         return worldName;
     }
 
+    public Location getDefaultLocation() {
+        return new Location(Bukkit.getWorld(this.getWorldName()), this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
+    }
+
     public String[] getLines() {
         return tags;
     }
 
-    public boolean isVisibleToAll() {
+    // TODO: Fully implement this
+    /*public boolean isVisibleToAll() {
         return visibleToAll;
     }
 
     public void setVisibleToAll(boolean flag) {
         this.visibleToAll = flag;
-    }
+    }*/
 
     public double getSpacing() {
         return spacing;
@@ -110,19 +115,26 @@ public class Hologram {
     }
 
     public void show(Player observer, int x, int y, int z) {
+        if (this.playerToLocationMap.containsKey(observer.getName())) {
+            this.move(observer, new Vector(x, y, z));
+        }
         for (int index = 0; index < this.getTagCount(); index++) {
             this.generate(observer, index, -index * this.spacing, x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }
 
-    public void move(Player observer, Location location) {
-        Location loc = location.clone();
+    public void move(Player observer, Location to) {
+        this.move(observer, to.toVector());
+    }
+
+    public void move(Player observer, Vector vector) {
+        Vector loc = vector.clone();
         for (int i = 0; i < this.getTagCount(); i++) {
             this.moveTag(observer, i, loc);
             loc.setY(loc.getY() - this.spacing);
         }
-        this.playerToLocationMap.put(observer.getName(), new Vector(location.getX(), location.getY(), location.getZ()));
+        this.playerToLocationMap.put(observer.getName(), vector);
     }
 
     public void clear(Player observer) {
@@ -149,7 +161,7 @@ public class Hologram {
         destroy.send(observer);
     }
 
-    protected void moveTag(Player observer, int index, Location to) {
+    protected void moveTag(Player observer, int index, Vector to) {
         WrapperPacketEntityTeleport teleportHorse = new WrapperPacketEntityTeleport();
         teleportHorse.setEntityId(this.getHorseIndex(index));
         teleportHorse.setX(to.getX());

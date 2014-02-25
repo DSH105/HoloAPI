@@ -1,11 +1,14 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageChar;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ShortIdGenerator;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -85,6 +88,11 @@ public class HologramFactory {
             this.id = ShortIdGenerator.nextId(lines.length);
         }
         Hologram hologram = new Hologram(this.id, this.worldName, this.locX, this.locY, this.locZ, lines);
+        for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
+            if (e instanceof Player) {
+                hologram.show((Player) e);
+            }
+        }
         HoloAPI.getManager().track(hologram, HoloAPI.getInstance());
         return hologram;
     }
