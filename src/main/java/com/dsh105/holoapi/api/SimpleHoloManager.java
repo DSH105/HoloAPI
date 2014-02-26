@@ -168,7 +168,7 @@ public class SimpleHoloManager implements HoloManager {
                         continue;
                     }
                     if (!lines.isEmpty()) {
-                        new HologramFactory().withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
+                        new HologramFactory().withFirstId(Integer.parseInt(key)).withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
                     }
                 }
             }
@@ -204,7 +204,7 @@ public class SimpleHoloManager implements HoloManager {
             }
         }
         if (!lines.isEmpty()) {
-            new HologramFactory().withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
+            new HologramFactory().withFirstId(hologramId).withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
         }
     }
 

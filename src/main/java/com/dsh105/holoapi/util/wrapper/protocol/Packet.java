@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public class Packet {
 
     private Class packetClass;
-    private net.minecraft.server.v1_7_R1.Packet packetHandle;
+    private Object packetHandle;
     private Protocol protocol;
     private Sender sender;
 
@@ -19,7 +19,7 @@ public class Packet {
     public Packet(Protocol protocol, Sender sender, int id) {
         this.packetClass = PacketUtil.getPacket(protocol, sender, id);
         try {
-            this.packetHandle = (net.minecraft.server.v1_7_R1.Packet) this.packetClass.newInstance();
+            this.packetHandle = this.packetClass.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -44,7 +44,7 @@ public class Packet {
     }
 
     public net.minecraft.server.v1_7_R1.Packet getPacketHandle() {
-        return this.packetHandle;
+        return (net.minecraft.server.v1_7_R1.Packet) this.packetHandle;
     }
 
     public Protocol getProtocol() {

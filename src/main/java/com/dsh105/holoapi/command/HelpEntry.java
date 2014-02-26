@@ -4,10 +4,11 @@ import org.bukkit.ChatColor;
 
 public enum HelpEntry {
 
-    CREATE("/holo create", "Create a holographic display. Lines can be entered after each other in a seamless."),
-    CREATE_IMAGE("/holo create image <image_id>", "Create a holographic display with the specified images. Images can be defined in the images.yml."),
+    CREATE("/holo create", "Create a holographic display. Lines can be entered after each other."),
+    CREATE_IMAGE("/holo create image <image_id>", "Create a holographic display with the specified images. Images can be defined in the config.yml."),
     REMOVE("/holo remove <id>", "Remove an existing holographic display using its ID."),
-    INFO("/holo info", "View information on active holographic displays.")
+    INFO("/holo info", "View information on active holographic displays."),
+    RELOAD("/holo reload", "Reload all HoloAPI configuration files."),
     ;
 
     private String line;

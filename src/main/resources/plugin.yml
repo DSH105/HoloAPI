@@ -1,6 +1,6 @@
 name: ${project.name}
 version: ${project.version}
-author: [DSH105, Frostalf, CaptainBern]
+author: [DSH105, CaptainBern]
 description: Advanced Hologram management
 website: ${project.url}
 main: ${main.class}
@@ -8,3 +8,29 @@ commands:
     holo:
         description: Create, remove and view information on Holographic displays
         permission: holoapi.holo
+    holoupdate:
+        description: Update the HoloAPI plugin
+        permission: holoapi.update
+permissions:
+    holoapi.holo:
+        default: op
+    holoapi.holo.create:
+        default: op
+    holoapi.holo.remove:
+        default: op
+    holoapi.holo.info:
+        default: op
+    holoapi.holo.reload:
+        default: op
+    holoapi.update:
+        default: op
+    holoapi.*:
+        default: op
+        description: All HoloAPI commands
+        children:
+            holoapi.holo: true
+            holoapi.holo.create: true
+            holoapi.holo.remove: true
+            holoapi.holo.info: true
+            holoapi.holo.reload: true
+            holoapi.update: true

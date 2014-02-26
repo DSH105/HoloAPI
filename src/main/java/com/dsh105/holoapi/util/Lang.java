@@ -18,6 +18,7 @@ public enum Lang {
     NULL_PLAYER("null_player", "&b%player% &3is not online. Please try a different Player."),
     INT_ONLY("int_only", "&b%string% &3must to be an integer."),
     WHUPS("whups", "&3Whups. Something bad happened."),
+    CONFIGS_RELOADED("configs_reloaded", "&3Configuration files reloaded."),
 
     LOADING_URL_IMAGE("loading_image_display", "&3Loading custom URL image of key &b%key%&3..."),
     ACTIVE_DISPLAYS("active_displays", "&3Active Holographic Displays:"),

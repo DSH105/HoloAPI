@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 public enum Perm {
 
     UPDATE("holoapi.update"),
+    RELOAD("holoapi.holo.reload"),
     CREATE("holoapi.holo.create"),
     REMOVE("holoapi.holo.remove"),
     INFO("holoapi.holo.info");

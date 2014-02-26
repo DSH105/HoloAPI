@@ -119,11 +119,11 @@ public class HoloCommand implements CommandExecutor {
             }
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
-                /*if (Perm.RELOAD.hasPerm(sender, true, true)) {
+                if (Perm.RELOAD.hasPerm(sender, true, true)) {
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).reloadConfig();
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
                     Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
-                } else return true;*/
+                } else return true;
             }
             if (args[0].equalsIgnoreCase("info")) {
                 if (Perm.INFO.hasPerm(sender, true, true)) {
