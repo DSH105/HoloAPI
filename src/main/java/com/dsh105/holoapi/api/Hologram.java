@@ -124,7 +124,6 @@ public class Hologram {
 
     protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
         for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
-            HoloAPI.LOGGER.log(Level.INFO, entry.getKey().getFirst() + "," + entry.getKey().getLast() + " : " + entry.getValue() + ", " + index);
             if (entry.getKey().getFirst() == index) {
                 return entry;
             }
