@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 
 public class PlayerUtil {
 
-    private static final Method getHandle = ReflectionUtil.getMethod(Player.class, "getHandle");
     private static final Method sendPacket = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("PlayerConnection"), "sendPacket", ReflectionUtil.getNMSClass("Packet"));
 
     public static void sendPacket(Player player, Object packet){
@@ -20,6 +19,7 @@ public class PlayerUtil {
     }
 
     public static Object playerToEntityPlayer(Player player){
+        Method getHandle = ReflectionUtil.getMethod(player.getClass(), "getHandle");
         try {
             return getHandle.invoke(player);
         } catch (Exception e) {
