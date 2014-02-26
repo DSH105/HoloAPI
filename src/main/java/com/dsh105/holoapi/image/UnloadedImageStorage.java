@@ -5,11 +5,13 @@ public class UnloadedImageStorage {
     private String imagePath;
     private int imageHeight;
     private ImageChar charType;
+    private boolean requiresBorder;
 
-    public UnloadedImageStorage(String imagePath, int imageHeight, ImageChar charType) {
+    public UnloadedImageStorage(String imagePath, int imageHeight, ImageChar charType, boolean requiresBorder) {
         this.imagePath = imagePath;
         this.imageHeight = imageHeight;
         this.charType = charType;
+        this.requiresBorder = requiresBorder;
     }
 
     public String getImagePath() {
@@ -34,5 +36,13 @@ public class UnloadedImageStorage {
 
     public void setCharType(ImageChar charType) {
         this.charType = charType;
+    }
+
+    public boolean requiresBorder() {
+        return requiresBorder;
+    }
+
+    public void setRequiresBorder(boolean requiresBorder) {
+        this.requiresBorder = requiresBorder;
     }
 }

@@ -109,8 +109,8 @@ public class HoloCommand implements CommandExecutor {
                             Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
                             return true;
                         }
-                        Location loc = ((Player) sender).getLocation().clone();
-                        loc.subtract(0D, 1.5D, 0D);
+                        Location loc = ((Player) sender).getEyeLocation().clone();
+                        loc.add(0D, generator.getLines().length * Hologram.getSpacing(), 0D);
                         Hologram h = new HologramFactory().withImage(generator).withLocation(loc).build();
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getFirstId() + ""));
                         return true;
@@ -133,7 +133,8 @@ public class HoloCommand implements CommandExecutor {
                     }
                     Lang.sendTo(sender, Lang.ACTIVE_DISPLAYS.getValue());
                     for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllHolograms().entrySet()) {
-                        sender.sendMessage("•• " + ChatColor.AQUA + entry.getKey().getFirstId() + ChatColor.DARK_AQUA + " (" + entry.getValue().getName() + ")");
+                        Hologram h = entry.getKey();
+                        sender.sendMessage("•• " + ChatColor.AQUA + h.getFirstId() + ChatColor.DARK_AQUA + " (" + (int) h.getDefaultX() + "," + (int) h.getDefaultY() + "," + (int) h.getDefaultZ() + "," + h.getWorldName() + ")");
                     }
                     return true;
                 } else return true;
@@ -174,7 +175,7 @@ public class HoloCommand implements CommandExecutor {
                         public String getFailedText() {
                             return Lang.YES_NO_INPUT_INVALID.getValue();
                         }
-                    }));
+                    })).buildConversation((Player) sender).begin();
 
                     return true;
                 } else return true;

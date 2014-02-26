@@ -3,6 +3,7 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
+import com.dsh105.holoapi.exceptions.ImageNotLoadedException;
 import com.dsh105.holoapi.image.ImageChar;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ShortIdGenerator;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HologramFactory {
 
@@ -24,6 +26,7 @@ public class HologramFactory {
     private boolean prepared = false;
 
     private ArrayList<String> tags = new ArrayList<String>();
+    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
 
     protected HologramFactory withFirstId(int firstId) {
         this.id = firstId;
@@ -64,15 +67,23 @@ public class HologramFactory {
     }
 
     public HologramFactory withImage(ImageGenerator imageGenerator) {
+        int first = this.tags.size() - 1;
+        int last = imageGenerator.getLines().length - 1;
+        this.imageIdMap.put(new TagSize(first, last), imageGenerator.getImageKey());
         return this.withText(imageGenerator.getLines());
     }
 
-    public HologramFactory withImage(String imageUrl, int imageHeight) {
-        return this.withImage(new ImageGenerator(imageUrl, imageHeight, ImageChar.BLOCK));
-    }
-
-    public HologramFactory withImage(String imageUrl, int imageHeight, ImageChar imageChar) {
-        return this.withImage(new ImageGenerator(imageUrl, imageHeight, imageChar));
+    public HologramFactory withImage(String customImageKey) {
+        ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(customImageKey);
+        if (generator != null) {
+            int first = this.tags.size() - 1;
+            int last = generator.getLines().length - 1;
+            this.imageIdMap.put(new TagSize(first, last), generator.getImageKey());
+            this.withText(generator.getLines());
+        } else {
+            throw new ImageNotLoadedException(customImageKey);
+        }
+        return this;
     }
 
     public Hologram build() {
@@ -93,6 +104,7 @@ public class HologramFactory {
                 hologram.show((Player) e);
             }
         }
+        hologram.setImageTagMap(this.imageIdMap);
         HoloAPI.getManager().track(hologram, HoloAPI.getInstance());
         return hologram;
     }

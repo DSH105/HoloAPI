@@ -17,40 +17,52 @@ import java.net.URI;
 
 public class ImageGenerator {
 
-    private final static String TRANSPARENT_CHAR = /*'\u2591'*/"  ";
-
+    private final static char TRANSPARENT_CHAR_NOBORDER = ' ';
+    private final static String TRANSPARENT_CHAR_BORDER = "  ";
     private String lines[];
 
+    private String imageKey;
+
     private String storedImageUrl;
-    private int sotredImageHeight;
+
+    private int storedImageHeight;
     private ImageChar storedImgChar = ImageChar.BLOCK;
+    private boolean storedRequiresBorder;
 
-    public ImageGenerator(BufferedImage image, int height, ImageChar imgChar) {
-        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
+    public ImageGenerator(BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
+        this.imageKey = imageKey;
+        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
     }
 
-    public ImageGenerator(String imageUrl, int height, ImageChar imgChar) {
-        this(imageUrl, height, imgChar, true);
+    public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean requiresBorder) {
+        this(imageKey, imageUrl, height, imgChar, true, requiresBorder);
     }
 
-    public ImageGenerator(String imageUrl, int height, ImageChar imgChar, boolean loadUrl) {
+    public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean loadUrl, boolean requiresBorder) {
+        this.imageKey = imageKey;
         if (loadUrl) {
             this.loadUrlImage();
         } else {
             this.storedImageUrl = imageUrl;
-            this.sotredImageHeight = height;
+            this.storedImageHeight = height;
             this.storedImgChar = imgChar;
+            this.storedRequiresBorder = requiresBorder;
         }
     }
 
-    public ImageGenerator(File imageFile, int height, ImageChar imgChar) {
+    public ImageGenerator(String imageKey, File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {
         BufferedImage image;
         try {
             image = ImageIO.read(imageFile);
         } catch (IOException e) {
             throw new RuntimeException("Cannot read image " + imageFile.getPath(), e);
         }
-        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar());
+        this.imageKey = imageKey;
+        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
+    }
+
+    public String getImageKey() {
+        return imageKey;
     }
 
     protected void loadUrlImage() {
@@ -64,44 +76,59 @@ public class ImageGenerator {
         } catch (IOException e) {
             throw new RuntimeException("Cannot read image " + uri, e);
         }
-        this.lines = this.generate(generateColours(image, this.sotredImageHeight), this.storedImgChar.getImageChar());
+        this.lines = this.generate(generateColours(image, this.storedImageHeight), this.storedImgChar.getImageChar(), storedRequiresBorder);
     }
 
     public String[] getLines() {
         return lines;
     }
 
-    private String[] generate(ChatColor[][] colors, char imgchar) {
+    private String[] generate(ChatColor[][] colors, char imgchar, boolean b) {
         String[] lines = new String[colors[0].length];
         for (int y = 0; y < colors[0].length; y++) {
             String line = "";
             for (int x = 0; x < colors.length; x++) {
                 ChatColor colour = colors[x][y];
                 if (colour == null) {
-                    //line += TRANSPARENT_CHAR;
-                    if (!line.equals("")) {
+                    line += b ? TRANSPARENT_CHAR_BORDER : TRANSPARENT_CHAR_NOBORDER;
+                    /*if (!line.equals("")) {
                         line += TRANSPARENT_CHAR;
-                    }
+                    }*/
                 } else {
-                    line += colour.toString() + imgchar;
+                    line += colour.toString() + imgchar + ChatColor.RESET;
                 }
             }
 
-            line = line.trim();
+            if (!b) {
+                line = line.trim();
+            }
 
-            /*for (int x = colors.length - 1; x > 0; x--) {
-                if (line.length() > 0) {
-                    if (!(colors[x][y] == null || colors[x][y].equals(TRANSPARENT_CHAR))) {
-                        break;
-                    } else {
-                        line = line.substring(0, line.length() - 1);
-                    }
-                } else {
-                    break;
-                }
-            }*/
             lines[y] = line + ChatColor.RESET;
         }
+        /*int min = 0;
+        for (String s : lines) {
+            if (s != null) {
+                char[] chars = s.toCharArray();
+                char space = ' ';
+                int j = 0;
+                for (int i = s.length() - 1; i > 0; i--) {
+                    if (chars[i] == space) {
+                        j++;
+                    }
+                    if (j < min) {
+                        min = j;
+                    }
+                }
+            }
+        }
+
+        String[] newLines = new String[lines.length];
+        int index = 0;
+        for (String s : lines) {
+            if (s != null) {
+                newLines[index] = s.substring(0, s.length() - min);
+            }
+        }*/
         return lines;
     }
 

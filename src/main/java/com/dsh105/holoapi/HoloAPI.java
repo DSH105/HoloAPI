@@ -7,11 +7,14 @@ import com.dsh105.dshutils.command.CustomCommand;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
+import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.dshutils.util.VersionUtil;
 import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
+import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.image.ImageLoader;
 import com.dsh105.holoapi.image.SimpleImageLoader;
 import com.dsh105.holoapi.listeners.HoloListener;
@@ -22,11 +25,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
 
 public class HoloAPI extends DSHPlugin {
 
@@ -140,13 +152,27 @@ public class HoloAPI extends DSHPlugin {
     }
 
     private void loadHolograms() {
-
-        getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+        new BukkitRunnable() {
             @Override
             public void run() {
                 IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
             }
-        });
+        }.runTaskAsynchronously(this);
+
+        final ArrayList<String> unprepared = MANAGER.loadFileData();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (getImageLoader().isLoaded()) {
+                    for (String s : unprepared) {
+                        MANAGER.loadFromFile(Integer.parseInt(s));
+                    }
+                    LOGGER.log(Level.INFO, "Loaded all saved holograms");
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(this, 20 * 10, 20 * 10);
 
         // TODO: LOAD THIS STUFF :DDD
         // Load all saved holograms and set the IDs based on those saved. Store the next ID in the generator so that there's no double-up

@@ -2,7 +2,9 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.GeometryUtil;
+import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.image.ImageGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -11,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class SimpleHoloManager implements HoloManager {
 
@@ -64,6 +67,7 @@ public class SimpleHoloManager implements HoloManager {
         if (this.updateDisplayTask == null) {
             this.updateDisplayTask = new UpdateDisplayTask();
         }
+        this.saveToFile(hologram);
     }
 
     @Override
@@ -74,6 +78,7 @@ public class SimpleHoloManager implements HoloManager {
             this.updateDisplayTask.cancel();
             this.updateDisplayTask = null;
         }
+        this.clearFromFile(hologram);
     }
 
     @Override
@@ -94,11 +99,18 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void saveToFile(Hologram hologram) {
-        this.config.set(hologram.getFirstId() + ".world", hologram.getWorldName());
-        this.config.set(hologram.getFirstId() + ".x", hologram.getDefaultX());
-        this.config.set(hologram.getFirstId() + ".y", hologram.getDefaultY());
-        this.config.set(hologram.getFirstId() + ".z", hologram.getDefaultZ());
-        this.config.set(hologram.getFirstId() + ".lines", hologram.getLines());
+        this.config.set("holograms." + hologram.getFirstId() + ".worldName", hologram.getWorldName());
+        this.config.set("holograms." + hologram.getFirstId() + ".x", hologram.getDefaultX());
+        this.config.set("holograms." + hologram.getFirstId() + ".y", hologram.getDefaultY());
+        this.config.set("holograms." + hologram.getFirstId() + ".z", hologram.getDefaultZ());
+        int index = 0;
+        for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
+            if (entry.getValue()) {
+                this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".type", "image");
+            }
+            this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".value", entry.getKey());
+            index++;
+        }
         this.config.saveConfig();
     }
 
@@ -112,8 +124,90 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void clearFromFile(Hologram hologram) {
-        //TODO
+        this.config.set(hologram.getFirstId() + "", null);
         this.config.saveConfig();
+    }
+
+    public ArrayList<String> loadFileData() {
+        ArrayList<String> unprepared = new ArrayList<String>();
+        ConfigurationSection cs = config.getConfigurationSection("holograms");
+        if (cs != null) {
+            for (String key : cs.getKeys(false)) {
+                String path = "holograms." + key + ".";
+                String worldName = config.getString(path + "worldName");
+                int x = config.getInt(path + "x");
+                int y = config.getInt(path + "y");
+                int z = config.getInt(path + "z");
+                ConfigurationSection cs1 = cs.getConfigurationSection("lines");
+                boolean containsImage = false;
+                ArrayList<String> lines = new ArrayList<String>();
+                for (String key1 : cs1.getKeys(false)) {
+                    if (StringUtil.isInt(key1)) {
+                        String type = config.getString(path + "lines." + key1 + ".type");
+                        String value = config.getString(path + "lines." + key1 + ".value");
+                        if (type.equalsIgnoreCase("image")) {
+                            containsImage = true;
+                            break;
+                            /*ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(value);
+                            if (generator != null) {
+                                for (String line : generator.getLines()) {
+                                    lines.add(line);
+                                }
+                            }*/
+                        } else {
+                            lines.add(value);
+                        }
+
+                        lines.add(Integer.parseInt(key1), value);
+                    } else {
+                        HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                        continue;
+                    }
+                }
+                if (containsImage) {
+                    unprepared.add(key);
+                    continue;
+                }
+                if (!lines.isEmpty()) {
+                    new HologramFactory().withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
+                }
+            }
+        }
+        return unprepared;
+    }
+
+    public void loadFromFile(int hologramId) {
+        String path = "holograms." + hologramId + ".";
+        String worldName = config.getString(path + "worldName");
+        int x = config.getInt(path + "x");
+        int y = config.getInt(path + "y");
+        int z = config.getInt(path + "z");
+        ConfigurationSection cs1 = config.getConfigurationSection("holograms." + hologramId + ".lines");
+        ArrayList<String> lines = new ArrayList<String>();
+        for (String key1 : cs1.getKeys(false)) {
+            if (StringUtil.isInt(key1)) {
+                String type = config.getString(path + "lines." + key1 + ".type");
+                String value = config.getString(path + "lines." + key1 + ".value");
+                if (type.equalsIgnoreCase("image")) {
+                    ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(value);
+                    if (generator != null) {
+                        for (String line : generator.getLines()) {
+                            lines.add(line);
+                        }
+                    }
+                } else {
+                    lines.add(value);
+                }
+
+                lines.add(Integer.parseInt(key1), value);
+            } else {
+                HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
+                continue;
+            }
+        }
+        if (!lines.isEmpty()) {
+            new HologramFactory().withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
+        }
     }
 
     @Override
@@ -135,7 +229,6 @@ public class SimpleHoloManager implements HoloManager {
                     .withText(lines.toArray(new String[lines.size()]))
                     .withFirstId(saveId)
                     .build();
-            this.track(hologram, HoloAPI.getInstance());
             return hologram;
         }
         return null;

@@ -10,8 +10,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class Hologram {
 
@@ -21,13 +23,14 @@ public class Hologram {
     private double defY;
     private double defZ;
     private String[] tags;
-    private double spacing = 0.25D;
+    private static double LINE_SPACING = 0.25D;
 
     private int firstId;
 
     private boolean visibleToAll = true;
 
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
+    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
 
     protected Hologram(int id, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
@@ -79,16 +82,51 @@ public class Hologram {
         this.visibleToAll = flag;
     }*/
 
-    public double getSpacing() {
-        return spacing;
-    }
-
-    public void setSpacing(double spacing) {
-        this.spacing = spacing;
+    public static double getSpacing() {
+        return LINE_SPACING;
     }
 
     public int getFirstId() {
         return firstId;
+    }
+
+    protected void setImageTagMap(HashMap<TagSize, String> map) {
+        this.imageIdMap = map;
+    }
+
+    protected HashMap<String, Boolean> serialise() {
+        HashMap<String, Boolean> map = new HashMap<String, Boolean>();
+        ArrayList<String> tags = new ArrayList<String>();
+        for (String s : this.tags) {
+            tags.add(s);
+        }
+        boolean cont = true;
+        int index = 0;
+        while (cont) {
+            if (index > tags.size()) {
+                cont = false;
+            } else {
+                String tag = tags.get(index);
+                Map.Entry<TagSize, String> entry = getImageIdOfIndex(index);
+                if (entry != null) {
+                    index += entry.getKey().getLast() - entry.getKey().getFirst();
+                    map.put(entry.getValue(), true);
+                } else {
+                    map.put(tag, false);
+                }
+            }
+            index++;
+        }
+        return map;
+    }
+
+    protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
+        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
+            if (entry.getKey().getFirst() == index) {
+                return entry;
+            }
+        }
+        return null;
     }
 
     protected void clearPlayerLocationMap() {
@@ -96,7 +134,12 @@ public class Hologram {
         while (i.hasNext()) {
             Player p = Bukkit.getPlayerExact(i.next());
             if (p != null) {
-                this.clear(p);
+                int[] ids = new int[this.getTagCount()];
+
+                for (int j = 0; j < this.getTagCount(); j++) {
+                    ids[j] = j;
+                }
+                clearTags(p, ids);
             }
             i.remove();
         }
@@ -119,7 +162,7 @@ public class Hologram {
             this.move(observer, new Vector(x, y, z));
         }
         for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, index, -index * this.spacing, x, y, z);
+            this.generate(observer, index, -index * LINE_SPACING, x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }
@@ -132,7 +175,7 @@ public class Hologram {
         Vector loc = vector.clone();
         for (int i = 0; i < this.getTagCount(); i++) {
             this.moveTag(observer, i, loc);
-            loc.setY(loc.getY() - this.spacing);
+            loc.setY(loc.getY() - LINE_SPACING);
         }
         this.playerToLocationMap.put(observer.getName(), vector);
     }
