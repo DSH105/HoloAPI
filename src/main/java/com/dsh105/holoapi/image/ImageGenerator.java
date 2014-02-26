@@ -17,7 +17,7 @@ import java.net.URI;
 
 public class ImageGenerator {
 
-    private final static char TRANSPARENT_CHAR = ' ';
+    private final static String TRANSPARENT_CHAR = "   ";
 
     private String lines[];
 
@@ -76,11 +76,8 @@ public class ImageGenerator {
         for (int y = 0; y < colors[0].length; y++) {
             String line = "";
             for (int x = 0; x < colors.length; x++) {
-                if (colors[x][y] != null) {
-                    line += colors[x][y].toString() + imgchar;
-                } else {
-                    line += TRANSPARENT_CHAR;
-                }
+                String colour = colors[x][y].toString();
+                line += (colour != null) ? colour + imgchar : TRANSPARENT_CHAR;
             }
             lines[y] = line + ChatColor.RESET;
         }
