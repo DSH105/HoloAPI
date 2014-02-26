@@ -12,14 +12,16 @@ import java.util.ArrayList;
 public class InputPrompt extends ValidatingPrompt {
 
     private ArrayList<String> lines;
+    private String lastAdded;
     private boolean first = true;
 
     public InputPrompt() {
         this.lines = new ArrayList<String>();
     }
 
-    public InputPrompt(ArrayList<String> lines) {
+    public InputPrompt(ArrayList<String> lines, String lastAdded) {
         this.lines = lines;
+        this.lastAdded = lastAdded;
         this.first = false;
     }
 
@@ -35,14 +37,14 @@ public class InputPrompt extends ValidatingPrompt {
             return new InputSuccessPrompt();
         }
         this.lines.add(ChatColor.translateAlternateColorCodes('&', s));
-        return new InputPrompt(this.lines);
+        return new InputPrompt(this.lines, ChatColor.translateAlternateColorCodes('&', s));
     }
 
     @Override
     public String getPromptText(ConversationContext conversationContext) {
         if (this.first) {
             return Lang.PROMPT_INPUT.getValue();
-        } else return Lang.PROMPT_INPUT_NEXT.getValue();
+        } else return Lang.PROMPT_INPUT_ADDED.getValue().replace("%input%", ChatColor.translateAlternateColorCodes('&', this.lastAdded));
     }
 
     @Override

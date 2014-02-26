@@ -34,7 +34,7 @@ public enum Lang {
     YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),
 
     PROMPT_INPUT("prompt_input", "&3Enter the desired lines of the new hologram. Enter &bDone &3when finished."),
-    PROMPT_INPUT_NEXT("prompt_input_next", "&3Enter next line."),
+    PROMPT_INPUT_ADDED("prompt_input_added", "&3Added new line: &r%input%"),
     PROMPT_INPUT_FAILED("prompt_input_failed", "&3Hologram lines cannot be empty and must not exceed 32 characters. Retry or enter &bExit &3 to cancel."),
     ;
 

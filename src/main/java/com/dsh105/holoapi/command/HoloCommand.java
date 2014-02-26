@@ -148,7 +148,7 @@ public class HoloCommand implements CommandExecutor {
                     }
                     Hologram h = HoloAPI.getManager().getHologram(Integer.parseInt(args[1]));
                     if (h == null) {
-                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue());
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
                         return true;
                     }
                     final int holoId = h.getFirstId();

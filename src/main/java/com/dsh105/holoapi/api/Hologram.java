@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ShortIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class Hologram {
 
@@ -103,7 +105,7 @@ public class Hologram {
         boolean cont = true;
         int index = 0;
         while (cont) {
-            if (index > tags.size()) {
+            if (index >= tags.size()) {
                 cont = false;
             } else {
                 String tag = tags.get(index);
@@ -122,6 +124,7 @@ public class Hologram {
 
     protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
         for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
+            HoloAPI.LOGGER.log(Level.INFO, entry.getKey().getFirst() + "," + entry.getKey().getLast() + " : " + entry.getValue() + ", " + index);
             if (entry.getKey().getFirst() == index) {
                 return entry;
             }

@@ -173,9 +173,6 @@ public class HoloAPI extends DSHPlugin {
                 }
             }
         }.runTaskTimer(this, 20 * 10, 20 * 10);
-
-        // TODO: LOAD THIS STUFF :DDD
-        // Load all saved holograms and set the IDs based on those saved. Store the next ID in the generator so that there's no double-up
     }
 
     /*private void registerCommands() {

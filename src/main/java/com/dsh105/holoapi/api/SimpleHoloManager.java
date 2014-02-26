@@ -6,6 +6,7 @@ import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.ImageGenerator;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -105,10 +106,8 @@ public class SimpleHoloManager implements HoloManager {
         this.config.set("holograms." + hologram.getFirstId() + ".z", hologram.getDefaultZ());
         int index = 0;
         for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
-            if (entry.getValue()) {
-                this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".type", "image");
-            }
-            this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".value", entry.getKey());
+            this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".type", entry.getValue() ? "image" : "text");
+            this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
             index++;
         }
         this.config.saveConfig();
@@ -124,7 +123,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void clearFromFile(Hologram hologram) {
-        this.config.set(hologram.getFirstId() + "", null);
+        this.config.set("holograms." + hologram.getFirstId() + "", null);
         this.config.saveConfig();
     }
 
@@ -138,38 +137,39 @@ public class SimpleHoloManager implements HoloManager {
                 int x = config.getInt(path + "x");
                 int y = config.getInt(path + "y");
                 int z = config.getInt(path + "z");
-                ConfigurationSection cs1 = cs.getConfigurationSection("lines");
+                ConfigurationSection cs1 = config.getConfigurationSection("holograms." + key + ".lines");
                 boolean containsImage = false;
-                ArrayList<String> lines = new ArrayList<String>();
-                for (String key1 : cs1.getKeys(false)) {
-                    if (StringUtil.isInt(key1)) {
-                        String type = config.getString(path + "lines." + key1 + ".type");
-                        String value = config.getString(path + "lines." + key1 + ".value");
-                        if (type.equalsIgnoreCase("image")) {
-                            containsImage = true;
-                            break;
+                if (cs1 != null) {
+                    ArrayList<String> lines = new ArrayList<String>();
+                    for (String key1 : cs1.getKeys(false)) {
+                        if (StringUtil.isInt(key1)) {
+                            String type = config.getString(path + "lines." + key1 + ".type");
+                            String value = config.getString(path + "lines." + key1 + ".value");
+                            if (type.equalsIgnoreCase("image")) {
+                                containsImage = true;
+                                break;
                             /*ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(value);
                             if (generator != null) {
                                 for (String line : generator.getLines()) {
                                     lines.add(line);
                                 }
                             }*/
-                        } else {
-                            lines.add(value);
-                        }
+                            } else {
+                                lines.add(Integer.parseInt(key1), ChatColor.translateAlternateColorCodes('&', value));
+                            }
 
-                        lines.add(Integer.parseInt(key1), value);
-                    } else {
-                        HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                        } else {
+                            HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                            continue;
+                        }
+                    }
+                    if (containsImage) {
+                        unprepared.add(key);
                         continue;
                     }
-                }
-                if (containsImage) {
-                    unprepared.add(key);
-                    continue;
-                }
-                if (!lines.isEmpty()) {
-                    new HologramFactory().withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
+                    if (!lines.isEmpty()) {
+                        new HologramFactory().withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
+                    }
                 }
             }
         }
@@ -196,10 +196,8 @@ public class SimpleHoloManager implements HoloManager {
                         }
                     }
                 } else {
-                    lines.add(value);
+                    lines.add(ChatColor.translateAlternateColorCodes('&', value));
                 }
-
-                lines.add(Integer.parseInt(key1), value);
             } else {
                 HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
                 continue;

@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class HologramFactory {
 
@@ -68,6 +69,7 @@ public class HologramFactory {
 
     public HologramFactory withImage(ImageGenerator imageGenerator) {
         int first = this.tags.size() - 1;
+        if (first < 0) first = 0;
         int last = imageGenerator.getLines().length - 1;
         this.imageIdMap.put(new TagSize(first, last), imageGenerator.getImageKey());
         return this.withText(imageGenerator.getLines());
