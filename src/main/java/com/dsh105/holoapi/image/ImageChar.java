@@ -23,9 +23,9 @@ public enum ImageChar {
         return humanName;
     }
 
-    public static ImageChar fromHumanName(String humanName, boolean ignoreCase) {
+    public static ImageChar fromHumanName(String humanName) {
         for (ImageChar c : ImageChar.values()) {
-            if (c.getHumanName().equals(ignoreCase ? humanName.toLowerCase() : humanName)) {
+            if (c.getHumanName().equalsIgnoreCase(humanName)) {
                 return c;
             }
         }

@@ -98,8 +98,8 @@ public class Hologram {
             if (p != null) {
                 this.clear(p);
             }
+            i.remove();
         }
-        this.playerToLocationMap.clear();
     }
 
     public Vector getLocationFor(Player player) {

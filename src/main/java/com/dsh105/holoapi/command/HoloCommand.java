@@ -110,7 +110,7 @@ public class HoloCommand implements CommandExecutor {
                             return true;
                         }
                         Location loc = ((Player) sender).getLocation().clone();
-                        loc.add(0D, 1.5D, 0D);
+                        loc.subtract(0D, 1.5D, 0D);
                         Hologram h = new HologramFactory().withImage(generator).withLocation(loc).build();
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getFirstId() + ""));
                         return true;
@@ -118,6 +118,13 @@ public class HoloCommand implements CommandExecutor {
                 }
             }
         } else if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("reload")) {
+                /*if (Perm.RELOAD.hasPerm(sender, true, true)) {
+                    HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).reloadConfig();
+                    HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
+                    Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
+                } else return true;*/
+            }
             if (args[0].equalsIgnoreCase("info")) {
                 if (Perm.INFO.hasPerm(sender, true, true)) {
                     if (HoloAPI.getManager().getAllHolograms().isEmpty()) {

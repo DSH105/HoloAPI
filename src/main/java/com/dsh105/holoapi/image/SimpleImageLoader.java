@@ -37,6 +37,7 @@ public class SimpleImageLoader implements ImageLoader {
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type");
                 if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
+                    HoloAPI.getInstance().LOGGER.log(Level.INFO, "Failed to load image: " + key + ". Invalid image type.");
                     continue;
                 }
                 ImageLoader.ImageLoadType type = ImageLoader.ImageLoadType.valueOf(imageType.toUpperCase());
@@ -44,6 +45,8 @@ public class SimpleImageLoader implements ImageLoader {
                 ImageGenerator generator = findGenerator(type, key, imagePath, imageHeight, imageChar);
                 if (generator != null) {
                     this.KEY_TO_IMAGE_MAP.put(key, generator);
+                } else {
+                    HoloAPI.getInstance().LOGGER.log(Level.INFO, "Failed to load image: " + key + ".");
                 }
             }
         }
@@ -53,9 +56,10 @@ public class SimpleImageLoader implements ImageLoader {
 
     private ImageGenerator findGenerator(ImageLoader.ImageLoadType type, String key, String imagePath, int imageHeight, String imageCharType) {
         try {
-            ImageChar c = ImageChar.fromHumanName(imageCharType, true);
+            ImageChar c = ImageChar.fromHumanName(imageCharType);
             if (c == null) {
-                return null;
+                HoloAPI.getInstance().LOGGER.log(Level.INFO, "Invalid image char type for " + key + ". Using default.");
+                c = ImageChar.BLOCK;
             }
             switch (type) {
                 case URL:
@@ -66,6 +70,7 @@ public class SimpleImageLoader implements ImageLoader {
                     return new ImageGenerator(f, imageHeight, c);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return null;
