@@ -123,6 +123,9 @@ public class HoloCommand implements CommandExecutor {
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).reloadConfig();
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
                     Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
+                    Lang.sendTo(sender, Lang.HOLOGRAM_RELOAD.getValue());
+                    HoloAPI.getInstance().loadHolograms(HoloAPI.getInstance());
+                    return true;
                 } else return true;
             }
             if (args[0].equalsIgnoreCase("info")) {
