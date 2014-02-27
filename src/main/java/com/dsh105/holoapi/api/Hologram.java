@@ -173,9 +173,9 @@ public class Hologram {
     }
 
     public void show(Player observer, int x, int y, int z) {
-        if (this.playerToLocationMap.containsKey(observer.getName())) {
+        /*if (this.playerToLocationMap.containsKey(observer.getName())) {
             this.move(observer, new Vector(x, y, z));
-        }
+        }*/
         for (int index = 0; index < this.getTagCount(); index++) {
             this.generate(observer, index, -index * LINE_SPACING, x, y, z);
         }
@@ -187,12 +187,13 @@ public class Hologram {
     }
 
     public void move(Player observer, Vector vector) {
-        Vector loc = vector.clone();
+        /*Vector loc = vector.clone();
         for (int i = 0; i < this.getTagCount(); i++) {
             this.moveTag(observer, i, loc);
             loc.setY(loc.getY() - LINE_SPACING);
         }
-        this.playerToLocationMap.put(observer.getName(), vector);
+        this.playerToLocationMap.put(observer.getName(), vector);*/
+        this.show(observer, (int) vector.getX(), (int) vector.getY(), (int) vector.getZ());
     }
 
     public void clear(Player observer) {

@@ -225,6 +225,8 @@ public class SimpleHoloManager implements HoloManager {
                     Player p = Bukkit.getPlayerExact(name);
                     if (!GeometryUtil.getNearbyEntities(h.getDefaultLocation(), 50).contains(p)) {
                         h.clear(p);
+                    } else {
+                        h.show(p);
                     }
                 }
             }
