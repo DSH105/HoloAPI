@@ -120,6 +120,7 @@ public class HoloCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (Perm.RELOAD.hasPerm(sender, true, true)) {
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).reloadConfig();
+                    HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA).reloadConfig();
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
                     Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
                     Lang.sendTo(sender, Lang.HOLOGRAM_RELOAD.getValue());
