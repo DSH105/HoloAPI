@@ -111,7 +111,7 @@ public class HoloAPI extends DSHPlugin {
         IMAGE_LOADER = new SimpleImageLoader();
         this.getCommand("holo").setExecutor(new HoloCommand());
         manager.registerEvents(new HoloListener(), this);
-        this.loadHolograms();
+        this.loadHolograms(this);
 
         try {
             Metrics metrics = new Metrics(this);
