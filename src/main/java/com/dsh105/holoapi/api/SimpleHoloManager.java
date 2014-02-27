@@ -55,7 +55,7 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public Hologram getHologram(String hologramId) {
         for (Hologram hologram : this.holograms.keySet()) {
-            if (hologram.getSaveId().equals(hologram)) {
+            if (hologram.getSaveId().equals(hologramId)) {
                 return hologram;
             }
         }
@@ -68,7 +68,9 @@ public class SimpleHoloManager implements HoloManager {
         if (this.updateDisplayTask == null) {
             this.updateDisplayTask = new UpdateDisplayTask();
         }
-        this.saveToFile(hologram);
+        if (this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
+            this.saveToFile(hologram);
+        }
     }
 
     @Override

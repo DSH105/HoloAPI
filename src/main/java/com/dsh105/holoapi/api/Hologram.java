@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import net.minecraft.server.v1_7_R1.DataWatcher;
 import org.bukkit.Bukkit;
@@ -35,6 +36,7 @@ public class Hologram {
         this(worldName, x, y, z);
         this.saveId = saveId;
         this.tags = lines;
+        this.firstTagId = TagIdGenerator.nextId(this.tags.length);
     }
 
     private Hologram(String worldName, double x, double y, double z) {

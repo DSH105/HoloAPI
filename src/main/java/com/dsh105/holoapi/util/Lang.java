@@ -28,8 +28,8 @@ public enum Lang {
     HOLOGRAM_NOT_FOUND("hologram_not_found", "&3Hologram of ID &b%id% &3not found."),
     NO_ACTIVE_HOLOGRAMS("no_active_holograms", "&3There are currently no active holographic displays."),
     HOLOGRAM_CREATED("hologram_created", "&3Hologram of ID &b%id% &3created."),
-    HOLOGRAM_REMOVED("hologram_removed", "&3Hologram of ID &b%id% &3removed."),
-    HOLOGRAM_CLEARED("hologram_cleared", "&3Hologram cleared from file."),
+    HOLOGRAM_REMOVED_MEMORY("hologram_removed_memory", "&3Hologram of ID &b%id% &3removed from memory."),
+    HOLOGRAM_CLEARED_FILE("hologram_cleared_file", "&3Hologram of ID &b%id% &3cleared from file and memory."),
     HOLOGRAM_MOVED("hologram_moved", "&3Hologram position moved."),
     HOLOGRAM_RELOAD("hologram_reload", "&3Performing manual reload of all holograms and images..."),
 

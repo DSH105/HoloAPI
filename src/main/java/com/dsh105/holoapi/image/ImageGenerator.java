@@ -19,6 +19,8 @@ public class ImageGenerator {
 
     private final static char TRANSPARENT_CHAR_NOBORDER = ' ';
     private final static String TRANSPARENT_CHAR_BORDER = "  ";
+    //private final static char TRANSPARENT_CHAR_BORDER = ImageChar.LIGHT_SHADE.getImageChar();
+
     private String lines[];
 
     private String imageKey;

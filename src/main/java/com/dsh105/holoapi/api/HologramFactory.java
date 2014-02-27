@@ -4,10 +4,8 @@ import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.exceptions.ImageNotLoadedException;
-import com.dsh105.holoapi.image.ImageChar;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
-import com.dsh105.holoapi.util.ShortIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,7 +14,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class HologramFactory {
 
@@ -100,8 +97,8 @@ public class HologramFactory {
 
         String[] lines = this.tags.toArray(new String[this.tags.size()]);
         if (!this.preparedId || this.saveId == null) {
-            Map.Entry<TagSize, String> imageIndex = getImageIdOfIndex(0);
-            this.saveId = imageIndex != null ? imageIndex.getValue() : SaveIdGenerator.nextId() + "";
+            //Map.Entry<TagSize, String> imageIndex = getImageIdOfIndex(0);
+            this.saveId = SaveIdGenerator.nextId() + "";
         }
         Hologram hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
         for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
