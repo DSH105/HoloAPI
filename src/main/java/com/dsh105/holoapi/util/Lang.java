@@ -38,7 +38,7 @@ public enum Lang {
 
     PROMPT_INPUT("prompt_input", "&3Enter the desired lines of the new hologram. Enter &bDone &3when finished."),
     PROMPT_INPUT_NEXT("prompt_input_next", "&3Added new line: &r%input%&3. Enter next line."),
-    PROMPT_INPUT_FAILED("prompt_input_failed", "&3Hologram lines cannot be empty and must not exceed 32 characters. Retry or enter &bExit &3 to cancel."),
+    PROMPT_INPUT_FAIL("prompt_input_fail", "&3Hologram lines cannot be empty. Retry or enter &bExit &3 to cancel."),
     ;
 
     private String path;

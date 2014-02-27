@@ -4,7 +4,6 @@ import com.dsh105.holoapi.util.Lang;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.StringPrompt;
 import org.bukkit.conversations.ValidatingPrompt;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class InputPrompt extends ValidatingPrompt {
 
     @Override
     protected boolean isInputValid(ConversationContext conversationContext, String s) {
-        return !((this.first && s.equalsIgnoreCase("DONE")) || s.length() > 32);
+        return !(this.first && s.equalsIgnoreCase("DONE"));
     }
 
     @Override
@@ -49,6 +48,6 @@ public class InputPrompt extends ValidatingPrompt {
 
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return Lang.PROMPT_INPUT_FAILED.getValue();
+        return Lang.PROMPT_INPUT_FAIL.getValue();
     }
 }
