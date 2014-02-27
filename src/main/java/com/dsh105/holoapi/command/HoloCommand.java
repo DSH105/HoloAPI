@@ -11,6 +11,7 @@ import com.dsh105.holoapi.conversation.basic.YesNoFunction;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -109,10 +110,8 @@ public class HoloCommand implements CommandExecutor {
                             Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
                             return true;
                         }
-                        Location loc = ((Player) sender).getEyeLocation().clone();
-                        loc.add(0D, generator.getLines().length * Hologram.getSpacing(), 0D);
-                        Hologram h = new HologramFactory().withImage(generator).withLocation(loc).build();
-                        Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getFirstId() + ""));
+                        Hologram h = new HologramFactory().withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                        Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                         return true;
                     } else return true;
                 }
@@ -137,7 +136,7 @@ public class HoloCommand implements CommandExecutor {
                     Lang.sendTo(sender, Lang.ACTIVE_DISPLAYS.getValue());
                     for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllHolograms().entrySet()) {
                         Hologram h = entry.getKey();
-                        sender.sendMessage("•• " + ChatColor.AQUA + h.getFirstId() + ChatColor.DARK_AQUA + " (" + (int) h.getDefaultX() + "," + (int) h.getDefaultY() + "," + (int) h.getDefaultZ() + "," + h.getWorldName() + ")");
+                        sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());
                     }
                     return true;
                 } else return true;
@@ -145,23 +144,19 @@ public class HoloCommand implements CommandExecutor {
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("remove")) {
                 if (Perm.REMOVE.hasPerm(sender, true, true)) {
-                    if (!StringUtil.isInt(args[1])) {
-                        Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
-                        return true;
-                    }
-                    Hologram h = HoloAPI.getManager().getHologram(Integer.parseInt(args[1]));
+                    Hologram h = HoloAPI.getManager().getHologram(args[1]);
                     if (h == null) {
                         Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
                         return true;
                     }
-                    final int holoId = h.getFirstId();
+                    final String hologramId = h.getSaveId();
                     HoloAPI.getManager().stopTracking(h);
                     Lang.sendTo(sender, Lang.HOLOGRAM_REMOVED.getValue().replace("%id%", args[1]));
 
                     InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
                         @Override
                         public void onFunction(ConversationContext context, String input) {
-                            HoloAPI.getManager().clearFromFile(holoId);
+                            HoloAPI.getManager().clearFromFile(hologramId);
                         }
 
                         @Override
@@ -180,6 +175,23 @@ public class HoloCommand implements CommandExecutor {
                         }
                     })).buildConversation((Player) sender).begin();
 
+                    return true;
+                } else return true;
+            } else if (args[0].equalsIgnoreCase("move")) {
+                if (Perm.MOVE.hasPerm(sender, true, false)) {
+                    Hologram h = HoloAPI.getManager().getHologram(args[1]);
+                    if (h == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                        return true;
+                    }
+                    Location to = ((Player) sender).getLocation();
+                    for (String pName : h.getPlayerViews().keySet()) {
+                        Player p = Bukkit.getPlayerExact(pName);
+                        if (p != null) {
+                            h.move(p, to);
+                        }
+                    }
+                    Lang.sendTo(sender, Lang.HOLOGRAM_MOVED.getValue());
                     return true;
                 } else return true;
             }

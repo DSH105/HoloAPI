@@ -53,9 +53,9 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
-    public Hologram getHologram(int id) {
+    public Hologram getHologram(String hologramId) {
         for (Hologram hologram : this.holograms.keySet()) {
-            if (hologram.getFirstId() == id) {
+            if (hologram.getSaveId().equals(hologram)) {
                 return hologram;
             }
         }
@@ -83,16 +83,16 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
-    public void stopTracking(int id) {
-        Hologram hologram = this.getHologram(id);
+    public void stopTracking(String hologramId) {
+        Hologram hologram = this.getHologram(hologramId);
         if (hologram != null) {
             this.stopTracking(hologram);
         }
     }
 
     @Override
-    public void saveToFile(int id) {
-        Hologram hologram = this.getHologram(id);
+    public void saveToFile(String hologramId) {
+        Hologram hologram = this.getHologram(hologramId);
         if (hologram != null) {
             this.saveToFile(hologram);
         }
@@ -100,22 +100,22 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void saveToFile(Hologram hologram) {
-        this.config.set("holograms." + hologram.getFirstId() + ".worldName", hologram.getWorldName());
-        this.config.set("holograms." + hologram.getFirstId() + ".x", hologram.getDefaultX());
-        this.config.set("holograms." + hologram.getFirstId() + ".y", hologram.getDefaultY());
-        this.config.set("holograms." + hologram.getFirstId() + ".z", hologram.getDefaultZ());
+        this.config.set("holograms." + hologram.getSaveId() + ".worldName", hologram.getWorldName());
+        this.config.set("holograms." + hologram.getSaveId() + ".x", hologram.getDefaultX());
+        this.config.set("holograms." + hologram.getSaveId() + ".y", hologram.getDefaultY());
+        this.config.set("holograms." + hologram.getSaveId() + ".z", hologram.getDefaultZ());
         int index = 0;
         for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
-            this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".type", entry.getValue() ? "image" : "text");
-            this.config.set("holograms." + hologram.getFirstId() + ".lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
+            this.config.set("holograms." + hologram.getSaveId() + ".lines." + index + ".type", entry.getValue() ? "image" : "text");
+            this.config.set("holograms." + hologram.getSaveId() + ".lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
             index++;
         }
         this.config.saveConfig();
     }
 
     @Override
-    public void clearFromFile(int id) {
-        Hologram hologram = this.getHologram(id);
+    public void clearFromFile(String hologramId) {
+        Hologram hologram = this.getHologram(hologramId);
         if (hologram != null) {
             this.clearFromFile(hologram);
         }
@@ -123,7 +123,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void clearFromFile(Hologram hologram) {
-        this.config.set("holograms." + hologram.getFirstId() + "", null);
+        this.config.set("holograms." + hologram.getSaveId() + "", null);
         this.config.saveConfig();
     }
 
@@ -148,12 +148,6 @@ public class SimpleHoloManager implements HoloManager {
                             if (type.equalsIgnoreCase("image")) {
                                 containsImage = true;
                                 break;
-                            /*ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(value);
-                            if (generator != null) {
-                                for (String line : generator.getLines()) {
-                                    lines.add(line);
-                                }
-                            }*/
                             } else {
                                 lines.add(Integer.parseInt(key1), ChatColor.translateAlternateColorCodes('&', value));
                             }
@@ -168,7 +162,7 @@ public class SimpleHoloManager implements HoloManager {
                         continue;
                     }
                     if (!lines.isEmpty()) {
-                        new HologramFactory().withFirstId(Integer.parseInt(key)).withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
+                        new HologramFactory().withSaveId(key).withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
                     }
                 }
             }
@@ -176,7 +170,7 @@ public class SimpleHoloManager implements HoloManager {
         return unprepared;
     }
 
-    public void loadFromFile(int hologramId) {
+    public Hologram loadFromFile(String hologramId) {
         String path = "holograms." + hologramId + ".";
         String worldName = config.getString(path + "worldName");
         int x = config.getInt(path + "x");
@@ -204,30 +198,7 @@ public class SimpleHoloManager implements HoloManager {
             }
         }
         if (!lines.isEmpty()) {
-            new HologramFactory().withFirstId(hologramId).withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
-        }
-    }
-
-    @Override
-    public Hologram createFromFile(int saveId) {
-        ConfigurationSection cs = this.config.getConfigurationSection("" + saveId);
-        if (cs != null) {
-            double[] coords = new double[] {
-                    this.config.getDouble(saveId + ".x"),
-                    this.config.getDouble(saveId + ".y"),
-                    this.config.getDouble(saveId + ".z")
-            };
-            List<String> lines = Arrays.asList(this.config.getList(saveId + ".lines").toString());
-            if (lines == null) {
-                return null;
-            }
-
-            Hologram hologram = new HologramFactory()
-                    .withLocation(new org.bukkit.util.Vector(coords[0], coords[1], coords[2]), this.config.getString(saveId + ".world"))
-                    .withText(lines.toArray(new String[lines.size()]))
-                    .withFirstId(saveId)
-                    .build();
-            return hologram;
+            return new HologramFactory().withSaveId(hologramId).withText(lines.toArray(new String[lines.size()])).withLocation(new Vector(x, y, z), worldName).build();
         }
         return null;
     }

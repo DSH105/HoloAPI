@@ -27,6 +27,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -151,28 +152,32 @@ public class HoloAPI extends DSHPlugin {
         }
     }
 
-    private void loadHolograms() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
-            }
-        }.runTaskAsynchronously(this);
+    public void loadHolograms(Plugin plugin) {
+        if (plugin.getName().equals("HoloAPI")) {
+            MANAGER.clearAll();
 
-        final ArrayList<String> unprepared = MANAGER.loadFileData();
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (getImageLoader().isLoaded()) {
-                    for (String s : unprepared) {
-                        MANAGER.loadFromFile(Integer.parseInt(s));
-                    }
-                    LOGGER.log(Level.INFO, "Loaded all saved holograms");
-                    this.cancel();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
                 }
-            }
-        }.runTaskTimer(this, 20 * 10, 20 * 10);
+            }.runTaskAsynchronously(this);
+
+            final ArrayList<String> unprepared = MANAGER.loadFileData();
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (getImageLoader().isLoaded()) {
+                        for (String s : unprepared) {
+                            MANAGER.loadFromFile(s);
+                        }
+                        LOGGER.log(Level.INFO, "Loaded all saved holograms");
+                        this.cancel();
+                    }
+                }
+            }.runTaskTimer(this, 20 * 10, 20 * 10);
+        }
     }
 
     /*private void registerCommands() {

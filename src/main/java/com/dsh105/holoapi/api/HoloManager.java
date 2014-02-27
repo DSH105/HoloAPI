@@ -18,21 +18,19 @@ public interface HoloManager {
 
     public ArrayList<Hologram> getHologramsFor(Plugin owningPlugin);
 
-    public Hologram getHologram(int id);
+    public Hologram getHologram(String hologramId);
 
     public void track(Hologram hologram, Plugin owningPlugin);
 
     public void stopTracking(Hologram hologram);
 
-    public void stopTracking(int id);
+    public void stopTracking(String hologramId);
 
-    public void saveToFile(int id);
+    public void saveToFile(String hologramId);
 
     public void saveToFile(Hologram hologram);
 
-    public void clearFromFile(int id);
+    public void clearFromFile(String hologramId);
 
     public void clearFromFile(Hologram hologram);
-
-    public Hologram createFromFile(int saveId);
 }

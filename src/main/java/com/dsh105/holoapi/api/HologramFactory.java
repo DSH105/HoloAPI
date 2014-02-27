@@ -6,6 +6,7 @@ import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.exceptions.ImageNotLoadedException;
 import com.dsh105.holoapi.image.ImageChar;
 import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.util.SaveIdGenerator;
 import com.dsh105.holoapi.util.ShortIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -14,6 +15,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class HologramFactory {
@@ -22,15 +24,15 @@ public class HologramFactory {
     private double locX;
     private double locY;
     private double locZ;
-    private int id;
+    private String saveId;
     private boolean preparedId = false;
     private boolean prepared = false;
 
     private ArrayList<String> tags = new ArrayList<String>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
 
-    protected HologramFactory withFirstId(int firstId) {
-        this.id = firstId;
+    protected HologramFactory withSaveId(String saveId) {
+        this.saveId = saveId;
         this.preparedId = true;
         return this;
     }
@@ -97,10 +99,11 @@ public class HologramFactory {
         }
 
         String[] lines = this.tags.toArray(new String[this.tags.size()]);
-        if (!this.preparedId) {
-            this.id = ShortIdGenerator.nextId(lines.length);
+        if (!this.preparedId || this.saveId == null) {
+            Map.Entry<TagSize, String> imageIndex = getImageIdOfIndex(0);
+            this.saveId = imageIndex != null ? imageIndex.getValue() : SaveIdGenerator.nextId() + "";
         }
-        Hologram hologram = new Hologram(this.id, this.worldName, this.locX, this.locY, this.locZ, lines);
+        Hologram hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
         for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
@@ -109,5 +112,14 @@ public class HologramFactory {
         hologram.setImageTagMap(this.imageIdMap);
         HoloAPI.getManager().track(hologram, HoloAPI.getInstance());
         return hologram;
+    }
+
+    protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
+        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
+            if (entry.getKey().getFirst() == index) {
+                return entry;
+            }
+        }
+        return null;
     }
 }

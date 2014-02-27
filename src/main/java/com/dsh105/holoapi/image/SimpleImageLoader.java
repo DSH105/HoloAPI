@@ -20,6 +20,8 @@ public class SimpleImageLoader implements ImageLoader {
     //TODO: Implement a queue so that if holograms are created this doesn't stop them being created with images
 
     public void loadImageConfiguration(YAMLConfig config) {
+        KEY_TO_IMAGE_MAP.clear();
+        URL_UNLOADED.clear();
         File imageFolder = new File(HoloAPI.getInstance().getDataFolder() + File.separator + "images");
         if (!imageFolder.exists()) {
             imageFolder.mkdirs();

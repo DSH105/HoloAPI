@@ -10,7 +10,8 @@ public enum Perm {
     RELOAD("holoapi.holo.reload"),
     CREATE("holoapi.holo.create"),
     REMOVE("holoapi.holo.remove"),
-    INFO("holoapi.holo.info");
+    INFO("holoapi.holo.info"),
+    MOVE("holoapi.holo.move");
 
     String perm;
 

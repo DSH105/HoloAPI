@@ -1,8 +1,5 @@
 package com.dsh105.holoapi.api;
 
-import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.ShortIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import net.minecraft.server.v1_7_R1.DataWatcher;
 import org.bukkit.Bukkit;
@@ -15,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class Hologram {
 
@@ -27,16 +23,17 @@ public class Hologram {
     private String[] tags;
     private static double LINE_SPACING = 0.25D;
 
-    private int firstId;
+    private int firstTagId;
+    private String saveId;
 
     private boolean visibleToAll = true;
 
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
 
-    protected Hologram(int id, String worldName, double x, double y, double z, String... lines) {
+    protected Hologram(String saveId, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
-        this.firstId = id;
+        this.saveId = saveId;
         this.tags = lines;
     }
 
@@ -71,6 +68,12 @@ public class Hologram {
         return new Location(Bukkit.getWorld(this.getWorldName()), this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
     }
 
+    public HashMap<String, Vector> getPlayerViews() {
+        HashMap<String, Vector> map = new HashMap<String, Vector>();
+        map.putAll(this.playerToLocationMap);
+        return map;
+    }
+
     public String[] getLines() {
         return tags;
     }
@@ -88,9 +91,17 @@ public class Hologram {
         return LINE_SPACING;
     }
 
-    public int getFirstId() {
-        return firstId;
+    public String getSaveId() {
+        return saveId;
     }
+
+    protected void setSaveId(String saveId) {
+        this.saveId = saveId;
+    }
+
+    /*public int getFirstTagId() {
+        return firstTagId;
+    }*/
 
     protected void setImageTagMap(HashMap<TagSize, String> map) {
         this.imageIdMap = map;
@@ -255,11 +266,11 @@ public class Hologram {
     }
 
     private int getHorseIndex(int index) {
-        return firstId + index * 2;
+        return firstTagId + index * 2;
     }
 
     private int getSkullIndex(int index) {
-        return firstId + index * 2 + 1;
+        return firstTagId + index * 2 + 1;
     }
 
 }
