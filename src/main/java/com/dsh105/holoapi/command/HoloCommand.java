@@ -151,17 +151,23 @@ public class HoloCommand implements CommandExecutor {
                     }
                     final String hologramId = h.getSaveId();
                     HoloAPI.getManager().stopTracking(h);
-                    Lang.sendTo(sender, Lang.HOLOGRAM_REMOVED.getValue().replace("%id%", args[1]));
+                    Lang.sendTo(sender, Lang.HOLOGRAM_REMOVED_MEMORY.getValue().replace("%id%", args[1]));
 
                     InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
+
+                        private boolean success;
+
                         @Override
                         public void onFunction(ConversationContext context, String input) {
-                            HoloAPI.getManager().clearFromFile(hologramId);
+                            if (input.equalsIgnoreCase("YES")) {
+                                HoloAPI.getManager().clearFromFile(hologramId);
+                                success = true;
+                            }
                         }
 
                         @Override
                         public String getSuccessMessage() {
-                            return Lang.HOLOGRAM_CLEARED.getValue();
+                            return success ? Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId) : Lang.HOLOGRAM_RELOAD.getValue().replace("%id%", hologramId);
                         }
 
                         @Override
