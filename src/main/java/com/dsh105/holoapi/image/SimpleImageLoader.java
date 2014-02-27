@@ -83,7 +83,7 @@ public class SimpleImageLoader implements ImageLoader {
             if (this.URL_UNLOADED.get(key) != null) {
                 final UnloadedImageStorage data = this.URL_UNLOADED.get(key);
                 HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL image of key " + key + "...");
-                Lang.sendTo(sender, Lang.LOADING_URL_IMAGE.getValue().replace("%replace%", key));
+                Lang.sendTo(sender, Lang.LOADING_URL_IMAGE.getValue().replace("%key%", key));
                 final ImageGenerator generator = new ImageGenerator(key, data.getImagePath(), data.getImageHeight(), data.getCharType(), false, data.requiresBorder());
                 new BukkitRunnable() {
                     @Override
