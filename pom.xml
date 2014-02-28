@@ -53,6 +53,10 @@
             <id>hawk-repo</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
+        <repository>
+            <id>fanciful-repo</id>
+            <url>https://raw2.github.com/mkremins/fanciful/mvn-repo/</url>
+        </repository>
     </repositories>
     <build>
         <defaultGoal>clean package install</defaultGoal>
