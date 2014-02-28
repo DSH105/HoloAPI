@@ -20,6 +20,12 @@ permissions:
         default: op
     holoapi.holo.info:
         default: op
+    holoapi.holo.move:
+        default: op
+    holoapi.holo.teleport:
+        default: op
+    holoapi.holo.build:
+        default: op
     holoapi.holo.reload:
         default: op
     holoapi.update:
@@ -33,4 +39,7 @@ permissions:
             holoapi.holo.remove: true
             holoapi.holo.info: true
             holoapi.holo.reload: true
+            holoapi.holo.move: true
+            holoapi.holo.teleport: true
+            holoapi.holo.build: true
             holoapi.update: true

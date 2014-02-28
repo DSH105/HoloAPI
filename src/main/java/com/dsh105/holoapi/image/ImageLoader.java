@@ -8,7 +8,9 @@ public interface ImageLoader {
 
     public ImageGenerator getGenerator(String key);
 
-    boolean isLoaded();
+    public boolean exists(String key);
+
+    public boolean isLoaded();
 
     public enum ImageLoadType {
         URL, FILE;

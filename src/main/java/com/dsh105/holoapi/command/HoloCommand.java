@@ -139,6 +139,9 @@ public class HoloCommand implements CommandExecutor {
                         Hologram h = entry.getKey();
                         sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());
                     }
+            } else if (args[0].equalsIgnoreCase("build")) {
+                if (Perm.BUILD.hasPerm(sender, true, true)) {
+                    InputFactory.buildBasicConversation().withFirstPrompt(new BuilderInputPrompt()).buildConversation((Player) sender).begin();
                     return true;
                 } else return true;
             }
@@ -152,7 +155,6 @@ public class HoloCommand implements CommandExecutor {
                     }
                     final String hologramId = h.getSaveId();
                     HoloAPI.getManager().stopTracking(h);
-                    Lang.sendTo(sender, Lang.HOLOGRAM_REMOVED_MEMORY.getValue().replace("%id%", args[1]));
 
                     InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
 
@@ -199,6 +201,17 @@ public class HoloCommand implements CommandExecutor {
                         }
                     }
                     Lang.sendTo(sender, Lang.HOLOGRAM_MOVED.getValue());
+                    return true;
+                } else return true;
+            } else if (args[0].equalsIgnoreCase("teleport")) {
+                if (Perm.TELEPORT.hasPerm(sender, true, false)) {
+                    Hologram h = HoloAPI.getManager().getHologram(args[1]);
+                    if (h == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                        return true;
+                    }
+                    ((Player) sender).teleport(h.getDefaultLocation());
+                    Lang.sendTo(sender, Lang.HOLOGRAM_TELEPORT_TO.getValue().replace("%id%", h.getSaveId()));
                     return true;
                 } else return true;
             }

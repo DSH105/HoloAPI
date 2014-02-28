@@ -91,6 +91,8 @@ public class SimpleImageLoader implements ImageLoader {
                         generator.loadUrlImage();
                     }
                 };
+                this.KEY_TO_IMAGE_MAP.put(key, generator);
+                this.URL_UNLOADED.remove(key);
                 return generator;
             }
         }
@@ -105,9 +107,16 @@ public class SimpleImageLoader implements ImageLoader {
                 UnloadedImageStorage data = this.URL_UNLOADED.get(key);
                 HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL image of key: " + key);
                 g = new ImageGenerator(key, data.getImagePath(), data.getImageHeight(), data.getCharType(), data.requiresBorder());
+                this.KEY_TO_IMAGE_MAP.put(key, g);
+                this.URL_UNLOADED.remove(key);
             }
         }
         return g;
+    }
+
+    @Override
+    public boolean exists(String key) {
+        return this.KEY_TO_IMAGE_MAP.containsKey(key);
     }
 
     @Override
