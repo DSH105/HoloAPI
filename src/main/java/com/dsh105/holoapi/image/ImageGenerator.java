@@ -31,6 +31,10 @@ public class ImageGenerator {
     private ImageChar storedImgChar = ImageChar.BLOCK;
     private boolean storedRequiresBorder;
 
+    protected ImageGenerator(BufferedImage image, int height, ImageChar imgChar) {
+        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), false);
+    }
+
     public ImageGenerator(String imageKey, BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
         this.imageKey = imageKey;
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);

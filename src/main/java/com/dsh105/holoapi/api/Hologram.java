@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import net.minecraft.server.v1_7_R1.DataWatcher;
@@ -27,7 +28,7 @@ public class Hologram {
     private int firstTagId;
     private String saveId;
 
-    private boolean visibleToAll = true;
+    //private boolean visibleToAll = true;
 
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
@@ -264,11 +265,11 @@ public class Hologram {
         attach.send(observer);
     }
 
-    private int getHorseIndex(int index) {
+    protected int getHorseIndex(int index) {
         return firstTagId + index * 2;
     }
 
-    private int getSkullIndex(int index) {
+    protected int getSkullIndex(int index) {
         return firstTagId + index * 2 + 1;
     }
 
