@@ -10,6 +10,7 @@ import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.dshutils.util.VersionUtil;
 import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.HoloCommand;
@@ -123,7 +124,8 @@ public class HoloAPI extends DSHPlugin {
             Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (IOException e) {
-            Logger.log(Logger.LogLevel.WARNING, "Plugin Metrics (MCStats) has failed to start.", e, false);
+            ConsoleLogger.log(Logger.LogLevel.WARNING, "Plugin Metrics (MCStats) has failed to start.");
+            e.printStackTrace();
         }
 
         this.checkUpdates();
@@ -182,7 +184,7 @@ public class HoloAPI extends DSHPlugin {
                         this.cancel();
                     }
                 }
-            }.runTaskTimer(this, 20 * 10, 20 * 10);
+            }.runTaskTimer(this, 0, 20 * 10);
         }
     }
 
