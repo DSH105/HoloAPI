@@ -60,7 +60,9 @@ public class BuilderInputPrompt extends ValidatingPrompt {
         } else {
             if (this.currentBuilder.getType().equalsIgnoreCase("TEXT")) {
                 //this.success = true;
-                this.builders.add(this.currentBuilder.withLineData(s));
+                if (s.equalsIgnoreCase("none")) {
+                    this.builders.add(this.currentBuilder.withLineData(" "));
+                }
                 return new BuilderInputPrompt(this.builders);
             } else if (this.currentBuilder.getType().equalsIgnoreCase("IMAGE")) {
                 if (HoloAPI.getImageLoader().exists(s)) {
