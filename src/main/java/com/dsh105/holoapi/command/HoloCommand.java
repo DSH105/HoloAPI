@@ -8,17 +8,22 @@ import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.conversation.basic.YesNoFunction;
+import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -137,8 +142,38 @@ public class HoloCommand implements CommandExecutor {
                     Lang.sendTo(sender, Lang.ACTIVE_DISPLAYS.getValue());
                     for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllHolograms().entrySet()) {
                         Hologram h = entry.getKey();
-                        sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());
+                        ArrayList<String> list = new ArrayList<String>();
+                        list.add(ChatColor.GOLD + "" + ChatColor.UNDERLINE + "Hologram Preview:");
+                        if (h.getLines().length > 1) {
+                            for (Map.Entry<String, Boolean> serialise : h.serialise().entrySet()) {
+                                if (serialise.getValue()) {
+                                    if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + serialise.getKey() + ".requiresBorder", false)) {
+                                        for (String s : HoloAPI.getImageLoader().getGenerator(serialise.getKey()).getLines()) {
+                                            list.add(ChatColor.WHITE + s);
+                                        }
+                                    } else {
+                                        list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + serialise.getKey() + " (IMAGE)");
+                                    }
+                                } else {
+                                    list.add(ChatColor.WHITE + serialise.getKey());
+                                }
+                            }
+                        } else {
+                            list.add(h.getLines()[0]);
+                        }
+                        if (sender instanceof Player && list.size() > 1) {
+                            ItemStack i;
+                            String title = list.get(0);
+                            list.remove(title);
+                            i = ItemUtil.getItem(Material.SNOW, title, list.toArray(new String[list.size()]));
+                            new FancyMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName()).itemTooltip(i).suggest("/holo teleport " + h.getSaveId()).send(((Player) sender));
+                        } else {
+                            sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());
+                        }
                     }
+                    sender.sendMessage(Lang.TIP_HOVER_PREVIEW.getValue());
+                    return true;
+                } else return true;
             } else if (args[0].equalsIgnoreCase("build")) {
                 if (Perm.BUILD.hasPerm(sender, true, true)) {
                     InputFactory.buildBasicConversation().withFirstPrompt(new BuilderInputPrompt()).buildConversation((Player) sender).begin();
