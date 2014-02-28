@@ -4,10 +4,11 @@ public class AbstractWrapper {
 
     private Object handle;
 
-    public AbstractWrapper() {}
+    public AbstractWrapper() {
+    }
 
     protected void setHandle(Object handle) {
-        if(this.handle == null) {
+        if (this.handle == null) {
             this.handle = handle;
             return;
         }

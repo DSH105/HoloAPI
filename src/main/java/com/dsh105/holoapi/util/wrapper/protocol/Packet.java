@@ -3,7 +3,6 @@ package com.dsh105.holoapi.util.wrapper.protocol;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.PlayerUtil;
 import com.dsh105.holoapi.util.ReflectionUtil;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Packet {

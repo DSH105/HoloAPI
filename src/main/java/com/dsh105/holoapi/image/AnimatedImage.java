@@ -34,7 +34,7 @@ public class AnimatedImage {
         this.frameDelay = frameDelay;
         List<BufferedImage> frames = this.getFrames(input);
         imageFrames = new ImageGenerator[frames.size()];
-        for (int i = 0; i< frames.size(); i++) {
+        for (int i = 0; i < frames.size(); i++) {
             imageFrames[i] = new ImageGenerator(frames.get(i), height, imgChar);
         }
     }

@@ -40,7 +40,7 @@ public class ReflectionUtil {
         try {
             Field field = clazz.getDeclaredField(fieldName);
 
-            if(!field.isAccessible()) {
+            if (!field.isAccessible()) {
                 field.setAccessible(true);
             }
 

@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.util;
 
-import com.dsh105.holoapi.util.wrapper.protocol.*;
+import com.dsh105.holoapi.util.wrapper.protocol.Protocol;
+import com.dsh105.holoapi.util.wrapper.protocol.Sender;
 
 public class PacketFactory {
 

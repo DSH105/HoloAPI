@@ -13,7 +13,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class SimpleHoloManager implements HoloManager {
@@ -206,7 +209,7 @@ public class SimpleHoloManager implements HoloManager {
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20*30);
+            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 30);
         }
 
         private ArrayList<Hologram> toUpdate = new ArrayList<Hologram>();

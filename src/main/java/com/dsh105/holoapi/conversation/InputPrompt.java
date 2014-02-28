@@ -43,7 +43,8 @@ public class InputPrompt extends ValidatingPrompt {
     public String getPromptText(ConversationContext conversationContext) {
         if (this.first) {
             return Lang.PROMPT_INPUT.getValue();
-        } else return Lang.PROMPT_INPUT_NEXT.getValue().replace("%input%", ChatColor.translateAlternateColorCodes('&', this.lastAdded));
+        } else
+            return Lang.PROMPT_INPUT_NEXT.getValue().replace("%input%", ChatColor.translateAlternateColorCodes('&', this.lastAdded));
     }
 
     @Override

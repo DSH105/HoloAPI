@@ -11,8 +11,7 @@ public enum HelpEntry {
     MOVE("/holo move <id>", "Move a hologram to your current position."),
     TELEPORT("/holo teleport <id>", "Teleport to a specific hologram."),
     BUILD("/holo build", "Dynamically build a combined hologram of both text and images."),
-    RELOAD("/holo reload", "Reload all HoloAPI configuration files."),
-    ;
+    RELOAD("/holo reload", "Reload all HoloAPI configuration files."),;
 
     private String line;
 

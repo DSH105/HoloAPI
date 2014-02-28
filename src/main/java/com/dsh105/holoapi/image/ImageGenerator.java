@@ -157,7 +157,7 @@ public class ImageGenerator {
 
     private BufferedImage resize(BufferedImage originalImage, int width, int height) {
         AffineTransform af = new AffineTransform();
-        af.scale(width / (double)originalImage.getWidth(), height / (double)originalImage.getHeight());
+        af.scale(width / (double) originalImage.getWidth(), height / (double) originalImage.getHeight());
         AffineTransformOp operation = new AffineTransformOp(af, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         return operation.filter(originalImage, null);
         /*BufferedImage resizedImage = new BufferedImage(width, height, 6);

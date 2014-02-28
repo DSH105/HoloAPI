@@ -2,7 +2,6 @@ package com.dsh105.holoapi.util.wrapper;
 
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
-import net.minecraft.server.v1_7_R1.*;
 import net.minecraft.server.v1_7_R1.DataWatcher;
 import org.bukkit.util.Vector;
 

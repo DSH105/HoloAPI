@@ -1,7 +1,6 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import net.minecraft.server.v1_7_R1.DataWatcher;

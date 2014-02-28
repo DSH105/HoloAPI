@@ -3,18 +3,12 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
-import com.dsh105.holoapi.exceptions.ImageNotLoadedException;
 import com.dsh105.holoapi.image.AnimatedImage;
-import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AnimatedHologramFactory {
 

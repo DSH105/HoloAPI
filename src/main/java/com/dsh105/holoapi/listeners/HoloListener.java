@@ -3,7 +3,6 @@ package com.dsh105.holoapi.listeners;
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.SimpleHoloManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

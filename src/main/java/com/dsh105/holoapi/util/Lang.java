@@ -48,8 +48,7 @@ public enum Lang {
     BUILDER_INPUT_FIRST("builder_input_fail_text_image", "&3Enter type for next line (&bText &3or &bImage&3)."),
     BUILDER_INPUT_LINE_DATA("builder_input_line_data", "&3What would you like this line to say?"),
     BUILDER_INPUT_IMAGE_PATH("builder_input_image_path", "&3What image do you want to add?"),
-    BUILDER_INPUT_NEXT_WITH_NUMBER("builder_input_next_with_number", "&3Added %line% line. Enter type for next line (&bText &3 or &bImage)."),
-    ;
+    BUILDER_INPUT_NEXT_WITH_NUMBER("builder_input_next_with_number", "&3Added %line% line. Enter type for next line (&bText &3 or &bImage)."),;
 
     private String path;
     private String def;
