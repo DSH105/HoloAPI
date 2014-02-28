@@ -140,7 +140,7 @@ public class Hologram {
         return null;
     }
 
-    protected void clearPlayerLocationMap() {
+    public void clearAllPlayerViews() {
         Iterator<String> i = this.playerToLocationMap.keySet().iterator();
         while (i.hasNext()) {
             Player p = Bukkit.getPlayerExact(i.next());

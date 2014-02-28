@@ -39,7 +39,7 @@ public class SimpleHoloManager implements HoloManager {
     public void clearAll() {
         Iterator<Hologram> i = holograms.keySet().iterator();
         while (i.hasNext()) {
-            i.next().clearPlayerLocationMap();
+            i.next().clearAllPlayerViews();
             i.remove();
         }
     }
@@ -78,7 +78,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void stopTracking(Hologram hologram) {
-        hologram.clearPlayerLocationMap();
+        hologram.clearAllPlayerViews();
         this.holograms.remove(hologram);
         if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
             this.updateDisplayTask.cancel();
