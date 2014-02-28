@@ -244,7 +244,7 @@ public class Hologram {
         horse.setZ(z);
 
         DataWatcher dw = new DataWatcher(null);
-        dw.a(10, this.tags[index]);
+        dw.a(10, this.tags[index].replace("%name%", observer.getName()));
         dw.a(11, Byte.valueOf((byte) 1));
         dw.a(12, Integer.valueOf(-1700000));
         horse.setDataWatcher(dw);
