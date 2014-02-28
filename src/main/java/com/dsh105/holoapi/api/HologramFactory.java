@@ -59,6 +59,10 @@ public class HologramFactory {
         return this;
     }
 
+    public boolean isEmpty() {
+        return this.tags.isEmpty();
+    }
+
     public HologramFactory withText(String... text) {
         for (String tag : text) {
             this.tags.add(tag);
@@ -88,7 +92,7 @@ public class HologramFactory {
     }
 
     public Hologram build() {
-        if (this.tags.isEmpty()) {
+        if (this.isEmpty()) {
             throw new HologramNotPreparedException("Hologram lines cannot be empty.");
         }
         if (!this.prepared) {

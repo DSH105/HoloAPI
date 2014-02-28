@@ -105,7 +105,7 @@ public class Hologram {
         this.imageIdMap = map;
     }
 
-    protected HashMap<String, Boolean> serialise() {
+    public HashMap<String, Boolean> serialise() {
         HashMap<String, Boolean> map = new HashMap<String, Boolean>();
         ArrayList<String> tags = new ArrayList<String>();
         for (String s : this.tags) {
