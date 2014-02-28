@@ -168,7 +168,7 @@ public class HoloCommand implements CommandExecutor {
 
                         @Override
                         public String getSuccessMessage() {
-                            return success ? Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId) : Lang.HOLOGRAM_RELOAD.getValue().replace("%id%", hologramId);
+                            return success ? Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId) : Lang.HOLOGRAM_REMOVED_MEMORY.getValue().replace("%id%", hologramId);
                         }
 
                         @Override
