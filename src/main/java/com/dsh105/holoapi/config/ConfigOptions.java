@@ -2,6 +2,7 @@ package com.dsh105.holoapi.config;
 
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.config.options.Options;
+import com.dsh105.holoapi.HoloAPI;
 
 public class ConfigOptions extends Options {
 
@@ -17,6 +18,8 @@ public class ConfigOptions extends Options {
 
         set("autoUpdate", false);
         set("checkForUpdates", true);
+
+        set("verticalLineSpacing", HoloAPI.getHologramLineSpacing());
 
         config.saveConfig();
     }

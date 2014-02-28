@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import net.minecraft.server.v1_7_R1.DataWatcher;
@@ -22,7 +23,6 @@ public class Hologram {
     private double defY;
     private double defZ;
     private String[] tags;
-    private static double LINE_SPACING = 0.25D;
 
     private int firstTagId;
     private String saveId;
@@ -88,10 +88,6 @@ public class Hologram {
     public void setVisibleToAll(boolean flag) {
         this.visibleToAll = flag;
     }*/
-
-    public static double getSpacing() {
-        return LINE_SPACING;
-    }
 
     public String getSaveId() {
         return saveId;
@@ -177,7 +173,7 @@ public class Hologram {
             this.move(observer, new Vector(x, y, z));
         }*/
         for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, index, -index * LINE_SPACING, x, y, z);
+            this.generate(observer, index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }

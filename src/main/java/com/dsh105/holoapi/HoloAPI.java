@@ -57,6 +57,8 @@ public class HoloAPI extends DSHPlugin {
     public String updateName = "";
     public boolean updateChecked = false;
 
+    private static double LINE_SPACING = 0.25D;
+
     //private CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
     public ChatColor secondaryColour = ChatColor.AQUA;
@@ -87,6 +89,10 @@ public class HoloAPI extends DSHPlugin {
 
     public String getCommandLabel() {
         return OPTIONS.getConfig().getString("command", "holo");
+    }
+
+    public static double getHologramLineSpacing() {
+        return LINE_SPACING;
     }
 
     public YAMLConfig getConfig(ConfigType type) {
@@ -223,6 +229,8 @@ public class HoloAPI extends DSHPlugin {
         if (colour2 != null) {
             this.secondaryColour = colour2;
         }
+
+        LINE_SPACING = config.getDouble("verticalLineSpacing", 0.25D);
 
         try {
             dataConfig = this.getConfigManager().getNewConfig("data.yml");
