@@ -90,7 +90,7 @@ public class SimpleHoloManager implements HoloManager {
         if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).cancelAnimation();
         }
-        this.clearFromFile(hologram);
+        //this.clearFromFile(hologram);
     }
 
     @Override
