@@ -49,7 +49,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 }
                 AnimationLoadType type = AnimationLoadType.valueOf(imageType.toUpperCase());
 
-                AnimatedImageGenerator generator = findGenerator(config, type, key, imagePath, frameRate, imageHeight, imageChar);
+                AnimatedImageGenerator generator = findGenerator(config, type, key, imagePath, frameRate, imageHeight, imageChar, requiresBorder);
                 if (generator != null) {
                     this.KEY_TO_IMAGE_MAP.put(key, generator);
                 } else {

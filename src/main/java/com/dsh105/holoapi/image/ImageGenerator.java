@@ -32,7 +32,7 @@ public class ImageGenerator implements Generator {
     private boolean storedRequiresBorder;
 
     protected ImageGenerator(BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
-        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), b);
+        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
     }
 
     protected ImageGenerator(BufferedImage image, int height, ImageChar imgChar) {
