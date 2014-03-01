@@ -74,6 +74,9 @@ public class SimpleHoloManager implements HoloManager {
         if (this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
             this.saveToFile(hologram);
         }
+        if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
+            ((AnimatedHologram) hologram).restartAnimation();
+        }
     }
 
     @Override
@@ -83,6 +86,9 @@ public class SimpleHoloManager implements HoloManager {
         if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
             this.updateDisplayTask.cancel();
             this.updateDisplayTask = null;
+        }
+        if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
+            ((AnimatedHologram) hologram).cancelAnimation();
         }
         this.clearFromFile(hologram);
     }

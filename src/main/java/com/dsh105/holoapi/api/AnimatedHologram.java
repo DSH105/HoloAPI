@@ -8,6 +8,7 @@ import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,10 +25,21 @@ public class AnimatedHologram extends Hologram {
     protected AnimatedHologram(String saveId, String worldName, double x, double y, double z, AnimatedImage animatedImage) {
         super(saveId, worldName, x, y, z);
         this.animatedImage = animatedImage;
-        this.runDisplayTask();
+        this.restartAnimation();
     }
 
-    private void runDisplayTask() {
+    public boolean isAnimating() {
+        return this.displayTask != null;
+    }
+
+    public void cancelAnimation() {
+        if (this.displayTask != null) {
+            this.displayTask.cancel();
+            this.displayTask = null;
+        }
+    }
+
+    public void restartAnimation() {
         this.displayTask = new BukkitRunnable() {
             @Override
             public void run() {
@@ -46,6 +58,21 @@ public class AnimatedHologram extends Hologram {
         return animatedImage;
     }
 
+    @Override
+    public void show(Player observer) {
+        this.showAnimation(observer, this.animatedImage.current());
+    }
+
+    @Override
+    public void show(Player observer, Location location) {
+        this.showAnimation(observer, location.toVector(), this.animatedImage.current());
+    }
+
+    @Override
+    public void show(Player observer, int x, int y, int z) {
+        this.showAnimation(observer, x, y, z, this.animatedImage.current());
+    }
+
     public void showAnimation(Player observer, ImageGenerator generator) {
         this.showAnimation(observer, (int) this.getDefaultX(), (int) this.getDefaultY(), (int) this.getDefaultZ(), generator);
     }
@@ -59,6 +86,11 @@ public class AnimatedHologram extends Hologram {
             this.generateAnimation(observer, generator.getLines()[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
+    }
+
+    @Override
+    protected void generate(Player observer, int index, double diffY, int x, int y, int z) {
+        super.generate(observer, index, diffY, x, y, z);
     }
 
     protected void generateAnimation(Player observer, String message, int index, double diffY, int x, int y, int z) {
