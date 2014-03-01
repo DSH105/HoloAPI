@@ -3,4 +3,5 @@
 ----
 
 ## Hologram API and plugin
-### DSH105, CaptainBern and Frostalf
+#### Authors: DSH105
+#### Contributors: CaptainBern, hawkfalcon, Frostalf
