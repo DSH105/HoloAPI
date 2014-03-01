@@ -12,12 +12,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-public class SimpleImageLoader implements ImageLoader {
+public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
 
     private final HashMap<String, ImageGenerator> KEY_TO_IMAGE_MAP = new HashMap<String, ImageGenerator>();
     private final HashMap<String, UnloadedImageStorage> URL_UNLOADED = new HashMap<String, UnloadedImageStorage>();
     private boolean loaded;
-    //TODO: Implement a queue so that if holograms are created this doesn't stop them being created with images
 
     public void loadImageConfiguration(YAMLConfig config) {
         KEY_TO_IMAGE_MAP.clear();
@@ -30,7 +29,6 @@ public class SimpleImageLoader implements ImageLoader {
         if (cs != null) {
             for (String key : cs.getKeys(false)) {
                 String path = "images." + key + ".";
-                //boolean staticImage = config.getBoolean(path + "static");    // TODO: Animated images
                 String imagePath = config.getString(path + "path");
                 int imageHeight = config.getInt(path + "height", 10);
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());

@@ -2,11 +2,11 @@ package com.dsh105.holoapi.image;
 
 import org.bukkit.command.CommandSender;
 
-public interface ImageLoader {
+public interface ImageLoader<T extends Generator> {
 
-    public ImageGenerator getGenerator(CommandSender sender, String key);
+    public T getGenerator(CommandSender sender, String key);
 
-    public ImageGenerator getGenerator(String key);
+    public T getGenerator(String key);
 
     public boolean exists(String key);
 

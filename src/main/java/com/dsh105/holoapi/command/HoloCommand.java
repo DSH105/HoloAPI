@@ -119,7 +119,14 @@ public class HoloCommand implements CommandExecutor {
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                         return true;
                     } else return true;
-                }
+                }/* else if (args[0].equalsIgnoreCase("animation")) {
+                    if (Perm.CREATE.hasPerm(sender, true, false)) {
+                        if (!HoloAPI.getImageLoader().isLoaded()) {
+                            Lang.sendTo(sender, Lang.IMAGES_NOT_LOADED.getValue());
+                            return true;
+                        }
+                    } else return true;
+                }*/
             }
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {

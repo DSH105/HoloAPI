@@ -12,24 +12,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimatedImage {
+public class AnimatedImageGenerator implements Generator {
 
     private String key;
     private int frameDelay;
     private ImageGenerator[] imageFrames;
     private int index = 0;
 
-    public AnimatedImage(String key, int frameDelay, ImageGenerator... imageFrames) {
+    public AnimatedImageGenerator(String key, int frameDelay, ImageGenerator... imageFrames) {
         this.key = key;
         this.frameDelay = frameDelay;
         this.imageFrames = imageFrames;
     }
 
-    public AnimatedImage(String key, int frameDelay, File gifFile, int height, ImageChar imgChar) throws IOException {
+    public AnimatedImageGenerator(String key, int frameDelay, File gifFile, int height, ImageChar imgChar) throws IOException {
         this(key, frameDelay, ImageIO.createImageInputStream(gifFile), height, imgChar);
     }
 
-    public AnimatedImage(String key, int frameDelay, ImageInputStream input, int height, ImageChar imgChar) throws IOException {
+    public AnimatedImageGenerator(String key, int frameDelay, ImageInputStream input, int height, ImageChar imgChar) throws IOException {
         this.key = key;
         this.frameDelay = frameDelay;
         List<BufferedImage> frames = this.getFrames(input);
@@ -48,6 +48,7 @@ public class AnimatedImage {
         return frames;
     }
 
+    @Override
     public String getKey() {
         return key;
     }

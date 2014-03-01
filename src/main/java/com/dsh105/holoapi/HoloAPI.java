@@ -10,8 +10,7 @@ import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
-import com.dsh105.holoapi.image.ImageLoader;
-import com.dsh105.holoapi.image.SimpleImageLoader;
+import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
@@ -31,6 +30,7 @@ public class HoloAPI extends DSHPlugin {
 
     private static SimpleHoloManager MANAGER;
     private static SimpleImageLoader IMAGE_LOADER;
+    private static SimpleAnimationLoader ANIMATION_LOADER;
     private ConfigOptions OPTIONS;
 
     private YAMLConfig config;
@@ -69,8 +69,11 @@ public class HoloAPI extends DSHPlugin {
         return MANAGER;
     }
 
-    public static ImageLoader getImageLoader() {
+    public static ImageLoader<ImageGenerator> getImageLoader() {
         return IMAGE_LOADER;
+    }
+    public static ImageLoader<AnimatedImageGenerator> getAnimationLoader() {
+        return ANIMATION_LOADER;
     }
 
     public String getCommandLabel() {
@@ -101,6 +104,7 @@ public class HoloAPI extends DSHPlugin {
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
+        ANIMATION_LOADER = new SimpleAnimationLoader();
         this.getCommand("holo").setExecutor(new HoloCommand());
         manager.registerEvents(new HoloListener(), this);
         this.loadHolograms(this);

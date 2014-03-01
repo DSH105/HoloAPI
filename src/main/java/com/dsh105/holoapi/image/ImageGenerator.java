@@ -15,7 +15,7 @@ import java.net.URI;
  * Credit to bobacadodl for this one <3
  */
 
-public class ImageGenerator {
+public class ImageGenerator implements Generator {
 
     private final static char TRANSPARENT_CHAR_NOBORDER = ' ';
     private final static String TRANSPARENT_CHAR_BORDER = "  ";
@@ -67,7 +67,8 @@ public class ImageGenerator {
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
     }
 
-    public String getImageKey() {
+    @Override
+    public String getKey() {
         return imageKey;
     }
 

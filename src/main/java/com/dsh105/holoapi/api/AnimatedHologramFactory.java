@@ -3,7 +3,7 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
-import com.dsh105.holoapi.image.AnimatedImage;
+import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 public class AnimatedHologramFactory {
 
-    private AnimatedImage animatedImage;
+    private AnimatedImageGenerator animatedImage;
     private String worldName;
     private double locX;
     private double locY;
@@ -52,7 +52,7 @@ public class AnimatedHologramFactory {
         return this;
     }
 
-    public AnimatedHologramFactory withImage(AnimatedImage animatedImage) {
+    public AnimatedHologramFactory withImage(AnimatedImageGenerator animatedImage) {
         this.animatedImage = animatedImage;
         return this;
     }

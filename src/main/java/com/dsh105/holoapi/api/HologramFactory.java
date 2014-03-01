@@ -74,7 +74,7 @@ public class HologramFactory {
         int first = this.tags.size() - 1;
         if (first < 0) first = 0;
         int last = imageGenerator.getLines().length - 1;
-        this.imageIdMap.put(new TagSize(first, last), imageGenerator.getImageKey());
+        this.imageIdMap.put(new TagSize(first, last), imageGenerator.getKey());
         return this.withText(imageGenerator.getLines());
     }
 
@@ -83,7 +83,7 @@ public class HologramFactory {
         if (generator != null) {
             int first = this.tags.size() - 1;
             int last = generator.getLines().length - 1;
-            this.imageIdMap.put(new TagSize(first, last), generator.getImageKey());
+            this.imageIdMap.put(new TagSize(first, last), generator.getKey());
             this.withText(generator.getLines());
         } else {
             throw new ImageNotLoadedException(customImageKey);

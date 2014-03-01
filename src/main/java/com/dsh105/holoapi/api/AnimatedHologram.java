@@ -1,7 +1,7 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.image.AnimatedImage;
+import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
@@ -20,9 +20,9 @@ import java.util.Map;
 public class AnimatedHologram extends Hologram {
 
     private BukkitTask displayTask;
-    private final AnimatedImage animatedImage;
+    private final AnimatedImageGenerator animatedImage;
 
-    protected AnimatedHologram(String saveId, String worldName, double x, double y, double z, AnimatedImage animatedImage) {
+    protected AnimatedHologram(String saveId, String worldName, double x, double y, double z, AnimatedImageGenerator animatedImage) {
         super(saveId, worldName, x, y, z);
         this.animatedImage = animatedImage;
         this.restartAnimation();
@@ -54,7 +54,7 @@ public class AnimatedHologram extends Hologram {
         }.runTaskTimer(HoloAPI.getInstance(), 0L, animatedImage.getFrameDelay());
     }
 
-    public AnimatedImage getAnimatedImage() {
+    public AnimatedImageGenerator getAnimatedImage() {
         return animatedImage;
     }
 
