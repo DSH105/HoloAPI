@@ -2,6 +2,7 @@ package com.dsh105.holoapi.listeners;
 
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.Hologram;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,9 +44,12 @@ public class HoloListener implements Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
+                            ((AnimatedHologram) h).animate();
+                        }
                         h.show(player);
                     }
-                }.runTaskLater(HoloAPI.getInstance(), 20L);
+                }.runTaskLater(HoloAPI.getInstance(), 40L);
             }
         }
     }

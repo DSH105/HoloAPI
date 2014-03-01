@@ -81,12 +81,7 @@ public class HologramFactory {
     public HologramFactory withImage(String customImageKey) {
         ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(customImageKey);
         if (generator != null) {
-            int first = this.tags.size() - 1;
-            int last = generator.getLines().length - 1;
-            this.imageIdMap.put(new TagSize(first, last), generator.getKey());
-            this.withText(generator.getLines());
-        } else {
-            throw new ImageNotLoadedException(customImageKey);
+            this.withImage(generator);
         }
         return this;
     }

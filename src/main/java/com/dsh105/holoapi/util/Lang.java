@@ -21,7 +21,9 @@ public enum Lang {
     CONFIGS_RELOADED("configs_reloaded", "&3Configuration files reloaded."),
 
     TIP_HOVER_PREVIEW("hover_tip", "&e&oHover over to see a preview of the hologram. Click to insert teleport command."),
-    LOADING_URL_IMAGE("loading_image_display", "&3Loading custom URL image of key &b%key%&3..."),
+    IMAGE_LOADED("url_image_loaded", "&3Custom URL image of key &b%key% loaded."),
+    LOADING_URL_IMAGE("loading_url_image", "&3Loading custom URL image of key &b%key%&3. Create hologram when the image has finished loading."),
+    LOADING_URL_ANIMATION("loading_url_animation", "&3Loading custom URL animation of key &b%key%&3. Create hologram when the animation has finished loading."),
     ACTIVE_DISPLAYS("active_displays", "&3Active Holographic Displays:"),
     IMAGES_NOT_LOADED("images_not_loaded", "&3Images are not loaded yet. Try again later."),
 

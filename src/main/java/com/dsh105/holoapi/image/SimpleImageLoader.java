@@ -44,7 +44,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
                 if (generator != null) {
                     this.KEY_TO_IMAGE_MAP.put(key, generator);
                 } else {
-                    HoloAPI.getInstance().LOGGER.log(Level.INFO, "Failed to load image: " + key + ".");
+                    //HoloAPI.getInstance().LOGGER.log(Level.INFO, "Failed to load image: " + key + ".");
                 }
             }
         }
@@ -79,19 +79,11 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
         ImageGenerator g = this.KEY_TO_IMAGE_MAP.get(key);
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
-                final UnloadedImageStorage data = this.URL_UNLOADED.get(key);
-                HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL image of key " + key + "...");
                 Lang.sendTo(sender, Lang.LOADING_URL_IMAGE.getValue().replace("%key%", key));
-                final ImageGenerator generator = new ImageGenerator(key, data.getImagePath(), data.getImageHeight(), data.getCharType(), false, data.requiresBorder());
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        generator.loadUrlImage();
-                    }
-                };
-                this.KEY_TO_IMAGE_MAP.put(key, generator);
-                this.URL_UNLOADED.remove(key);
-                return generator;
+                this.prepareUrlGenerator(sender, key);
+                return null;
+            } else {
+                Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
             }
         }
         return g;
@@ -102,13 +94,29 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
         ImageGenerator g = this.KEY_TO_IMAGE_MAP.get(key);
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
-                UnloadedImageStorage data = this.URL_UNLOADED.get(key);
-                HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL image of key: " + key);
-                g = new ImageGenerator(key, data.getImagePath(), data.getImageHeight(), data.getCharType(), data.requiresBorder());
-                this.KEY_TO_IMAGE_MAP.put(key, g);
-                this.URL_UNLOADED.remove(key);
+                this.prepareUrlGenerator(null, key);
+                return null;
             }
         }
+        return g;
+    }
+
+    private ImageGenerator prepareUrlGenerator(final CommandSender sender, final String key) {
+        UnloadedImageStorage data = this.URL_UNLOADED.get(key);
+        HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL image of key " + key);
+        this.URL_UNLOADED.remove(key);
+        final ImageGenerator g = new ImageGenerator(key, data.getImagePath(), data.getImageHeight(), data.getCharType(), false, data.requiresBorder());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                g.loadUrlImage();
+                if (sender != null) {
+                    Lang.sendTo(sender, Lang.IMAGE_LOADED.getValue().replace("%key%", key));
+                }
+                HoloAPI.LOGGER.log(Level.INFO, "Custom URL image '" + key + "' loaded.");
+                KEY_TO_IMAGE_MAP.put(key, g);
+            }
+        }.runTaskAsynchronously(HoloAPI.getInstance());
         return g;
     }
 

@@ -2,11 +2,9 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.GIFFrame;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
+import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -15,21 +13,43 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import java.util.Iterator;
 import java.util.Map;
 
 public class AnimatedHologram extends Hologram {
 
     private BukkitTask displayTask;
     private final AnimatedImageGenerator animatedImage;
+    private GIFFrame frame;
 
     protected AnimatedHologram(String saveId, String worldName, double x, double y, double z, AnimatedImageGenerator animatedImage) {
-        super(saveId, worldName, x, y, z);
+        super(saveId, worldName, x, y, z, animatedImage.getFrame(0).getImageGenerator().getLines());
         this.animatedImage = animatedImage;
-        this.restartAnimation();
+        this.frame = this.animatedImage.getCurrent();
+        this.animate();
+    }
+
+    public void animate() {
+        final ImageGenerator image = this.frame.getImageGenerator();
+        this.displayTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
+                    Player p = Bukkit.getPlayerExact(entry.getKey());
+                    if (p != null) {
+                        Vector v = entry.getValue();
+                        clear(p);
+                        showAnimation(p, v, image);
+                        frame = animatedImage.getNext();
+                        animate();
+                    }
+                }
+            }
+        }.runTaskLater(HoloAPI.getInstance(), (int) Math.ceil(frame.getDelay() / 2.5));
     }
 
     public boolean isAnimating() {
-        return this.displayTask != null;
+        return this.displayTask != null ;
     }
 
     public void cancelAnimation() {
@@ -39,38 +59,23 @@ public class AnimatedHologram extends Hologram {
         }
     }
 
-    public void restartAnimation() {
-        this.displayTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
-                    Player p = Bukkit.getPlayerExact(entry.getKey());
-                    if (p != null) {
-                        Vector v = entry.getValue();
-                        showAnimation(p, v, animatedImage.next());
-                    }
-                }
-            }
-        }.runTaskTimer(HoloAPI.getInstance(), 0L, animatedImage.getFrameDelay());
-    }
-
     public AnimatedImageGenerator getAnimatedImage() {
         return animatedImage;
     }
 
     @Override
     public void show(Player observer) {
-        this.showAnimation(observer, this.animatedImage.current());
+        this.showAnimation(observer, frame.getImageGenerator());
     }
 
     @Override
     public void show(Player observer, Location location) {
-        this.showAnimation(observer, location.toVector(), this.animatedImage.current());
+        this.showAnimation(observer, location.toVector(), frame.getImageGenerator());
     }
 
     @Override
     public void show(Player observer, double x, double y, double z) {
-        this.showAnimation(observer, x, y, z, this.animatedImage.current());
+        this.showAnimation(observer, x, y, z, frame.getImageGenerator());
     }
 
     public void showAnimation(Player observer, ImageGenerator generator) {
@@ -86,6 +91,49 @@ public class AnimatedHologram extends Hologram {
             this.generateAnimation(observer, generator.getLines()[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
+    }
+
+    @Override
+    public void clear(Player observer) {
+        int[] ids = new int[frame.getImageGenerator().getLines().length];
+
+        for (int i = 0; i < frame.getImageGenerator().getLines().length; i++) {
+            ids[i] = i;
+        }
+        clearTags(observer, ids);
+        this.playerToLocationMap.remove(observer.getName());
+    }
+
+    @Override
+    protected void clearTags(Player observer, int... indices) {
+        WrapperPacketEntityDestroy destroy = new WrapperPacketEntityDestroy();
+        int[] entityIds = new int[indices.length * 2];
+
+        for (int i = 0; i < indices.length; i++) {
+            if (indices[i] <= frame.getImageGenerator().getLines().length) {
+                entityIds[i * 2] = this.getHorseIndex(indices[i]);
+                entityIds[i * 2 + 1] = this.getSkullIndex(indices[i] * 2);
+            }
+        }
+        destroy.setEntities(entityIds);
+        destroy.send(observer);
+    }
+
+    @Override
+    public void clearAllPlayerViews() {
+        Iterator<String> i = this.playerToLocationMap.keySet().iterator();
+        while (i.hasNext()) {
+            Player p = Bukkit.getPlayerExact(i.next());
+            if (p != null) {
+                int[] ids = new int[frame.getImageGenerator().getLines().length];
+
+                for (int j = 0; j < frame.getImageGenerator().getLines().length; j++) {
+                    ids[j] = j;
+                }
+                clearTags(p, ids);
+            }
+            i.remove();
+        }
     }
 
     @Override

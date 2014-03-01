@@ -3,12 +3,15 @@ package com.dsh105.holoapi.command;
 import com.dsh105.dshutils.pagination.Paginator;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.AnimatedHologram;
+import com.dsh105.holoapi.api.AnimatedHologramFactory;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.conversation.basic.YesNoFunction;
 import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
+import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
@@ -112,21 +115,27 @@ public class HoloCommand implements CommandExecutor {
                         String key = args[2];
                         ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(sender, key);
                         if (generator == null) {
-                            Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
                             return true;
                         }
                         Hologram h = new HologramFactory().withImage(generator).withLocation(((Player) sender).getLocation()).build();
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                         return true;
                     } else return true;
-                }/* else if (args[0].equalsIgnoreCase("animation")) {
+                } else if (args[1].equalsIgnoreCase("animation")) {
                     if (Perm.CREATE.hasPerm(sender, true, false)) {
                         if (!HoloAPI.getImageLoader().isLoaded()) {
                             Lang.sendTo(sender, Lang.IMAGES_NOT_LOADED.getValue());
                             return true;
                         }
+                        AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(sender, args[2]);
+                        if (generator == null) {
+                            return true;
+                        }
+                        AnimatedHologram h = new AnimatedHologramFactory().withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                        Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()));
+                        return true;
                     } else return true;
-                }*/
+                }
             }
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
@@ -151,22 +160,26 @@ public class HoloCommand implements CommandExecutor {
                         Hologram h = entry.getKey();
                         ArrayList<String> list = new ArrayList<String>();
                         list.add(ChatColor.GOLD + "" + ChatColor.UNDERLINE + "Hologram Preview:");
-                        if (h.getLines().length > 1) {
-                            for (Map.Entry<String, Boolean> serialise : h.serialise().entrySet()) {
-                                if (serialise.getValue()) {
-                                    if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + serialise.getKey() + ".requiresBorder", false)) {
-                                        for (String s : HoloAPI.getImageLoader().getGenerator(serialise.getKey()).getLines()) {
-                                            list.add(ChatColor.WHITE + s);
+                        if (h instanceof AnimatedHologram) {
+                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + ((AnimatedHologram) h).getAnimatedImage().getKey() + " (ANIMATION)");
+                        } else {
+                            if (h.getLines().length > 1) {
+                                for (Map.Entry<String, Boolean> serialise : h.serialise().entrySet()) {
+                                    if (serialise.getValue()) {
+                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + serialise.getKey() + ".requiresBorder", false)) {
+                                            for (String s : HoloAPI.getImageLoader().getGenerator(serialise.getKey()).getLines()) {
+                                                list.add(ChatColor.WHITE + s);
+                                            }
+                                        } else {
+                                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + serialise.getKey() + " (IMAGE)");
                                         }
                                     } else {
-                                        list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + serialise.getKey() + " (IMAGE)");
+                                        list.add(ChatColor.WHITE + serialise.getKey());
                                     }
-                                } else {
-                                    list.add(ChatColor.WHITE + serialise.getKey());
                                 }
+                            } else {
+                                list.add(h.getLines()[0]);
                             }
-                        } else {
-                            list.add(h.getLines()[0]);
                         }
                         if (sender instanceof Player && list.size() > 1) {
                             ItemStack i;

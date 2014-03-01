@@ -71,7 +71,7 @@ public class AnimatedHologramFactory {
         AnimatedHologram animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.animatedImage);
         for (Entity e : GeometryUtil.getNearbyEntities(animatedHologram.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
-                animatedHologram.showAnimation((Player) e, animatedHologram.getAnimatedImage().current());
+                animatedHologram.show((Player) e);
             }
         }
         HoloAPI.getManager().track(animatedHologram, HoloAPI.getInstance());

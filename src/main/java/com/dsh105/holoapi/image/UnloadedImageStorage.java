@@ -14,6 +14,12 @@ public class UnloadedImageStorage {
         this.requiresBorder = requiresBorder;
     }
 
+    public UnloadedImageStorage(String imagePath, int imageHeight, ImageChar charType) {
+        this.imagePath = imagePath;
+        this.imageHeight = imageHeight;
+        this.charType = charType;
+    }
+
     public String getImagePath() {
         return imagePath;
     }

@@ -4,6 +4,7 @@ import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -74,8 +75,8 @@ public class SimpleHoloManager implements HoloManager {
         if (this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
             this.saveToFile(hologram);
         }
-        if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
-            ((AnimatedHologram) hologram).restartAnimation();
+        if (hologram instanceof AnimatedHologram && !((AnimatedHologram) hologram).isAnimating()) {
+            ((AnimatedHologram) hologram).animate();
         }
     }
 
@@ -111,15 +112,20 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void saveToFile(Hologram hologram) {
-        this.config.set("holograms." + hologram.getSaveId() + ".worldName", hologram.getWorldName());
-        this.config.set("holograms." + hologram.getSaveId() + ".x", hologram.getDefaultX());
-        this.config.set("holograms." + hologram.getSaveId() + ".y", hologram.getDefaultY());
-        this.config.set("holograms." + hologram.getSaveId() + ".z", hologram.getDefaultZ());
-        int index = 0;
-        for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
-            this.config.set("holograms." + hologram.getSaveId() + ".lines." + index + ".type", entry.getValue() ? "image" : "text");
-            this.config.set("holograms." + hologram.getSaveId() + ".lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
-            index++;
+        String path = "holograms." + hologram.getSaveId() + ".";
+        this.config.set(path + "worldName", hologram.getWorldName());
+        this.config.set(path + "x", hologram.getDefaultX());
+        this.config.set(path + "y", hologram.getDefaultY());
+        this.config.set(path + "z", hologram.getDefaultZ());
+        if (hologram instanceof AnimatedHologram) {
+            this.config.set(path + "animatedImage", ((AnimatedHologram) hologram).getAnimatedImage().getKey());
+        } else {
+            int index = 0;
+            for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
+                this.config.set(path + "lines." + index + ".type", entry.getValue() ? "image" : "text");
+                this.config.set(path + "lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
+                index++;
+            }
         }
         this.config.saveConfig();
     }
@@ -148,32 +154,36 @@ public class SimpleHoloManager implements HoloManager {
                 double x = config.getDouble(path + "x");
                 double y = config.getDouble(path + "y");
                 double z = config.getDouble(path + "z");
-                ConfigurationSection cs1 = config.getConfigurationSection("holograms." + key + ".lines");
-                boolean containsImage = false;
-                if (cs1 != null) {
-                    //ArrayList<String> lines = new ArrayList<String>();
-                    HologramFactory hf = new HologramFactory();
-                    for (String key1 : cs1.getKeys(false)) {
-                        if (StringUtil.isInt(key1)) {
-                            String type = config.getString(path + "lines." + key1 + ".type");
-                            String value = config.getString(path + "lines." + key1 + ".value");
-                            if (type.equalsIgnoreCase("image")) {
-                                containsImage = true;
-                                break;
-                            } else {
-                                hf.withText(ChatColor.translateAlternateColorCodes('&', value));
-                            }
+                if (config.getString(path + "animatedImage") != null) {
+                    unprepared.add(key);
+                } else {
+                    ConfigurationSection cs1 = config.getConfigurationSection("holograms." + key + ".lines");
+                    boolean containsImage = false;
+                    if (cs1 != null) {
+                        //ArrayList<String> lines = new ArrayList<String>();
+                        HologramFactory hf = new HologramFactory();
+                        for (String key1 : cs1.getKeys(false)) {
+                            if (StringUtil.isInt(key1)) {
+                                String type = config.getString(path + "lines." + key1 + ".type");
+                                String value = config.getString(path + "lines." + key1 + ".value");
+                                if (type.equalsIgnoreCase("image")) {
+                                    containsImage = true;
+                                    break;
+                                } else {
+                                    hf.withText(ChatColor.translateAlternateColorCodes('&', value));
+                                }
 
-                        } else {
-                            HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                            } else {
+                                HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                                continue;
+                            }
+                        }
+                        if (containsImage) {
+                            unprepared.add(key);
                             continue;
                         }
+                        hf.withSaveId(key).withLocation(new Vector(x, y, z), worldName).build();
                     }
-                    if (containsImage) {
-                        unprepared.add(key);
-                        continue;
-                    }
-                    hf.withSaveId(key).withLocation(new Vector(x, y, z), worldName).build();
                 }
             }
         }
@@ -186,28 +196,35 @@ public class SimpleHoloManager implements HoloManager {
         double x = config.getDouble(path + "x");
         double y = config.getDouble(path + "y");
         double z = config.getDouble(path + "z");
-        ConfigurationSection cs1 = config.getConfigurationSection("holograms." + hologramId + ".lines");
-        HologramFactory hf = new HologramFactory();
-        //ArrayList<String> lines = new ArrayList<String>();
-        for (String key1 : cs1.getKeys(false)) {
-            if (StringUtil.isInt(key1)) {
-                String type = config.getString(path + "lines." + key1 + ".type");
-                String value = config.getString(path + "lines." + key1 + ".value");
-                if (type.equalsIgnoreCase("image")) {
-                    ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(value);
-                    if (generator != null) {
-                        hf.withImage(generator);
+        if (config.getString(path + "animatedImage") != null) {
+            AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage"));
+            if (generator != null) {
+                return new AnimatedHologramFactory().withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+            }
+        } else {
+            ConfigurationSection cs1 = config.getConfigurationSection("holograms." + hologramId + ".lines");
+            HologramFactory hf = new HologramFactory();
+            //ArrayList<String> lines = new ArrayList<String>();
+            for (String key1 : cs1.getKeys(false)) {
+                if (StringUtil.isInt(key1)) {
+                    String type = config.getString(path + "lines." + key1 + ".type");
+                    String value = config.getString(path + "lines." + key1 + ".value");
+                    if (type.equalsIgnoreCase("image")) {
+                        ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(value);
+                        if (generator != null) {
+                            hf.withImage(generator);
+                        }
+                    } else {
+                        hf.withText(ChatColor.translateAlternateColorCodes('&', value));
                     }
                 } else {
-                    hf.withText(ChatColor.translateAlternateColorCodes('&', value));
+                    HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
+                    continue;
                 }
-            } else {
-                HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
-                continue;
             }
-        }
-        if (!hf.isEmpty()) {
-            return hf.withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+            if (!hf.isEmpty()) {
+                return hf.withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+            }
         }
         return null;
     }

@@ -72,6 +72,7 @@ public class HoloAPI extends DSHPlugin {
     public static ImageLoader<ImageGenerator> getImageLoader() {
         return IMAGE_LOADER;
     }
+
     public static ImageLoader<AnimatedImageGenerator> getAnimationLoader() {
         return ANIMATION_LOADER;
     }
@@ -157,6 +158,7 @@ public class HoloAPI extends DSHPlugin {
                 @Override
                 public void run() {
                     IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
+                    ANIMATION_LOADER.loadAnimationConfiguration(getConfig(ConfigType.MAIN));
                 }
             }.runTaskAsynchronously(this);
 
