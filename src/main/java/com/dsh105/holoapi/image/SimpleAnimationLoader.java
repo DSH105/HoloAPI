@@ -39,7 +39,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                     continue;
                 }
                 int imageHeight = config.getInt(path + "height", 10);
-                int frameRate = config.getInt(path + "frameRate", 5);
+                int frameRate = config.getInt(path + "frameRate", 10);
                 boolean requiresBorder = config.getBoolean(path + "requiresBorder", false);
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
