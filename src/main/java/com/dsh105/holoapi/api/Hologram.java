@@ -3,7 +3,6 @@ package com.dsh105.holoapi.api;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
-import net.minecraft.server.v1_7_R1.DataWatcher;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -243,11 +242,11 @@ public class Hologram {
         horse.setY(y + diffY + 55);
         horse.setZ(z);
 
-        DataWatcher dw = new DataWatcher(null);
-        dw.a(10, this.tags[index].replace("%name%", observer.getName()));
-        dw.a(11, Byte.valueOf((byte) 1));
-        dw.a(12, Integer.valueOf(-1700000));
-        horse.setDataWatcher(dw);
+        WrappedDataWatcher dw = new WrappedDataWatcher();
+        dw.watch(10, this.tags[index].replace("%name%", observer.getName()));
+        dw.watch(11, Byte.valueOf((byte) 1));
+        dw.watch(12, Integer.valueOf(-1700000));
+        horse.setDataWatcher(dw.getHandle());
 
         WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
         skull.setEntityId(this.getSkullIndex(index));

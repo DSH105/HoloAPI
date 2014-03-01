@@ -4,11 +4,11 @@ import com.dsh105.holoapi.util.ReflectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class DataWatcher extends AbstractWrapper {
+public class WrappedDataWatcher extends AbstractWrapper {
 
-    public DataWatcher() {
+    public WrappedDataWatcher() {
         try {
-            super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").getConstructor(ReflectionUtil.getNMSClass("Entity")).newInstance(null));
+            super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").getConstructor(ReflectionUtil.getNMSClass("Entity")).newInstance(new Object[] {null}));
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

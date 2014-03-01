@@ -2,7 +2,6 @@ package com.dsh105.holoapi.util.wrapper;
 
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
-import net.minecraft.server.v1_7_R1.DataWatcher;
 import org.bukkit.util.Vector;
 
 public class WrapperPacketSpawnEntityLiving extends Packet {
@@ -109,11 +108,11 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
         return (((Integer) this.read("h")) / 8000.0D);
     }
 
-    public void setDataWatcher(net.minecraft.server.v1_7_R1.DataWatcher dataWatcher) {
+    public void setDataWatcher(Object dataWatcher) {
         this.write("l", dataWatcher);
     }
 
-    public DataWatcher getData() {
-        return (DataWatcher) this.read("l");
+    public Object getDataWatcher() {
+        return this.read("l");
     }
 }
