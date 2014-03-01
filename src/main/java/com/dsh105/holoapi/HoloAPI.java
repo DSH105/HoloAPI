@@ -169,7 +169,7 @@ public class HoloAPI extends DSHPlugin {
                         this.cancel();
                     }
                 }
-            }.runTaskTimer(this, 0, 20 * 10);
+            }.runTaskTimer(this, 20 * 5, 20 * 10);
         }
     }
 
