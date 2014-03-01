@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import sun.net.www.content.image.gif;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -32,29 +33,45 @@ public class AnimatedImageGenerator implements Generator {
     }
 
     public AnimatedImageGenerator(String key, File gifFile, int frameRate, int height, ImageChar imgChar) throws IOException {
+        this(key, gifFile, frameRate, height, imgChar, false);
+    }
+
+    public AnimatedImageGenerator(String key, File gifFile, int frameRate, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(gifFile);
-        this.prepare(height, imgChar);
+        this.prepare(height, imgChar, requiresBorder);
         this.prepareFrameRate(frameRate);
     }
 
     public AnimatedImageGenerator(String key, File gifFile, int height, ImageChar imgChar) throws IOException {
+        this(key, gifFile, height, imgChar, false);
+    }
+
+    public AnimatedImageGenerator(String key, File gifFile, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(gifFile);
-        this.prepare(height, imgChar);
+        this.prepare(height, imgChar, requiresBorder);
     }
 
     public AnimatedImageGenerator(String key, InputStream input, int frameRate, int height, ImageChar imgChar) throws IOException {
+        this(key, input, frameRate, height, imgChar, false);
+    }
+
+    public AnimatedImageGenerator(String key, InputStream input, int frameRate, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(input);
-        this.prepare(height, imgChar);
+        this.prepare(height, imgChar, false);
         this.prepareFrameRate(frameRate);
     }
 
     public AnimatedImageGenerator(String key, InputStream input, int height, ImageChar imgChar) throws IOException {
+        this(key, input, height, imgChar, false);
+    }
+
+    public AnimatedImageGenerator(String key, InputStream input, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(input);
-        this.prepare(height, imgChar);
+        this.prepare(height, imgChar, requiresBorder);
     }
 
     protected AnimatedImageGenerator(String key) {
@@ -62,6 +79,10 @@ public class AnimatedImageGenerator implements Generator {
     }
 
     protected void prepare(int height, ImageChar imgChar) {
+        this.prepare(height, imgChar, false);
+    }
+
+    protected void prepare(int height, ImageChar imgChar, boolean requiresBorder) {
         int maxHeight = 0;
         for (GIFFrame frame : frames) {
             maxHeight = Math.max(maxHeight, frame.image.getHeight());
@@ -69,7 +90,7 @@ public class AnimatedImageGenerator implements Generator {
 
         for (GIFFrame frame : frames) {
             int imageHeight = (int) ((frame.image.getHeight() / (double) maxHeight) * height);
-            frame.imageGenerator = new ImageGenerator(frame.image, imageHeight, imgChar);
+            frame.imageGenerator = new ImageGenerator(frame.image, imageHeight, imgChar, requiresBorder);
         }
     }
 

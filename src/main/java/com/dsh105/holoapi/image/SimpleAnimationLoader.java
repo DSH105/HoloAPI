@@ -40,6 +40,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 }
                 int imageHeight = config.getInt(path + "height", 10);
                 int frameRate = config.getInt(path + "frameRate", 5);
+                boolean requiresBorder = config.getBoolean(path + "requiresBorder", false);
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
                 if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
@@ -60,7 +61,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         HoloAPI.getInstance().LOGGER.log(Level.INFO, "Animations loaded.");
     }
 
-    private AnimatedImageGenerator findGenerator(YAMLConfig config, AnimationLoadType type, String key, String imagePath, int frameRate, int imageHeight, String imageCharType) {
+    private AnimatedImageGenerator findGenerator(YAMLConfig config, AnimationLoadType type, String key, String imagePath, int frameRate, int imageHeight, String imageCharType, boolean requiresBorder) {
         try {
             ImageChar c = ImageChar.fromHumanName(imageCharType);
             if (c == null) {
@@ -71,12 +72,12 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 case FILE:
                     File f = new File(HoloAPI.getInstance().getDataFolder() + File.separator + "animations" + File.separator + imagePath);
                     if (frameRate == 0) {
-                        return new AnimatedImageGenerator(key, f, imageHeight, c);
+                        return new AnimatedImageGenerator(key, f, imageHeight, c, requiresBorder);
                     } else {
-                        return new AnimatedImageGenerator(key, f, frameRate, imageHeight, c);
+                        return new AnimatedImageGenerator(key, f, frameRate, imageHeight, c, requiresBorder);
                     }
                 case URL:
-                    this.URL_UNLOADED.put(key, new UnloadedImageStorage(imagePath, imageHeight, frameRate, c));
+                    this.URL_UNLOADED.put(key, new UnloadedImageStorage(imagePath, imageHeight, frameRate, c, requiresBorder));
                     return null;
             }
         } catch (Exception e) {
@@ -132,7 +133,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                     connection.setConnectTimeout(8000);
                     input = connection.getInputStream();
                     generator.frames = generator.readGif(input);
-                    generator.prepare(data.getImageHeight(), data.getCharType());
+                    generator.prepare(data.getImageHeight(), data.getCharType(), data.requiresBorder());
                     if (data.getFrameRate() != 0) {
                         generator.prepareFrameRate(data.getFrameRate());
                     }

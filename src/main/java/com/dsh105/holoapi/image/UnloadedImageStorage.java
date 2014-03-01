@@ -15,11 +15,12 @@ public class UnloadedImageStorage {
         this.requiresBorder = requiresBorder;
     }
 
-    public UnloadedImageStorage(String imagePath, int imageHeight, int frameRate, ImageChar charType) {
+    public UnloadedImageStorage(String imagePath, int imageHeight, int frameRate, ImageChar charType, boolean requiresBorder) {
         this.imagePath = imagePath;
         this.imageHeight = imageHeight;
         this.frameRate = frameRate;
         this.charType = charType;
+        this.requiresBorder = requiresBorder;
     }
 
     public String getImagePath() {
