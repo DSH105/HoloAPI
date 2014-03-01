@@ -62,6 +62,8 @@ public class BuilderInputPrompt extends ValidatingPrompt {
                 //this.success = true;
                 if (s.equalsIgnoreCase("none")) {
                     this.builders.add(this.currentBuilder.withLineData(" "));
+                } else {
+                    this.builders.add(this.currentBuilder.withLineData(s));
                 }
                 return new BuilderInputPrompt(this.builders);
             } else if (this.currentBuilder.getType().equalsIgnoreCase("IMAGE")) {
