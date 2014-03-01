@@ -160,14 +160,14 @@ public class Hologram {
     }
 
     public void show(Player observer) {
-        this.show(observer, (int) this.getDefaultX(), (int) this.getDefaultY(), (int) this.getDefaultZ());
+        this.show(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
     }
 
     public void show(Player observer, Location location) {
         this.show(observer, location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
-    public void show(Player observer, int x, int y, int z) {
+    public void show(Player observer, double x, double y, double z) {
         /*if (this.playerToLocationMap.containsKey(observer.getName())) {
             this.move(observer, new Vector(x, y, z));
         }*/
@@ -188,7 +188,7 @@ public class Hologram {
             loc.setY(loc.getY() - LINE_SPACING);
         }
         this.playerToLocationMap.put(observer.getName(), vector);*/
-        this.show(observer, (int) vector.getX(), (int) vector.getY(), (int) vector.getZ());
+        this.show(observer, vector.getX(), vector.getY(), vector.getZ());
     }
 
     public void clear(Player observer) {
@@ -232,7 +232,7 @@ public class Hologram {
         teleportSkull.send(observer);
     }
 
-    protected void generate(Player observer, int index, double diffY, int x, int y, int z) {
+    protected void generate(Player observer, int index, double diffY, double x, double y, double z) {
         WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
 
         WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
