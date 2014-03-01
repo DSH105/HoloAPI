@@ -24,17 +24,31 @@ public class AnimatedImageGenerator implements Generator {
     protected ImmutableList<GIFFrame> frames;
     private int index = 0;
 
-    public AnimatedImageGenerator(String key, int frameDelay, ImageGenerator... imageFrames) {
+    public AnimatedImageGenerator(String key, int frameRate, ImageGenerator... imageFrames) {
         this.key = key;
         for (ImageGenerator generator : imageFrames) {
-            frames.add(new GIFFrame(generator, frameDelay));
+            frames.add(new GIFFrame(generator, frameRate));
         }
+    }
+
+    public AnimatedImageGenerator(String key, File gifFile, int frameRate, int height, ImageChar imgChar) throws IOException {
+        this.key = key;
+        this.frames = this.readGif(gifFile);
+        this.prepare(height, imgChar);
+        this.prepareFrameRate(frameRate);
     }
 
     public AnimatedImageGenerator(String key, File gifFile, int height, ImageChar imgChar) throws IOException {
         this.key = key;
         this.frames = this.readGif(gifFile);
         this.prepare(height, imgChar);
+    }
+
+    public AnimatedImageGenerator(String key, InputStream input, int frameRate, int height, ImageChar imgChar) throws IOException {
+        this.key = key;
+        this.frames = this.readGif(input);
+        this.prepare(height, imgChar);
+        this.prepareFrameRate(frameRate);
     }
 
     public AnimatedImageGenerator(String key, InputStream input, int height, ImageChar imgChar) throws IOException {
@@ -56,6 +70,12 @@ public class AnimatedImageGenerator implements Generator {
         for (GIFFrame frame : frames) {
             int imageHeight = (int) ((frame.image.getHeight() / (double) maxHeight) * height);
             frame.imageGenerator = new ImageGenerator(frame.image, imageHeight, imgChar);
+        }
+    }
+
+    protected void prepareFrameRate(int frameRate) {
+        for (GIFFrame frame : this.frames) {
+            frame.delay = frameRate;
         }
     }
 
@@ -144,7 +164,7 @@ public class AnimatedImageGenerator implements Generator {
             masterGraphics.drawImage(image, x, y, null);
 
             BufferedImage copy = new BufferedImage(master.getColorModel(), master.copyData(null), master.isAlphaPremultiplied(), null);
-            frames.add(new GIFFrame(copy, delay, disposal));
+            frames.add(new GIFFrame(copy, (int) Math.ceil(delay / 2.5D), disposal));
 
             if (disposal.equals("restoreToPrevious")) {
                 BufferedImage from = null;

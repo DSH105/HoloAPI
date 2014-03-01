@@ -13,7 +13,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ public class AnimatedHologram extends Hologram {
                 }
                 animate();
             }
-        }.runTaskLater(HoloAPI.getInstance(), (int) Math.ceil(frame.getDelay() / 2.5D));
+        }.runTaskLater(HoloAPI.getInstance(), frame.getDelay());
     }
 
     public boolean isAnimating() {

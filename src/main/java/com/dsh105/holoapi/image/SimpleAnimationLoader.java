@@ -39,6 +39,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                     continue;
                 }
                 int imageHeight = config.getInt(path + "height", 10);
+                int frameRate = config.getInt(path + "frameRate", 5);
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
                 if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
@@ -47,7 +48,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 }
                 AnimationLoadType type = AnimationLoadType.valueOf(imageType.toUpperCase());
 
-                AnimatedImageGenerator generator = findGenerator(config, type, key, imagePath, imageHeight, imageChar);
+                AnimatedImageGenerator generator = findGenerator(config, type, key, imagePath, frameRate, imageHeight, imageChar);
                 if (generator != null) {
                     this.KEY_TO_IMAGE_MAP.put(key, generator);
                 } else {
@@ -59,7 +60,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         HoloAPI.getInstance().LOGGER.log(Level.INFO, "Animations loaded.");
     }
 
-    private AnimatedImageGenerator findGenerator(YAMLConfig config, AnimationLoadType type, String key, String imagePath, int imageHeight, String imageCharType) {
+    private AnimatedImageGenerator findGenerator(YAMLConfig config, AnimationLoadType type, String key, String imagePath, int frameRate, int imageHeight, String imageCharType) {
         try {
             ImageChar c = ImageChar.fromHumanName(imageCharType);
             if (c == null) {
@@ -69,9 +70,13 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
             switch (type) {
                 case FILE:
                     File f = new File(HoloAPI.getInstance().getDataFolder() + File.separator + "animations" + File.separator + imagePath);
-                    return new AnimatedImageGenerator(key, f, imageHeight, c);
+                    if (frameRate == 0) {
+                        return new AnimatedImageGenerator(key, f, imageHeight, c);
+                    } else {
+                        return new AnimatedImageGenerator(key, f, frameRate, imageHeight, c);
+                    }
                 case URL:
-                    this.URL_UNLOADED.put(key, new UnloadedImageStorage(imagePath, imageHeight, c));
+                    this.URL_UNLOADED.put(key, new UnloadedImageStorage(imagePath, imageHeight, frameRate, c));
                     return null;
             }
         } catch (Exception e) {
@@ -128,6 +133,9 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                     input = connection.getInputStream();
                     generator.frames = generator.readGif(input);
                     generator.prepare(data.getImageHeight(), data.getCharType());
+                    if (data.getFrameRate() != 0) {
+                        generator.prepareFrameRate(data.getFrameRate());
+                    }
                     if (sender != null) {
                         Lang.sendTo(sender, Lang.IMAGE_LOADED.getValue().replace("%key%", key));
                     }
