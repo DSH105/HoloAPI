@@ -209,7 +209,6 @@ public class HoloCommand implements CommandExecutor {
                         return true;
                     }
                     final String hologramId = h.getSaveId();
-                    HoloAPI.getManager().stopTracking(h);
 
                     InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
 
@@ -238,6 +237,7 @@ public class HoloCommand implements CommandExecutor {
                             return Lang.YES_NO_INPUT_INVALID.getValue();
                         }
                     })).buildConversation((Player) sender).begin();
+                    HoloAPI.getManager().stopTracking(h);
 
                     return true;
                 } else return true;
