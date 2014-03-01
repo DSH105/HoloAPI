@@ -46,7 +46,7 @@ public class AnimatedHologram extends Hologram {
                 }
                 animate();
             }
-        }.runTaskLater(HoloAPI.getInstance(), (int) Math.ceil(frame.getDelay() / 5.0));
+        }.runTaskLater(HoloAPI.getInstance(), (int) Math.ceil(frame.getDelay() / 2.5D));
     }
 
     public boolean isAnimating() {
