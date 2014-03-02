@@ -145,9 +145,9 @@ public class SimpleHoloManager implements HoloManager {
             for (String key : cs.getKeys(false)) {
                 String path = "holograms." + key + ".";
                 String worldName = config.getString(path + "worldName");
-                int x = config.getInt(path + "x");
-                int y = config.getInt(path + "y");
-                int z = config.getInt(path + "z");
+                double x = config.getDouble(path + "x");
+                double y = config.getDouble(path + "y");
+                double z = config.getDouble(path + "z");
                 ConfigurationSection cs1 = config.getConfigurationSection("holograms." + key + ".lines");
                 boolean containsImage = false;
                 if (cs1 != null) {
@@ -183,9 +183,9 @@ public class SimpleHoloManager implements HoloManager {
     public Hologram loadFromFile(String hologramId) {
         String path = "holograms." + hologramId + ".";
         String worldName = config.getString(path + "worldName");
-        int x = config.getInt(path + "x");
-        int y = config.getInt(path + "y");
-        int z = config.getInt(path + "z");
+        double x = config.getDouble(path + "x");
+        double y = config.getDouble(path + "y");
+        double z = config.getDouble(path + "z");
         ConfigurationSection cs1 = config.getConfigurationSection("holograms." + hologramId + ".lines");
         HologramFactory hf = new HologramFactory();
         //ArrayList<String> lines = new ArrayList<String>();

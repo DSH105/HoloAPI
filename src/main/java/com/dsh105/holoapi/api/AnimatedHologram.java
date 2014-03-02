@@ -69,19 +69,19 @@ public class AnimatedHologram extends Hologram {
     }
 
     @Override
-    public void show(Player observer, int x, int y, int z) {
+    public void show(Player observer, double x, double y, double z) {
         this.showAnimation(observer, x, y, z, this.animatedImage.current());
     }
 
     public void showAnimation(Player observer, ImageGenerator generator) {
-        this.showAnimation(observer, (int) this.getDefaultX(), (int) this.getDefaultY(), (int) this.getDefaultZ(), generator);
+        this.showAnimation(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), generator);
     }
 
     public void showAnimation(Player observer, Vector v, ImageGenerator generator) {
         this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), generator);
     }
 
-    private void showAnimation(Player observer, int x, int y, int z, ImageGenerator generator) {
+    private void showAnimation(Player observer, double x, double y, double z, ImageGenerator generator) {
         for (int index = 0; index < generator.getLines().length; index++) {
             this.generateAnimation(observer, generator.getLines()[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
@@ -89,11 +89,11 @@ public class AnimatedHologram extends Hologram {
     }
 
     @Override
-    protected void generate(Player observer, int index, double diffY, int x, int y, int z) {
+    protected void generate(Player observer, int index, double diffY, double x, double y, double z) {
         super.generate(observer, index, diffY, x, y, z);
     }
 
-    protected void generateAnimation(Player observer, String message, int index, double diffY, int x, int y, int z) {
+    protected void generateAnimation(Player observer, String message, int index, double diffY, double x, double y, double z) {
         WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
 
         WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
