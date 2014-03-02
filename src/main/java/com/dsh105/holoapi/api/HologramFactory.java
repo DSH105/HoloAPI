@@ -22,6 +22,7 @@ public class HologramFactory {
     private double locY;
     private double locZ;
     private String saveId;
+    private boolean save = true;
     private boolean preparedId = false;
     private boolean prepared = false;
 
@@ -86,6 +87,11 @@ public class HologramFactory {
         return this;
     }
 
+    public HologramFactory withSaving(boolean saveToFile) {
+        this.save = saveToFile;
+        return this;
+    }
+
     public Hologram build() {
         if (this.isEmpty()) {
             throw new HologramNotPreparedException("Hologram lines cannot be empty.");
@@ -106,7 +112,7 @@ public class HologramFactory {
             }
         }
         hologram.setImageTagMap(this.imageIdMap);
-        HoloAPI.getManager().track(hologram, HoloAPI.getInstance());
+        HoloAPI.getManager().track(hologram, HoloAPI.getInstance(), this.save);
         return hologram;
     }
 

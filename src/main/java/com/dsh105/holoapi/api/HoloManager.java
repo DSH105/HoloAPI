@@ -1,9 +1,11 @@
 package com.dsh105.holoapi.api;
 
+import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface HoloManager {
 
@@ -12,6 +14,8 @@ public interface HoloManager {
     public ArrayList<Hologram> getHologramsFor(Plugin owningPlugin);
 
     public Hologram getHologram(String hologramId);
+
+    public void track(Hologram hologram, Plugin owningPlugin, boolean save);
 
     public void track(Hologram hologram, Plugin owningPlugin);
 
@@ -26,4 +30,12 @@ public interface HoloManager {
     public void clearFromFile(String hologramId);
 
     public void clearFromFile(Hologram hologram);
+
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, List<String> lines);
+
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, String... lines);
+
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, List<String> lines);
+
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, String... lines);
 }

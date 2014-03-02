@@ -94,6 +94,13 @@ public class AnimatedHologram extends Hologram {
     }
 
     @Override
+    public void move(Player observer, Vector to) {
+        this.cancelAnimation();
+        super.move(observer, to);
+        this.animate();
+    }
+
+    @Override
     public void clear(Player observer) {
         int[] ids = new int[frame.getImageGenerator().getLines().length];
 

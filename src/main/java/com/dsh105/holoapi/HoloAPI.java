@@ -34,7 +34,6 @@ public class HoloAPI extends DSHPlugin {
     private ConfigOptions OPTIONS;
 
     private YAMLConfig config;
-
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
 

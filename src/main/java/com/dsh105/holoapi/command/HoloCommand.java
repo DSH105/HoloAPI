@@ -48,20 +48,6 @@ public class HoloCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        /**
-         * Possible commands:
-         *
-         * ----------------------
-         * NOTE: ALL COMMAND CREATED HOLOGRAMS ARE VISIBLE TO ALL PLAYERS
-         * ----------------------
-         *
-         * TODO /holo create [-i <image></image>] [-t <text>] -> Creates hologram. Each switch can be followed by multiple lines, until a new switch is specified. (-i loads an image from config.yml images section)
-         * IMPLEMENTED /holo create -> Start conversation for multiple lines -> "Done" when finished
-         * IMPLEMENTED /holo info -> Print info on all active holograms (with ids)
-         * IMPLEMENTED /holo remove <id> -> remove hologram of id
-         * IMPLEMENTED /holo create image <image_id> -> Create hologram with the desired image
-         */
-
         if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
             if (args.length == 1) {
                 String[] help = this.help.getPage(1);
@@ -249,12 +235,7 @@ public class HoloCommand implements CommandExecutor {
                         return true;
                     }
                     Location to = ((Player) sender).getLocation();
-                    for (String pName : h.getPlayerViews().keySet()) {
-                        Player p = Bukkit.getPlayerExact(pName);
-                        if (p != null) {
-                            h.move(p, to);
-                        }
-                    }
+                    h.move(to);
                     Lang.sendTo(sender, Lang.HOLOGRAM_MOVED.getValue());
                     return true;
                 } else return true;

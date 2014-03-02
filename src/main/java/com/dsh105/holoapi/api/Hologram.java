@@ -174,18 +174,30 @@ public class Hologram {
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }
 
+    public void move(Location to) {
+        this.move(to.toVector());
+    }
+
+    public void move(Vector to) {
+        for (String pName : this.getPlayerViews().keySet()) {
+            Player p = Bukkit.getPlayerExact(pName);
+            if (p != null) {
+                this.move(p, to);
+            }
+        }
+    }
+
     public void move(Player observer, Location to) {
         this.move(observer, to.toVector());
     }
 
-    public void move(Player observer, Vector vector) {
-        /*Vector loc = vector.clone();
-        for (int i = 0; i < this.getTagCount(); i++) {
-            this.moveTag(observer, i, loc);
-            loc.setY(loc.getY() - LINE_SPACING);
+    public void move(Player observer, Vector to) {
+        Vector loc = to.clone();
+        for (int index = 0; index < this.getTagCount(); index++) {
+            this.moveTag(observer, index, loc);
+            loc.setY(loc.getY() - HoloAPI.getHologramLineSpacing());
         }
-        this.playerToLocationMap.put(observer.getName(), vector);*/
-        this.show(observer, vector.getX(), vector.getY(), vector.getZ());
+        this.playerToLocationMap.put(observer.getName(), to);
     }
 
     public void clear(Player observer) {
@@ -216,13 +228,13 @@ public class Hologram {
         WrapperPacketEntityTeleport teleportHorse = new WrapperPacketEntityTeleport();
         teleportHorse.setEntityId(this.getHorseIndex(index));
         teleportHorse.setX(to.getX());
-        teleportHorse.setY(to.getY());
+        teleportHorse.setY(to.getY() + 55);
         teleportHorse.setZ(to.getZ());
 
         WrapperPacketEntityTeleport teleportSkull = new WrapperPacketEntityTeleport();
         teleportSkull.setEntityId(this.getSkullIndex(index));
         teleportSkull.setX(to.getX());
-        teleportSkull.setY(to.getY());
+        teleportSkull.setY(to.getY() + 55);
         teleportSkull.setZ(to.getZ());
 
         teleportHorse.send(observer);

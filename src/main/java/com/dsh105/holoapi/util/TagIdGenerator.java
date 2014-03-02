@@ -6,6 +6,6 @@ public class TagIdGenerator {
 
     public static int nextId(int counter) {
         nextId += counter * 2;
-        return nextId;
+        return ++nextId;
     }
 }

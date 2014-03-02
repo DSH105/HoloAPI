@@ -6,18 +6,19 @@ import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 public class SimpleHoloManager implements HoloManager {
@@ -67,17 +68,22 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
-    public void track(Hologram hologram, Plugin owningPlugin) {
+    public void track(Hologram hologram, Plugin owningPlugin, boolean save) {
         this.holograms.put(hologram, owningPlugin);
         if (this.updateDisplayTask == null) {
             this.updateDisplayTask = new UpdateDisplayTask();
         }
-        if (this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
+        if (save && this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
             this.saveToFile(hologram);
         }
         if (hologram instanceof AnimatedHologram && !((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).animate();
         }
+    }
+
+    @Override
+    public void track(Hologram hologram, Plugin owningPlugin) {
+        this.track(hologram, owningPlugin, true);
     }
 
     @Override
@@ -132,16 +138,13 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void clearFromFile(String hologramId) {
-        Hologram hologram = this.getHologram(hologramId);
-        if (hologram != null) {
-            this.clearFromFile(hologram);
-        }
+        this.config.set("holograms." + hologramId + "", null);
+        this.config.saveConfig();
     }
 
     @Override
     public void clearFromFile(Hologram hologram) {
-        this.config.set("holograms." + hologram.getSaveId() + "", null);
-        this.config.saveConfig();
+        this.clearFromFile(hologram.getSaveId());
     }
 
     public ArrayList<String> loadFileData() {
@@ -227,6 +230,70 @@ public class SimpleHoloManager implements HoloManager {
             }
         }
         return null;
+    }
+
+    @Override
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, List<String> lines) {
+        return this.createSimpleHologram(location, durationInSeconds, false, lines.toArray(new String[lines.size()]));
+    }
+
+    @Override
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, List<String> lines) {
+        return this.createSimpleHologram(location, durationInSeconds, rise, lines.toArray(new String[lines.size()]));
+    }
+
+    @Override
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, String... lines) {
+        return this.createSimpleHologram(location, durationInSeconds, false, lines);
+    }
+
+    @Override
+    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, String... lines) {
+        final Hologram hologram = new HologramFactory().withText(lines).withLocation(location).withSaving(false).build();
+        for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
+            if (e instanceof Player) {
+                hologram.show((Player) e);
+            }
+        }
+        BukkitTask t = null;
+
+        if (rise) {
+            final Location l = location.clone();
+            t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    l.add(0.0D, 0.02D, 0.0D);
+                    for (String pName : hologram.getPlayerViews().keySet()) {
+                        Player p = Bukkit.getPlayerExact(pName);
+                        if (p != null) {
+                            hologram.move(p, l);
+                        }
+                    }
+                }
+            }, 1L, 1L);
+        }
+
+        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getInstance(), durationInSeconds * 20);
+        return hologram;
+    }
+
+    class HologramRemoveTask extends BukkitRunnable {
+
+        private Hologram hologram;
+        BukkitTask t = null;
+
+        HologramRemoveTask(Hologram hologram, BukkitTask t) {
+            this.hologram = hologram;
+            this.t = t;
+        }
+
+        @Override
+        public void run() {
+            if (this.t != null) {
+                t.cancel();
+            }
+            hologram.clearAllPlayerViews();
+        }
     }
 
     class UpdateDisplayTask extends BukkitRunnable {
