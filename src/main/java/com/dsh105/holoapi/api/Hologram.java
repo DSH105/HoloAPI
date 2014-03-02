@@ -3,6 +3,7 @@ package com.dsh105.holoapi.api;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -12,6 +13,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Hologram {
@@ -104,8 +106,8 @@ public class Hologram {
         this.imageIdMap = map;
     }
 
-    public HashMap<String, Boolean> serialise() {
-        HashMap<String, Boolean> map = new HashMap<String, Boolean>();
+    public LinkedHashMap<String, Boolean> serialise() {
+    	LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
         ArrayList<String> tags = new ArrayList<String>();
         for (String s : this.tags) {
             tags.add(s);
