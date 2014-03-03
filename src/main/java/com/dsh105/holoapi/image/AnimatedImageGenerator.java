@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.image;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.google.common.collect.ImmutableList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class AnimatedImageGenerator implements Generator {
 
@@ -24,6 +26,8 @@ public class AnimatedImageGenerator implements Generator {
     private String key;
     protected ImmutableList<GIFFrame> frames;
     private int index = 0;
+    private int maxHeight;
+    private GIFFrame largestFrame;
 
     public AnimatedImageGenerator(String key, int frameRate, ImageGenerator... imageFrames) {
         this.key = key;
@@ -83,13 +87,9 @@ public class AnimatedImageGenerator implements Generator {
     }
 
     protected void prepare(int height, ImageChar imgChar, boolean requiresBorder) {
-        int maxHeight = 0;
+        this.calculateMaxHeight();
         for (GIFFrame frame : frames) {
-            maxHeight = Math.max(maxHeight, frame.image.getHeight());
-        }
-
-        for (GIFFrame frame : frames) {
-            int imageHeight = (int) ((frame.image.getHeight() / (double) maxHeight) * height);
+            int imageHeight = (int) ((frame.image.getHeight() / (double) this.maxHeight) * height);
             frame.imageGenerator = new ImageGenerator(frame.image, imageHeight, imgChar, requiresBorder);
         }
     }
@@ -98,6 +98,19 @@ public class AnimatedImageGenerator implements Generator {
         for (GIFFrame frame : this.frames) {
             frame.delay = frameRate;
         }
+    }
+
+    protected void calculateMaxHeight() {
+        int maxHeight = 0;
+        GIFFrame largestFrame = this.frames.get(0);
+        for (GIFFrame frame : frames) {
+            if (frame.image.getHeight() > maxHeight) {
+                maxHeight = frame.image.getHeight();
+                largestFrame = frame;
+            }
+        }
+        this.maxHeight = maxHeight;
+        this.largestFrame = largestFrame;
     }
 
     protected ImmutableList<GIFFrame> readGif(InputStream input) throws IOException {
@@ -211,6 +224,14 @@ public class AnimatedImageGenerator implements Generator {
     @Override
     public String getKey() {
         return key;
+    }
+
+    public int getMaxHeight() {
+        return maxHeight;
+    }
+
+    public GIFFrame getLargestFrame() {
+        return largestFrame;
     }
 
     public GIFFrame getCurrent() {

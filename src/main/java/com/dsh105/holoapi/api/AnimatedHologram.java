@@ -23,7 +23,7 @@ public class AnimatedHologram extends Hologram {
     private GIFFrame frame;
 
     protected AnimatedHologram(String saveId, String worldName, double x, double y, double z, AnimatedImageGenerator animatedImage) {
-        super(saveId, worldName, x, y, z, animatedImage.getFrame(0).getImageGenerator().getLines());
+        super(saveId, worldName, x, y, z, animatedImage.getLargestFrame().getImageGenerator().getLines());
         this.animatedImage = animatedImage;
         this.frame = this.animatedImage.getCurrent();
         this.animate();
