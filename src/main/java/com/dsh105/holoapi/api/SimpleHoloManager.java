@@ -266,7 +266,7 @@ public class SimpleHoloManager implements HoloManager {
                     for (String pName : hologram.getPlayerViews().keySet()) {
                         Player p = Bukkit.getPlayerExact(pName);
                         if (p != null) {
-                            hologram.move(p, l);
+                            hologram.move(p, l.toVector());
                         }
                     }
                 }

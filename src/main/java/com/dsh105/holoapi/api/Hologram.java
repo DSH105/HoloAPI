@@ -1,10 +1,12 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -136,6 +138,16 @@ public class Hologram {
         return null;
     }
 
+    public void changeWorld(String worldName) {
+        this.clearAllPlayerViews();
+        this.worldName = worldName;
+        for (Entity e : GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50)) {
+            if (e instanceof Player) {
+                this.show((Player) e);
+            }
+        }
+    }
+
     public void clearAllPlayerViews() {
         Iterator<String> i = this.playerToLocationMap.keySet().iterator();
         while (i.hasNext()) {
@@ -175,6 +187,9 @@ public class Hologram {
     }
 
     public void move(Location to) {
+        if (!this.worldName.equals(to.getWorld().getName())) {
+            this.changeWorld(to.getWorld().getName());
+        }
         this.move(to.toVector());
     }
 
@@ -185,10 +200,6 @@ public class Hologram {
                 this.move(p, to);
             }
         }
-    }
-
-    public void move(Player observer, Location to) {
-        this.move(observer, to.toVector());
     }
 
     public void move(Player observer, Vector to) {
