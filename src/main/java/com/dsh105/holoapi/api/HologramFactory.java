@@ -28,6 +28,8 @@ public class HologramFactory {
 
     private ArrayList<String> tags = new ArrayList<String>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
+    private int tagId;
+    private boolean withTagId;
 
     protected HologramFactory withSaveId(String saveId) {
         this.saveId = saveId;
@@ -87,8 +89,14 @@ public class HologramFactory {
         return this;
     }
 
-    public HologramFactory withSaving(boolean saveToFile) {
+    protected HologramFactory withSaving(boolean saveToFile) {
         this.save = saveToFile;
+        return this;
+    }
+
+    protected HologramFactory withFirstTagId(int tagId) {
+        this.tagId = tagId;
+        this.withTagId = true;
         return this;
     }
 
@@ -105,7 +113,12 @@ public class HologramFactory {
             //Map.Entry<TagSize, String> imageIndex = getImageIdOfIndex(0);
             this.saveId = SaveIdGenerator.nextId() + "";
         }
-        Hologram hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
+        Hologram hologram;
+        if (this.withTagId) {
+            hologram = new Hologram(this.tagId, this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
+        } else {
+            hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
+        }
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             h.refreshDisplay();
         }
@@ -116,6 +129,7 @@ public class HologramFactory {
         }
         hologram.setImageTagMap(this.imageIdMap);
         HoloAPI.getManager().track(hologram, HoloAPI.getInstance(), this.save);
+        hologram.setSaveToFile(this.save);
         return hologram;
     }
 

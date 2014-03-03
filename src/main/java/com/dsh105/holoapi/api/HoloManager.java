@@ -31,11 +31,11 @@ public interface HoloManager {
 
     public void clearFromFile(Hologram hologram);
 
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, List<String> lines);
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, List<String> lines);
 
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, String... lines);
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, String... lines);
 
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, List<String> lines);
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, List<String> lines);
 
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, String... lines);
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines);
 }

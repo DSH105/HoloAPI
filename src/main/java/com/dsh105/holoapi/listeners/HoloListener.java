@@ -99,33 +99,28 @@ public class HoloListener implements Listener {
                 Location loc = p.getEyeLocation().clone();
                 loc.add(0.0D, 0.5D, 0.0D);
                 final int duration = config.getInt("chatBubbles.displayDurationSeconds", 8);
-                final Hologram hologram = HoloAPI.getManager().createSimpleHologram(loc, duration, ChatColor.translateAlternateColorCodes('&', config.getString("chatBubbles.nameFormat", "&6&o")) + event.getPlayer().getName() + ":", ChatColor.WHITE + event.getMessage());
+                final boolean rise = config.getBoolean("chatBubbles.rise", true);
+                final boolean followPlayer = config.getBoolean("chatBubbles.followPlayer", false);
+                final Hologram hologram = HoloAPI.getManager().createSimpleHologram(loc, duration, true, ChatColor.translateAlternateColorCodes('&', config.getString("chatBubbles.nameFormat", "&6&o")) + event.getPlayer().getName() + ":", ChatColor.WHITE + event.getMessage());
 
-                if (config.getBoolean("chatBubbles.followPlayer", false)) {
+                /*if (followPlayer) {
                     class FollowPlayer extends BukkitRunnable {
 
                         private int i;
-                        private Vector previous;
 
                         @Override
                         public void run() {
                             if (p == null || ++i >= (duration * 20)) {
                                 this.cancel();
                             }
-                            Location loc = p.getEyeLocation().clone();
-                            if (previous == null
-                                    || !(previous.getBlockX() == loc.getBlockX()
-                                    && previous.getBlockY() == loc.getBlockY()
-                                    && previous.getBlockZ() == loc.getBlockZ())) {
-                                loc.add(0.0D, 0.5D, 0.0D);
-                                hologram.move(loc);
-                                previous = loc.toVector();
-                            }
+                            Location l = p.getEyeLocation();
+                            double yDiff = l.getY() + (hologram.getDefaultY() - (l.getY() + 0.5D)) + (rise ? 0.02D : 0.0D);
+                            //hologram.move(new Vector(l.getX(), yDiff, l.getZ()));
                         }
                     }
 
                     new FollowPlayer().runTaskTimer(HoloAPI.getInstance(), 1L, 1L);
-                }
+                }*//*
             }
         }
     }*/

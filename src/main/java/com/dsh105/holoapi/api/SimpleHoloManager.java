@@ -7,6 +7,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
+import com.dsh105.holoapi.util.TagIdGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -233,23 +234,26 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, List<String> lines) {
-        return this.createSimpleHologram(location, durationInSeconds, false, lines.toArray(new String[lines.size()]));
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, List<String> lines) {
+        return this.createSimpleHologram(location, secondsUntilRemoved, false, lines.toArray(new String[lines.size()]));
     }
 
     @Override
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, List<String> lines) {
-        return this.createSimpleHologram(location, durationInSeconds, rise, lines.toArray(new String[lines.size()]));
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, List<String> lines) {
+        return this.createSimpleHologram(location, secondsUntilRemoved, rise, lines.toArray(new String[lines.size()]));
     }
 
     @Override
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, String... lines) {
-        return this.createSimpleHologram(location, durationInSeconds, false, lines);
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, String... lines) {
+        return this.createSimpleHologram(location, secondsUntilRemoved, false, lines);
     }
 
     @Override
-    public Hologram createSimpleHologram(Location location, int durationInSeconds, boolean rise, String... lines) {
-        final Hologram hologram = new HologramFactory().withText(lines).withLocation(location).withSaving(false).build();
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
+        int simpleId = TagIdGenerator.nextSimpleId(lines.length);
+        HoloAPI.LOGGER.log(Level.INFO, simpleId + "");
+        final Hologram hologram = new HologramFactory().withSaveId(simpleId + "").withText(lines).withLocation(location).withSaving(false).build();
+        hologram.firstTagId = simpleId;
         for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
@@ -263,17 +267,12 @@ public class SimpleHoloManager implements HoloManager {
                 @Override
                 public void run() {
                     l.add(0.0D, 0.02D, 0.0D);
-                    for (String pName : hologram.getPlayerViews().keySet()) {
-                        Player p = Bukkit.getPlayerExact(pName);
-                        if (p != null) {
-                            hologram.move(p, l.toVector());
-                        }
-                    }
+                    hologram.move(l.toVector());
                 }
             }, 1L, 1L);
         }
 
-        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getInstance(), durationInSeconds * 20);
+        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getInstance(), secondsUntilRemoved * 20);
         return hologram;
     }
 
@@ -293,6 +292,9 @@ public class SimpleHoloManager implements HoloManager {
                 t.cancel();
             }
             hologram.clearAllPlayerViews();
+            for (Hologram h : getAllHolograms().keySet()) {
+                h.refreshDisplay();
+            }
         }
     }
 
@@ -308,17 +310,7 @@ public class SimpleHoloManager implements HoloManager {
         public void run() {
             Iterator<Hologram> i = toUpdate.iterator();
             while (i.hasNext()) {
-                Hologram h = i.next();
-                HashMap<String, Vector> map = new HashMap<String, Vector>();
-                map.putAll(h.playerToLocationMap);
-
-                for (String name : map.keySet()) {
-                    Player p = Bukkit.getPlayerExact(name);
-                    h.clear(p);
-                    if (GeometryUtil.getNearbyEntities(h.getDefaultLocation(), 50).contains(p)) {
-                        h.show(p);
-                    }
-                }
+                i.next().refreshDisplay();
             }
         }
     }
