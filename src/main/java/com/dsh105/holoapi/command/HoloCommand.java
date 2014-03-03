@@ -17,7 +17,6 @@ import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import mkremins.fanciful.FancyMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -144,6 +143,9 @@ public class HoloCommand implements CommandExecutor {
                     Lang.sendTo(sender, Lang.ACTIVE_DISPLAYS.getValue());
                     for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllHolograms().entrySet()) {
                         Hologram h = entry.getKey();
+                        if (!h.shouldSaveToFile()) {
+                            continue;
+                        }
                         ArrayList<String> list = new ArrayList<String>();
                         list.add(ChatColor.GOLD + "" + ChatColor.UNDERLINE + "Hologram Preview:");
                         if (h instanceof AnimatedHologram) {
@@ -177,7 +179,9 @@ public class HoloCommand implements CommandExecutor {
                             sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());
                         }
                     }
-                    sender.sendMessage(Lang.TIP_HOVER_PREVIEW.getValue());
+                    if (sender instanceof Player) {
+                        sender.sendMessage(Lang.TIP_HOVER_PREVIEW.getValue());
+                    }
                     return true;
                 } else return true;
             } else if (args[0].equalsIgnoreCase("build")) {

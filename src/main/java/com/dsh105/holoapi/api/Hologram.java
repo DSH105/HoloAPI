@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class Hologram {
 
@@ -22,13 +23,19 @@ public class Hologram {
     private double defZ;
     private String[] tags;
 
-    private int firstTagId;
+    protected int firstTagId;
     private String saveId;
-
-    //private boolean visibleToAll = true;
+    private boolean saveToFile = true;
 
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
+
+    protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
+        this(worldName, x, y, z);
+        this.saveId = saveId;
+        this.tags = lines;
+        this.firstTagId = firstTagId;
+    }
 
     protected Hologram(String saveId, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
@@ -42,6 +49,15 @@ public class Hologram {
         this.defX = x;
         this.defY = y;
         this.defZ = z;
+
+    }
+
+    public boolean shouldSaveToFile() {
+        return saveToFile;
+    }
+
+    protected void setSaveToFile(boolean flag) {
+        this.saveToFile = flag;
     }
 
     public int getTagCount() {
@@ -72,6 +88,16 @@ public class Hologram {
         HashMap<String, Vector> map = new HashMap<String, Vector>();
         map.putAll(this.playerToLocationMap);
         return map;
+    }
+
+    public void refreshDisplay() {
+        for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
+            Player p = Bukkit.getPlayerExact(entry.getKey());
+            this.clear(p);
+            if (GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50).contains(p)) {
+                this.show(p);
+            }
+        }
     }
 
     public String[] getLines() {
@@ -194,6 +220,10 @@ public class Hologram {
     }
 
     public void move(Vector to) {
+        this.defX = to.getX();
+        this.defY = to.getY();
+        this.defZ = to.getZ();
+        HoloAPI.getManager().saveToFile(this);
         for (String pName : this.getPlayerViews().keySet()) {
             Player p = Bukkit.getPlayerExact(pName);
             if (p != null) {
@@ -248,8 +278,13 @@ public class Hologram {
         teleportSkull.setY(to.getY() + 55);
         teleportSkull.setZ(to.getZ());
 
+        WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
+        attach.setEntityId(this.getHorseIndex(index));
+        attach.setVehicleId(this.getSkullIndex(index));
+
         teleportHorse.send(observer);
         teleportSkull.send(observer);
+        //attach.send(observer);
     }
 
     protected void generate(Player observer, int index, double diffY, double x, double y, double z) {
@@ -284,11 +319,11 @@ public class Hologram {
     }
 
     protected int getHorseIndex(int index) {
-        return firstTagId + index * 2;
+        return firstTagId + (index * 2);
     }
 
     protected int getSkullIndex(int index) {
-        return firstTagId + index * 2 + 1;
+        return this.getHorseIndex(index) + 1;
     }
 
 }

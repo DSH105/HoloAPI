@@ -59,6 +59,12 @@ public class AnimatedHologram extends Hologram {
         }
     }
 
+    @Override
+    public void refreshDisplay() {
+        this.cancelAnimation();
+        this.animate();
+    }
+
     public AnimatedImageGenerator getAnimatedImage() {
         return animatedImage;
     }
