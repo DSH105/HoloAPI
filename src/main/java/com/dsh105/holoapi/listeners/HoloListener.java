@@ -8,6 +8,7 @@ import com.dsh105.holoapi.api.Hologram;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,6 +17,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -57,6 +60,28 @@ public class HoloListener implements Listener {
                         h.show(player);
                     }
                 }.runTaskLater(HoloAPI.getInstance(), 40L);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+            if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+            if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
+                for (Entity e : GeometryUtil.getNearbyEntities(h.getDefaultLocation(), 50)) {
+                    if (e instanceof Player) {
+                        h.show((Player) e);
+                    }
+                }
             }
         }
     }
