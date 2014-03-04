@@ -30,6 +30,9 @@ public class AnimatedHologram extends Hologram {
     }
 
     public void animate() {
+        if (this.isAnimating()) {
+            this.cancelAnimation();
+        }
         final ImageGenerator image = this.frame.getImageGenerator();
         this.displayTask = new BukkitRunnable() {
             @Override
