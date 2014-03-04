@@ -8,9 +8,12 @@ import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 public class AnimatedHologramFactory {
+
+    private Plugin owningPlugin;
 
     private AnimatedImageGenerator animatedImage;
     private String worldName;
@@ -20,6 +23,13 @@ public class AnimatedHologramFactory {
     private String saveId;
     private boolean preparedId = false;
     private boolean prepared = false;
+
+    public AnimatedHologramFactory(Plugin owningPlugin) {
+        if (owningPlugin == null) {
+            throw new NullPointerException("Plugin cannot be null");
+        }
+        this.owningPlugin = owningPlugin;
+    }
 
     protected AnimatedHologramFactory withSaveId(String saveId) {
         this.saveId = saveId;
@@ -77,7 +87,7 @@ public class AnimatedHologramFactory {
                 animatedHologram.show((Player) e);
             }
         }
-        HoloAPI.getManager().track(animatedHologram, HoloAPI.getInstance());
+        HoloAPI.getManager().track(animatedHologram, this.owningPlugin);
         return animatedHologram;
     }
 }

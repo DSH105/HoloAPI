@@ -102,7 +102,7 @@ public class HoloCommand implements CommandExecutor {
                         if (generator == null) {
                             return true;
                         }
-                        Hologram h = new HologramFactory().withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                        Hologram h = new HologramFactory(HoloAPI.getInstance()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                         return true;
                     } else return true;
@@ -116,7 +116,7 @@ public class HoloCommand implements CommandExecutor {
                         if (generator == null) {
                             return true;
                         }
-                        AnimatedHologram h = new AnimatedHologramFactory().withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                        AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getInstance()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()));
                         return true;
                     } else return true;

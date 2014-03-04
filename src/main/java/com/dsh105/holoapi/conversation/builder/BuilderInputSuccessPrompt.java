@@ -23,7 +23,7 @@ public class BuilderInputSuccessPrompt extends MessagePrompt {
     public String getPromptText(ConversationContext conversationContext) {
         ArrayList<HoloInputBuilder> builders = (ArrayList<HoloInputBuilder>) conversationContext.getSessionData("builders");
         //ArrayList<String> lines = new ArrayList<String>();
-        HologramFactory hf = new HologramFactory();
+        HologramFactory hf = new HologramFactory(HoloAPI.getInstance());
         for (HoloInputBuilder b : builders) {
             if (b.getType() == null || b.getLineData() == null) {
                 continue;

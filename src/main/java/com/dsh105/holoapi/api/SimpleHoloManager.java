@@ -167,7 +167,7 @@ public class SimpleHoloManager implements HoloManager {
                     boolean containsImage = false;
                     if (cs1 != null) {
                         //ArrayList<String> lines = new ArrayList<String>();
-                        HologramFactory hf = new HologramFactory();
+                        HologramFactory hf = new HologramFactory(HoloAPI.getInstance());
                         for (String key1 : cs1.getKeys(false)) {
                             if (StringUtil.isInt(key1)) {
                                 String type = config.getString(path + "lines." + key1 + ".type");
@@ -205,11 +205,11 @@ public class SimpleHoloManager implements HoloManager {
         if (config.getString(path + "animatedImage") != null) {
             AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage"));
             if (generator != null) {
-                return new AnimatedHologramFactory().withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+                return new AnimatedHologramFactory(HoloAPI.getInstance()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
             }
         } else {
             ConfigurationSection cs1 = config.getConfigurationSection("holograms." + hologramId + ".lines");
-            HologramFactory hf = new HologramFactory();
+            HologramFactory hf = new HologramFactory(HoloAPI.getInstance());
             //ArrayList<String> lines = new ArrayList<String>();
             for (String key1 : cs1.getKeys(false)) {
                 if (StringUtil.isInt(key1)) {
@@ -254,7 +254,7 @@ public class SimpleHoloManager implements HoloManager {
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
         HoloAPI.LOGGER.log(Level.INFO, simpleId + "");
-        final Hologram hologram = new HologramFactory().withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSaving(false).build();
+        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSaving(false).build();
         for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
                 hologram.show((Player) e);

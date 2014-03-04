@@ -9,6 +9,7 @@ import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HologramFactory {
+
+    private Plugin owningPlugin;
 
     private String worldName;
     private double locX;
@@ -30,6 +33,13 @@ public class HologramFactory {
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
     private int tagId;
     private boolean withTagId;
+
+    public HologramFactory(Plugin owningPlugin) {
+        if (owningPlugin == null) {
+            throw new NullPointerException("Plugin cannot be null");
+        }
+        this.owningPlugin = owningPlugin;
+    }
 
     protected HologramFactory withSaveId(String saveId) {
         this.saveId = saveId;
@@ -128,7 +138,7 @@ public class HologramFactory {
             }
         }
         hologram.setImageTagMap(this.imageIdMap);
-        HoloAPI.getManager().track(hologram, HoloAPI.getInstance(), this.save);
+        HoloAPI.getManager().track(hologram, this.owningPlugin, this.save);
         hologram.setSaveToFile(this.save);
         return hologram;
     }

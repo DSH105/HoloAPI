@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.conversation;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.util.Lang;
@@ -18,7 +19,7 @@ public class InputSuccessPrompt extends MessagePrompt {
     @Override
     public String getPromptText(ConversationContext conversationContext) {
         String[] lines = (String[]) conversationContext.getSessionData("lines");
-        HologramFactory hf = new HologramFactory().withText(lines).withLocation(((Player) conversationContext.getForWhom()).getLocation());
+        HologramFactory hf = new HologramFactory(HoloAPI.getInstance()).withText(lines).withLocation(((Player) conversationContext.getForWhom()).getLocation());
         Hologram h = hf.build();
         return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
     }
