@@ -119,9 +119,9 @@ public class HologramFactory {
         } else {
             hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
         }
-        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+        /*for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             h.refreshDisplay();
-        }
+        }*/
         for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
                 hologram.show((Player) e);

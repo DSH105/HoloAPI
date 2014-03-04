@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -92,10 +93,15 @@ public class Hologram {
 
     public void refreshDisplay() {
         for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
-            Player p = Bukkit.getPlayerExact(entry.getKey());
+            final Player p = Bukkit.getPlayerExact(entry.getKey());
             this.clear(p);
             if (GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50).contains(p)) {
-                this.show(p);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        show(p);
+                    }
+                }.runTaskLater(HoloAPI.getInstance(), 1L);
             }
         }
     }
@@ -167,6 +173,9 @@ public class Hologram {
     public void changeWorld(String worldName) {
         this.clearAllPlayerViews();
         this.worldName = worldName;
+        if (this.shouldSaveToFile()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
         for (Entity e : GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
                 this.show((Player) e);
@@ -223,7 +232,9 @@ public class Hologram {
         this.defX = to.getX();
         this.defY = to.getY();
         this.defZ = to.getZ();
-        HoloAPI.getManager().saveToFile(this);
+        if (this.shouldSaveToFile()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
         for (String pName : this.getPlayerViews().keySet()) {
             Player p = Bukkit.getPlayerExact(pName);
             if (p != null) {

@@ -119,22 +119,24 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void saveToFile(Hologram hologram) {
-        String path = "holograms." + hologram.getSaveId() + ".";
-        this.config.set(path + "worldName", hologram.getWorldName());
-        this.config.set(path + "x", hologram.getDefaultX());
-        this.config.set(path + "y", hologram.getDefaultY());
-        this.config.set(path + "z", hologram.getDefaultZ());
-        if (hologram instanceof AnimatedHologram) {
-            this.config.set(path + "animatedImage", ((AnimatedHologram) hologram).getAnimatedImage().getKey());
-        } else {
-            int index = 0;
-            for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
-                this.config.set(path + "lines." + index + ".type", entry.getValue() ? "image" : "text");
-                this.config.set(path + "lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
-                index++;
+        if (hologram.shouldSaveToFile()) {
+            String path = "holograms." + hologram.getSaveId() + ".";
+            this.config.set(path + "worldName", hologram.getWorldName());
+            this.config.set(path + "x", hologram.getDefaultX());
+            this.config.set(path + "y", hologram.getDefaultY());
+            this.config.set(path + "z", hologram.getDefaultZ());
+            if (hologram instanceof AnimatedHologram) {
+                this.config.set(path + "animatedImage", ((AnimatedHologram) hologram).getAnimatedImage().getKey());
+            } else {
+                int index = 0;
+                for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
+                    this.config.set(path + "lines." + index + ".type", entry.getValue() ? "image" : "text");
+                    this.config.set(path + "lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
+                    index++;
+                }
             }
+            this.config.saveConfig();
         }
-        this.config.saveConfig();
     }
 
     @Override
@@ -252,8 +254,7 @@ public class SimpleHoloManager implements HoloManager {
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
         HoloAPI.LOGGER.log(Level.INFO, simpleId + "");
-        final Hologram hologram = new HologramFactory().withSaveId(simpleId + "").withText(lines).withLocation(location).withSaving(false).build();
-        hologram.firstTagId = simpleId;
+        final Hologram hologram = new HologramFactory().withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSaving(false).build();
         for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
@@ -293,8 +294,13 @@ public class SimpleHoloManager implements HoloManager {
             }
             hologram.clearAllPlayerViews();
             for (Hologram h : getAllHolograms().keySet()) {
-                h.refreshDisplay();
+                if (!h.shouldSaveToFile()) {
+                    h.refreshDisplay();
+                }
             }
+            /*for (Hologram h : getAllHolograms().keySet()) {
+                h.refreshDisplay();
+            }*/
         }
     }
 
