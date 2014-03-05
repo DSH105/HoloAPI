@@ -152,11 +152,6 @@ public class AnimatedHologram extends Hologram {
         }
     }
 
-    @Override
-    protected void generate(Player observer, int index, double diffY, double x, double y, double z) {
-        super.generate(observer, index, diffY, x, y, z);
-    }
-
     protected void generateAnimation(Player observer, String message, int index, double diffY, double x, double y, double z) {
         WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
 

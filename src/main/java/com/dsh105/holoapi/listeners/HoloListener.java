@@ -13,10 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -65,6 +62,21 @@ public class HoloListener implements Listener {
     }
 
     @EventHandler
+    public void onWorldChage(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+            if (player.getLocation().getWorld().getName().equals(h.getWorldName())) {
+                if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
+                    ((AnimatedHologram) h).animate();
+                }
+                h.show(player);
+            } if (event.getFrom().getName().equals(h.getWorldName()) && h.getLocationFor(player) != null) {
+                h.clear(player);
+            }
+        }
+    }
+
+    @EventHandler
     public void onChunkUnload(ChunkUnloadEvent event) {
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
@@ -85,10 +97,6 @@ public class HoloListener implements Listener {
             }
         }
     }
-
-    // TODO: Fix this
-    // Currently overrides animations and messes with existing holograms
-    // Also appears in `/holo info` list
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
@@ -118,7 +126,6 @@ public class HoloListener implements Listener {
                             if (rise) {
                                 riseDiff += 0.02D;
                             }
-                            //double yDiff = ((l.getY() + 0.5D) - hologram.getDefaultY()) + (rise ? 0.02D : 0.0D);
                             hologram.move(new Vector(l.getX(), l.getY() + 0.5D + riseDiff, l.getZ()));
                         }
                     }
