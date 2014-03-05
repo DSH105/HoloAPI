@@ -170,7 +170,7 @@ public class HoloAPI extends DSHPlugin {
                         for (String s : unprepared) {
                             MANAGER.loadFromFile(s);
                         }
-                        LOGGER.log(Level.INFO, "Loaded all saved holograms");
+                        LOGGER.log(Level.INFO, "Holograms loaded");
                         this.cancel();
                     }
                 }
