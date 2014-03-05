@@ -4,6 +4,7 @@ import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -64,6 +65,14 @@ public class AnimatedHologramFactory {
 
     public AnimatedHologramFactory withImage(AnimatedImageGenerator animatedImage) {
         this.animatedImage = animatedImage;
+        return this;
+    }
+
+    public AnimatedHologramFactory withImage(String animatedImageKey) {
+        AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(animatedImageKey);
+        if (generator != null) {
+            this.withImage(generator);
+        }
         return this;
     }
 
