@@ -15,8 +15,6 @@ public interface HoloManager {
 
     public Hologram getHologram(String hologramId);
 
-    public void track(Hologram hologram, Plugin owningPlugin, boolean save);
-
     public void track(Hologram hologram, Plugin owningPlugin);
 
     public void stopTracking(Hologram hologram);

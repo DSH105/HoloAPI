@@ -143,7 +143,7 @@ public class HoloCommand implements CommandExecutor {
                     Lang.sendTo(sender, Lang.ACTIVE_DISPLAYS.getValue());
                     for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllHolograms().entrySet()) {
                         Hologram h = entry.getKey();
-                        if (!h.shouldSaveToFile()) {
+                        if (h.isSimple()) {
                             continue;
                         }
                         ArrayList<String> list = new ArrayList<String>();

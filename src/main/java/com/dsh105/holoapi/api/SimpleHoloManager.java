@@ -6,9 +6,7 @@ import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.SaveIdGenerator;
 import com.dsh105.holoapi.util.TagIdGenerator;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -69,22 +67,17 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
-    public void track(Hologram hologram, Plugin owningPlugin, boolean save) {
+    public void track(Hologram hologram, Plugin owningPlugin) {
         this.holograms.put(hologram, owningPlugin);
         if (this.updateDisplayTask == null) {
             this.updateDisplayTask = new UpdateDisplayTask();
         }
-        if (save && this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
+        if (!hologram.isSimple() && this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
             this.saveToFile(hologram);
         }
         if (hologram instanceof AnimatedHologram && !((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).animate();
         }
-    }
-
-    @Override
-    public void track(Hologram hologram, Plugin owningPlugin) {
-        this.track(hologram, owningPlugin, true);
     }
 
     @Override
@@ -119,7 +112,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void saveToFile(Hologram hologram) {
-        if (hologram.shouldSaveToFile()) {
+        if (!hologram.isSimple()) {
             String path = "holograms." + hologram.getSaveId() + ".";
             this.config.set(path + "worldName", hologram.getWorldName());
             this.config.set(path + "x", hologram.getDefaultX());
@@ -253,7 +246,7 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
-        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSaving(false).build();
+        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).isSimple(true).build();
         for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
@@ -293,7 +286,7 @@ public class SimpleHoloManager implements HoloManager {
             }
             hologram.clearAllPlayerViews();
             for (Hologram h : getAllHolograms().keySet()) {
-                if (!h.shouldSaveToFile()) {
+                if (h.isSimple()) {
                     h.refreshDisplay();
                 }
             }

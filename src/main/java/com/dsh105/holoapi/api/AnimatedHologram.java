@@ -29,6 +29,16 @@ public class AnimatedHologram extends Hologram {
         this.animate();
     }
 
+    @Override
+    public boolean isSimple() {
+        return false;
+    }
+
+    @Override
+    protected void setSimple(boolean flag) {
+        // Do nothing. Animated holograms can't be simple
+    }
+
     public void animate() {
         if (this.isAnimating()) {
             this.cancelAnimation();

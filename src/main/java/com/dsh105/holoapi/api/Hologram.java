@@ -13,7 +13,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.logging.Level;
 
 public class Hologram {
 
@@ -26,7 +25,7 @@ public class Hologram {
 
     protected int firstTagId;
     private String saveId;
-    private boolean saveToFile = true;
+    private boolean simple = false;
 
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
@@ -53,12 +52,12 @@ public class Hologram {
 
     }
 
-    public boolean shouldSaveToFile() {
-        return saveToFile;
+    public boolean isSimple() {
+        return simple;
     }
 
-    protected void setSaveToFile(boolean flag) {
-        this.saveToFile = flag;
+    protected void setSimple(boolean flag) {
+        this.simple = flag;
     }
 
     public int getTagCount() {
@@ -173,7 +172,7 @@ public class Hologram {
     public void changeWorld(String worldName) {
         this.clearAllPlayerViews();
         this.worldName = worldName;
-        if (this.shouldSaveToFile()) {
+        if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
         for (Entity e : GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50)) {
@@ -232,7 +231,7 @@ public class Hologram {
         this.defX = to.getX();
         this.defY = to.getY();
         this.defZ = to.getZ();
-        if (this.shouldSaveToFile()) {
+        if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
         for (String pName : this.getPlayerViews().keySet()) {

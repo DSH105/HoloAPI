@@ -3,7 +3,6 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
-import com.dsh105.holoapi.exceptions.ImageNotLoadedException;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Bukkit;
@@ -27,7 +26,7 @@ public class HologramFactory {
     private double locY;
     private double locZ;
     private String saveId;
-    private boolean save = true;
+    private boolean simple = false;
     private boolean preparedId = false;
     private boolean prepared = false;
 
@@ -101,8 +100,8 @@ public class HologramFactory {
         return this;
     }
 
-    protected HologramFactory withSaving(boolean saveToFile) {
-        this.save = saveToFile;
+    protected HologramFactory isSimple(boolean simple) {
+        this.simple = simple;
         return this;
     }
 
@@ -147,8 +146,8 @@ public class HologramFactory {
             }
         }
         hologram.setImageTagMap(this.imageIdMap);
-        HoloAPI.getManager().track(hologram, this.owningPlugin, this.save);
-        hologram.setSaveToFile(this.save);
+        hologram.setSimple(this.simple);
+        HoloAPI.getManager().track(hologram, this.owningPlugin);
         return hologram;
     }
 

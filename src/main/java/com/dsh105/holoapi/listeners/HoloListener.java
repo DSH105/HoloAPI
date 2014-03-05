@@ -25,9 +25,11 @@ public class HoloListener implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            if (event.getTo().getWorld().getName().equals(h.getWorldName()) && GeometryUtil.getNearbyEntities(event.getTo(), 50).contains(player)) {
-                if (h.getLocationFor(player) != null) {
-                    h.show(player);
+            if (!h.isSimple()) {
+                if (event.getTo().getWorld().getName().equals(h.getWorldName()) && GeometryUtil.getNearbyEntities(event.getTo(), 50).contains(player)) {
+                    if (h.getLocationFor(player) != null) {
+                        h.show(player);
+                    }
                 }
             }
         }
@@ -47,29 +49,33 @@ public class HoloListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         for (final Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            if (player.getLocation().getWorld().getName().equals(h.getWorldName())) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
-                            ((AnimatedHologram) h).animate();
+            if (!h.isSimple()) {
+                if (player.getLocation().getWorld().getName().equals(h.getWorldName())) {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
+                                ((AnimatedHologram) h).animate();
+                            }
+                            h.show(player);
                         }
-                        h.show(player);
-                    }
-                }.runTaskLater(HoloAPI.getInstance(), 40L);
+                    }.runTaskLater(HoloAPI.getInstance(), 40L);
+                }
             }
         }
     }
 
     @EventHandler
-    public void onWorldChage(PlayerChangedWorldEvent event) {
+    public void onWorldChange(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (player.getLocation().getWorld().getName().equals(h.getWorldName())) {
-                if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
-                    ((AnimatedHologram) h).animate();
+                if (!h.isSimple()) {
+                    if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
+                        ((AnimatedHologram) h).animate();
+                    }
+                    h.show(player);
                 }
-                h.show(player);
             } if (event.getFrom().getName().equals(h.getWorldName()) && h.getLocationFor(player) != null) {
                 h.clear(player);
             }
