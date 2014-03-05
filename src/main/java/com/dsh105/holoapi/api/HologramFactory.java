@@ -6,6 +6,7 @@ import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.exceptions.ImageNotLoadedException;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class HologramFactory {
 
@@ -123,6 +125,13 @@ public class HologramFactory {
             //Map.Entry<TagSize, String> imageIndex = getImageIdOfIndex(0);
             this.saveId = SaveIdGenerator.nextId() + "";
         }
+
+        if (Bukkit.getWorld(this.worldName) == null) {
+            HoloAPI.getManager().clearFromFile(this.saveId);
+            HoloAPI.LOGGER.log(Level.SEVERE, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + "!");
+            return null;
+        }
+
         Hologram hologram;
         if (this.withTagId) {
             hologram = new Hologram(this.tagId, this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
