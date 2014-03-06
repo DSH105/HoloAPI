@@ -27,7 +27,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setX(double value) {
-        this.write("c", Math.floor(value * 32.0D));
+        this.write("c", (int) Math.floor(value * 32.0D));
     }
 
     public double getX() {
@@ -35,7 +35,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setY(double value) {
-        this.write("d", Math.floor(value * 32.0D));
+        this.write("d", (int) Math.floor(value * 32.0D));
     }
 
     public double getY() {
@@ -43,7 +43,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setZ(double value) {
-        this.write("e", Math.floor(value * 32.0D));
+        this.write("e", (int) Math.floor(value * 32.0D));
     }
 
     public double getZ() {
@@ -51,7 +51,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setYaw(float value) {
-        this.write("i", (value * 256.0F / 360.0F));
+        this.write("i", (byte) (value * 256.0F / 360.0F));
     }
 
     public float getYaw() {
@@ -59,7 +59,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setHeadPitch(float value) {
-        this.write("j", (value * 256.0F / 360.0F));
+        this.write("j", (byte) (value * 256.0F / 360.0F));
     }
 
     public float getHeadPitch() {
@@ -67,7 +67,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setHeadYaw(float value) {
-        this.write("k", (value * 256.0F / 360.0F));
+        this.write("k", (byte) (value * 256.0F / 360.0F));
     }
 
     public float getHeadYaw() {
@@ -85,7 +85,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setMotionX(double value) {
-        this.write("f", Math.floor(value * 8000.0D));
+        this.write("f", (int) Math.floor(value * 8000.0D));
     }
 
     public double getMotionX() {
@@ -93,7 +93,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setMotionY(double value) {
-        this.write("g", Math.floor(value * 8000.0D));
+        this.write("g", (int) Math.floor(value * 8000.0D));
     }
 
     public double getMotionY() {
@@ -101,7 +101,7 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setMotionZ(double value) {
-        this.write("h", Math.floor(value * 8000.0D));
+        this.write("h", (int) Math.floor(value * 8000.0D));
     }
 
     public double getMotionZ() {

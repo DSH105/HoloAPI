@@ -177,7 +177,7 @@ public class AnimatedHologram extends Hologram {
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
         dw.watch(10, message.replace("%name%", observer.getName()));
-        dw.watch(11, Byte.valueOf(1));
+        dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setDataWatcher(dw.getHandle());
 

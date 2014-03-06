@@ -143,7 +143,7 @@ public class ImageGenerator implements Generator {
     }
 
     private ChatColor[][] generateColours(BufferedImage image, int height) {
-        double ratio = image.getHeight() / image.getWidth();
+        double ratio = (double) image.getHeight() / image.getWidth();
         int width = (int) (height / ratio);
         if (width > 10) width = 10;
         BufferedImage resized = resize(image, (int) (height / ratio), height);
@@ -161,7 +161,7 @@ public class ImageGenerator implements Generator {
 
     private BufferedImage resize(BufferedImage originalImage, int width, int height) {
         AffineTransform af = new AffineTransform();
-        af.scale(width / originalImage.getWidth(), height / originalImage.getHeight());
+        af.scale(width / (double) originalImage.getWidth(), height / (double) originalImage.getHeight());
         AffineTransformOp operation = new AffineTransformOp(af, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         return operation.filter(originalImage, null);
         /*BufferedImage resizedImage = new BufferedImage(width, height, 6);

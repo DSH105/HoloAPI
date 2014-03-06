@@ -173,9 +173,9 @@ public class HoloCommand implements CommandExecutor {
                             String title = list.get(0);
                             list.remove(title);
                             i = ItemUtil.getItem(Material.SNOW, title, list.toArray(new String[list.size()]));
-                            new FancyMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + h.getDefaultX() + ", " + h.getDefaultY() + ", " + h.getDefaultZ() + ", " + h.getWorldName()).itemTooltip(i).suggest("/holo teleport " + h.getSaveId()).send(((Player) sender));
+                            new FancyMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName()).itemTooltip(i).suggest("/holo teleport " + h.getSaveId()).send(((Player) sender));
                         } else {
-                            sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + h.getDefaultX() + ", " + h.getDefaultY() + ", " + h.getDefaultZ() + ", " + h.getWorldName());
+                            sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());
                         }
                     }
                     if (sender instanceof Player) {

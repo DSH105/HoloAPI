@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class ItemUtil {
 
     public static ItemStack getItem(Material material, int amount, String name, String... lore) {
-        ItemStack i = new ItemStack(material, amount, 0);
+        ItemStack i = new ItemStack(material, amount, (short) 0);
         ItemMeta meta = i.getItemMeta();
         if (meta != null) {
             if (name != null) {
