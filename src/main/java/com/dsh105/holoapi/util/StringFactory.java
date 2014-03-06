@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StringFactory {
 
@@ -18,9 +19,7 @@ public class StringFactory {
         ArrayList<String> list = new ArrayList<String>();
         if (string.contains(separator)) {
             String[] split = string.split(separator);
-            for (String s : split) {
-                list.add(s);
-            }
+            list.addAll(Arrays.asList(split));
         } else {
             list.add(string);
         }

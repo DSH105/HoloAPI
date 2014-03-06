@@ -9,6 +9,7 @@ import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityTeleport;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -144,9 +145,7 @@ public class Hologram {
     public LinkedHashMap<String, Boolean> serialise() {
         LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
         ArrayList<String> tags = new ArrayList<String>();
-        for (String s : this.tags) {
-            tags.add(s);
-        }
+        tags.addAll(Arrays.asList(this.tags));
         boolean cont = true;
         int index = 0;
         while (cont) {
