@@ -290,6 +290,7 @@ public class SimpleHoloManager implements HoloManager {
                     h.refreshDisplay();
                 }
             }
+            holograms.remove(hologram);
             /*for (Hologram h : getAllHolograms().keySet()) {
                 h.refreshDisplay();
             }*/
