@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.bukkit.entity.Player;
 
@@ -12,7 +13,11 @@ public class PlayerUtil {
         Object playerConnection = getPlayerConnection(player);
         try {
             sendPacket.invoke(playerConnection, packet);
-        } catch (Exception e) {
+        } catch (IllegalAccessException e) {
+            HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
+        } catch (IllegalArgumentException e) {
+            HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
+        } catch (InvocationTargetException e) {
             HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
         }
     }
@@ -21,7 +26,13 @@ public class PlayerUtil {
         Method getHandle = ReflectionUtil.getMethod(player.getClass(), "getHandle");
         try {
             return getHandle.invoke(player);
-        } catch (Exception e) {
+        } catch (IllegalAccessException e) {
+            HoloAPI.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
+            return null;
+        } catch (IllegalArgumentException e) {
+            HoloAPI.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
+            return null;
+        } catch (InvocationTargetException e) {
             HoloAPI.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
             return null;
         }

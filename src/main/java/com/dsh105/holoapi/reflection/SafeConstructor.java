@@ -3,6 +3,7 @@ package com.dsh105.holoapi.reflection;
 import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class SafeConstructor<T> {
 
@@ -37,7 +38,13 @@ public class SafeConstructor<T> {
     public T newInstance(Object... params) {
         try {
             return (T) this.getConstructor().newInstance(params);
-        } catch (Throwable e) {
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
