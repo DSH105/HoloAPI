@@ -1,10 +1,8 @@
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
-import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

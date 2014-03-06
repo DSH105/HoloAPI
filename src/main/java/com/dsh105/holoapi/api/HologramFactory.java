@@ -1,6 +1,5 @@
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
