@@ -76,8 +76,6 @@ public class HoloListener implements Listener {
                     }
                     h.show(player);
                 }
-            } if (event.getFrom().getName().equals(h.getWorldName()) && h.getLocationFor(player) != null) {
-                h.clear(player);
             }
         }
     }
