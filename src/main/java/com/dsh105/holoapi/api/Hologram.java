@@ -93,14 +93,16 @@ public class Hologram {
     public void refreshDisplay() {
         for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
             final Player p = Bukkit.getPlayerExact(entry.getKey());
-            this.clear(p);
-            if (GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50).contains(p)) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        show(p);
-                    }
-                }.runTaskLater(HoloAPI.getInstance(), 1L);
+            if (p != null) {
+                this.clear(p);
+                if (GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50).contains(p)) {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            show(p);
+                        }
+                    }.runTaskLater(HoloAPI.getInstance(), 1L);
+                }
             }
         }
     }
