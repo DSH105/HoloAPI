@@ -96,9 +96,9 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 Lang.sendTo(sender, Lang.LOADING_URL_ANIMATION.getValue().replace("%key%", key));
                 this.prepareUrlGenerator(sender, key);
                 return null;
+            } else {
+                Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
             }
-        } else {
-            Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
         }
         return g;
     }
