@@ -1,15 +1,14 @@
 package com.dsh105.holoapi.image;
 
-import org.bukkit.ChatColor;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import javax.imageio.ImageIO;
+import org.bukkit.ChatColor;
 
 /**
  * Credit to bobacadodl for this one <3

@@ -1,13 +1,12 @@
 package com.dsh105.holoapi;
 
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 
 public class ModuleLogger extends Logger {
     private final String[] modulePath;

@@ -1,11 +1,10 @@
 package com.dsh105.holoapi.api;
 
-import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
 
 public interface HoloManager {
 

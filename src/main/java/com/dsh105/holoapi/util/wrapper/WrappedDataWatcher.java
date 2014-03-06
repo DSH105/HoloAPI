@@ -1,7 +1,6 @@
 package com.dsh105.holoapi.util.wrapper;
 
 import com.dsh105.holoapi.util.ReflectionUtil;
-
 import java.lang.reflect.InvocationTargetException;
 
 public class WrappedDataWatcher extends AbstractWrapper {

@@ -2,7 +2,17 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TagIdGenerator;
-import com.dsh105.holoapi.util.wrapper.*;
+import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityDestroy;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityTeleport;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -10,8 +20,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.*;
 
 public class Hologram {
 

@@ -2,7 +2,6 @@ package com.dsh105.holoapi.util.wrapper;
 
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
-
 import java.util.Arrays;
 import java.util.List;
 

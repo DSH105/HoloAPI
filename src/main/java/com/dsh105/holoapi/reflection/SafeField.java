@@ -2,7 +2,6 @@ package com.dsh105.holoapi.reflection;
 
 import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 

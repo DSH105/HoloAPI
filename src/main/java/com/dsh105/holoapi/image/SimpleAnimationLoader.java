@@ -4,10 +4,6 @@ import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.EnumUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.Lang;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +11,9 @@ import java.net.URI;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.logging.Level;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator> {
 

@@ -1,9 +1,8 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
-import org.bukkit.entity.Player;
-
 import java.lang.reflect.Method;
+import org.bukkit.entity.Player;
 
 public class PlayerUtil {
 

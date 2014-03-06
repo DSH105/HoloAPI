@@ -1,8 +1,7 @@
 package com.dsh105.holoapi.image;
 
+import java.awt.Color;
 import org.bukkit.ChatColor;
-
-import java.awt.*;
 
 public class ColourMap {
     protected static final Color[] colors = {

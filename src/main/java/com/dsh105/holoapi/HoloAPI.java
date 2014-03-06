@@ -10,21 +10,24 @@ import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
-import com.dsh105.holoapi.image.*;
+import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.image.ImageLoader;
+import com.dsh105.holoapi.image.SimpleAnimationLoader;
+import com.dsh105.holoapi.image.SimpleImageLoader;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class HoloAPI extends DSHPlugin {
 

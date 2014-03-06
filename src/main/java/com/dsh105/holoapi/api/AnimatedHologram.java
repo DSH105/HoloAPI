@@ -4,7 +4,13 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.GIFFrame;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.wrapper.*;
+import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityDestroy;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
+import java.util.Iterator;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -12,9 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-
-import java.util.Iterator;
-import java.util.Map;
 
 public class AnimatedHologram extends Hologram {
 
