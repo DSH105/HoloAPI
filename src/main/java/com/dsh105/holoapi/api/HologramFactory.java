@@ -1,10 +1,10 @@
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
+import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -79,7 +79,7 @@ public class HologramFactory {
 
     public HologramFactory withText(String... text) {
         for (String tag : text) {
-            this.tags.add(tag);
+            this.tags.add(UnicodeFormatter.replaceAll(tag));
         }
         return this;
     }
