@@ -226,6 +226,11 @@ public class AnimatedImageGenerator implements Generator {
         return key;
     }
 
+    public ArrayList<GIFFrame> getFrames() {
+        ArrayList<GIFFrame> frames = new ArrayList<GIFFrame>(this.frames);
+        return frames;
+    }
+
     public int getMaxHeight() {
         return maxHeight;
     }
