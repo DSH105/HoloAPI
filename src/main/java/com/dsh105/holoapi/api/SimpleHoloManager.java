@@ -247,7 +247,7 @@ public class SimpleHoloManager implements HoloManager {
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
         final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).isSimple(true).build();
-        for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
+        for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
             }

@@ -91,7 +91,7 @@ public class AnimatedHologramFactory {
         /*for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             h.refreshDisplay();
         }*/
-        for (Entity e : GeometryUtil.getNearbyEntities(animatedHologram.getDefaultLocation(), 50)) {
+        for (Entity e : animatedHologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 animatedHologram.show((Player) e);
             }

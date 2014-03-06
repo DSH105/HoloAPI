@@ -140,7 +140,7 @@ public class HologramFactory {
         /*for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             h.refreshDisplay();
         }*/
-        for (Entity e : GeometryUtil.getNearbyEntities(hologram.getDefaultLocation(), 50)) {
+        for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
             }

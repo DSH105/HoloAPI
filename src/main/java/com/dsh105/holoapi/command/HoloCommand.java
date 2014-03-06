@@ -255,6 +255,16 @@ public class HoloCommand implements CommandExecutor {
                     return true;
                 } else return true;
             }
+        } else if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("edit")) {
+                if (Perm.EDIT.hasPerm(sender, true, true)) {
+                    Hologram h = HoloAPI.getManager().getHologram(args[1]);
+                    if (h == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                        return true;
+                    }
+                } else return true;
+            }
         }
         Lang.sendTo(sender, Lang.COMMAND_ERROR.getValue()
                 .replace("%cmd%", "/" + cmd.getLabel() + " " + (args.length == 0 ? "" : StringUtil.combineSplit(0, args, " "))));

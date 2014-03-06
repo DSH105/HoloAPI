@@ -26,7 +26,7 @@ public class HoloListener implements Listener {
         Player player = event.getPlayer();
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (!h.isSimple()) {
-                if (event.getTo().getWorld().getName().equals(h.getWorldName()) && GeometryUtil.getNearbyEntities(event.getTo(), 50).contains(player)) {
+                if (event.getTo().getWorld().getName().equals(h.getWorldName())) {
                     if (h.getLocationFor(player) != null) {
                         h.show(player);
                     }
@@ -93,7 +93,7 @@ public class HoloListener implements Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
-                for (Entity e : GeometryUtil.getNearbyEntities(h.getDefaultLocation(), 50)) {
+                for (Entity e : h.getDefaultLocation().getWorld().getEntities()) {
                     if (e instanceof Player) {
                         h.show((Player) e);
                     }

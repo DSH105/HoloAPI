@@ -13,7 +13,8 @@ public enum Perm {
     INFO("holoapi.holo.info"),
     MOVE("holoapi.holo.move"),
     TELEPORT("holoapi.holo.teleport"),
-    BUILD("holoapi.holo.build");
+    BUILD("holoapi.holo.build"),
+    EDIT("holoapi.holo.edit");
 
     String perm;
 

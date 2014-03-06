@@ -95,14 +95,12 @@ public class Hologram {
             final Player p = Bukkit.getPlayerExact(entry.getKey());
             if (p != null) {
                 this.clear(p);
-                if (GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50).contains(p)) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            show(p);
-                        }
-                    }.runTaskLater(HoloAPI.getInstance(), 1L);
-                }
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        show(p);
+                    }
+                }.runTaskLater(HoloAPI.getInstance(), 1L);
             }
         }
     }
@@ -177,7 +175,7 @@ public class Hologram {
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
-        for (Entity e : GeometryUtil.getNearbyEntities(this.getDefaultLocation(), 50)) {
+        for (Entity e : this.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 this.show((Player) e);
             }
