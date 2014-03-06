@@ -18,7 +18,7 @@ public class WrapperPacketEntityTeleport extends Packet {
     }
 
     public void setX(double value) {
-        this.write("b", (int) Math.floor(value * 32.0D));
+        this.write("b", Math.floor(value * 32.0D));
     }
 
     public double getX() {
@@ -26,7 +26,7 @@ public class WrapperPacketEntityTeleport extends Packet {
     }
 
     public void setY(double value) {
-        this.write("c", (int) Math.floor(value * 32.0D));
+        this.write("c", Math.floor(value * 32.0D));
     }
 
     public double getY() {
@@ -34,7 +34,7 @@ public class WrapperPacketEntityTeleport extends Packet {
     }
 
     public void setZ(double value) {
-        this.write("d", (int) Math.floor(value * 32.0D));
+        this.write("d", Math.floor(value * 32.0D));
     }
 
     public double getZ() {
@@ -42,7 +42,7 @@ public class WrapperPacketEntityTeleport extends Packet {
     }
 
     public void setYaw(float value) {
-        this.write("e", (byte) (value * 256.0F / 360.0F));
+        this.write("e", (value * 256.0F / 360.0F));
     }
 
     public float getYaw() {
@@ -50,7 +50,7 @@ public class WrapperPacketEntityTeleport extends Packet {
     }
 
     public void setPitch(float value) {
-        this.write("f", (byte) (value * 256.0F / 360.0F));
+        this.write("f", (value * 256.0F / 360.0F));
     }
 
     public float getPitch() {

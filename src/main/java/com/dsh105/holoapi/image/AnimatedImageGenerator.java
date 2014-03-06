@@ -86,7 +86,7 @@ public class AnimatedImageGenerator implements Generator {
     protected void prepare(int height, ImageChar imgChar, boolean requiresBorder) {
         this.calculateMaxHeight();
         for (GIFFrame frame : frames) {
-            int imageHeight = (int) ((frame.image.getHeight() / (double) this.maxHeight) * height);
+            int imageHeight = (int) ((frame.image.getHeight() / this.maxHeight) * height);
             frame.imageGenerator = new ImageGenerator(frame.image, imageHeight, imgChar, requiresBorder);
         }
     }

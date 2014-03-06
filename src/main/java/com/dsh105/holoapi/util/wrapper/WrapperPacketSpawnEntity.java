@@ -18,7 +18,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setX(double value) {
-        this.write("b", (int) Math.floor(value * 32.0D));
+        this.write("b", Math.floor(value * 32.0D));
     }
 
     public double getX() {
@@ -26,7 +26,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setY(double value) {
-        this.write("c", (int) Math.floor(value * 32.0D));
+        this.write("c", Math.floor(value * 32.0D));
     }
 
     public double getY() {
@@ -34,7 +34,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setZ(double value) {
-        this.write("d", (int) Math.floor(value * 32.0D));
+        this.write("d", Math.floor(value * 32.0D));
     }
 
     public double getZ() {
@@ -42,7 +42,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setMotionX(double value) {
-        this.write("e", (int) Math.floor(value * 8000.0D));
+        this.write("e", Math.floor(value * 8000.0D));
     }
 
     public double getMotionX() {
@@ -50,7 +50,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setMotionY(double value) {
-        this.write("f", (int) Math.floor(value * 8000.0D));
+        this.write("f", Math.floor(value * 8000.0D));
     }
 
     public double getMotionY() {
@@ -58,7 +58,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setMotionZ(double value) {
-        this.write("g", (int) Math.floor(value * 8000.0D));
+        this.write("g", Math.floor(value * 8000.0D));
     }
 
     public double getMotionZ() {
@@ -66,7 +66,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setYaw(float value) {
-        this.write("h", (int) (value * 256.0F / 360.0F));
+        this.write("h", (value * 256.0F / 360.0F));
     }
 
     public float getYaw() {
@@ -74,7 +74,7 @@ public class WrapperPacketSpawnEntity extends Packet {
     }
 
     public void setPitch(float value) {
-        this.write("i", (int) (value * 256.0F / 360.0F));
+        this.write("i", (value * 256.0F / 360.0F));
     }
 
     public float getPitch() {
