@@ -10,8 +10,8 @@ public class PacketFactory {
         ENTITY_LIVING_SPAWN(Protocol.PLAY, Sender.SERVER, 0x0F, 0x18),
         ENTITY_DESTROY(Protocol.PLAY, Sender.SERVER, 0x13, 0x1D),
         ENTITY_TELEPORT(Protocol.PLAY, Sender.SERVER, 0x18, 0x22),
-        ENTITY_ATTACH(Protocol.PLAY, Sender.SERVER, 0x1B, 0x27);
-        ENTITY_METADATA(Protocol.PLAY, Sender.SERVER, 28);
+        ENTITY_ATTACH(Protocol.PLAY, Sender.SERVER, 0x1B, 0x27),
+        ENTITY_METADATA(Protocol.PLAY, Sender.SERVER, 0x18, 0x28);
 
         private Protocol protocol;
         private Sender sender;
