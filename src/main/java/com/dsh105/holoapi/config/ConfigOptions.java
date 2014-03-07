@@ -3,7 +3,6 @@ package com.dsh105.holoapi.config;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.config.options.Options;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.image.ImageChar;
 
 public class ConfigOptions extends Options {
 

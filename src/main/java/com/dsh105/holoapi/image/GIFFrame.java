@@ -2,30 +2,30 @@ package com.dsh105.holoapi.image;
 
 import java.awt.image.BufferedImage;
 
-public class GIFFrame {
+public class GIFFrame extends Frame {
 
     protected BufferedImage image;
-    protected int delay;
     protected String disposal;
 
     protected ImageGenerator imageGenerator;
 
     protected GIFFrame(BufferedImage image, int delay, String disposal) {
+        super(delay);
         this.image = image;
-        this.delay = delay;
         this.disposal = disposal;
     }
 
     protected GIFFrame(ImageGenerator generator, int delay) {
-        this.delay = delay;
+        super(delay);
         this.imageGenerator = generator;
-    }
-
-    public int getDelay() {
-        return delay;
     }
 
     public ImageGenerator getImageGenerator() {
         return imageGenerator;
+    }
+
+    @Override
+    public String[] getLines() {
+        return this.imageGenerator.getLines();
     }
 }

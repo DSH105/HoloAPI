@@ -87,7 +87,7 @@ public class HoloCommand implements CommandExecutor {
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("create")) {
             if (args.length == 1) {
                 if (Perm.CREATE.hasPerm(sender, true, false)) {
-                    InputFactory.promptHoloInput((Player) sender);
+                    InputFactory.buildBasicConversation().withFirstPrompt(new InputPrompt()).buildConversation((Player) sender).begin();
                     return true;
                 } else return true;
             } else if (args.length == 3) {

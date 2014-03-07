@@ -13,13 +13,20 @@ public class InputPrompt extends ValidatingPrompt {
     private ArrayList<String> lines;
     private String lastAdded;
     private boolean first = true;
+    private InputSuccessPrompt successPrompt = new InputSuccessPrompt();
 
     public InputPrompt() {
         this.lines = new ArrayList<String>();
     }
 
-    public InputPrompt(ArrayList<String> lines, String lastAdded) {
+    public InputPrompt(InputSuccessPrompt successPrompt) {
+        this.successPrompt = successPrompt;
+        this.lines = new ArrayList<String>();
+    }
+
+    public InputPrompt(ArrayList<String> lines, InputSuccessPrompt successPrompt, String lastAdded) {
         this.lines = lines;
+        this.successPrompt = successPrompt;
         this.lastAdded = lastAdded;
         this.first = false;
     }
@@ -33,10 +40,10 @@ public class InputPrompt extends ValidatingPrompt {
     protected Prompt acceptValidatedInput(ConversationContext conversationContext, String s) {
         if (s.equalsIgnoreCase("DONE")) {
             conversationContext.setSessionData("lines", this.lines.toArray(new String[this.lines.size()]));
-            return new InputSuccessPrompt();
+            return this.successPrompt;
         }
         this.lines.add(ChatColor.translateAlternateColorCodes('&', s));
-        return new InputPrompt(this.lines, ChatColor.translateAlternateColorCodes('&', s));
+        return new InputPrompt(this.lines, this.successPrompt, ChatColor.translateAlternateColorCodes('&', s));
     }
 
     @Override

@@ -19,8 +19,7 @@ public class InputSuccessPrompt extends MessagePrompt {
     @Override
     public String getPromptText(ConversationContext conversationContext) {
         String[] lines = (String[]) conversationContext.getSessionData("lines");
-        HologramFactory hf = new HologramFactory(HoloAPI.getInstance()).withText(lines).withLocation(((Player) conversationContext.getForWhom()).getLocation());
-        Hologram h = hf.build();
+        Hologram h = new HologramFactory(HoloAPI.getInstance()).withText(lines).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
         return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
     }
 }

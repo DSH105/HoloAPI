@@ -6,10 +6,6 @@ import org.bukkit.entity.Player;
 
 public class InputFactory {
 
-    public static void promptHoloInput(Player forWhom) {
-        buildBasicConversation().withFirstPrompt(new InputPrompt()).buildConversation(forWhom).begin();
-    }
-
     public static ConversationFactory buildBasicConversation() {
         return new ConversationFactory(HoloAPI.getInstance())
                 .withModality(true)

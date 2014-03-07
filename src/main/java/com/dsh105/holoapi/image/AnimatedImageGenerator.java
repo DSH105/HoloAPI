@@ -1,11 +1,9 @@
 package com.dsh105.holoapi.image;
 
-import com.dsh105.holoapi.HoloAPI;
 import com.google.common.collect.ImmutableList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import sun.net.www.content.image.gif;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -17,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class AnimatedImageGenerator implements Generator {
 
@@ -25,7 +22,6 @@ public class AnimatedImageGenerator implements Generator {
 
     private String key;
     protected ImmutableList<GIFFrame> frames;
-    private int index = 0;
     private int maxHeight;
     private GIFFrame largestFrame;
 
@@ -237,23 +233,5 @@ public class AnimatedImageGenerator implements Generator {
 
     public GIFFrame getLargestFrame() {
         return largestFrame;
-    }
-
-    public GIFFrame getCurrent() {
-        return this.getFrame(this.index);
-    }
-
-    public GIFFrame getNext() {
-        if (++this.index >= this.frames.size()) {
-            this.index = 0;
-        }
-        return this.getFrame(this.index);
-    }
-
-    public GIFFrame getFrame(int index) {
-        if (index >= this.frames.size()) {
-            return null;
-        }
-        return this.frames.get(index);
     }
 }
