@@ -14,6 +14,7 @@ import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,6 +42,8 @@ public class HoloAPI extends DSHPlugin {
     public boolean updateAvailable = false;
     public String updateName = "";
     public boolean updateChecked = false;
+
+    public static boolean isUsingNetty;
 
     private static double LINE_SPACING = 0.25D;
 
@@ -101,6 +104,14 @@ public class HoloAPI extends DSHPlugin {
         PluginManager manager = getServer().getPluginManager();
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
+
+        // detect version, this needs some improvements, it doesn't look too pretty now.
+        if(Bukkit.getVersion().contains("1.7")) {
+            isUsingNetty = true;
+        } else if(Bukkit.getVersion().contains("1.6")) {
+            isUsingNetty = false;
+        }
+
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
