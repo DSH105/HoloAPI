@@ -88,9 +88,11 @@ public class AnimatedHologramFactory {
             this.saveId = SaveIdGenerator.nextId() + "";
         }
         AnimatedHologram animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.animatedImage);
-        /*for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            h.refreshDisplay();
-        }*/
+        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+            if (!h.isSimple()) {
+                h.refreshDisplay();
+            }
+        }
         for (Entity e : animatedHologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 animatedHologram.show((Player) e);

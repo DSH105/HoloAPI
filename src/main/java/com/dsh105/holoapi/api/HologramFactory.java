@@ -137,9 +137,13 @@ public class HologramFactory {
         } else {
             hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
         }
-        /*for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            h.refreshDisplay();
-        }*/
+        if (!hologram.isSimple()) {
+            for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+                if (!h.isSimple()) {
+                    h.refreshDisplay();
+                }
+            }
+        }
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
