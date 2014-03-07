@@ -8,6 +8,8 @@ import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.SimpleHoloManager;
+import com.dsh105.holoapi.command.CommandManager;
+import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
 import com.dsh105.holoapi.image.*;
@@ -29,6 +31,7 @@ import java.util.logging.Level;
 
 public class HoloAPI extends DSHPlugin {
 
+    private static CommandManager COMMAND_MANAGER;
     private static SimpleHoloManager MANAGER;
     private static SimpleImageLoader IMAGE_LOADER;
     private static SimpleAnimationLoader ANIMATION_LOADER;
@@ -116,7 +119,12 @@ public class HoloAPI extends DSHPlugin {
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
         ANIMATION_LOADER = new SimpleAnimationLoader();
-        this.getCommand("holo").setExecutor(new HoloCommand());
+
+        COMMAND_MANAGER = new CommandManager(this);
+        DynamicPluginCommand holoCommand = new DynamicPluginCommand(this.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getInstance().getCommandLabel() + " help &3for help.", new HoloCommand(), null, this);
+        holoCommand.setPermission("holoapi.holo");
+        COMMAND_MANAGER.register(holoCommand);
+
         manager.registerEvents(new HoloListener(), this);
         this.loadHolograms(this);
 

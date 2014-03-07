@@ -5,9 +5,6 @@ description: Advanced Hologram management
 website: ${project.url}
 main: ${main.class}
 commands:
-    holo:
-        description: Create, remove and view information on Holographic displays
-        permission: holoapi.holo
     holoupdate:
         description: Update the HoloAPI plugin
         permission: holoapi.update

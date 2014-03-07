@@ -13,6 +13,8 @@ public class ConfigOptions extends Options {
 
     @Override
     public void setDefaults() {
+        set("command", "holo");
+
         set("primaryChatColour", "3");
         set("secondaryChatColour", "b");
 
