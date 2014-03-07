@@ -238,7 +238,6 @@ public class SimpleHoloManager implements HoloManager {
         double y = config.getDouble(path + "y");
         double z = config.getDouble(path + "z");
         if (config.get(path + "animatedImage.image") != null) {
-            HoloAPI.LOGGER.log(Level.INFO, "Image isn't null");
             if (config.getBoolean(path + "animatedImage.image")) {
                 AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage.key"));
                 if (generator != null) {
