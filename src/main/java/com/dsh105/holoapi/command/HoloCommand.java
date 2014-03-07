@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.command;
 
+import com.dsh105.dshutils.libs.FancyMessage;
 import com.dsh105.dshutils.pagination.Paginator;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
@@ -9,20 +10,17 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.InputPrompt;
-import com.dsh105.holoapi.conversation.InputSuccessPrompt;
 import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.conversation.basic.YesNoFunction;
 import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPrompt;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
-import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import com.dsh105.holoapi.util.UnicodeFormatter;
-import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
