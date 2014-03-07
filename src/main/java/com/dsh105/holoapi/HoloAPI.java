@@ -105,7 +105,7 @@ public class HoloAPI extends DSHPlugin {
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
 
-        // detect version
+        // detect version, this needs some improvements, it doesn't look too pretty now.
         if(Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
         } else if(Bukkit.getVersion().contains("1.6")) {
