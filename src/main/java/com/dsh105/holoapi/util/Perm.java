@@ -14,7 +14,8 @@ public enum Perm {
     MOVE("holoapi.holo.move"),
     TELEPORT("holoapi.holo.teleport"),
     BUILD("holoapi.holo.build"),
-    EDIT("holoapi.holo.edit");
+    EDIT("holoapi.holo.edit"),
+    REFRESH("holoapi.holo.refresh");
 
     String perm;
 

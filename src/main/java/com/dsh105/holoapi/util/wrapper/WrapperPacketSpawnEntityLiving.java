@@ -108,11 +108,11 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
         return (((Integer) this.read("h")) / 8000.0D);
     }
 
-    public void setDataWatcher(Object dataWatcher) {
-        this.write("l", dataWatcher);
+    public void setMetadata(WrappedDataWatcher metadata) {
+        this.write("l", metadata.getHandle());
     }
 
-    public Object getDataWatcher() {
+    public Object getMetadata() {
         return this.read("l");
     }
 }

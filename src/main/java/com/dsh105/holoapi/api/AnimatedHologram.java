@@ -2,8 +2,9 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
-import com.dsh105.holoapi.image.GIFFrame;
-import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.image.AnimatedTextGenerator;
+import com.dsh105.holoapi.image.Frame;
+import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,20 +14,69 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class AnimatedHologram extends Hologram {
 
     private BukkitTask displayTask;
-    private final AnimatedImageGenerator animatedImage;
-    private GIFFrame frame;
+    private boolean imageGenerated;
+    private String animationKey;
+
+    private ArrayList<Frame> frames = new ArrayList<Frame>();
+    private int index = 0;
+    private Frame currentFrame;
 
     protected AnimatedHologram(String saveId, String worldName, double x, double y, double z, AnimatedImageGenerator animatedImage) {
-        super(saveId, worldName, x, y, z, animatedImage.getLargestFrame().getImageGenerator().getLines());
-        this.animatedImage = animatedImage;
-        this.frame = this.animatedImage.getCurrent();
+        super(TagIdGenerator.nextId(animatedImage.getLargestFrame().getImageGenerator().getLines().length * animatedImage.getFrames().size()),
+                saveId, worldName, x, y, z, animatedImage.getLargestFrame().getImageGenerator().getLines());
+        this.frames.addAll(animatedImage.getFrames());
+        this.currentFrame = this.getCurrent();
         this.animate();
+        this.imageGenerated = true;
+        this.animationKey = animatedImage.getKey();
+    }
+
+    protected AnimatedHologram(String saveId, String worldName, double x, double y, double z, AnimatedTextGenerator textGenerator) {
+        super(TagIdGenerator.nextId(textGenerator.getLargestFrame().getLines().length * textGenerator.getFrames().size()),
+                saveId, worldName, x, y, z, textGenerator.getLargestFrame().getLines());
+        this.frames.addAll(textGenerator.getFrames());
+        this.currentFrame = this.getCurrent();
+        this.animate();
+    }
+
+    public boolean isImageGenerated() {
+        return imageGenerated;
+    }
+
+    public String getAnimationKey() {
+        return animationKey;
+    }
+
+    public Frame getCurrent() {
+        return this.getFrame(this.index);
+    }
+
+    public Frame getNext() {
+        if (++this.index >= this.frames.size()) {
+            this.index = 0;
+        }
+        return this.getFrame(this.index);
+    }
+
+    public Frame getFrame(int index) {
+        if (index >= this.frames.size()) {
+            return null;
+        }
+        return this.frames.get(index);
+    }
+
+    public ArrayList<Frame> getFrames() {
+        ArrayList<Frame> list = new ArrayList<Frame>();
+        list.addAll(this.frames);
+        return list;
     }
 
     @Override
@@ -39,26 +89,33 @@ public class AnimatedHologram extends Hologram {
         // Do nothing. Animated holograms can't be simple
     }
 
+    @Override
+    public void updateLine(int index, String content) {
+        // Nothing can happen here. Lines are always changing
+    }
+
     public void animate() {
         if (this.isAnimating()) {
             this.cancelAnimation();
         }
-        final ImageGenerator image = this.frame.getImageGenerator();
+        //final ImageGenerator image = this.currentFrame.getL;
         this.displayTask = new BukkitRunnable() {
             @Override
             public void run() {
                 for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
                     final Player p = Bukkit.getPlayerExact(entry.getKey());
                     if (p != null) {
-                        final Vector v = entry.getValue();
-                        frame = animatedImage.getNext();
-                        clear(p);
-                        showAnimation(p, v, image);
+                        //final Vector v = entry.getValue();
+                        currentFrame = getNext();
+                        updateAnimation(p, currentFrame.getLines());
+                        //clear(p);
+                        //showAnimation(p, v, currentFrame.getLines());
+
                     }
                 }
                 animate();
             }
-        }.runTaskLater(HoloAPI.getInstance(), frame.getDelay());
+        }.runTaskLater(HoloAPI.getInstance(), currentFrame.getDelay());
     }
 
     public boolean isAnimating() {
@@ -78,36 +135,38 @@ public class AnimatedHologram extends Hologram {
         this.animate();
     }
 
-    public AnimatedImageGenerator getAnimatedImage() {
-        return animatedImage;
+    public void updateAnimation(Player observer, String[] lines) {
+        for (int index = 0; index < lines.length; index++) {
+            this.updateNametag(observer, lines[index], index);
+        }
     }
 
     @Override
     public void show(Player observer) {
-        this.showAnimation(observer, frame.getImageGenerator());
+        this.showAnimation(observer, currentFrame.getLines());
     }
 
     @Override
     public void show(Player observer, Location location) {
-        this.showAnimation(observer, location.toVector(), frame.getImageGenerator());
+        this.showAnimation(observer, location.toVector(), currentFrame.getLines());
     }
 
     @Override
     public void show(Player observer, double x, double y, double z) {
-        this.showAnimation(observer, x, y, z, frame.getImageGenerator());
+        this.showAnimation(observer, x, y, z, currentFrame.getLines());
     }
 
-    public void showAnimation(Player observer, ImageGenerator generator) {
-        this.showAnimation(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), generator);
+    public void showAnimation(Player observer, String[] lines) {
+        this.showAnimation(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), lines);
     }
 
-    public void showAnimation(Player observer, Vector v, ImageGenerator generator) {
-        this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), generator);
+    public void showAnimation(Player observer, Vector v, String[] lines) {
+        this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), lines);
     }
 
-    private void showAnimation(Player observer, double x, double y, double z, ImageGenerator generator) {
-        for (int index = 0; index < generator.getLines().length; index++) {
-            this.generateAnimation(observer, generator.getLines()[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
+    private void showAnimation(Player observer, double x, double y, double z, String[] lines) {
+        for (int index = 0; index < lines.length; index++) {
+            this.generateAnimation(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }
@@ -121,9 +180,9 @@ public class AnimatedHologram extends Hologram {
 
     @Override
     public void clear(Player observer) {
-        int[] ids = new int[frame.getImageGenerator().getLines().length];
+        int[] ids = new int[currentFrame.getLines().length];
 
-        for (int i = 0; i < frame.getImageGenerator().getLines().length; i++) {
+        for (int i = 0; i < currentFrame.getLines().length; i++) {
             ids[i] = i;
         }
         clearTags(observer, ids);
@@ -136,7 +195,7 @@ public class AnimatedHologram extends Hologram {
         int[] entityIds = new int[indices.length * 2];
 
         for (int i = 0; i < indices.length; i++) {
-            if (indices[i] <= frame.getImageGenerator().getLines().length) {
+            if (indices[i] <= currentFrame.getLines().length) {
                 entityIds[i * 2] = this.getHorseIndex(indices[i]);
                 entityIds[i * 2 + 1] = this.getSkullIndex(indices[i] * 2);
             }
@@ -151,9 +210,9 @@ public class AnimatedHologram extends Hologram {
         while (i.hasNext()) {
             Player p = Bukkit.getPlayerExact(i.next());
             if (p != null) {
-                int[] ids = new int[frame.getImageGenerator().getLines().length];
+                int[] ids = new int[currentFrame.getLines().length];
 
-                for (int j = 0; j < frame.getImageGenerator().getLines().length; j++) {
+                for (int j = 0; j < currentFrame.getLines().length; j++) {
                     ids[j] = j;
                 }
                 clearTags(p, ids);
@@ -176,7 +235,7 @@ public class AnimatedHologram extends Hologram {
         dw.watch(10, message.replace("%name%", observer.getName()));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
-        horse.setDataWatcher(dw.getHandle());
+        horse.setMetadata(dw);
 
         WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
         skull.setEntityId(this.getSkullIndex(index));
@@ -191,5 +250,23 @@ public class AnimatedHologram extends Hologram {
         horse.send(observer);
         skull.send(observer);
         attach.send(observer);
+    }
+
+    @Override
+    protected void updateNametag(Player observer, int index) {
+        this.updateNametag(observer, this.getCurrent().getLines()[index], index);
+    }
+
+    protected void updateNametag(Player observer, String message, int index) {
+        WrappedDataWatcher dw = new WrappedDataWatcher();
+        dw.watch(10, message.replace("%name%", observer.getName()));
+        dw.watch(11, Byte.valueOf((byte) 1));
+        dw.watch(12, Integer.valueOf(-1700000));
+
+        WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
+        metadata.setEntityId(this.getHorseIndex(index));
+        metadata.setMetadata(dw);
+
+        metadata.send(observer);
     }
 }

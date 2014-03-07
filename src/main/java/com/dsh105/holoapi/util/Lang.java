@@ -20,6 +20,7 @@ public enum Lang {
     WHUPS("whups", "&3Whups. Something bad happened."),
     CONFIGS_RELOADED("configs_reloaded", "&3Configuration files reloaded."),
 
+    LINE_INDEX_TOO_BIG("line_index_too_big", "&3Line &b%index% &3does not exist."),
     TIP_HOVER_PREVIEW("hover_tip", "&e&oHover over to see a preview of the hologram. Click to insert teleport command."),
     IMAGE_LOADED("url_image_loaded", "&3Custom URL image of key &b%key% loaded."),
     LOADING_URL_IMAGE("loading_url_image", "&3Loading custom URL image of key &b%key%&3. Create hologram when the image has finished loading."),
@@ -37,13 +38,20 @@ public enum Lang {
     HOLOGRAM_MOVED("hologram_moved", "&3Hologram position moved."),
     HOLOGRAM_RELOAD("hologram_reload", "&3Performing manual reload of all holograms and images..."),
     HOLOGRAM_TELEPORT_TO("hologram_teleport_to", "&3You have been teleported to the hologram of ID &b%id%&3."),
+    HOLOGRAM_UPDATE_LINE("hologram_update_line", "&3Line &b%index% &3has been updated to &r%input%&3."),
+    HOLOGRAM_REFRESH("hologram_refresh", "&3Hologram of ID &b%id% &3refreshed."),
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),
     YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),
 
+    PROMPT_UPDATE_LINE("prompt_update_line", "&3What do you want to set this line to?"),
+    PROMPT_DELAY("prompt_delay", "&3Enter the desired delay (in ticks) of the frames in the new animated hologram."),
     PROMPT_INPUT("prompt_input", "&3Enter the desired lines of the new hologram. Enter &bDone &3when finished."),
+    PROMPT_INPUT_FRAMES("prompt_input_frames", "&3Enter the desired lines of the new animated hologram. Enter &bDone &3when finished or &bNext &3to start building the next frame."),
     PROMPT_INPUT_NEXT("prompt_input_next", "&3Added new line: &r%input%&3. Enter next line."),
     PROMPT_INPUT_FAIL("prompt_input_fail", "&3Hologram lines cannot be empty. Retry or enter &bExit &3 to cancel."),
+    PROMPT_INPUT_INVALID("prompt_input_invalid", "&3Input invalid."),
+    PROMPT_NEXT_FRAME("prompt_next_frame", "&3Frame %num% selected. Enter first line."),
 
     BUILDER_EMPTY_LINES("hologram_not_created", "&3The hologram was not created as it was empty."),
     BUILDER_INPUT_FAIL_TEXT_IMAGE("builder_input_fail_text_image", "&3Enter a valid line type (&bText &3or &bImage&3)."),
