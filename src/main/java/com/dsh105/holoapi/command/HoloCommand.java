@@ -1,6 +1,5 @@
 package com.dsh105.holoapi.command;
 
-import com.dsh105.dshutils.libs.FancyMessage;
 import com.dsh105.dshutils.pagination.Paginator;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
@@ -21,6 +20,7 @@ import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import com.dsh105.holoapi.util.UnicodeFormatter;
+import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -65,7 +65,7 @@ public class HoloCommand implements CommandExecutor {
                 if (StringUtil.isInt(args[1])) {
                     String[] help = this.help.getPage(Integer.parseInt(args[1]));
                     if (help == null) {
-                        Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.toString().replace("%index%", args[1]));
+                        Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.getValue().replace("%index%", args[1]));
                         return true;
                     }
                     sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");

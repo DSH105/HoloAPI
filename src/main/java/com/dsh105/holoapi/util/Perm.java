@@ -28,7 +28,7 @@ public enum Perm {
             return hasPerm(((Player) sender), sendMessage);
         } else {
             if (!allowConsole && sendMessage) {
-                Lang.sendTo(sender, Lang.IN_GAME_ONLY.toString());
+                Lang.sendTo(sender, Lang.IN_GAME_ONLY.getValue());
             }
             return allowConsole;
         }
@@ -39,7 +39,7 @@ public enum Perm {
             return true;
         }
         if (sendMessage) {
-            Lang.sendTo(player, Lang.NO_PERMISSION.toString().replace("%perm%", this.perm));
+            Lang.sendTo(player, Lang.NO_PERMISSION.getValue().replace("%perm%", this.perm));
         }
         return false;
     }
