@@ -5,6 +5,7 @@ import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityDestroy;
+import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityMetadata;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityTeleport;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
