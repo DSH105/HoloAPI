@@ -101,7 +101,7 @@ public enum Lang {
 
     public String getValue() {
         String result = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
-        if (result != null && result != "" && result != "none") {
+        if (result != null && !"".equals(result) && !"none".equals(result)) {
             return ChatColor.translateAlternateColorCodes('&', HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def));
         } else {
             return "";
