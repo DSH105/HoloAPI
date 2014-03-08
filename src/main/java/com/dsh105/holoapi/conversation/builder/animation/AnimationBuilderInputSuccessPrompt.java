@@ -6,12 +6,11 @@ import com.dsh105.holoapi.api.AnimatedHologramFactory;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
+import java.util.ArrayList;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
 
 public class AnimationBuilderInputSuccessPrompt extends MessagePrompt {
 

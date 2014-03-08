@@ -2,7 +2,6 @@ package com.dsh105.holoapi.conversation;
 
 import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.entity.Player;
 
 public class InputFactory {
 

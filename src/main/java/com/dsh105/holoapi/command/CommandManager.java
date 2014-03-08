@@ -2,14 +2,16 @@ package com.dsh105.holoapi.command;
 
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
-
-import java.util.*;
 
 public class CommandManager {
 

@@ -6,9 +6,8 @@ import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.PlayerUtil;
 import com.dsh105.holoapi.util.ReflectionUtil;
-import org.bukkit.entity.Player;
-
 import java.util.Map;
+import org.bukkit.entity.Player;
 
 public class Packet {
 

@@ -3,13 +3,11 @@ package com.dsh105.holoapi.conversation.builder.animation;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
+import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
-
-import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class AnimationBuilderInputPrompt extends ValidatingPrompt {
 
