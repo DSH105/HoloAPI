@@ -18,6 +18,7 @@ import com.dsh105.holoapi.image.ImageLoader;
 import com.dsh105.holoapi.image.SimpleAnimationLoader;
 import com.dsh105.holoapi.image.SimpleImageLoader;
 import com.dsh105.holoapi.listeners.HoloListener;
+import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import java.io.File;
@@ -129,6 +130,7 @@ public class HoloAPI extends DSHPlugin {
         COMMAND_MANAGER.register(holoCommand);
 
         manager.registerEvents(new HoloListener(), this);
+        manager.registerEvents(new IndicatorListener(), this);
         this.loadHolograms(this);
 
         try {
