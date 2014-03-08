@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
 public interface HoloManager {
 
@@ -35,4 +36,8 @@ public interface HoloManager {
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, List<String> lines);
 
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines);
+
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, Vector velocity, List<String> lines);
+
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, final Vector velocity, String... lines);
 }

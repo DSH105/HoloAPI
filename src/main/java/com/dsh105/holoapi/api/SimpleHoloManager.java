@@ -316,6 +316,34 @@ public class SimpleHoloManager implements HoloManager {
         return hologram;
     }
 
+    @Override
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, Vector velocity, List<String> lines) {
+        return this.createSimpleHologram(location, secondsUntilRemoved, velocity, lines);
+    }
+
+    @Override
+    public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, final Vector velocity, String... lines) {
+        int simpleId = TagIdGenerator.nextSimpleId(lines.length);
+        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).isSimple(true).build();
+        for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
+            if (e instanceof Player) {
+                hologram.show((Player) e);
+            }
+        }
+
+        final Location l = location.clone();
+        BukkitTask t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                l.add(velocity);
+                hologram.move(l.toVector());
+            }
+        }, 1L, 1L);
+
+        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getInstance(), secondsUntilRemoved * 20);
+        return hologram;
+    }
+
     class HologramRemoveTask extends BukkitRunnable {
 
         private Hologram hologram;
@@ -331,13 +359,12 @@ public class SimpleHoloManager implements HoloManager {
             if (this.t != null) {
                 t.cancel();
             }
-            hologram.clearAllPlayerViews();
+            stopTracking(hologram);
             for (Hologram h : getAllHolograms().keySet()) {
                 if (h.isSimple()) {
                     h.refreshDisplay();
                 }
             }
-            holograms.remove(hologram);
             /*for (Hologram h : getAllHolograms().keySet()) {
                 h.refreshDisplay();
             }*/
