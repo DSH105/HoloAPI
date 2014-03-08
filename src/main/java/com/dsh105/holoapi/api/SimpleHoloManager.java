@@ -4,6 +4,8 @@ import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.AnimatedTextGenerator;
+import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import java.util.ArrayList;
@@ -121,7 +123,23 @@ public class SimpleHoloManager implements HoloManager {
             this.config.set(path + "y", hologram.getDefaultY());
             this.config.set(path + "z", hologram.getDefaultZ());
             if (hologram instanceof AnimatedHologram) {
-                this.config.set(path + "animatedImage", ((AnimatedHologram) hologram).getAnimatedImage().getKey());
+                AnimatedHologram animatedHologram = (AnimatedHologram) hologram;
+                if (animatedHologram.isImageGenerated()) {
+                    this.config.set(path + "animatedImage.image", true);
+                    this.config.set(path + "animatedImage.key", animatedHologram.getAnimationKey());
+                } else {
+                    this.config.set(path + "animatedImage.image", false);
+                    int index = 0;
+                    for (Frame f : animatedHologram.getFrames()) {
+                        this.config.set(path + "animatedImage.frames." + index + ".delay", f.getDelay());
+                        int tagIndex = 0;
+                        for (String tag : f.getLines()) {
+                            this.config.set(path + "animatedImage.frames." + index + "." + tagIndex, tag);
+                            tagIndex++;
+                        }
+                        index++;
+                    }
+                }
             } else {
                 int index = 0;
                 for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
@@ -155,8 +173,33 @@ public class SimpleHoloManager implements HoloManager {
                 double x = config.getDouble(path + "x");
                 double y = config.getDouble(path + "y");
                 double z = config.getDouble(path + "z");
-                if (config.getString(path + "animatedImage") != null) {
-                    unprepared.add(key);
+                if (config.get(path + "animatedImage.image") != null) {
+                    if (config.getBoolean(path + "animatedImage.image")) {
+                        unprepared.add(key);
+                    } else {
+                        ArrayList<Frame> frameList = new ArrayList<Frame>();
+                        ConfigurationSection frames = config.getConfigurationSection("holograms." + key + ".animatedImage.frames");
+                        if (frames != null) {
+                            for (String frameKey : frames.getKeys(false)) {
+                                ConfigurationSection lines = config.getConfigurationSection("holograms." + key + ".animatedImage.frames." + frameKey);
+                                if (lines != null) {
+                                    ArrayList<String> tagList = new ArrayList<String>();
+                                    int delay = config.getInt("holograms." + key + ".animatedImage.frames." + frameKey + ".delay", 5);
+                                    for (String tagKey : lines.getKeys(false)) {
+                                        if (!tagKey.equalsIgnoreCase("delay")) {
+                                            tagList.add(config.getString("holograms." + key + ".animatedImage.frames." + frameKey + "." + tagKey));
+                                        }
+                                    }
+                                    if (!tagList.isEmpty()) {
+                                        frameList.add(new Frame(delay, tagList.toArray(new String[tagList.size()])));
+                                    }
+                                }
+                            }
+                        }
+                        if (!frameList.isEmpty()) {
+                            new AnimatedHologramFactory(HoloAPI.getInstance()).withText(new AnimatedTextGenerator(frameList.toArray(new Frame[frameList.size()]))).withSaveId(key).withLocation(new Vector(x, y, z), worldName).build();
+                        }
+                    }
                 } else {
                     ConfigurationSection cs1 = config.getConfigurationSection("holograms." + key + ".lines");
                     boolean containsImage = false;
@@ -197,10 +240,12 @@ public class SimpleHoloManager implements HoloManager {
         double x = config.getDouble(path + "x");
         double y = config.getDouble(path + "y");
         double z = config.getDouble(path + "z");
-        if (config.getString(path + "animatedImage") != null) {
-            AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage"));
-            if (generator != null) {
-                return new AnimatedHologramFactory(HoloAPI.getInstance()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+        if (config.get(path + "animatedImage.image") != null) {
+            if (config.getBoolean(path + "animatedImage.image")) {
+                AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage.key"));
+                if (generator != null) {
+                    return new AnimatedHologramFactory(HoloAPI.getInstance()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+                }
             }
         } else {
             ConfigurationSection cs1 = config.getConfigurationSection("holograms." + hologramId + ".lines");

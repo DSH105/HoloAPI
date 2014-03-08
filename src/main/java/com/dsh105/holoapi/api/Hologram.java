@@ -208,6 +208,19 @@ public class Hologram {
         return this.playerToLocationMap.get(player.getName());
     }
 
+    public void updateLine(int index, String content) {
+        if (index >= this.tags.length) {
+            throw new IllegalArgumentException("Tag index doesn't exist!");
+        }
+        this.tags[index] = content;
+        for (String name : this.playerToLocationMap.keySet()) {
+            Player p = Bukkit.getPlayerExact(name);
+            if (p != null) {
+                this.updateNametag(p, index);
+            }
+        }
+    }
+
     public void show(Player observer) {
         this.show(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
     }
@@ -317,7 +330,7 @@ public class Hologram {
         dw.watch(10, this.tags[index].replace("%name%", observer.getName()));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
-        horse.setDataWatcher(dw.getHandle());
+        horse.setMetadata(dw);
 
         WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
         skull.setEntityId(this.getSkullIndex(index));
@@ -332,6 +345,19 @@ public class Hologram {
         horse.send(observer);
         skull.send(observer);
         attach.send(observer);
+    }
+
+    protected void updateNametag(Player observer, int index) {
+        WrappedDataWatcher dw = new WrappedDataWatcher();
+        dw.watch(10, this.tags[index].replace("%name%", observer.getName()));
+        dw.watch(11, Byte.valueOf((byte) 1));
+        dw.watch(12, Integer.valueOf(-1700000));
+
+        WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
+        metadata.setEntityId(this.getHorseIndex(index));
+        metadata.setMetadata(dw);
+
+        metadata.send(observer);
     }
 
     protected int getHorseIndex(int index) {

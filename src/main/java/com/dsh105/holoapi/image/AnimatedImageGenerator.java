@@ -1,20 +1,20 @@
 package com.dsh105.holoapi.image;
 
 import com.google.common.collect.ImmutableList;
-import java.awt.Color;
-import java.awt.Graphics2D;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class AnimatedImageGenerator implements Generator {
 
@@ -22,7 +22,6 @@ public class AnimatedImageGenerator implements Generator {
 
     private String key;
     protected ImmutableList<GIFFrame> frames;
-    private int index = 0;
     private int maxHeight;
     private GIFFrame largestFrame;
 
@@ -234,23 +233,5 @@ public class AnimatedImageGenerator implements Generator {
 
     public GIFFrame getLargestFrame() {
         return largestFrame;
-    }
-
-    public GIFFrame getCurrent() {
-        return this.getFrame(this.index);
-    }
-
-    public GIFFrame getNext() {
-        if (++this.index >= this.frames.size()) {
-            this.index = 0;
-        }
-        return this.getFrame(this.index);
-    }
-
-    public GIFFrame getFrame(int index) {
-        if (index >= this.frames.size()) {
-            return null;
-        }
-        return this.frames.get(index);
     }
 }

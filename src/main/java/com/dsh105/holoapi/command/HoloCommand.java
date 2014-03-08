@@ -8,16 +8,18 @@ import com.dsh105.holoapi.api.AnimatedHologramFactory;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.conversation.InputFactory;
+import com.dsh105.holoapi.conversation.InputPrompt;
+import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.conversation.basic.YesNoFunction;
 import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
+import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPrompt;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
-import java.util.ArrayList;
-import java.util.Map;
+import com.dsh105.holoapi.util.UnicodeFormatter;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -60,7 +62,7 @@ public class HoloCommand implements CommandExecutor {
                 if (StringUtil.isInt(args[1])) {
                     String[] help = this.help.getPage(Integer.parseInt(args[1]));
                     if (help == null) {
-                        Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.toString().replace("%index%", args[1]));
+                        Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.getValue().replace("%index%", args[1]));
                         return true;
                     }
                     sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
@@ -86,9 +88,16 @@ public class HoloCommand implements CommandExecutor {
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("create")) {
             if (args.length == 1) {
                 if (Perm.CREATE.hasPerm(sender, true, false)) {
-                    InputFactory.promptHoloInput((Player) sender);
+                    InputFactory.buildBasicConversation().withFirstPrompt(new InputPrompt()).buildConversation((Player) sender).begin();
                     return true;
                 } else return true;
+            } else if (args.length == 2) {
+                if (args[1].equalsIgnoreCase("animation")) {
+                    if (Perm.CREATE.hasPerm(sender, true, false)) {
+                        InputFactory.buildBasicConversation().withFirstPrompt(new AnimationBuilderInputPrompt()).buildConversation((Player) sender).begin();
+                        return true;
+                    } else return true;
+                }
             } else if (args.length == 3) {
                 if (args[1].equalsIgnoreCase("image")) {
                     if (Perm.CREATE.hasPerm(sender, true, false)) {
@@ -148,7 +157,14 @@ public class HoloCommand implements CommandExecutor {
                         ArrayList<String> list = new ArrayList<String>();
                         list.add(ChatColor.GOLD + "" + ChatColor.UNDERLINE + "Hologram Preview:");
                         if (h instanceof AnimatedHologram) {
-                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + ((AnimatedHologram) h).getAnimatedImage().getKey() + " (ANIMATION)");
+                            AnimatedHologram animatedHologram = (AnimatedHologram) h;
+                            if (animatedHologram.isImageGenerated()) {
+                                list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + animatedHologram.getAnimationKey() + " (ANIMATION)");
+                            } else {
+                                for (String tag : animatedHologram.getFrames().get(0).getLines()) {
+                                    list.add(tag);
+                                }
+                            }
                         } else {
                             if (h.getLines().length > 1) {
                                 for (Map.Entry<String, Boolean> serialise : h.serialise().entrySet()) {
@@ -253,15 +269,61 @@ public class HoloCommand implements CommandExecutor {
                     Lang.sendTo(sender, Lang.HOLOGRAM_TELEPORT_TO.getValue().replace("%id%", h.getSaveId()));
                     return true;
                 } else return true;
-            }
-        } else if (args.length == 3) {
-            if (args[0].equalsIgnoreCase("edit")) {
-                if (Perm.EDIT.hasPerm(sender, true, true)) {
+            } else if (args[0].equalsIgnoreCase("refresh")) {
+                if (Perm.REFRESH.hasPerm(sender, true, true)) {
                     Hologram h = HoloAPI.getManager().getHologram(args[1]);
                     if (h == null) {
                         Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
                         return true;
                     }
+                    h.refreshDisplay();
+                    Lang.sendTo(sender, Lang.HOLOGRAM_REFRESH.getValue().replace("%id%", h.getSaveId()));
+                    return true;
+                } else return true;
+            }
+        } else if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("edit")) {
+                if (Perm.EDIT.hasPerm(sender, true, false)) {
+                    final Hologram h = HoloAPI.getManager().getHologram(args[1]);
+                    if (h == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                        return true;
+                    }
+                    if (!StringUtil.isInt(args[2])) {
+                        Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[2]));
+                        return true;
+                    }
+                    final int index = Integer.parseInt(args[2]);
+                    if (index > h.getLines().length) {
+                        Lang.sendTo(sender, Lang.LINE_INDEX_TOO_BIG.getValue().replace("%index%", args[2]));
+                        return true;
+                    }
+
+                    InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new SimpleInputFunction() {
+                        private String input;
+
+                        @Override
+                        public void onFunction(ConversationContext context, String input) {
+                            this.input = input;
+                            h.updateLine(index - 1, UnicodeFormatter.replaceAll(input));
+                        }
+
+                        @Override
+                        public String getSuccessMessage() {
+                            return Lang.HOLOGRAM_UPDATE_LINE.getValue().replace("%index%", index + "").replace("%input%", input);
+                        }
+
+                        @Override
+                        public String getPromptText() {
+                            return Lang.PROMPT_UPDATE_LINE.getValue();
+                        }
+
+                        @Override
+                        public String getFailedText() {
+                            return "";
+                        }
+                    })).buildConversation((Player) sender).begin();
+                    return true;
                 } else return true;
             }
         }

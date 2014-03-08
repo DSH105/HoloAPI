@@ -4,11 +4,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
+import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -77,7 +73,9 @@ public class HologramFactory {
     }
 
     public HologramFactory withText(String... text) {
-        this.tags.addAll(Arrays.asList(text));
+        for (String tag : text) {
+            this.tags.add(UnicodeFormatter.replaceAll(tag));
+        }
         return this;
     }
 
@@ -134,9 +132,13 @@ public class HologramFactory {
         } else {
             hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
         }
-        /*for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            h.refreshDisplay();
-        }*/
+        if (!hologram.isSimple()) {
+            for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+                if (!h.isSimple()) {
+                    h.refreshDisplay();
+                }
+            }
+        }
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e);

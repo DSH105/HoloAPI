@@ -3,6 +3,7 @@ package com.dsh105.holoapi.api;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -15,13 +16,16 @@ public class AnimatedHologramFactory {
     private Plugin owningPlugin;
 
     private AnimatedImageGenerator animatedImage;
+    private AnimatedTextGenerator textGenerator;
     private String worldName;
     private double locX;
     private double locY;
     private double locZ;
     private String saveId;
+
     private boolean preparedId = false;
     private boolean prepared = false;
+    private boolean imageGenerated;
 
     public AnimatedHologramFactory(Plugin owningPlugin) {
         if (owningPlugin == null) {
@@ -61,8 +65,15 @@ public class AnimatedHologramFactory {
         return this;
     }
 
+    public AnimatedHologramFactory withText(AnimatedTextGenerator textGenerator) {
+        this.textGenerator = textGenerator;
+        this.imageGenerated = false;
+        return this;
+    }
+
     public AnimatedHologramFactory withImage(AnimatedImageGenerator animatedImage) {
         this.animatedImage = animatedImage;
+        this.imageGenerated = true;
         return this;
     }
 
@@ -75,8 +86,8 @@ public class AnimatedHologramFactory {
     }
 
     public AnimatedHologram build() {
-        if (this.animatedImage == null) {
-            throw new HologramNotPreparedException("Hologram animated image cannot be empty.");
+        if ((this.imageGenerated && this.animatedImage == null) || (!this.imageGenerated && this.textGenerator == null)) {
+            throw new HologramNotPreparedException("Hologram animation cannot be empty.");
         }
         if (!this.prepared) {
             throw new HologramNotPreparedException("Hologram location cannot be null.");
@@ -85,10 +96,17 @@ public class AnimatedHologramFactory {
         if (!this.preparedId || this.saveId == null) {
             this.saveId = SaveIdGenerator.nextId() + "";
         }
-        AnimatedHologram animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.animatedImage);
-        /*for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            h.refreshDisplay();
-        }*/
+        AnimatedHologram animatedHologram;
+        if (this.imageGenerated) {
+             animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.animatedImage);
+        } else {
+            animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.textGenerator);
+        }
+        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+            if (!h.isSimple()) {
+                h.refreshDisplay();
+            }
+        }
         for (Entity e : animatedHologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 animatedHologram.show((Player) e);

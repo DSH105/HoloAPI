@@ -8,6 +8,8 @@ import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.SimpleHoloManager;
+import com.dsh105.holoapi.command.CommandManager;
+import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
@@ -18,10 +20,7 @@ import com.dsh105.holoapi.image.SimpleImageLoader;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,6 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class HoloAPI extends DSHPlugin {
 
+    private static CommandManager COMMAND_MANAGER;
     private static SimpleHoloManager MANAGER;
     private static SimpleImageLoader IMAGE_LOADER;
     private static SimpleAnimationLoader ANIMATION_LOADER;
@@ -44,6 +44,8 @@ public class HoloAPI extends DSHPlugin {
     public boolean updateAvailable = false;
     public String updateName = "";
     public boolean updateChecked = false;
+
+    public static boolean isUsingNetty;
 
     private static double LINE_SPACING = 0.25D;
 
@@ -104,11 +106,24 @@ public class HoloAPI extends DSHPlugin {
         PluginManager manager = getServer().getPluginManager();
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
+
+        // detect version, this needs some improvements, it doesn't look too pretty now.
+        if(Bukkit.getVersion().contains("1.7")) {
+            isUsingNetty = true;
+        } else if(Bukkit.getVersion().contains("1.6")) {
+            isUsingNetty = false;
+        }
+
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
         ANIMATION_LOADER = new SimpleAnimationLoader();
-        this.getCommand("holo").setExecutor(new HoloCommand());
+
+        COMMAND_MANAGER = new CommandManager(this);
+        DynamicPluginCommand holoCommand = new DynamicPluginCommand(this.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getInstance().getCommandLabel() + " help &3for help.", new HoloCommand(), null, this);
+        holoCommand.setPermission("holoapi.holo");
+        COMMAND_MANAGER.register(holoCommand);
+
         manager.registerEvents(new HoloListener(), this);
         this.loadHolograms(this);
 
