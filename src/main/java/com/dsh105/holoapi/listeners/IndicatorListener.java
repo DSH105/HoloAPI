@@ -20,7 +20,7 @@ public class IndicatorListener implements Listener {
         this.config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
         if (config.getBoolean("indicators.damage.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
@@ -32,7 +32,7 @@ public class IndicatorListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (config.getBoolean("indicators.damage.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
@@ -44,7 +44,7 @@ public class IndicatorListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExpGain(PlayerExpChangeEvent event) {
         if (config.getBoolean("indicators.exp.enable", false)) {
             HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, ChatColor.GREEN + "+" + event.getAmount() + " exp");
