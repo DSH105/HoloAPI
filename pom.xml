@@ -137,6 +137,29 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <!--<configuration> <stylesheetfile>${project.basedir}/style/stylesheet.css</stylesheetfile>
+                  </configuration> -->
+                <executions>
+                    <execution>
+                        <id>non-aggregate</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <links>
+                                <link>http://jd.bukkit.org/rb/apidocs/</link>
+                            </links>
+                            <linksource>true</linksource>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
