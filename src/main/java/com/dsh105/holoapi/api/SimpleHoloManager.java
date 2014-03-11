@@ -374,14 +374,12 @@ public class SimpleHoloManager implements HoloManager {
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 30);
+            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 10);
         }
-
-        private ArrayList<Hologram> toUpdate = new ArrayList<Hologram>();
 
         @Override
         public void run() {
-            Iterator<Hologram> i = toUpdate.iterator();
+            Iterator<Hologram> i = getAllHolograms().keySet().iterator();
             while (i.hasNext()) {
                 i.next().refreshDisplay();
             }
