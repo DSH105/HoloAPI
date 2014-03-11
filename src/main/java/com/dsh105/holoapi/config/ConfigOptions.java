@@ -30,10 +30,12 @@ public class ConfigOptions extends Options {
         set("chatBubbles.displayDurationSeconds", 8);
 
         set("indicators.damage.enable", false);
+        set("indicators.damage.format", "&c");
         set("indicators.damage.timeVisible", 4);
         set("indicators.damage.showForPlayers", true);
         set("indicators.damage.showForMobs", true);
         set("indicators.exp.enable", false);
+        set("indicators.exp.format", "&a");
         set("indicators.exp.timeVisible", 4);
 
         // HoloAPI will automatically replace the following to the specified unicode character if it is found in a hologram

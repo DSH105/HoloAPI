@@ -26,7 +26,7 @@ public class IndicatorListener implements Listener {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
                     || config.getBoolean("indicators.damage.showForMobs", false)) {
                 if (!(event instanceof EntityDamageByEntityEvent)) {
-                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, ChatColor.RED + "-" + event.getDamage() + " \u2764");
+                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " \u2764");
                 }
             }
         }
@@ -39,7 +39,7 @@ public class IndicatorListener implements Listener {
                     || config.getBoolean("indicators.damage.showForMobs", false)) {
                 Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
                 v.setY(v.getY() + 0.05D);
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.RED + "-" + event.getDamage() + " \u2764");
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " \u2764");
             }
         }
     }
@@ -47,7 +47,7 @@ public class IndicatorListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExpGain(PlayerExpChangeEvent event) {
         if (config.getBoolean("indicators.exp.enable", false)) {
-            HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, ChatColor.GREEN + "+" + event.getAmount() + " exp");
+            HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.exp.format", "&a")) + "+" + event.getAmount() + " exp");
         }
     }
 }
