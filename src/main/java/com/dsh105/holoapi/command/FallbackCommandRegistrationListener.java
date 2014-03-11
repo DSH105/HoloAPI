@@ -13,7 +13,7 @@ public class FallbackCommandRegistrationListener implements Listener {
        this.fallback = commandMap;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onCommand(PlayerCommandPreprocessEvent event) {
         if(this.fallback.dispatch(event.getPlayer(), event.getMessage())) {
             event.setCancelled(true);

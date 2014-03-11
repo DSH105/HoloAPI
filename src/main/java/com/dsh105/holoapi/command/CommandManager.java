@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.command;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
 import java.util.ArrayList;
@@ -11,11 +12,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.SimplePluginManager;
 
 public class CommandManager {
 
-    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new SafeField<CommandMap>(SimplePluginManager.class, "commandMap");
+    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new SafeField<CommandMap>(Bukkit.getServer().getPluginManager().getClass(), "commandMap");
     protected static final FieldAccessor<Map<String, Command>> KNOWN_COMMANDS = new SafeField<Map<String, org.bukkit.command.Command>>(SimpleCommandMap.class, "knownCommands");
 
     private CommandMap fallback;
@@ -56,7 +58,14 @@ public class CommandManager {
     }
 
     public CommandMap getCommandMap() {
-        CommandMap map = SERVER_COMMAND_MAP.get(Bukkit.getPluginManager());
+        CommandMap map = null;
+
+        try {
+            map = SERVER_COMMAND_MAP.get(Bukkit.getPluginManager());
+        } catch (Exception e) {
+            HoloAPI.LOGGER.warning("Failed to retrieve the CommandMap! Using fallback instead...");
+            map = null;
+        }
 
         if(map == null) {
             if(fallback != null) {
