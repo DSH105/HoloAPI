@@ -365,9 +365,6 @@ public class SimpleHoloManager implements HoloManager {
                     h.refreshDisplay();
                 }
             }
-            /*for (Hologram h : getAllHolograms().keySet()) {
-                h.refreshDisplay();
-            }*/
         }
     }
 

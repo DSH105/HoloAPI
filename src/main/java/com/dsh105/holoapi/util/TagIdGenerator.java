@@ -7,7 +7,7 @@ public class TagIdGenerator {
 
     public static int nextId(int counter) {
         nextId += counter * 2;
-        return nextId;
+        return nextId++;
     }
 
     public static int nextSimpleId(int counter) {
@@ -16,6 +16,6 @@ public class TagIdGenerator {
             simpleId = Short.MIN_VALUE;
             return nextSimpleId(counter);
         }
-        return simpleId;
+        return simpleId++;
     }
 }

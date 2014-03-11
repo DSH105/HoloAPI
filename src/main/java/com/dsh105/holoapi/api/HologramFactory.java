@@ -153,13 +153,4 @@ public class HologramFactory {
         HoloAPI.getManager().track(hologram, this.owningPlugin);
         return hologram;
     }
-
-    protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
-        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
-            if (entry.getKey().getFirst() == index) {
-                return entry;
-            }
-        }
-        return null;
-    }
 }
