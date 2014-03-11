@@ -146,21 +146,18 @@ public class HoloCommand implements CommandExecutor {
             }
             if (args[0].equalsIgnoreCase("info")) {
                 if (Perm.INFO.hasPerm(sender, true, true)) {
-                    if (HoloAPI.getManager().getAllHolograms().isEmpty()) {
+                    if (HoloAPI.getManager().getAllComplexHolograms().isEmpty()) {
                         Lang.sendTo(sender, Lang.NO_ACTIVE_HOLOGRAMS.getValue());
                         return true;
                     }
                     Lang.sendTo(sender, Lang.ACTIVE_DISPLAYS.getValue());
-                    for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllHolograms().entrySet()) {
+                    for (Map.Entry<Hologram, Plugin> entry : HoloAPI.getManager().getAllComplexHolograms().entrySet()) {
                         Hologram h = entry.getKey();
-                        if (h.isSimple()) {
-                            continue;
-                        }
                         ArrayList<String> list = new ArrayList<String>();
                         list.add(ChatColor.GOLD + "" + ChatColor.UNDERLINE + "Hologram Preview:");
                         if (h instanceof AnimatedHologram) {
                             AnimatedHologram animatedHologram = (AnimatedHologram) h;
-                            if (animatedHologram.isImageGenerated()) {
+                            if (animatedHologram.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(animatedHologram.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(animatedHologram.getAnimationKey())) {
                                 list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + animatedHologram.getAnimationKey() + " (ANIMATION)");
                             } else {
                                 for (String tag : animatedHologram.getFrames().get(0).getLines()) {

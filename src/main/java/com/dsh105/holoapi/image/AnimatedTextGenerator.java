@@ -2,12 +2,21 @@ package com.dsh105.holoapi.image;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a generator used to produce animated text frames
+ */
+
 public class AnimatedTextGenerator {
 
     private int maxHeight;
     private ArrayList<Frame> frames = new ArrayList<Frame>();
     private Frame largestFrame;
 
+    /**
+     * Constructs an AnimatedTextGenerator for use in an AnimatedHologram
+     *
+     * @param frames frames used to construct the generator with
+     */
     public AnimatedTextGenerator(Frame[] frames) {
         this.largestFrame = frames[0];
         for (Frame f : frames) {
@@ -43,14 +52,29 @@ public class AnimatedTextGenerator {
         this.largestFrame = largestFrame;
     }
 
+    /**
+     * Gets the largest frame of the generator
+     *
+     * @return largest frame of the generator
+     */
     public Frame getLargestFrame() {
         return largestFrame;
     }
 
+    /**
+     * Gets the frames of the generator
+     *
+     * @return frames of the generator
+     */
     public ArrayList<Frame> getFrames() {
         return frames;
     }
 
+    /**
+     * Gets the maximum frame height
+     *
+     * @return maximum frame height
+     */
     public int getMaxHeight() {
         return maxHeight;
     }

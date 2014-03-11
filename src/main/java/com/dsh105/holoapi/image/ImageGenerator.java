@@ -11,7 +11,10 @@ import javax.imageio.ImageIO;
 import org.bukkit.ChatColor;
 
 /**
- * Credit to bobacadodl for this one <3
+ * Represents a generator used to produce images
+ *
+ * Original code by @bobacadodl
+ * https://forums.bukkit.org/threads/204902/
  */
 
 public class ImageGenerator implements Generator {
@@ -38,15 +41,43 @@ public class ImageGenerator implements Generator {
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), false);
     }
 
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param image {@link java.awt.image.BufferedImage} used to generate the image
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     */
     public ImageGenerator(String imageKey, BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
         this.imageKey = imageKey;
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
     }
 
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param imageUrl URL to search the image for
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     */
     public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean requiresBorder) {
         this(imageKey, imageUrl, height, imgChar, true, requiresBorder);
     }
 
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param imageUrl URL to search the image for
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param loadUrl whether to automatically load the image from the specified URL
+     * @param requiresBorder whether the display requires a border
+     */
     public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean loadUrl, boolean requiresBorder) {
         this.imageKey = imageKey;
         if (loadUrl) {
@@ -59,6 +90,15 @@ public class ImageGenerator implements Generator {
         }
     }
 
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param imageFile file used to generate the image
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     */
     public ImageGenerator(String imageKey, File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {
         BufferedImage image;
         try {
@@ -89,56 +129,34 @@ public class ImageGenerator implements Generator {
         this.lines = this.generate(generateColours(image, this.storedImageHeight), this.storedImgChar.getImageChar(), storedRequiresBorder);
     }
 
+    /**
+     * Gets the generated lines
+     *
+     * @return generated lines
+     */
     public String[] getLines() {
         return lines;
     }
 
-    private String[] generate(ChatColor[][] colors, char imgchar, boolean b) {
+    private String[] generate(ChatColor[][] colors, char imgchar, boolean border) {
         String[] lines = new String[colors[0].length];
         for (int y = 0; y < colors[0].length; y++) {
             String line = "";
             for (int x = 0; x < colors.length; x++) {
                 ChatColor colour = colors[x][y];
                 if (colour == null) {
-                    line += b ? TRANSPARENT_CHAR_BORDER : TRANSPARENT_CHAR_NOBORDER;
-                    /*if (!line.equals("")) {
-                        line += TRANSPARENT_CHAR;
-                    }*/
+                    line += border ? TRANSPARENT_CHAR_BORDER : TRANSPARENT_CHAR_NOBORDER;
                 } else {
                     line += colour.toString() + imgchar + ChatColor.RESET;
                 }
             }
 
-            if (!b) {
+            if (!border) {
                 line = line.trim();
             }
 
             lines[y] = line + ChatColor.RESET;
         }
-        /*int min = 0;
-        for (String s : lines) {
-            if (s != null) {
-                char[] chars = s.toCharArray();
-                char space = ' ';
-                int j = 0;
-                for (int i = s.length() - 1; i > 0; i--) {
-                    if (chars[i] == space) {
-                        j++;
-                    }
-                    if (j < min) {
-                        min = j;
-                    }
-                }
-            }
-        }
-
-        String[] newLines = new String[lines.length];
-        int index = 0;
-        for (String s : lines) {
-            if (s != null) {
-                newLines[index] = s.substring(0, s.length() - min);
-            }
-        }*/
         return lines;
     }
 
@@ -164,15 +182,6 @@ public class ImageGenerator implements Generator {
         af.scale(width / (double) originalImage.getWidth(), height / (double) originalImage.getHeight());
         AffineTransformOp operation = new AffineTransformOp(af, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         return operation.filter(originalImage, null);
-        /*BufferedImage resizedImage = new BufferedImage(width, height, 6);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, width, height, null);
-        g.dispose();
-        g.setComposite(AlphaComposite.Src);
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        return resizedImage;*/
     }
 
 }

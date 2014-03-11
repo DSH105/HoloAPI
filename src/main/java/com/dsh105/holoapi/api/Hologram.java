@@ -23,6 +23,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+/**
+ * Represents an Hologram that consists of either image or text
+ */
+
 public class Hologram {
 
     private String worldName;
@@ -61,44 +65,89 @@ public class Hologram {
 
     }
 
+    /**
+     * Gets whether the hologram is simple
+     *
+     * @return true if the hologram is simple
+     */
     public boolean isSimple() {
         return simple;
     }
 
-    protected void setSimple(boolean flag) {
+    protected void setSimplicity(boolean flag) {
         this.simple = flag;
     }
 
+    /**
+     * Gets the number of lines in the hologram
+     *
+     * @return number of lines in the hologram
+     */
     public int getTagCount() {
         return this.tags.length;
     }
 
+    /**
+     * Gets the default X coordinate of the hologram
+     *
+     * @return default X coordinate
+     */
     public double getDefaultX() {
         return defX;
     }
 
+    /**
+     * Gets the default Y coordinate of the hologram
+     *
+     * @return default Y coordinate
+     */
     public double getDefaultY() {
         return defY;
     }
 
+    /**
+     * Gets the default Z coordinate of the hologram
+     *
+     * @return default Z coordinate
+     */
     public double getDefaultZ() {
         return defZ;
     }
 
+    /**
+     * Gets the World name the hologram is visible in
+     *
+     * @return world name the hologram is in
+     */
     public String getWorldName() {
         return worldName;
     }
 
+    /**
+     * Gets the default location of the hologram
+     *
+     * @return default location of the hologram
+     */
     public Location getDefaultLocation() {
         return new Location(Bukkit.getWorld(this.getWorldName()), this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
     }
 
+    /**
+     * Gets a map of all players who are viewing the hologram
+     * <p>
+     * Positions the hologram is viewed from may be different according to different players
+     *
+     * @return player name to {@link org.bukkit.util.Vector} map of all viewed positions
+     */
     public HashMap<String, Vector> getPlayerViews() {
         HashMap<String, Vector> map = new HashMap<String, Vector>();
         map.putAll(this.playerToLocationMap);
         return map;
     }
 
+    /**
+     * Refresh the display of the hologram
+     */
     public void refreshDisplay() {
         for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
             final Player p = Bukkit.getPlayerExact(entry.getKey());
@@ -114,6 +163,13 @@ public class Hologram {
         }
     }
 
+    /**
+     * Gets the lines that the hologram consists of
+     * <p>
+     * Important: Images will be returned as block characters in admist the text characters
+     *
+     * @return lines of the hologram
+     */
     public String[] getLines() {
         return tags;
     }
@@ -127,6 +183,13 @@ public class Hologram {
         this.visibleToAll = flag;
     }*/
 
+    /**
+     * Gets the save id of this hologram
+     * <p>
+     * Used to save the hologram to the HoloAPI save files
+     *
+     * @return key the represents the hologram in save files
+     */
     public String getSaveId() {
         return saveId;
     }
@@ -143,6 +206,11 @@ public class Hologram {
         this.imageIdMap = map;
     }
 
+    /**
+     * Gets a serialised map of the hologram
+     *
+     * @return serialised map of the hologram
+     */
     public LinkedHashMap<String, Boolean> serialise() {
         LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
         ArrayList<String> tags = new ArrayList<String>();
@@ -176,6 +244,13 @@ public class Hologram {
         return null;
     }
 
+    /**
+     * Changes the world the hologram is visible in
+     * <p>
+     * Hologram coordinates will remain the same if the world is changed
+     *
+     * @param worldName name of of the destination world
+     */
     public void changeWorld(String worldName) {
         this.clearAllPlayerViews();
         this.worldName = worldName;
@@ -189,6 +264,9 @@ public class Hologram {
         }
     }
 
+    /**
+     * Clears all views of the hologram, making it invisible to all players who could previously see it
+     */
     public void clearAllPlayerViews() {
         Iterator<String> i = this.playerToLocationMap.keySet().iterator();
         while (i.hasNext()) {
@@ -205,10 +283,22 @@ public class Hologram {
         }
     }
 
+    /**
+     * Gets the viewpoint for a player
+     *
+     * @param player player to retrieve the viewpoint for
+     * @return {@link org.bukkit.util.Vector} representing a player's viewpoint of the hologram
+     */
     public Vector getLocationFor(Player player) {
         return this.playerToLocationMap.get(player.getName());
     }
 
+    /**
+     * Sets the content of a line of the hologram
+     *
+     * @param index index of the line to set
+     * @param content new content for the hologram line
+     */
     public void updateLine(int index, String content) {
         if (index >= this.tags.length) {
             throw new IllegalArgumentException("Tag index doesn't exist!");
@@ -222,14 +312,33 @@ public class Hologram {
         }
     }
 
+    /**
+     * Shows the hologram to a player at the default location
+     *
+     * @param observer player to show the hologram to
+     */
     public void show(Player observer) {
         this.show(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
     }
 
+    /**
+     * Shows the hologram to a player at a location
+     *
+     * @param observer player to show the hologram to
+     * @param location location that the hologram is visible at
+     */
     public void show(Player observer, Location location) {
         this.show(observer, location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
+    /**
+     * Shows the hologram to a player at a location
+     *
+     * @param observer player to show the hologram to
+     * @param x x coordinate of the location the hologram is visible at
+     * @param y y coordinate of the location the hologram is visible at
+     * @param z z coordinate of the location the hologram is visible at
+     */
     public void show(Player observer, double x, double y, double z) {
         /*if (this.playerToLocationMap.containsKey(observer.getName())) {
             this.move(observer, new Vector(x, y, z));
@@ -240,6 +349,13 @@ public class Hologram {
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }
 
+    /**
+     * Moves the hologram to a new location
+     * <p>
+     * Also moves the hologram position for all players currently viewing the hologram
+     *
+     * @param to position to move to
+     */
     public void move(Location to) {
         if (!this.worldName.equals(to.getWorld().getName())) {
             this.changeWorld(to.getWorld().getName());
@@ -247,6 +363,13 @@ public class Hologram {
         this.move(to.toVector());
     }
 
+    /**
+     * Moves the hologram to a new location
+     * <p>
+     * Also moves the hologram position for all players currently viewing the hologram
+     *
+     * @param to position to move to
+     */
     public void move(Vector to) {
         this.defX = to.getX();
         this.defY = to.getY();
@@ -262,7 +385,7 @@ public class Hologram {
         }
     }
 
-    public void move(Player observer, Vector to) {
+    protected void move(Player observer, Vector to) {
         Vector loc = to.clone();
         for (int index = 0; index < this.getTagCount(); index++) {
             this.moveTag(observer, index, loc);
@@ -271,6 +394,11 @@ public class Hologram {
         this.playerToLocationMap.put(observer.getName(), to);
     }
 
+    /**
+     * Clears the view of the hologram for a player
+     *
+     * @param observer player to clear the hologram display for
+     */
     public void clear(Player observer) {
         int[] ids = new int[this.getTagCount()];
 

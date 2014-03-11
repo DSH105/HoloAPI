@@ -74,24 +74,50 @@ public class HoloAPI extends DSHPlugin {
         return this.prefix.replace("%text%", internalText);
     }
 
+    /**
+     * Gets the HoloAPI Hologram Manager.
+     * <p>
+     * The Hologram Manager is used to register and manage the holograms created from both within and outside the HoloAPI plugin
+     *
+     * @return {@link com.dsh105.holoapi.api.HoloManager} that manages and controls registration of holograms
+     */
     public static HoloManager getManager() {
         return MANAGER;
     }
 
+    /**
+     * Gets the HoloAPI Image Loader
+     * <p>
+     * The Image Loader stores and handles registration of all images configured in the HoloAPI Configuration file
+     *
+     * @return Image Loader that controls and stores all pre-loaded image generators
+     */
     public static ImageLoader<ImageGenerator> getImageLoader() {
         return IMAGE_LOADER;
     }
 
+    /**
+     * Gets the HoloAPI Animation Loader
+     * <p>
+     * The Animated Loader stores and handles registration of all animations configured in the HoloAPI Configuration file
+     *
+     * @return Animation Loader that controls and stores all pre-loaded animation generators
+     */
     public static ImageLoader<AnimatedImageGenerator> getAnimationLoader() {
         return ANIMATION_LOADER;
     }
 
-    public String getCommandLabel() {
-        return OPTIONS.getConfig().getString("command", "holo");
-    }
-
+    /**
+     * Gets the spacing between hologram lines
+     *
+     * @return line spacing between holograms
+     */
     public static double getHologramLineSpacing() {
         return LINE_SPACING;
+    }
+
+    public String getCommandLabel() {
+        return OPTIONS.getConfig().getString("command", "holo");
     }
 
     public YAMLConfig getConfig(ConfigType type) {

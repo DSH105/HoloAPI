@@ -22,6 +22,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+/**
+ * Represents an AnimatedHologram that consists of either image or text frames displayed in a constant sequence
+ */
+
 public class AnimatedHologram extends Hologram {
 
     private BukkitTask displayTask;
@@ -50,18 +54,40 @@ public class AnimatedHologram extends Hologram {
         this.animate();
     }
 
+    /**
+     * Gets whether this hologram is image or text based
+     *
+     * @return true if the hologram is image based, false if text based
+     */
     public boolean isImageGenerated() {
         return imageGenerated;
     }
 
+    /**
+     * Gets the animation key of the hologram
+     * <p>
+     * If the hologram is image based, the animation will have an animation key, as defined by the {@link com.dsh105.holoapi.image.AnimatedImageGenerator} used to create it
+     *
+     * @return key of the animation used to create the hologram. Returns null if the hologram is text-based
+     */
     public String getAnimationKey() {
         return animationKey;
     }
 
+    /**
+     * Gets the current frame of the animated hologram
+     *
+     * @return the current frame of the animated hologram
+     */
     public Frame getCurrent() {
         return this.getFrame(this.index);
     }
 
+    /**
+     * Gets the next frame of the animated hologram
+     *
+     * @return the next frame of the animated hologram
+     */
     public Frame getNext() {
         if (++this.index >= this.frames.size()) {
             this.index = 0;
@@ -69,13 +95,24 @@ public class AnimatedHologram extends Hologram {
         return this.getFrame(this.index);
     }
 
+    /**
+     * Gets the frame by its index
+     *
+     * @param index index of the frame to get
+     * @return frame of the animated hologram by its index
+     */
     public Frame getFrame(int index) {
         if (index >= this.frames.size()) {
-            return null;
+            throw new IndexOutOfBoundsException("Frame " + index + "doesn't exist.");
         }
         return this.frames.get(index);
     }
 
+    /**
+     * Gets all frames of the animated hologram
+     *
+     * @return frames of the animated hologram
+     */
     public ArrayList<Frame> getFrames() {
         ArrayList<Frame> list = new ArrayList<Frame>();
         list.addAll(this.frames);
@@ -83,20 +120,13 @@ public class AnimatedHologram extends Hologram {
     }
 
     @Override
-    public boolean isSimple() {
-        return false;
-    }
-
-    @Override
-    protected void setSimple(boolean flag) {
-        // Do nothing. Animated holograms can't be simple
-    }
-
-    @Override
     public void updateLine(int index, String content) {
         // Nothing can happen here. Lines are always changing
     }
 
+    /**
+     * Begin the animation of the hologram
+     */
     public void animate() {
         if (this.isAnimating()) {
             this.cancelAnimation();
@@ -121,10 +151,18 @@ public class AnimatedHologram extends Hologram {
         }.runTaskLater(HoloAPI.getInstance(), currentFrame.getDelay());
     }
 
+    /**
+     * Gets whether the animated hologram has an active animation
+     *
+     * @return true if the hologram is currently animating
+     */
     public boolean isAnimating() {
         return this.displayTask != null;
     }
 
+    /**
+     * Cancels the current animation
+     */
     public void cancelAnimation() {
         if (this.displayTask != null) {
             this.displayTask.cancel();
@@ -138,6 +176,14 @@ public class AnimatedHologram extends Hologram {
         this.animate();
     }
 
+    /**
+     * Updates the animation for an observer
+     * <p>
+     * Important to note: This method may yield unexpected results if not used properly
+     *
+     * @param observer Player to update the animation for
+     * @param lines Lines to display
+     */
     public void updateAnimation(Player observer, String[] lines) {
         for (int index = 0; index < lines.length; index++) {
             this.updateNametag(observer, lines[index], index);
@@ -159,14 +205,42 @@ public class AnimatedHologram extends Hologram {
         this.showAnimation(observer, x, y, z, currentFrame.getLines());
     }
 
+    /**
+     * Shows the the animation to an observer
+     * <p>
+     * Important to note: This method may yield unexpected results if not used properly
+     *
+     * @param observer Player to show the animation to
+     * @param lines Lines to display
+     */
     public void showAnimation(Player observer, String[] lines) {
         this.showAnimation(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), lines);
     }
 
+    /**
+     * Shows the the animation to an observer at a position
+     * <p>
+     * Important to note: This method may yield unexpected results if not used properly
+     *
+     * @param observer Player to show the animation to
+     * @param v Position to show the animation at
+     * @param lines Lines to display
+     */
     public void showAnimation(Player observer, Vector v, String[] lines) {
         this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), lines);
     }
 
+    /**
+     * Shows the the animation to an observer at a position
+     * <p>
+     * Important to note: This method may yield unexpected results if not used properly
+     *
+     * @param observer Player to show the animation to
+     * @param x x value of the position the animation is to be shown
+     * @param y y value of the position the animation is to be shown
+     * @param z z value of the position the animation is to be shown
+     * @param lines Lines to display
+     */
     private void showAnimation(Player observer, double x, double y, double z, String[] lines) {
         for (int index = 0; index < lines.length; index++) {
             this.generateAnimation(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);

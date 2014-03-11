@@ -16,15 +16,26 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Represents a generator used to produce animated image frames from either a GIF or set of images
+ */
+
 public class AnimatedImageGenerator implements Generator {
 
-    // Based off: https://github.com/aadnk/DisplayFloatingImages/blob/master/DisplayFloatingImage/src/main/java/com/comphenix/example/nametags/GifImageMessage.java
+    // https://github.com/aadnk/DisplayFloatingImages/blob/master/DisplayFloatingImage/src/main/java/com/comphenix/example/nametags/GifImageMessage.java
 
     private String key;
     protected ImmutableList<GIFFrame> frames;
     private int maxHeight;
     private GIFFrame largestFrame;
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param frameRate frame rate of the hologram display
+     * @param imageFrames frames to use in the animated hologram
+     */
     public AnimatedImageGenerator(String key, int frameRate, ImageGenerator... imageFrames) {
         this.key = key;
         for (ImageGenerator generator : imageFrames) {
@@ -32,10 +43,31 @@ public class AnimatedImageGenerator implements Generator {
         }
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param gifFile GIF file used to generate the display
+     * @param frameRate frame rate of the hologram display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, File gifFile, int frameRate, int height, ImageChar imgChar) throws IOException {
         this(key, gifFile, frameRate, height, imgChar, false);
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param gifFile GIF file used to generate the display
+     * @param frameRate frame rate of the hologram display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, File gifFile, int frameRate, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(gifFile);
@@ -43,20 +75,60 @@ public class AnimatedImageGenerator implements Generator {
         this.prepareFrameRate(frameRate);
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param gifFile GIF file used to generate the display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, File gifFile, int height, ImageChar imgChar) throws IOException {
         this(key, gifFile, height, imgChar, false);
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param gifFile GIF file used to generate the display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, File gifFile, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(gifFile);
         this.prepare(height, imgChar, requiresBorder);
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input {@link java.io.InputStream} used to generate the display
+     * @param frameRate frame rate of the hologram display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, InputStream input, int frameRate, int height, ImageChar imgChar) throws IOException {
         this(key, input, frameRate, height, imgChar, false);
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input {@link java.io.InputStream} used to generate the display
+     * @param frameRate frame rate of the hologram display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, InputStream input, int frameRate, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(input);
@@ -64,10 +136,29 @@ public class AnimatedImageGenerator implements Generator {
         this.prepareFrameRate(frameRate);
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input {@link java.io.InputStream} used to generate the display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, InputStream input, int height, ImageChar imgChar) throws IOException {
         this(key, input, height, imgChar, false);
     }
 
+    /**
+     * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
+     *
+     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input {@link java.io.InputStream} used to generate the display
+     * @param height height of the display
+     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     * @throws IOException If an input exception occurred or the image could not be found
+     */
     public AnimatedImageGenerator(String key, InputStream input, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(input);
@@ -222,15 +313,30 @@ public class AnimatedImageGenerator implements Generator {
         return key;
     }
 
+    /**
+     * Gets the frames of the generator
+     *
+     * @return frames of the generator
+     */
     public ArrayList<GIFFrame> getFrames() {
         ArrayList<GIFFrame> frames = new ArrayList<GIFFrame>(this.frames);
         return frames;
     }
 
+    /**
+     * Gets the maximum frame height
+     *
+     * @return maximum frame height
+     */
     public int getMaxHeight() {
         return maxHeight;
     }
 
+    /**
+     * Gets the largest frame of the generator
+     *
+     * @return largest frame of the generator
+     */
     public GIFFrame getLargestFrame() {
         return largestFrame;
     }

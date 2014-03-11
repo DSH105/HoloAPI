@@ -78,7 +78,9 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
         ImageGenerator g = this.KEY_TO_IMAGE_MAP.get(key);
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
-                Lang.sendTo(sender, Lang.LOADING_URL_IMAGE.getValue().replace("%key%", key));
+                if (sender != null) {
+                    Lang.sendTo(sender, Lang.LOADING_URL_IMAGE.getValue().replace("%key%", key));
+                }
                 this.prepareUrlGenerator(sender, key);
                 return null;
             } else {
@@ -122,6 +124,11 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
     @Override
     public boolean exists(String key) {
         return this.KEY_TO_IMAGE_MAP.containsKey(key);
+    }
+
+    @Override
+    public boolean existsAsUnloadedUrl(String key) {
+        return this.URL_UNLOADED.containsKey(key);
     }
 
     @Override

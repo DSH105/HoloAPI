@@ -93,7 +93,9 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
             if (this.URL_UNLOADED.get(key) != null) {
                 HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
                 Lang.sendTo(sender, Lang.LOADING_URL_ANIMATION.getValue().replace("%key%", key));
-                this.prepareUrlGenerator(sender, key);
+                if (sender != null) {
+                    this.prepareUrlGenerator(sender, key);
+                }
                 return null;
             } else {
                 Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
@@ -153,6 +155,11 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
     @Override
     public boolean exists(String key) {
         return this.KEY_TO_IMAGE_MAP.containsKey(key);
+    }
+
+    @Override
+    public boolean existsAsUnloadedUrl(String key) {
+        return this.URL_UNLOADED.containsKey(key);
     }
 
     @Override

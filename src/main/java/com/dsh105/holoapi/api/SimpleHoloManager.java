@@ -41,6 +41,28 @@ public class SimpleHoloManager implements HoloManager {
         return map;
     }
 
+    @Override
+    public HashMap<Hologram, Plugin> getAllComplexHolograms() {
+        HashMap<Hologram, Plugin> map = new HashMap<Hologram, Plugin>();
+        for (Map.Entry<Hologram, Plugin> entry : this.holograms.entrySet()) {
+            if (!entry.getKey().isSimple()) {
+                map.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public HashMap<Hologram, Plugin> getAllSimpleHolograms() {
+        HashMap<Hologram, Plugin> map = new HashMap<Hologram, Plugin>();
+        for (Map.Entry<Hologram, Plugin> entry : this.holograms.entrySet()) {
+            if (entry.getKey().isSimple()) {
+                map.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return map;
+    }
+
     public void clearAll() {
         Iterator<Hologram> i = holograms.keySet().iterator();
         while (i.hasNext()) {
@@ -124,7 +146,7 @@ public class SimpleHoloManager implements HoloManager {
             this.config.set(path + "z", hologram.getDefaultZ());
             if (hologram instanceof AnimatedHologram) {
                 AnimatedHologram animatedHologram = (AnimatedHologram) hologram;
-                if (animatedHologram.isImageGenerated()) {
+                if (animatedHologram.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(animatedHologram.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(animatedHologram.getAnimationKey())) {
                     this.config.set(path + "animatedImage.image", true);
                     this.config.set(path + "animatedImage.key", animatedHologram.getAnimationKey());
                 } else {
@@ -293,7 +315,7 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
-        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).isSimple(true).build();
+        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
@@ -324,7 +346,7 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, final Vector velocity, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
-        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).isSimple(true).build();
+        final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e);
