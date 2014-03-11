@@ -172,6 +172,7 @@ public class HoloAPI extends DSHPlugin {
 
     @Override
     public void onDisable() {
+        this.COMMAND_MANAGER.unregister();
         MANAGER.clearAll();
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
