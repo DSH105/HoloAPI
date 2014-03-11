@@ -28,6 +28,7 @@ public class ConfigOptions extends Options {
         set("chatBubbles.followPlayer", false);
         set("chatBubbles.nameFormat", "&6&o");
         set("chatBubbles.displayDurationSeconds", 8);
+        set("chatBubbles.charactersPerLine", 30);
 
         set("indicators.damage.enable", false);
         set("indicators.damage.format", "&c");

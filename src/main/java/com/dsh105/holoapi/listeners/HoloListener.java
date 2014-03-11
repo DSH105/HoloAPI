@@ -21,6 +21,8 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+
 public class HoloListener implements Listener {
 
     @EventHandler
@@ -105,40 +107,56 @@ public class HoloListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
-        if (!event.isCancelled()) {
-            YAMLConfig config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
-            if (config.getBoolean("chatBubbles.show", false)) {
-                final Player p = event.getPlayer();
-                Location loc = p.getEyeLocation().clone();
-                loc.add(0.0D, 0.5D, 0.0D);
-                final int duration = config.getInt("chatBubbles.displayDurationSeconds", 8);
-                final boolean rise = config.getBoolean("chatBubbles.rise", true);
-                final boolean followPlayer = config.getBoolean("chatBubbles.followPlayer", false);
-                final Hologram hologram = HoloAPI.getManager().createSimpleHologram(loc, duration, !followPlayer, ChatColor.translateAlternateColorCodes('&', config.getString("chatBubbles.nameFormat", "&6&o")) + event.getPlayer().getName() + ":", ChatColor.WHITE + event.getMessage());
+    public void onAsyncPlayerChat(final AsyncPlayerChatEvent event) {
+        HoloAPI.getInstance().getServer().getScheduler().runTask(HoloAPI.getInstance(), new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!event.isCancelled()) {
+                    YAMLConfig config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
+                    if (config.getBoolean("chatBubbles.show", false)) {
+                        final Player p = event.getPlayer();
+                        Location loc = p.getEyeLocation().clone();
+                        loc.add(0.0D, 0.5D, 0.0D);
+                        final int duration = config.getInt("chatBubbles.displayDurationSeconds", 8);
+                        final boolean rise = config.getBoolean("chatBubbles.rise", true);
+                        final boolean followPlayer = config.getBoolean("chatBubbles.followPlayer", false);
+                        int charsPerLine = config.getInt("chatBubbles.charactersPerLine", 30);
 
-                if (followPlayer) {
-                    class FollowPlayer extends BukkitRunnable {
+                        String msg = event.getMessage();
+                        ArrayList<String> lines = new ArrayList<String>();
+                        lines.add(ChatColor.translateAlternateColorCodes('&', config.getString("chatBubbles.nameFormat", "&6&o")) + event.getPlayer().getName() + ":");
+                        int index = 0;
+                        while (index < msg.length()) {
+                            lines.add(ChatColor.WHITE + msg.substring(index, Math.min(index + charsPerLine, msg.length())));
+                            index += charsPerLine;
+                        }
 
-                        private int i;
-                        private double riseDiff = 0.0D;
+                        final Hologram hologram = HoloAPI.getManager().createSimpleHologram(loc, duration, !followPlayer, lines);
 
-                        @Override
-                        public void run() {
-                            if (p == null || ++i >= (duration * 20)) {
-                                this.cancel();
+                        if (followPlayer) {
+                            class FollowPlayer extends BukkitRunnable {
+
+                                private int i;
+                                private double riseDiff = 0.0D;
+
+                                @Override
+                                public void run() {
+                                    if (p == null || ++i >= (duration * 20)) {
+                                        this.cancel();
+                                    }
+                                    Location l = p.getEyeLocation();
+                                    if (rise) {
+                                        riseDiff += 0.02D;
+                                    }
+                                    hologram.move(new Vector(l.getX(), l.getY() + 0.5D + riseDiff, l.getZ()));
+                                }
                             }
-                            Location l = p.getEyeLocation();
-                            if (rise) {
-                                riseDiff += 0.02D;
-                            }
-                            hologram.move(new Vector(l.getX(), l.getY() + 0.5D + riseDiff, l.getZ()));
+
+                            new FollowPlayer().runTaskTimer(HoloAPI.getInstance(), 1L, 1L);
                         }
                     }
-
-                    new FollowPlayer().runTaskTimer(HoloAPI.getInstance(), 1L, 1L);
                 }
             }
-        }
+        });
     }
 }
