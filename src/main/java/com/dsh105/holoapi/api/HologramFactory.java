@@ -186,7 +186,7 @@ public class HologramFactory {
         }
 
         if (Bukkit.getWorld(this.worldName) == null) {
-            HoloAPI.getManager().clearFromFile(this.saveId);
+            //HoloAPI.getManager().clearFromFile(this.saveId);
             HoloAPI.LOGGER.log(Level.SEVERE, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + "!");
             return null;
         }

@@ -402,7 +402,7 @@ public class Hologram {
     public void clear(Player observer) {
         int[] ids = new int[this.getTagCount()];
 
-        for (int i = 0; i < this.getTagCount(); i++) {
+        for (int i = 0; i < ids.length; i++) {
             ids[i] = i;
         }
         clearTags(observer, ids);
