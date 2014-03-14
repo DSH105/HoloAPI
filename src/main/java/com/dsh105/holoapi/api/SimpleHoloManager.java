@@ -384,7 +384,7 @@ public class SimpleHoloManager implements HoloManager {
             stopTracking(hologram);
             for (Hologram h : getAllHolograms().keySet()) {
                 if (h.isSimple()) {
-                    h.refreshDisplay();
+                    //h.refreshDisplay();
                 }
             }
         }
