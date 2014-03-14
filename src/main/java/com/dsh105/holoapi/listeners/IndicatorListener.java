@@ -103,7 +103,7 @@ public class IndicatorListener implements Listener {
 
                     @Override
                     public void run() {
-                        if (p == null || ++i >= (duration * 20)) {
+                        if (p == null || ++i >= ((duration * 20) - 1)) {
                             this.cancel();
                         }
                         Location l = p.getEyeLocation();
