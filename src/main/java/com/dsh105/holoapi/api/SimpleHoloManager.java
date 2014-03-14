@@ -156,7 +156,7 @@ public class SimpleHoloManager implements HoloManager {
                         this.config.set(path + "animatedImage.frames." + index + ".delay", f.getDelay());
                         int tagIndex = 0;
                         for (String tag : f.getLines()) {
-                            this.config.set(path + "animatedImage.frames." + index + "." + tagIndex, tag);
+                            this.config.set(path + "animatedImage.frames." + index + "." + tagIndex, tag.replace(ChatColor.COLOR_CHAR, '&'));
                             tagIndex++;
                         }
                         index++;
@@ -209,7 +209,7 @@ public class SimpleHoloManager implements HoloManager {
                                     int delay = config.getInt("holograms." + key + ".animatedImage.frames." + frameKey + ".delay", 5);
                                     for (String tagKey : lines.getKeys(false)) {
                                         if (!tagKey.equalsIgnoreCase("delay")) {
-                                            tagList.add(config.getString("holograms." + key + ".animatedImage.frames." + frameKey + "." + tagKey));
+                                            tagList.add(ChatColor.translateAlternateColorCodes('&', config.getString("holograms." + key + ".animatedImage.frames." + frameKey + "." + tagKey)));
                                         }
                                     }
                                     if (!tagList.isEmpty()) {
