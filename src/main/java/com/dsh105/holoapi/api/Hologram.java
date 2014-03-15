@@ -457,7 +457,7 @@ public class Hologram {
         String msg = this.tags[index].replace("%name%", observer.getName());
         if (msg.contains("%time%")) {
             Calendar c = Calendar.getInstance();
-            c.add(Calendar.HOUR_OF_DAY, -HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
+            c.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
             msg = msg.replace("%time%", new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime()));
         }
 
