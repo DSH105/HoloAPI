@@ -35,7 +35,24 @@ public class IndicatorListener implements Listener {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
                     || config.getBoolean("indicators.damage.showForMobs", false)) {
                 if (!(event instanceof EntityDamageByEntityEvent)) {
-                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " " + HEART_CHARACTER);
+                    String colours = config.getString("indicators.damage.format.default", "&c");
+
+                    if (event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
+                        colours = config.getString("indicators.damage.format.drowning", "&b");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+                        colours = config.getString("indicators.damage.format.fire", "&4");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
+                        colours = config.getString("indicators.damage.format.magic", "&5");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
+                        colours = config.getString("indicators.damage.format.poison", "&2");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.STARVATION) {
+                        colours = config.getString("indicators.damage.format.starvation", "&6");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.WITHER) {
+                        colours = config.getString("indicators.damage.format.wither", "&8");
+                    }
+
+                    String text = ChatColor.translateAlternateColorCodes('&', colours) + "-" + event.getDamage() + " " + HEART_CHARACTER;
+                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, text);
                 }
             }
         }
