@@ -1,7 +1,6 @@
 package com.dsh105.holoapi.listeners;
 
 import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
@@ -26,6 +25,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -63,7 +63,7 @@ public class IndicatorListener implements Listener {
                         colours = config.getString("indicators.damage.format.wither", "&8");
                     }
 
-                    String text = ChatColor.translateAlternateColorCodes('&', colours) + "-" + event.getDamage() + " " + HEART_CHARACTER;
+                    String text = ChatColor.translateAlternateColorCodes('&', colours) + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
                     HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, text);
                 }
             }
@@ -77,7 +77,7 @@ public class IndicatorListener implements Listener {
                     || config.getBoolean("indicators.damage.showForMobs", true)) {
                 Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
                 v.setY(v.getY() + 0.05D);
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format.default", "&c")) + "-" + event.getDamage() + " " + HEART_CHARACTER);
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format.default", "&c")) + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
             }
         }
     }
@@ -107,6 +107,8 @@ public class IndicatorListener implements Listener {
                 if (potion != null) {
                     this.showPotionHologram(event.getPlayer(), potion.getEffects());
                 }
+            } else if (event.getItem().getType() == Material.GOLDEN_APPLE) {
+                HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.potion.goldapple.format", "&e+ $effect%").replace("%effect%", "Golden Apple")));
             }
         }
     }

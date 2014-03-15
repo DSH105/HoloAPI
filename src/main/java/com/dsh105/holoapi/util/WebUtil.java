@@ -15,8 +15,7 @@ public class WebUtil {
             InputStream in = con.getInputStream();
             String encoding = con.getContentEncoding();
             encoding = encoding == null ? "UTF-8" : encoding;
-            String body = IOUtils.toString(in, encoding);
-            return body;
+            return IOUtils.toString(in, encoding);
         } catch (Exception e) {
             e.printStackTrace();
         }

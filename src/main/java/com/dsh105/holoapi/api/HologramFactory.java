@@ -108,8 +108,8 @@ public class HologramFactory {
     /**
      * Adds text to constructed Holograms
      *
-     * @param text
-     * @returnThis object
+     * @param text Text to add to constructed holograms
+     * @return This object
      */
     public HologramFactory withText(String... text) {
         for (String tag : text) {

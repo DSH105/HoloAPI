@@ -237,8 +237,7 @@ public class SimpleHoloManager implements HoloManager {
                                 }
 
                             } else {
-                                HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
-                                continue;
+                                HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
                             }
                         }
                         if (containsImage) {
@@ -283,8 +282,7 @@ public class SimpleHoloManager implements HoloManager {
                         hf.withText(ChatColor.translateAlternateColorCodes('&', value));
                     }
                 } else {
-                    HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
-                    continue;
+                    HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
                 }
             }
             if (!hf.isEmpty()) {
@@ -337,7 +335,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, Vector velocity, List<String> lines) {
-        return this.createSimpleHologram(location, secondsUntilRemoved, velocity, lines);
+        return this.createSimpleHologram(location, secondsUntilRemoved, velocity, lines.toArray(new String[lines.size()]));
     }
 
     @Override
@@ -379,11 +377,11 @@ public class SimpleHoloManager implements HoloManager {
                 t.cancel();
             }
             stopTracking(hologram);
-            for (Hologram h : getAllHolograms().keySet()) {
+            /*for (Hologram h : getAllHolograms().keySet()) {
                 if (h.isSimple()) {
                     //h.refreshDisplay();
                 }
-            }
+            }*/
         }
     }
 

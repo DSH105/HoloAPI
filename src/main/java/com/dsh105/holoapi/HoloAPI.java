@@ -168,7 +168,7 @@ public class HoloAPI extends DSHPlugin {
 
     @Override
     public void onDisable() {
-        this.COMMAND_MANAGER.unregister();
+        COMMAND_MANAGER.unregister();
         MANAGER.clearAll();
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
@@ -282,8 +282,7 @@ public class HoloAPI extends DSHPlugin {
         if (commandLabel.equalsIgnoreCase("holoupdate")) {
             if (Perm.UPDATE.hasPerm(sender, true, true)) {
                 if (updateChecked) {
-                    @SuppressWarnings("unused")
-                    Updater updater = new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+                    new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
                     return true;
                 } else {
                     Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.getValue());
@@ -295,6 +294,6 @@ public class HoloAPI extends DSHPlugin {
     }
 
     public enum ConfigType {
-        MAIN, DATA, LANG;
+        MAIN, DATA, LANG
     }
 }

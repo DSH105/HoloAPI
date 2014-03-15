@@ -63,10 +63,15 @@ public class ConfigOptions extends Options {
         set("indicators.exp.timeVisible", 4);
 
         set("indicators.potion.enable", false);
-        set("indicators.potion.format", "&e");
         set("indicators.potion.timeVisible", 4);
         set("indicators.potion.showForPlayers", true);
         set("indicators.potion.showForMobs", true);
+
+        String[] potions = new String[] {"speed", "slow", "fast_digging", "slow_digging", "increase_damage", "heal", "harm", "jump", "confusion", "regeneration", "damage_resistance", "fire_resistance", "water_breathing", "invisibility", "blindness", "night_vision", "hunger", "weakness", "poison", "wither", "health_boost", "absorption", "saturation"};
+
+        for (String s : potions) {
+            set("indicators.potion.format." + s, "&e %effect% %amp%");
+        }
 
         set("indicators.gainHealth.enable", false);
         set("indicators.gainHealth.format", "&a");
