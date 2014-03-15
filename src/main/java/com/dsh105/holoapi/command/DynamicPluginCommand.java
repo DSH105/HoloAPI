@@ -1,12 +1,13 @@
 package com.dsh105.holoapi.command;
 
-import java.util.Arrays;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Arrays;
 
 public class DynamicPluginCommand extends Command implements PluginIdentifiableCommand {
     protected final CommandExecutor owner;
@@ -60,7 +61,7 @@ public class DynamicPluginCommand extends Command implements PluginIdentifiableC
         if (registeredWith instanceof CommandManager) {
             try {
                 for (String permission : permissions) {
-                    if(sender.hasPermission(permission))
+                    if (sender.hasPermission(permission))
                         return true;
                 }
                 return false;

@@ -5,9 +5,6 @@ import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import com.dsh105.holoapi.util.UnicodeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -15,9 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+
 /**
  * A HologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.Hologram} which can be managed by HoloAPI
- * <p>
+ * <p/>
  * The HologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to the constructor
  */
 
@@ -86,7 +87,7 @@ public class HologramFactory {
      * Sets the location for constructed Holograms
      *
      * @param vectorLocation a {@link org.bukkit.util.Vector} representing the coordinates of constructed Holograms
-     * @param worldName the world name to place constructed Hologram in
+     * @param worldName      the world name to place constructed Hologram in
      * @return This object
      */
     public HologramFactory withLocation(Vector vectorLocation, String worldName) {
@@ -119,11 +120,11 @@ public class HologramFactory {
 
     /**
      * Adds an image to constructed Holograms
-     * <p>
-     * @see com.dsh105.holoapi.image.ImageGenerator
+     * <p/>
      *
      * @param imageGenerator image generator used to prepare Holograms
      * @return This object
+     * @see com.dsh105.holoapi.image.ImageGenerator
      */
     public HologramFactory withImage(ImageGenerator imageGenerator) {
         int first = this.tags.size() - 1;

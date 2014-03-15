@@ -1,18 +1,19 @@
 package com.dsh105.holoapi.image;
 
-import java.awt.Color;
+import org.bukkit.ChatColor;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import javax.imageio.ImageIO;
-import org.bukkit.ChatColor;
 
 /**
  * Represents a generator used to produce images
- *
+ * <p/>
  * Original code by @bobacadodl
  * https://forums.bukkit.org/threads/204902/
  */
@@ -44,10 +45,10 @@ public class ImageGenerator implements Generator {
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param image {@link java.awt.image.BufferedImage} used to generate the image
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param image          {@link java.awt.image.BufferedImage} used to generate the image
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      */
     public ImageGenerator(String imageKey, BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
@@ -58,10 +59,10 @@ public class ImageGenerator implements Generator {
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param imageUrl URL to search the image for
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param imageUrl       URL to search the image for
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      */
     public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean requiresBorder) {
@@ -71,11 +72,11 @@ public class ImageGenerator implements Generator {
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param imageUrl URL to search the image for
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
-     * @param loadUrl whether to automatically load the image from the specified URL
+     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param imageUrl       URL to search the image for
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param loadUrl        whether to automatically load the image from the specified URL
      * @param requiresBorder whether the display requires a border
      */
     public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean loadUrl, boolean requiresBorder) {
@@ -93,10 +94,10 @@ public class ImageGenerator implements Generator {
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param imageFile file used to generate the image
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param imageFile      file used to generate the image
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      */
     public ImageGenerator(String imageKey, File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {

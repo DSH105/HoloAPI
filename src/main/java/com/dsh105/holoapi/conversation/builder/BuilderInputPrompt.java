@@ -2,10 +2,11 @@ package com.dsh105.holoapi.conversation.builder;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.Lang;
-import java.util.ArrayList;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
+
+import java.util.ArrayList;
 
 public class BuilderInputPrompt extends ValidatingPrompt {
 

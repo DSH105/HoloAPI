@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 
 /**
  * An AnimatedHologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.AnimatedHologram} which can be managed by HoloAPI
- * <p>
+ * <p/>
  * The AnimatedHologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to the constructor
  */
 
@@ -81,7 +81,7 @@ public class AnimatedHologramFactory {
      * Sets the location for constructed AnimatedHolograms
      *
      * @param vectorLocation a {@link org.bukkit.util.Vector} representing the coordinates of constructed AnimatedHolograms
-     * @param worldName the world name to place constructed AnimatedHolograms in
+     * @param worldName      the world name to place constructed AnimatedHolograms in
      * @return This object
      */
     public AnimatedHologramFactory withLocation(Vector vectorLocation, String worldName) {
@@ -92,11 +92,11 @@ public class AnimatedHologramFactory {
 
     /**
      * Adds frames of text to constructed AnimatedHolograms
-     * <p>
-     * @see com.dsh105.holoapi.image.AnimatedTextGenerator
+     * <p/>
      *
      * @param textGenerator text generator used to prepare AnimatedHolograms
      * @return This object
+     * @see com.dsh105.holoapi.image.AnimatedTextGenerator
      */
     public AnimatedHologramFactory withText(AnimatedTextGenerator textGenerator) {
         this.textGenerator = textGenerator;
@@ -106,11 +106,11 @@ public class AnimatedHologramFactory {
 
     /**
      * Adds image frames to constructed AnimatedHolograms
-     * <p>
-     * @see com.dsh105.holoapi.image.AnimatedImageGenerator
+     * <p/>
      *
      * @param animatedImage animation generator used to prepare AnimatedHolograms
      * @return This object
+     * @see com.dsh105.holoapi.image.AnimatedImageGenerator
      */
     public AnimatedHologramFactory withImage(AnimatedImageGenerator animatedImage) {
         this.animatedImage = animatedImage;
@@ -119,7 +119,7 @@ public class AnimatedHologramFactory {
     }
 
     /**
-     /**
+     * /**
      * Adds image frames to constructed AnimatedHolograms
      *
      * @param animatedImageKey key of the animation generator to search for. If a generator is not found, the animation will not be added
@@ -162,7 +162,7 @@ public class AnimatedHologramFactory {
         }
         AnimatedHologram animatedHologram;
         if (this.imageGenerated) {
-             animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.animatedImage);
+            animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.animatedImage);
         } else {
             animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.textGenerator);
         }
