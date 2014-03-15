@@ -22,6 +22,8 @@ public class ConfigOptions extends Options {
         set("checkForUpdates", true);
 
         set("verticalLineSpacing", HoloAPI.getHologramLineSpacing());
+        set("timezone.offset", 0);
+        set("timezone.showZoneMarker", true);
 
         set("chatBubbles.show", false);
         set("chatBubbles.rise", true);

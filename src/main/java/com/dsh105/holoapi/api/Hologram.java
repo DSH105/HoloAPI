@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
@@ -9,12 +10,10 @@ import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityMetadata;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityTeleport;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -455,8 +454,15 @@ public class Hologram {
         horse.setY(y + diffY + 55);
         horse.setZ(z);
 
+        String msg = this.tags[index].replace("%name%", observer.getName());
+        if (msg.contains("%time%")) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.ZONE_OFFSET, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
+            msg = msg.replace("%time%", new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime()));
+        }
+
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, this.tags[index].replace("%name%", observer.getName()));
+        dw.watch(10, msg);
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setMetadata(dw);
