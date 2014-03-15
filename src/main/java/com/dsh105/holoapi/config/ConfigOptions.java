@@ -52,6 +52,7 @@ public class ConfigOptions extends Options {
         set("indicators.damage.format.magic", "&5");
         set("indicators.damage.format.poison", "&2");
         set("indicators.damage.format.starvation", "&6");
+        set("indicators.damage.format.thorns", "&e");
         set("indicators.damage.format.wither", "&8");
         set("indicators.damage.timeVisible", 4);
         set("indicators.damage.showForPlayers", true);

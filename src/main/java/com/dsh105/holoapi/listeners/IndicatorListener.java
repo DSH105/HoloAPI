@@ -47,6 +47,8 @@ public class IndicatorListener implements Listener {
                         colours = config.getString("indicators.damage.format.poison", "&2");
                     } else if (event.getCause() == EntityDamageEvent.DamageCause.STARVATION) {
                         colours = config.getString("indicators.damage.format.starvation", "&6");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.THORNS) {
+                        colours = config.getString("indicators.damage.format.thorns", "&e");
                     } else if (event.getCause() == EntityDamageEvent.DamageCause.WITHER) {
                         colours = config.getString("indicators.damage.format.wither", "&8");
                     }
