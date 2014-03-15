@@ -41,6 +41,11 @@ public class ConfigOptions extends Options {
         set("indicators.exp.enable", false);
         set("indicators.exp.format", "&a");
         set("indicators.exp.timeVisible", 4);
+        set("indicators.gainHealth.enable", false);
+        set("indicators.gainHealth.format", "&a");
+        set("indicators.gainHealth.timeVisible", 4);
+        set("indicators.gainHealth.showForPlayers", true);
+        set("indicators.gainHealth.showForMobs", true);
 
         // HoloAPI will automatically replace the following to the specified unicode character if it is found in a hologram
         set("specialCharacters.[x]", "2591");

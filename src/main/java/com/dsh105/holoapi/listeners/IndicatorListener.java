@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,6 +20,8 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 
 public class IndicatorListener implements Listener {
+
+    private static char HEART_CHARACTER = '\u2764';
 
     private YAMLConfig config;
 
@@ -32,7 +35,7 @@ public class IndicatorListener implements Listener {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
                     || config.getBoolean("indicators.damage.showForMobs", false)) {
                 if (!(event instanceof EntityDamageByEntityEvent)) {
-                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " \u2764");
+                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " " + HEART_CHARACTER);
                 }
             }
         }
@@ -41,11 +44,11 @@ public class IndicatorListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (config.getBoolean("indicators.damage.enable", false)) {
-            if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
-                    || config.getBoolean("indicators.damage.showForMobs", false)) {
+            if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
+                    || config.getBoolean("indicators.damage.showForMobs", true)) {
                 Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
                 v.setY(v.getY() + 0.05D);
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " \u2764");
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " " + HEART_CHARACTER);
             }
         }
     }
@@ -54,6 +57,16 @@ public class IndicatorListener implements Listener {
     public void onExpGain(PlayerExpChangeEvent event) {
         if (config.getBoolean("indicators.exp.enable", false)) {
             HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.exp.format", "&a")) + "+" + event.getAmount() + " exp");
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityRegainHealth(EntityRegainHealthEvent event) {
+        if (config.getBoolean("indicators.gainHealth.enable", false)) {
+            if (event.getEntity() instanceof Player && config.getBoolean("indicators.gainHealth.showForPlayers", true)
+                    || config.getBoolean("indicators.gainHealth.showForMobs", true)) {
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.gainHealth.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.gainHealth.format", "&a")) + "+" + event.getAmount() + " " + HEART_CHARACTER);
+            }
         }
     }
 
