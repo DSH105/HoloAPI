@@ -31,7 +31,7 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
-        if (config.getBoolean("indicators.damage.enable", false)) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
                     || config.getBoolean("indicators.damage.showForMobs", false)) {
                 if (!(event instanceof EntityDamageByEntityEvent)) {
@@ -43,7 +43,7 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (config.getBoolean("indicators.damage.enable", false)) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
                     || config.getBoolean("indicators.damage.showForMobs", true)) {
                 Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
