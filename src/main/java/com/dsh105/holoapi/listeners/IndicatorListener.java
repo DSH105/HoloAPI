@@ -1,10 +1,15 @@
 package com.dsh105.holoapi.listeners;
 
 import com.dsh105.dshutils.config.YAMLConfig;
+import com.dsh105.dshutils.logger.ConsoleLogger;
+import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.util.RomanNumeral;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,12 +17,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class IndicatorListener implements Listener {
 
@@ -86,6 +96,38 @@ public class IndicatorListener implements Listener {
                     || config.getBoolean("indicators.gainHealth.showForMobs", true)) {
                 HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.gainHealth.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.gainHealth.format", "&a")) + "+" + event.getAmount() + " " + HEART_CHARACTER);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onConsumePotion(PlayerItemConsumeEvent event) {
+        if (config.getBoolean("indicators.potion.enable", false)) {
+            if (event.getItem().getType() == Material.POTION) {
+                Potion potion = Potion.fromItemStack(event.getItem());
+                if (potion != null) {
+                    this.showPotionHologram(event.getPlayer(), potion.getEffects());
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onSplashPotion(PotionSplashEvent event) {
+        if (config.getBoolean("indicators.potion.enable", false)) {
+            for (Entity e : event.getAffectedEntities()) {
+                if (event.getEntity() instanceof Player && config.getBoolean("indicators.potion.showForPlayers", true)
+                        || config.getBoolean("indicators.potion.showForMobs", true)) {
+                    this.showPotionHologram(e, event.getPotion().getEffects());
+                }
+            }
+        }
+    }
+
+    private void showPotionHologram(Entity e, Collection<PotionEffect> effects) {
+        for (PotionEffect effect : effects) {
+            String type = StringUtil.capitalise(effect.getType().getName().replace("_", " "));
+            int amp = effect.getAmplifier() < 1 ? 1 : effect.getAmplifier();
+            HoloAPI.getManager().createSimpleHologram(e.getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.potion.format." + type, "&e")) + "+ " + type + " " + new RomanNumeral(amp));
         }
     }
 

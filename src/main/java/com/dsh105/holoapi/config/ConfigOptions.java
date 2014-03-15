@@ -62,6 +62,12 @@ public class ConfigOptions extends Options {
         set("indicators.exp.format", "&a");
         set("indicators.exp.timeVisible", 4);
 
+        set("indicators.potion.enable", false);
+        set("indicators.potion.format", "&e");
+        set("indicators.potion.timeVisible", 4);
+        set("indicators.potion.showForPlayers", true);
+        set("indicators.potion.showForMobs", true);
+
         set("indicators.gainHealth.enable", false);
         set("indicators.gainHealth.format", "&a");
         set("indicators.gainHealth.timeVisible", 4);
