@@ -86,7 +86,9 @@ public class IndicatorListener implements Listener {
             int charsPerLine = config.getInt("chatBubbles.charactersPerLine", 30);
 
             ArrayList<String> lines = new ArrayList<String>();
-            lines.add(ChatColor.translateAlternateColorCodes('&', config.getString("chatBubbles.nameFormat", "&6&o")) + p.getName() + ":");
+            if (config.getBoolean("chatBubbles.showPlayerName")) {
+                lines.add(ChatColor.translateAlternateColorCodes('&', config.getString("chatBubbles.nameFormat", "&6&o")) + p.getName() + ":");
+            }
             int index = 0;
             while (index < msg.length()) {
                 lines.add(ChatColor.WHITE + msg.substring(index, Math.min(index + charsPerLine, msg.length())));

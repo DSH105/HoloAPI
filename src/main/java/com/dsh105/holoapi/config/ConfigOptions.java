@@ -28,6 +28,7 @@ public class ConfigOptions extends Options {
         set("chatBubbles.show", false);
         set("chatBubbles.rise", true);
         set("chatBubbles.followPlayer", false);
+        set("chatBubbles.showPlayerName", true);
         set("chatBubbles.nameFormat", "&6&o");
         set("chatBubbles.displayDurationSeconds", 8);
         set("chatBubbles.charactersPerLine", 30);
