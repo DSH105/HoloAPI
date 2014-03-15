@@ -468,19 +468,18 @@ public class Hologram {
         skull.setZ(z);
         skull.setEntityType(66);
 
-        WrappedDataWatcher dw2 = new WrappedDataWatcher();
+        /*WrappedDataWatcher dw2 = new WrappedDataWatcher();
         dw2.watch(11, Byte.valueOf((byte) 1));
         WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
         metadata.setEntityId(this.getSkullIndex(index));
-        metadata.setMetadata(dw2);
-
+        metadata.setMetadata(dw2);*/
 
         attach.setEntityId(horse.getEntityId());
         attach.setVehicleId(skull.getEntityId());
 
         horse.send(observer);
         skull.send(observer);
-        metadata.send(observer);
+        //metadata.send(observer);
         attach.send(observer);
     }
 
