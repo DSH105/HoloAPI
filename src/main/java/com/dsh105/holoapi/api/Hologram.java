@@ -1,19 +1,8 @@
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TagIdGenerator;
-import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityDestroy;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityMetadata;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityTeleport;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -21,6 +10,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Represents an Hologram that consists of either image or text
@@ -133,7 +125,7 @@ public class Hologram {
 
     /**
      * Gets a map of all players who are viewing the hologram
-     * <p>
+     * <p/>
      * Positions the hologram is viewed from may be different according to different players
      *
      * @return player name to {@link org.bukkit.util.Vector} map of all viewed positions
@@ -164,7 +156,7 @@ public class Hologram {
 
     /**
      * Gets the lines that the hologram consists of
-     * <p>
+     * <p/>
      * Important: Images will be returned as block characters in admist the text characters
      *
      * @return lines of the hologram
@@ -184,7 +176,7 @@ public class Hologram {
 
     /**
      * Gets the save id of this hologram
-     * <p>
+     * <p/>
      * Used to save the hologram to the HoloAPI save files
      *
      * @return key the represents the hologram in save files
@@ -245,7 +237,7 @@ public class Hologram {
 
     /**
      * Changes the world the hologram is visible in
-     * <p>
+     * <p/>
      * Hologram coordinates will remain the same if the world is changed
      *
      * @param worldName name of of the destination world
@@ -295,7 +287,7 @@ public class Hologram {
     /**
      * Sets the content of a line of the hologram
      *
-     * @param index index of the line to set
+     * @param index   index of the line to set
      * @param content new content for the hologram line
      */
     public void updateLine(int index, String content) {
@@ -334,9 +326,9 @@ public class Hologram {
      * Shows the hologram to a player at a location
      *
      * @param observer player to show the hologram to
-     * @param x x coordinate of the location the hologram is visible at
-     * @param y y coordinate of the location the hologram is visible at
-     * @param z z coordinate of the location the hologram is visible at
+     * @param x        x coordinate of the location the hologram is visible at
+     * @param y        y coordinate of the location the hologram is visible at
+     * @param z        z coordinate of the location the hologram is visible at
      */
     public void show(Player observer, double x, double y, double z) {
         /*if (this.playerToLocationMap.containsKey(observer.getName())) {
@@ -350,7 +342,7 @@ public class Hologram {
 
     /**
      * Moves the hologram to a new location
-     * <p>
+     * <p/>
      * Also moves the hologram position for all players currently viewing the hologram
      *
      * @param to position to move to
@@ -364,7 +356,7 @@ public class Hologram {
 
     /**
      * Moves the hologram to a new location
-     * <p>
+     * <p/>
      * Also moves the hologram position for all players currently viewing the hologram
      *
      * @param to position to move to

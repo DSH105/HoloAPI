@@ -13,7 +13,7 @@ public enum ImageChar {
     DARK_SHADE('\u2593', "dark"),
 
     /**
-     *  Represents a half shaded character
+     * Represents a half shaded character
      */
     MEDIUM_SHADE('\u2592', "medium"),
 
@@ -50,6 +50,7 @@ public enum ImageChar {
 
     /**
      * Gets the appropriate ImageChar from its friendly name
+     *
      * @param humanName friendly name used to search for
      * @return ImageChar if found, null if it doesn't exist
      */

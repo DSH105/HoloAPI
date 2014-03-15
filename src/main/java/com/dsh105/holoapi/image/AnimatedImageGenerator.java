@@ -1,20 +1,20 @@
 package com.dsh105.holoapi.image;
 
 import com.google.common.collect.ImmutableList;
-import java.awt.Color;
-import java.awt.Graphics2D;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Represents a generator used to produce animated image frames from either a GIF or set of images
@@ -32,8 +32,8 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param frameRate frame rate of the hologram display
+     * @param key         key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param frameRate   frame rate of the hologram display
      * @param imageFrames frames to use in the animated hologram
      */
     public AnimatedImageGenerator(String key, int frameRate, ImageGenerator... imageFrames) {
@@ -46,11 +46,11 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param gifFile GIF file used to generate the display
+     * @param key       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param gifFile   GIF file used to generate the display
      * @param frameRate frame rate of the hologram display
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param height    height of the display
+     * @param imgChar   {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @throws IOException If an input exception occurred or the image could not be found
      */
     public AnimatedImageGenerator(String key, File gifFile, int frameRate, int height, ImageChar imgChar) throws IOException {
@@ -60,11 +60,11 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param gifFile GIF file used to generate the display
-     * @param frameRate frame rate of the hologram display
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param key            key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param gifFile        GIF file used to generate the display
+     * @param frameRate      frame rate of the hologram display
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      * @throws IOException If an input exception occurred or the image could not be found
      */
@@ -78,9 +78,9 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param key     key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
      * @param gifFile GIF file used to generate the display
-     * @param height height of the display
+     * @param height  height of the display
      * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @throws IOException If an input exception occurred or the image could not be found
      */
@@ -91,10 +91,10 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param gifFile GIF file used to generate the display
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param key            key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param gifFile        GIF file used to generate the display
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      * @throws IOException If an input exception occurred or the image could not be found
      */
@@ -107,11 +107,11 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param input {@link java.io.InputStream} used to generate the display
+     * @param key       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input     {@link java.io.InputStream} used to generate the display
      * @param frameRate frame rate of the hologram display
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param height    height of the display
+     * @param imgChar   {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @throws IOException If an input exception occurred or the image could not be found
      */
     public AnimatedImageGenerator(String key, InputStream input, int frameRate, int height, ImageChar imgChar) throws IOException {
@@ -121,11 +121,11 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param input {@link java.io.InputStream} used to generate the display
-     * @param frameRate frame rate of the hologram display
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param key            key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input          {@link java.io.InputStream} used to generate the display
+     * @param frameRate      frame rate of the hologram display
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      * @throws IOException If an input exception occurred or the image could not be found
      */
@@ -139,9 +139,9 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param input {@link java.io.InputStream} used to generate the display
-     * @param height height of the display
+     * @param key     key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input   {@link java.io.InputStream} used to generate the display
+     * @param height  height of the display
      * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @throws IOException If an input exception occurred or the image could not be found
      */
@@ -152,10 +152,10 @@ public class AnimatedImageGenerator implements Generator {
     /**
      * Constructs an AnimatedImageGenerator for use in an AnimatedHologram
      *
-     * @param key key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
-     * @param input {@link java.io.InputStream} used to generate the display
-     * @param height height of the display
-     * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param key            key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
+     * @param input          {@link java.io.InputStream} used to generate the display
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      * @throws IOException If an input exception occurred or the image could not be found
      */

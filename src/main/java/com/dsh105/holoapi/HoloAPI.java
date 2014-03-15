@@ -12,26 +12,22 @@ import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
-import com.dsh105.holoapi.image.AnimatedImageGenerator;
-import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.image.ImageLoader;
-import com.dsh105.holoapi.image.SimpleAnimationLoader;
-import com.dsh105.holoapi.image.SimpleImageLoader;
+import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class HoloAPI extends DSHPlugin {
 
@@ -76,7 +72,7 @@ public class HoloAPI extends DSHPlugin {
 
     /**
      * Gets the HoloAPI Hologram Manager.
-     * <p>
+     * <p/>
      * The Hologram Manager is used to register and manage the holograms created from both within and outside the HoloAPI plugin
      *
      * @return {@link com.dsh105.holoapi.api.HoloManager} that manages and controls registration of holograms
@@ -87,7 +83,7 @@ public class HoloAPI extends DSHPlugin {
 
     /**
      * Gets the HoloAPI Image Loader
-     * <p>
+     * <p/>
      * The Image Loader stores and handles registration of all images configured in the HoloAPI Configuration file
      *
      * @return Image Loader that controls and stores all pre-loaded image generators
@@ -98,7 +94,7 @@ public class HoloAPI extends DSHPlugin {
 
     /**
      * Gets the HoloAPI Animation Loader
-     * <p>
+     * <p/>
      * The Animated Loader stores and handles registration of all animations configured in the HoloAPI Configuration file
      *
      * @return Animation Loader that controls and stores all pre-loaded animation generators
@@ -139,9 +135,9 @@ public class HoloAPI extends DSHPlugin {
         this.loadConfiguration();
 
         // detect version, this needs some improvements, it doesn't look too pretty now.
-        if(Bukkit.getVersion().contains("1.7")) {
+        if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
-        } else if(Bukkit.getVersion().contains("1.6")) {
+        } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
         }
 
@@ -157,7 +153,7 @@ public class HoloAPI extends DSHPlugin {
 
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new IndicatorListener(), this);
-        this.loadHolograms(this);
+        this.loadHolograms();
 
         try {
             Metrics metrics = new Metrics(this);
@@ -200,57 +196,32 @@ public class HoloAPI extends DSHPlugin {
         }
     }
 
-    public void loadHolograms(Plugin plugin) {
-        if (plugin.getName().equals("HoloAPI")) {
-            MANAGER.clearAll();
+    public void loadHolograms() {
+        MANAGER.clearAll();
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
-                    ANIMATION_LOADER.loadAnimationConfiguration(getConfig(ConfigType.MAIN));
-                }
-            }.runTaskAsynchronously(this);
-
-            final ArrayList<String> unprepared = MANAGER.loadFileData();
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (getImageLoader().isLoaded()) {
-                        for (String s : unprepared) {
-                            MANAGER.loadFromFile(s);
-                        }
-                        LOGGER.log(Level.INFO, "Holograms loaded");
-                        this.cancel();
-                    }
-                }
-            }.runTaskTimer(this, 20 * 5, 20 * 10);
-        }
-    }
-
-    /*private void registerCommands() {
-        try {
-            Class craftServer = Class.forName("org.bukkit.craftbukkit." + VersionUtil.getServerVersion() + ".CraftServer");
-            if (craftServer.isInstance(Bukkit.getServer())) {
-                final Field f = craftServer.getDeclaredField("commandMap");
-                f.setAccessible(true);
-                this.commandMap = (CommandMap) f.get(Bukkit.getServer());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
+                ANIMATION_LOADER.loadAnimationConfiguration(getConfig(ConfigType.MAIN));
             }
-        } catch (Exception e) {
-            Logger.log(Logger.LogLevel.WARNING, "Registration of commands failed.", e, true);
-        }
+        }.runTaskAsynchronously(this);
 
-        String cmdString = this.getConfig(ConfigType.MAIN).getString("command", "holo");
-        if (this.commandMap.getCommand(cmdString) != null) {
-            Logger.log(Logger.LogLevel.WARNING, "A command under the name /" + cmdString + " already exists. Registering command under /holoapi:" + cmdString, true);
-        }
+        final ArrayList<String> unprepared = MANAGER.loadFileData();
 
-        CustomCommand cmd = new CustomCommand(cmdString);
-        this.commandMap.register("holoapi", cmd);
-        cmd.setExecutor(new HoloCommand(cmdString));
-        //cmd.setTabCompleter(new CommandComplete());
-    }*/
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (getImageLoader().isLoaded()) {
+                    for (String s : unprepared) {
+                        MANAGER.loadFromFile(s);
+                    }
+                    LOGGER.log(Level.INFO, "Holograms loaded");
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(this, 20 * 5, 20 * 10);
+    }
 
     private void loadConfiguration() {
         String[] header = {"HoloAPI Configuration File", "---------------------",

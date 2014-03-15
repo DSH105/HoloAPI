@@ -20,8 +20,6 @@ import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import com.dsh105.holoapi.util.UnicodeFormatter;
-import java.util.ArrayList;
-import java.util.Map;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -33,6 +31,9 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class HoloCommand implements CommandExecutor {
 
@@ -140,7 +141,7 @@ public class HoloCommand implements CommandExecutor {
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
                     Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
                     Lang.sendTo(sender, Lang.HOLOGRAM_RELOAD.getValue());
-                    HoloAPI.getInstance().loadHolograms(HoloAPI.getInstance());
+                    HoloAPI.getInstance().loadHolograms();
                     return true;
                 } else return true;
             }

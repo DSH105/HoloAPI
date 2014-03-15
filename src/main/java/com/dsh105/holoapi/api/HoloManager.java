@@ -1,17 +1,18 @@
 package com.dsh105.holoapi.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public interface HoloManager {
 
     /**
      * Gets all the stored holograms, including simple holograms
-     * <p>
+     * <p/>
      * Simple holograms include chat bubbles and indicators if the server has them enabled
      *
      * @return all stored holograms
@@ -27,7 +28,7 @@ public interface HoloManager {
 
     /**
      * Gets all the stored holograms which are simple
-     * <p>
+     * <p/>
      * Simple holograms include chat bubbles and indicators if the server has them enabled
      *
      * @return all stored holograms
@@ -53,14 +54,14 @@ public interface HoloManager {
     /**
      * Tracks and registers a hologram
      *
-     * @param hologram hologram to register
+     * @param hologram     hologram to register
      * @param owningPlugin plugin to register hologram under
      */
     public void track(Hologram hologram, Plugin owningPlugin);
 
     /**
      * Stops tracking a hologram and clears all player views
-     * <p>
+     * <p/>
      * This does not clear the hologram data from file
      *
      * @param hologram hologram to stop tracking
@@ -69,7 +70,7 @@ public interface HoloManager {
 
     /**
      * Stops tracking a hologram and clears all player views
-     * <p>
+     * <p/>
      * This does not clear the hologram data from file
      *
      * @param hologramId ID of hologram to stop tracking
@@ -107,9 +108,9 @@ public interface HoloManager {
     /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
      *
-     * @param location position to place the simple hologram
+     * @param location            position to place the simple hologram
      * @param secondsUntilRemoved time in seconds until the hologram is removed
-     * @param lines content of the hologram
+     * @param lines               content of the hologram
      * @return The constructed simple Hologram
      */
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, List<String> lines);
@@ -117,9 +118,9 @@ public interface HoloManager {
     /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
      *
-     * @param location position to place the simple hologram
+     * @param location            position to place the simple hologram
      * @param secondsUntilRemoved time in seconds until the hologram is removed
-     * @param lines content of the hologram
+     * @param lines               content of the hologram
      * @return The constructed simple hologram
      */
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, String... lines);
@@ -127,10 +128,10 @@ public interface HoloManager {
     /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
      *
-     * @param location position to place the simple hologram
+     * @param location            position to place the simple hologram
      * @param secondsUntilRemoved time in seconds until the hologram is removed
-     * @param rise if true, the hologram will automatically rise upwards at a predefined speed
-     * @param lines content of the hologram
+     * @param rise                if true, the hologram will automatically rise upwards at a predefined speed
+     * @param lines               content of the hologram
      * @return The constrctued simple Hologram
      */
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, List<String> lines);
@@ -138,10 +139,10 @@ public interface HoloManager {
     /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
      *
-     * @param location position to place the simple hologram
+     * @param location            position to place the simple hologram
      * @param secondsUntilRemoved time in seconds until the hologram is removed
-     * @param rise if true, the hologram will automatically rise upwards at a predefined speed
-     * @param lines content of the hologram
+     * @param rise                if true, the hologram will automatically rise upwards at a predefined speed
+     * @param lines               content of the hologram
      * @return The constucted simple Hologram
      */
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines);
@@ -149,10 +150,10 @@ public interface HoloManager {
     /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
      *
-     * @param location position to place the simple hologram
+     * @param location            position to place the simple hologram
      * @param secondsUntilRemoved time in seconds until the hologram is removed
-     * @param velocity velocity to apply to the hologram
-     * @param lines content of the hologram
+     * @param velocity            velocity to apply to the hologram
+     * @param lines               content of the hologram
      * @return The constructed simple Hologram
      */
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, Vector velocity, List<String> lines);
@@ -160,10 +161,10 @@ public interface HoloManager {
     /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
      *
-     * @param location position to place the simple hologram
+     * @param location            position to place the simple hologram
      * @param secondsUntilRemoved time in seconds until the hologram is removed
-     * @param velocity velocity to apply to the hologram
-     * @param lines content of the hologram
+     * @param velocity            velocity to apply to the hologram
+     * @param lines               content of the hologram
      * @return The constructed simple Hologram
      */
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, final Vector velocity, String... lines);

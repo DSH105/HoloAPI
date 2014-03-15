@@ -5,11 +5,12 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
-import java.util.ArrayList;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 public class BuilderInputSuccessPrompt extends MessagePrompt {
 
