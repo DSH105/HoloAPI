@@ -384,7 +384,7 @@ public class SimpleHoloManager implements HoloManager {
             stopTracking(hologram);
             for (Hologram h : getAllHolograms().keySet()) {
                 if (h.isSimple()) {
-                    h.refreshDisplay();
+                    //h.refreshDisplay();
                 }
             }
         }
@@ -393,7 +393,7 @@ public class SimpleHoloManager implements HoloManager {
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 10);
+            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 25);
         }
 
         @Override
