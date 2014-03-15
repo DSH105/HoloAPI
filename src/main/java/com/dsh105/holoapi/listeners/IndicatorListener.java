@@ -65,7 +65,7 @@ public class IndicatorListener implements Listener {
                     || config.getBoolean("indicators.damage.showForMobs", true)) {
                 Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
                 v.setY(v.getY() + 0.05D);
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " " + HEART_CHARACTER);
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format.default", "&c")) + "-" + event.getDamage() + " " + HEART_CHARACTER);
             }
         }
     }
