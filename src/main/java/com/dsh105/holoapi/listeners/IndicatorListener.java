@@ -112,7 +112,7 @@ public class IndicatorListener implements Listener {
                 if (event.getItem().getDurability() == 1) {
                     msg = config.getString("indicators.potion.godapple.format", "&e+ %effect%");
                 }
-                HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, msg.replace("%effect%", "Golden Apple"));
+                HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', msg.replace("%effect%", "Golden Apple")));
             }
         }
     }
