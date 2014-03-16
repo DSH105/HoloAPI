@@ -66,6 +66,8 @@ public class ConfigOptions extends Options {
         set("indicators.potion.timeVisible", 4);
         set("indicators.potion.showForPlayers", true);
         set("indicators.potion.showForMobs", true);
+        set("indicators.potion.goldenapple.format", "&e+ %effect%");
+        set("indicators.potion.godapple.format", "&e+ %effect% II");
 
         String[] potions = new String[] {"speed", "slow", "fast_digging", "slow_digging", "increase_damage", "heal", "harm", "jump", "confusion", "regeneration", "damage_resistance", "fire_resistance", "water_breathing", "invisibility", "blindness", "night_vision", "hunger", "weakness", "poison", "wither", "health_boost", "absorption", "saturation"};
 
