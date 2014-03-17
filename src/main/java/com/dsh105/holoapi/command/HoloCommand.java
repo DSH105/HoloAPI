@@ -298,7 +298,7 @@ public class HoloCommand implements CommandExecutor {
                         @Override
                         public void onFunction(ConversationContext context, String input) {
                             this.input = input;
-                            h.updateLine(index - 1, UnicodeFormatter.replaceAll(input));
+                            h.updateLine(index - 1, ChatColor.translateAlternateColorCodes('&', UnicodeFormatter.replaceAll(input)));
                         }
 
                         @Override
