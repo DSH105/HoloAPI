@@ -161,7 +161,7 @@ public class IndicatorListener implements Listener {
         YAMLConfig config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
         if (config.getBoolean("chatBubbles.show", false)) {
             Location loc = p.getEyeLocation().clone();
-            loc.add(0.0D, 0.5D, 0.0D);
+            loc.add(0.0D, config.getDouble("chatBubbles.distanceAbovePlayerTag", 0.5D), 0.0D);
             final int duration = config.getInt("chatBubbles.displayDurationSeconds", 8);
             final boolean rise = config.getBoolean("chatBubbles.rise", true);
             final boolean followPlayer = config.getBoolean("chatBubbles.followPlayer", false);
