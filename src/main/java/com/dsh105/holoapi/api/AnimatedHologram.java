@@ -304,8 +304,12 @@ public class AnimatedHologram extends Hologram {
         horse.setY(y + diffY + 55);
         horse.setZ(z);
 
+        message = message.replace("%name%", observer.getName());
+        message = message.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
+        message = message.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
+
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message.replace("%name%", observer.getName()));
+        dw.watch(10, message);
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setMetadata(dw);
@@ -331,8 +335,12 @@ public class AnimatedHologram extends Hologram {
     }
 
     protected void updateNametag(Player observer, String message, int index) {
+        message = message.replace("%name%", observer.getName());
+        message = message.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
+        message = message.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
+
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message.replace("%name%", observer.getName()));
+        dw.watch(10, message);
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
 
