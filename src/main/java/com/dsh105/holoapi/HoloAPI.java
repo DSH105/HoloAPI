@@ -12,6 +12,7 @@ import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
+import com.dsh105.holoapi.hook.VaultHook;
 import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
@@ -40,6 +41,8 @@ public class HoloAPI extends DSHPlugin {
     private YAMLConfig config;
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
+
+    public VaultHook vaultHook;
 
     // Update Checker stuff
     public boolean updateAvailable = false;
@@ -164,6 +167,14 @@ public class HoloAPI extends DSHPlugin {
         }
 
         this.checkUpdates();
+
+        // Vault Hook
+        vaultHook = new VaultHook(this);
+
+        if (manager.getPlugin("Vault") != null && manager.getPlugin("Vault").isEnabled()) {
+            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and Hooked Vault.");
+            vaultHook.loadHook();
+        }
     }
 
     @Override
@@ -293,7 +304,11 @@ public class HoloAPI extends DSHPlugin {
         return false;
     }
 
+    public VaultHook getVaultHook() {
+        return vaultHook;
+    }
+
     public enum ConfigType {
-        MAIN, DATA, LANG
+        MAIN, DATA, LANG;
     }
 }
