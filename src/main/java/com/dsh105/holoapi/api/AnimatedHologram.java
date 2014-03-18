@@ -14,7 +14,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -303,6 +305,12 @@ public class AnimatedHologram extends Hologram {
         horse.setX(x);
         horse.setY(y + diffY + 55);
         horse.setZ(z);
+
+        if (message.contains("%time%")) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
+            message = message.replace("%time%", new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime()));
+        }
 
         message = message.replace("%name%", observer.getName());
         message = message.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
