@@ -453,6 +453,9 @@ public class Hologram {
             msg = msg.replace("%time%", new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime()));
         }
 
+        msg = msg.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
+        msg = msg.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
+
         WrappedDataWatcher dw = new WrappedDataWatcher();
         dw.watch(10, msg);
         dw.watch(11, Byte.valueOf((byte) 1));

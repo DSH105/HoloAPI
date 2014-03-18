@@ -49,6 +49,11 @@
             <version>${fanciful.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.2.27</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -62,6 +67,10 @@
         <repository>
             <id>fanciful-repo</id>
             <url>https://raw2.github.com/mkremins/fanciful/mvn-repo/</url>
+        </repository>
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
         </repository>
     </repositories>
     <build>
@@ -150,6 +159,7 @@
                                     <include>com.dsh105:DSHUtils</include>
                                     <include>org.json:json</include>
                                     <include>mkremins:fanciful</include>
+                                    <include>net.milkbowl.vault:Vault</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
