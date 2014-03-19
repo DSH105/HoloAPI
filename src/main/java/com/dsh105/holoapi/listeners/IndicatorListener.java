@@ -1,24 +1,39 @@
 package com.dsh105.holoapi.listeners;
 
 import com.dsh105.dshutils.config.YAMLConfig;
+import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.util.RomanNumeral;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class IndicatorListener implements Listener {
+
+    private static char HEART_CHARACTER = '\u2764';
+    private static HashMap<String, ArrayList<String>> CHAT_BUBBLES = new HashMap<String, ArrayList<String>>();
 
     private YAMLConfig config;
 
@@ -28,11 +43,30 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
-        if (config.getBoolean("indicators.damage.enable", false)) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
                     || config.getBoolean("indicators.damage.showForMobs", false)) {
                 if (!(event instanceof EntityDamageByEntityEvent)) {
-                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " \u2764");
+                    String colours = config.getString("indicators.damage.format.default", "&c");
+
+                    if (event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
+                        colours = config.getString("indicators.damage.format.drowning", "&b");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+                        colours = config.getString("indicators.damage.format.fire", "&4");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
+                        colours = config.getString("indicators.damage.format.magic", "&5");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
+                        colours = config.getString("indicators.damage.format.poison", "&2");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.STARVATION) {
+                        colours = config.getString("indicators.damage.format.starvation", "&6");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.THORNS) {
+                        colours = config.getString("indicators.damage.format.thorns", "&e");
+                    } else if (event.getCause() == EntityDamageEvent.DamageCause.WITHER) {
+                        colours = config.getString("indicators.damage.format.wither", "&8");
+                    }
+
+                    String text = ChatColor.translateAlternateColorCodes('&', colours) + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
+                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, text);
                 }
             }
         }
@@ -40,12 +74,12 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (config.getBoolean("indicators.damage.enable", false)) {
-            if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
-                    || config.getBoolean("indicators.damage.showForMobs", false)) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
+            if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
+                    || config.getBoolean("indicators.damage.showForMobs", true)) {
                 Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
                 v.setY(v.getY() + 0.05D);
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format", "&c")) + "-" + event.getDamage() + " \u2764");
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format.default", "&c")) + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
             }
         }
     }
@@ -54,6 +88,55 @@ public class IndicatorListener implements Listener {
     public void onExpGain(PlayerExpChangeEvent event) {
         if (config.getBoolean("indicators.exp.enable", false)) {
             HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.exp.format", "&a")) + "+" + event.getAmount() + " exp");
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityRegainHealth(EntityRegainHealthEvent event) {
+        if (config.getBoolean("indicators.gainHealth.enable", false)) {
+            if (event.getEntity() instanceof Player && config.getBoolean("indicators.gainHealth.showForPlayers", true)
+                    || config.getBoolean("indicators.gainHealth.showForMobs", true)) {
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.gainHealth.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.gainHealth.format", "&a")) + "+" + event.getAmount() + " " + HEART_CHARACTER);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onConsumePotion(PlayerItemConsumeEvent event) {
+        if (config.getBoolean("indicators.potion.enable", false)) {
+            if (event.getItem().getType() == Material.POTION) {
+                Potion potion = Potion.fromItemStack(event.getItem());
+                if (potion != null) {
+                    this.showPotionHologram(event.getPlayer(), potion.getEffects());
+                }
+            } else if (event.getItem().getType() == Material.GOLDEN_APPLE) {
+                String msg = config.getString("indicators.potion.goldenapple.format", "&e+ %effect%");
+                if (event.getItem().getDurability() == 1) {
+                    msg = config.getString("indicators.potion.godapple.format", "&e+ %effect%");
+                }
+                HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', msg.replace("%effect%", "Golden Apple")));
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onSplashPotion(PotionSplashEvent event) {
+        if (config.getBoolean("indicators.potion.enable", false)) {
+            for (Entity e : event.getAffectedEntities()) {
+                if (event.getEntity() instanceof Player && config.getBoolean("indicators.potion.showForPlayers", true)
+                        || config.getBoolean("indicators.potion.showForMobs", true)) {
+                    this.showPotionHologram(e, event.getPotion().getEffects());
+                }
+            }
+        }
+    }
+
+    private void showPotionHologram(Entity e, Collection<PotionEffect> effects) {
+        for (PotionEffect effect : effects) {
+            int amp = (effect.getAmplifier() < 1 ? 1 : effect.getAmplifier()) + 1;
+            String content = ChatColor.translateAlternateColorCodes('&', config.getString("indicators.potion.format." + effect.getType().getName().toLowerCase(), "&e+ %effect% %amp%"));
+            content = content.replace("%effect%", StringUtil.capitalise(effect.getType().getName().replace("_", " "))).replace("%amp%", "" + new RomanNumeral(amp));
+            HoloAPI.getManager().createSimpleHologram(e.getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, content);
         }
     }
 
@@ -79,7 +162,7 @@ public class IndicatorListener implements Listener {
         YAMLConfig config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
         if (config.getBoolean("chatBubbles.show", false)) {
             Location loc = p.getEyeLocation().clone();
-            loc.add(0.0D, 0.5D, 0.0D);
+            loc.add(0.0D, config.getDouble("chatBubbles.distanceAbovePlayerTag", 0.5D), 0.0D);
             final int duration = config.getInt("chatBubbles.displayDurationSeconds", 8);
             final boolean rise = config.getBoolean("chatBubbles.rise", true);
             final boolean followPlayer = config.getBoolean("chatBubbles.followPlayer", false);
@@ -95,7 +178,51 @@ public class IndicatorListener implements Listener {
                 index += charsPerLine;
             }
 
+            if (CHAT_BUBBLES.containsKey(p.getName())) {
+                ArrayList<String> hologramIds = CHAT_BUBBLES.get(p.getName());
+                if (!hologramIds.isEmpty()) {
+                    Hologram last = null;
+                    // Iterate from bottom to top
+                    for (int j = hologramIds.size() - 1; j >= 0; j--) {
+                        Hologram h = HoloAPI.getManager().getHologram(hologramIds.get(j));
+                        if (h != null) {
+                            double totalSize = (h.getLines().length * HoloAPI.getHologramLineSpacing());
+                            double minY = h.getDefaultY() - totalSize;
+                            if (last != null && minY < last.getDefaultY()) {
+                                h.move(new Vector(h.getDefaultX(), h.getDefaultY() + (last.getLines().length * HoloAPI.getHologramLineSpacing()), h.getDefaultZ()));
+                            } else {
+                                if (minY < loc.getY()) {
+                                    h.move(new Vector(h.getDefaultX(), h.getDefaultY() + totalSize, h.getDefaultZ()));
+                                    last = h;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             final Hologram hologram = HoloAPI.getManager().createSimpleHologram(loc, duration, !followPlayer, lines);
+
+            ArrayList<String> list;
+            if (CHAT_BUBBLES.containsKey(p.getName())) {
+                list = CHAT_BUBBLES.get(p.getName());
+            } else {
+                list = new ArrayList<String>();
+            }
+
+            list.add(hologram.getSaveId());
+            CHAT_BUBBLES.put(p.getName(), list);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ArrayList<String> list = CHAT_BUBBLES.get(p.getName());
+                    if (list != null) {
+                        list.remove(hologram.getSaveId());
+                    }
+
+                    CHAT_BUBBLES.put(p.getName(), list);
+                }
+            }.runTaskLater(HoloAPI.getInstance(), duration * 20);
 
             if (followPlayer) {
                 class FollowPlayer extends BukkitRunnable {

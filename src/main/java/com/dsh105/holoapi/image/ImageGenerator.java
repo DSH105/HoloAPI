@@ -143,8 +143,8 @@ public class ImageGenerator implements Generator {
         String[] lines = new String[colors[0].length];
         for (int y = 0; y < colors[0].length; y++) {
             String line = "";
-            for (int x = 0; x < colors.length; x++) {
-                ChatColor colour = colors[x][y];
+            for (ChatColor[] color : colors) {
+                ChatColor colour = color[y];
                 if (colour == null) {
                     line += border ? TRANSPARENT_CHAR_BORDER : TRANSPARENT_CHAR_NOBORDER;
                 } else {
@@ -163,8 +163,6 @@ public class ImageGenerator implements Generator {
 
     private ChatColor[][] generateColours(BufferedImage image, int height) {
         double ratio = (double) image.getHeight() / image.getWidth();
-        int width = (int) (height / ratio);
-        if (width > 10) width = 10;
         BufferedImage resized = resize(image, (int) (height / ratio), height);
 
         ChatColor[][] chatImg = new ChatColor[resized.getWidth()][resized.getHeight()];

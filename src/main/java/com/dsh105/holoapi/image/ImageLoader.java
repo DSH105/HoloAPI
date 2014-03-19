@@ -64,6 +64,6 @@ public interface ImageLoader<T extends Generator> {
         /**
          * Represents an image that can be located within the HoloAPI plugin data folder
          */
-        FILE;
+        FILE
     }
 }

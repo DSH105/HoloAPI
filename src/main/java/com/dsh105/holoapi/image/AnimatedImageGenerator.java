@@ -132,7 +132,7 @@ public class AnimatedImageGenerator implements Generator {
     public AnimatedImageGenerator(String key, InputStream input, int frameRate, int height, ImageChar imgChar, boolean requiresBorder) throws IOException {
         this.key = key;
         this.frames = this.readGif(input);
-        this.prepare(height, imgChar, false);
+        this.prepare(height, imgChar, requiresBorder);
         this.prepareFrameRate(frameRate);
     }
 
@@ -319,8 +319,7 @@ public class AnimatedImageGenerator implements Generator {
      * @return frames of the generator
      */
     public ArrayList<GIFFrame> getFrames() {
-        ArrayList<GIFFrame> frames = new ArrayList<GIFFrame>(this.frames);
-        return frames;
+        return new ArrayList<GIFFrame>(this.frames);
     }
 
     /**

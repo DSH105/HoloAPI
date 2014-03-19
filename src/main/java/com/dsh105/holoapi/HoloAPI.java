@@ -12,6 +12,7 @@ import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
+import com.dsh105.holoapi.hook.VaultHook;
 import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
@@ -40,6 +41,8 @@ public class HoloAPI extends DSHPlugin {
     private YAMLConfig config;
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
+
+    public VaultHook vaultHook;
 
     // Update Checker stuff
     public boolean updateAvailable = false;
@@ -127,6 +130,10 @@ public class HoloAPI extends DSHPlugin {
         return null;
     }
 
+    public VaultHook getVaultHook() {
+        return vaultHook;
+    }
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -153,6 +160,15 @@ public class HoloAPI extends DSHPlugin {
 
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new IndicatorListener(), this);
+
+        // Vault Hook
+        vaultHook = new VaultHook(this);
+
+        if (manager.getPlugin("Vault") != null && manager.getPlugin("Vault").isEnabled()) {
+            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and Hooked Vault.");
+            vaultHook.loadHook();
+        }
+
         this.loadHolograms();
 
         try {
@@ -164,11 +180,12 @@ public class HoloAPI extends DSHPlugin {
         }
 
         this.checkUpdates();
+
     }
 
     @Override
     public void onDisable() {
-        this.COMMAND_MANAGER.unregister();
+        COMMAND_MANAGER.unregister();
         MANAGER.clearAll();
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
@@ -282,8 +299,7 @@ public class HoloAPI extends DSHPlugin {
         if (commandLabel.equalsIgnoreCase("holoupdate")) {
             if (Perm.UPDATE.hasPerm(sender, true, true)) {
                 if (updateChecked) {
-                    @SuppressWarnings("unused")
-                    Updater updater = new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+                    new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
                     return true;
                 } else {
                     Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.getValue());

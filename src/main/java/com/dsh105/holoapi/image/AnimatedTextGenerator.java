@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.image;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Represents a generator used to produce animated text frames
@@ -19,18 +20,14 @@ public class AnimatedTextGenerator {
      */
     public AnimatedTextGenerator(Frame[] frames) {
         this.largestFrame = frames[0];
-        for (Frame f : frames) {
-            this.frames.add(f);
-        }
+        Collections.addAll(this.frames, frames);
         this.calculateMaxHeight();
 
         for (Frame f : this.frames) {
             int diff = this.maxHeight - f.getLines().length;
             if (diff > 0) {
                 ArrayList<String> lines = new ArrayList<String>();
-                for (String s : f.getLines()) {
-                    lines.add(s);
-                }
+                Collections.addAll(lines, f.getLines());
                 for (int i = 0; i <= diff; i++) {
                     lines.add(" ");
                 }

@@ -67,7 +67,7 @@ public class SafeField<T> implements FieldAccessor<T> {
         try {
             return (T) this.field.get(instance);
         } catch (IllegalAccessException e) {
-            ConsoleLogger.log(Logger.LogLevel.WARNING, "Failed to access filed: " + toString());
+            ConsoleLogger.log(Logger.LogLevel.WARNING, "Failed to access field: " + toString());
             e.printStackTrace();
         }
         return null;

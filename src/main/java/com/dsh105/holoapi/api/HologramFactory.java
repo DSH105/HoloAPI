@@ -4,7 +4,6 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.SaveIdGenerator;
-import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -108,12 +107,12 @@ public class HologramFactory {
     /**
      * Adds text to constructed Holograms
      *
-     * @param text
-     * @return object
+     * @param text Text to add to constructed holograms
+     * @return This object
      */
     public HologramFactory withText(String... text) {
         for (String tag : text) {
-            this.tags.add(UnicodeFormatter.replaceAll(tag));
+            this.tags.add(tag);
         }
         return this;
     }

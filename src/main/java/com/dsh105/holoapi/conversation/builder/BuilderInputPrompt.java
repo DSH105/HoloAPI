@@ -38,10 +38,7 @@ public class BuilderInputPrompt extends ValidatingPrompt {
         if (s.equalsIgnoreCase("DONE")) {
             return true;
         }
-        if (this.currentBuilder == null) {
-            return s.equalsIgnoreCase("TEXT") || s.equalsIgnoreCase("IMAGE");
-        }
-        return true;
+        return this.currentBuilder != null || s.equalsIgnoreCase("TEXT") || s.equalsIgnoreCase("IMAGE");
     }
 
     @Override

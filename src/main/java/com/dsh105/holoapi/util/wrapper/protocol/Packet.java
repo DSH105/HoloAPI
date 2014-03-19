@@ -3,6 +3,7 @@ package com.dsh105.holoapi.util.wrapper.protocol;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
+import com.dsh105.holoapi.util.MiscUtil;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.PlayerUtil;
 import com.dsh105.holoapi.util.ReflectionUtil;
@@ -36,7 +37,7 @@ public class Packet {
         } else {
             FieldAccessor<Map> mapField = new SafeField<Map>(ReflectionUtil.getNMSClass("Packet"), "a");
             Map map = mapField.get(null);
-            this.packetClass = (Class) map.get(legacyId);
+            this.packetClass = (Class) MiscUtil.getKeyAtValue(map, legacyId);
             try {
                 this.packetHandle = this.packetClass.newInstance();
             } catch (InstantiationException e) {

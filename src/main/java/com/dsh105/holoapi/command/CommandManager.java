@@ -57,7 +57,7 @@ public class CommandManager {
     }
 
     public CommandMap getCommandMap() {
-        CommandMap map = null;
+        CommandMap map;
 
         try {
             map = SERVER_COMMAND_MAP.get(Bukkit.getPluginManager());

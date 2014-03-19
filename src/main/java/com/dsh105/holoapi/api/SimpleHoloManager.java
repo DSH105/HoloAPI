@@ -237,8 +237,7 @@ public class SimpleHoloManager implements HoloManager {
                                 }
 
                             } else {
-                                HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
-                                continue;
+                                HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
                             }
                         }
                         if (containsImage) {
@@ -283,8 +282,7 @@ public class SimpleHoloManager implements HoloManager {
                         hf.withText(ChatColor.translateAlternateColorCodes('&', value));
                     }
                 } else {
-                    HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
-                    continue;
+                    HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
                 }
             }
             if (!hf.isEmpty()) {
@@ -321,10 +319,10 @@ public class SimpleHoloManager implements HoloManager {
         BukkitTask t = null;
 
         if (rise) {
-            final Location l = location.clone();
             t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
                 @Override
                 public void run() {
+                    Location l = hologram.getDefaultLocation();
                     l.add(0.0D, 0.02D, 0.0D);
                     hologram.move(l.toVector());
                 }
@@ -337,7 +335,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, Vector velocity, List<String> lines) {
-        return this.createSimpleHologram(location, secondsUntilRemoved, velocity, lines);
+        return this.createSimpleHologram(location, secondsUntilRemoved, velocity, lines.toArray(new String[lines.size()]));
     }
 
     @Override
@@ -350,10 +348,10 @@ public class SimpleHoloManager implements HoloManager {
             }
         }
 
-        final Location l = location.clone();
         BukkitTask t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
             @Override
             public void run() {
+                Location l = hologram.getDefaultLocation();
                 l.add(velocity);
                 hologram.move(l.toVector());
             }
@@ -379,18 +377,18 @@ public class SimpleHoloManager implements HoloManager {
                 t.cancel();
             }
             stopTracking(hologram);
-            for (Hologram h : getAllHolograms().keySet()) {
+            /*for (Hologram h : getAllHolograms().keySet()) {
                 if (h.isSimple()) {
                     //h.refreshDisplay();
                 }
-            }
+            }*/
         }
     }
 
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 25);
+            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 60);
         }
 
         @Override

@@ -40,7 +40,6 @@ public class PlayerUtil {
     }
 
     public static Object getPlayerConnection(Player player) {
-        Object connection = ReflectionUtil.getField(ReflectionUtil.getNMSClass("EntityPlayer"), "playerConnection", playerToEntityPlayer(player));
-        return connection;
+        return ReflectionUtil.getField(ReflectionUtil.getNMSClass("EntityPlayer"), "playerConnection", playerToEntityPlayer(player));
     }
 }

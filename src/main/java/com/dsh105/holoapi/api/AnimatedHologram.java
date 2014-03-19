@@ -4,6 +4,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
+import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
@@ -305,7 +306,7 @@ public class AnimatedHologram extends Hologram {
         horse.setZ(z);
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message.replace("%name%", observer.getName()));
+        dw.watch(10, TagFormatter.format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setMetadata(dw);
@@ -332,7 +333,7 @@ public class AnimatedHologram extends Hologram {
 
     protected void updateNametag(Player observer, String message, int index) {
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message.replace("%name%", observer.getName()));
+        dw.watch(10, TagFormatter.format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
 

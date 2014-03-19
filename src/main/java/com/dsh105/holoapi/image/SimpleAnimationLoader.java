@@ -34,8 +34,8 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
             for (String key : cs.getKeys(false)) {
                 String path = "animations." + key + ".";
                 String imagePath = config.getString(path + "path");
-                if (path == null) {
-                    HoloAPI.getInstance().LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invaid path");
+                if (imagePath == null) {
+                    HoloAPI.LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invalid path");
                     continue;
                 }
                 int imageHeight = config.getInt(path + "height", 10);
@@ -44,7 +44,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
                 if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
-                    HoloAPI.getInstance().LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invalid image type.");
+                    HoloAPI.LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invalid image type.");
                     continue;
                 }
                 AnimationLoadType type = AnimationLoadType.valueOf(imageType.toUpperCase());
@@ -52,20 +52,18 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 AnimatedImageGenerator generator = findGenerator(config, type, key, imagePath, frameRate, imageHeight, imageChar, requiresBorder);
                 if (generator != null) {
                     this.KEY_TO_IMAGE_MAP.put(key, generator);
-                } else {
-                    //HoloAPI.getInstance().LOGGER.log(Level.INFO, "Failed to load animation: " + key + ".");
                 }
             }
         }
         loaded = true;
-        HoloAPI.getInstance().LOGGER.log(Level.INFO, "Animations loaded.");
+        HoloAPI.LOGGER.log(Level.INFO, "Animations loaded.");
     }
 
     private AnimatedImageGenerator findGenerator(YAMLConfig config, AnimationLoadType type, String key, String imagePath, int frameRate, int imageHeight, String imageCharType, boolean requiresBorder) {
         try {
             ImageChar c = ImageChar.fromHumanName(imageCharType);
             if (c == null) {
-                HoloAPI.getInstance().LOGGER.log(Level.INFO, "Invalid image char type for " + key + ". Using default.");
+                HoloAPI.LOGGER.log(Level.INFO, "Invalid image char type for " + key + ". Using default.");
                 c = ImageChar.BLOCK;
             }
             switch (type) {
@@ -92,7 +90,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         AnimatedImageGenerator g = this.KEY_TO_IMAGE_MAP.get(key);
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
-                HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
+                HoloAPI.LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
                 Lang.sendTo(sender, Lang.LOADING_URL_ANIMATION.getValue().replace("%key%", key));
                 if (sender != null) {
                     this.prepareUrlGenerator(sender, key);
@@ -110,7 +108,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         AnimatedImageGenerator g = this.KEY_TO_IMAGE_MAP.get(key);
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
-                HoloAPI.getInstance().LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
+                HoloAPI.LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
                 this.prepareUrlGenerator(null, key);
                 return null;
             }
@@ -125,8 +123,8 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
             @Override
             public void run() {
                 URI uri = URI.create(data.getImagePath());
-                URLConnection connection = null;
-                InputStream input = null;
+                URLConnection connection;
+                InputStream input;
                 try {
                     connection = uri.toURL().openConnection();
                     connection.setRequestProperty("Content-Type", "image/gif");
@@ -169,6 +167,6 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
     }
 
     public enum AnimationLoadType {
-        FILE, URL;
+        FILE, URL
     }
 }
