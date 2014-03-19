@@ -28,10 +28,12 @@ import org.bukkit.util.Vector;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class IndicatorListener implements Listener {
 
     private static char HEART_CHARACTER = '\u2764';
+    private static HashMap<String, ArrayList<String>> CHAT_BUBBLES = new HashMap<String, ArrayList<String>>();
 
     private YAMLConfig config;
 
@@ -177,7 +179,51 @@ public class IndicatorListener implements Listener {
                 index += charsPerLine;
             }
 
+            if (CHAT_BUBBLES.containsKey(p.getName())) {
+                ArrayList<String> hologramIds = CHAT_BUBBLES.get(p.getName());
+                if (!hologramIds.isEmpty()) {
+                    Hologram last = null;
+                    // Iterate from bottom to top
+                    for (int j = hologramIds.size() - 1; j >= 0; j--) {
+                        Hologram h = HoloAPI.getManager().getHologram(hologramIds.get(j));
+                        if (h != null) {
+                            double totalSize = (h.getLines().length * HoloAPI.getHologramLineSpacing());
+                            double minY = h.getDefaultY() - totalSize;
+                            if (last != null && minY < last.getDefaultY()) {
+                                h.move(new Vector(h.getDefaultX(), h.getDefaultY() + (last.getLines().length * HoloAPI.getHologramLineSpacing()), h.getDefaultZ()));
+                            } else {
+                                if (minY < loc.getY()) {
+                                    h.move(new Vector(h.getDefaultX(), h.getDefaultY() + totalSize, h.getDefaultZ()));
+                                    last = h;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             final Hologram hologram = HoloAPI.getManager().createSimpleHologram(loc, duration, !followPlayer, lines);
+
+            ArrayList<String> list;
+            if (CHAT_BUBBLES.containsKey(p.getName())) {
+                list = CHAT_BUBBLES.get(p.getName());
+            } else {
+                list = new ArrayList<String>();
+            }
+
+            list.add(hologram.getSaveId());
+            CHAT_BUBBLES.put(p.getName(), list);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ArrayList<String> list = CHAT_BUBBLES.get(p.getName());
+                    if (list != null) {
+                        list.remove(hologram.getSaveId());
+                    }
+
+                    CHAT_BUBBLES.put(p.getName(), list);
+                }
+            }.runTaskLater(HoloAPI.getInstance(), duration * 20);
 
             if (followPlayer) {
                 class FollowPlayer extends BukkitRunnable {

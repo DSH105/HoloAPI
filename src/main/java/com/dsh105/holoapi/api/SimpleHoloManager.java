@@ -319,10 +319,10 @@ public class SimpleHoloManager implements HoloManager {
         BukkitTask t = null;
 
         if (rise) {
-            final Location l = location.clone();
             t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
                 @Override
                 public void run() {
+                    Location l = hologram.getDefaultLocation();
                     l.add(0.0D, 0.02D, 0.0D);
                     hologram.move(l.toVector());
                 }
@@ -348,10 +348,10 @@ public class SimpleHoloManager implements HoloManager {
             }
         }
 
-        final Location l = location.clone();
         BukkitTask t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
             @Override
             public void run() {
+                Location l = hologram.getDefaultLocation();
                 l.add(velocity);
                 hologram.move(l.toVector());
             }
@@ -388,7 +388,7 @@ public class SimpleHoloManager implements HoloManager {
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 25);
+            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 60);
         }
 
         @Override
