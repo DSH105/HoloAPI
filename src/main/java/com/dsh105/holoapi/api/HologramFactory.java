@@ -113,7 +113,7 @@ public class HologramFactory {
      */
     public HologramFactory withText(String... text) {
         for (String tag : text) {
-            this.tags.add(UnicodeFormatter.replaceAll(tag));
+            this.tags.add(tag);
         }
         return this;
     }

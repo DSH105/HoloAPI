@@ -4,7 +4,9 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
+import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
+import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -306,18 +308,8 @@ public class AnimatedHologram extends Hologram {
         horse.setY(y + diffY + 55);
         horse.setZ(z);
 
-        if (message.contains("%time%")) {
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
-            message = message.replace("%time%", new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime()));
-        }
-
-        message = message.replace("%name%", observer.getName());
-        message = message.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
-        message = message.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
-
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message);
+        dw.watch(10, TagFormatter.format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setMetadata(dw);
@@ -343,12 +335,8 @@ public class AnimatedHologram extends Hologram {
     }
 
     protected void updateNametag(Player observer, String message, int index) {
-        message = message.replace("%name%", observer.getName());
-        message = message.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
-        message = message.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
-
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message);
+        dw.watch(10, TagFormatter.format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
 

@@ -44,7 +44,7 @@ public class Frame {
     protected void setLines(String[] lines) {
         if (lines != null) {
             for (int i = 0; i < lines.length; i++) {
-                lines[i] = UnicodeFormatter.replaceAll(lines[i]);
+                lines[i] = lines[i];
             }
             this.lines = lines;
         }

@@ -130,6 +130,10 @@ public class HoloAPI extends DSHPlugin {
         return null;
     }
 
+    public VaultHook getVaultHook() {
+        return vaultHook;
+    }
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -302,10 +306,6 @@ public class HoloAPI extends DSHPlugin {
             }
         }
         return false;
-    }
-
-    public VaultHook getVaultHook() {
-        return vaultHook;
     }
 
     public enum ConfigType {
