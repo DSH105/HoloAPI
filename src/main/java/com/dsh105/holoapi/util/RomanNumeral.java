@@ -120,6 +120,7 @@ public class RomanNumeral {
     /**
      * Return the standard representation of this Roman numeral.
      */
+    @Override
     public String toString() {
         String roman = "";  // The roman numeral.
         int N = num;        // N represents the part of num that still has
