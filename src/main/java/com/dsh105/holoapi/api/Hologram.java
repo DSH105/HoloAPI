@@ -189,10 +189,6 @@ public class Hologram {
         this.saveId = saveId;
     }
 
-    /*public int getFirstTagId() {
-        return firstTagId;
-    }*/
-
     protected void setImageTagMap(HashMap<TagSize, String> map) {
         this.imageIdMap = map;
     }
@@ -430,13 +426,8 @@ public class Hologram {
         teleportSkull.setY(to.getY() + 55);
         teleportSkull.setZ(to.getZ());
 
-        WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
-        attach.setEntityId(this.getHorseIndex(index));
-        attach.setVehicleId(this.getSkullIndex(index));
-
         teleportHorse.send(observer);
         teleportSkull.send(observer);
-        //attach.send(observer);
     }
 
     protected void generate(Player observer, int index, double diffY, double x, double y, double z) {
@@ -462,18 +453,11 @@ public class Hologram {
         skull.setZ(z);
         skull.setEntityType(66);
 
-        /*WrappedDataWatcher dw2 = new WrappedDataWatcher();
-        dw2.watch(11, Byte.valueOf((byte) 1));
-        WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
-        metadata.setEntityId(this.getSkullIndex(index));
-        metadata.setMetadata(dw2);*/
-
         attach.setEntityId(horse.getEntityId());
         attach.setVehicleId(skull.getEntityId());
 
         horse.send(observer);
         skull.send(observer);
-        //metadata.send(observer);
         attach.send(observer);
     }
 

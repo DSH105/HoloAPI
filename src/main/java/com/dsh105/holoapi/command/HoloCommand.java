@@ -19,7 +19,6 @@ import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
-import com.dsh105.holoapi.util.UnicodeFormatter;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

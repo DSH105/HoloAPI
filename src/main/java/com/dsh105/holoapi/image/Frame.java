@@ -1,7 +1,5 @@
 package com.dsh105.holoapi.image;
 
-import com.dsh105.holoapi.util.UnicodeFormatter;
-
 /**
  * Represents a text or image frame used in AnimatedImageGenerators
  */

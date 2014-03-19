@@ -5,7 +5,7 @@
     <artifactId>HoloAPI</artifactId>
     <name>HoloAPI</name>
     <version>1.0.7-SNAPSHOT</version>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <dshutils.version>1.0-SNAPSHOT</dshutils.version>
@@ -15,17 +15,17 @@
         <cb_package>v1_7_R1</cb_package>
         <main.class>com.dsh105.holoapi.HoloAPI</main.class>
     </properties>
-    
+
     <distributionManagement>
         <repository>
             <id>hawk-repo</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
     </distributionManagement>
-    
+
     <!-- Dependencies -->
     <dependencies>
-    
+
         <!-- Bukkit -->
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -33,7 +33,7 @@
             <version>${minecraft.version}-${craftbukkit.version}-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- CraftBukkit -->
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -41,21 +41,21 @@
             <version>${minecraft.version}-${craftbukkit.version}-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- Java's SON -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20090211</version>
         </dependency>
-        
+
         <!-- DSHUtils -->
         <dependency>
             <groupId>com.dsh105</groupId>
             <artifactId>DSHUtils</artifactId>
             <version>${dshutils.version}</version>
         </dependency>
-        
+
         <!-- Fanciful -->
         <dependency>
             <groupId>mkremins</groupId>
@@ -71,22 +71,22 @@
             <version>1.2.27</version>
         </dependency>
     </dependencies>
-    
+
     <!-- Repositories -->
     <repositories>
-    
+
         <!-- Bukkit -->
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
-        
+
         <!-- DSHUtils -->
         <repository>
             <id>hawk-repo</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
-        
+
         <!-- Fanciful -->
         <repository>
             <id>fanciful-repo</id>
@@ -99,7 +99,7 @@
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
         </repository>
     </repositories>
-    
+
     <!-- Build -->
     <build>
         <defaultGoal>clean package install</defaultGoal>
@@ -145,7 +145,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <!-- Compiler -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -155,7 +155,7 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-            
+
             <!-- Jar-Filler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -173,7 +173,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            
+
             <!-- Shade -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

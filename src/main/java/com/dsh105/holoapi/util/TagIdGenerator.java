@@ -15,22 +15,14 @@ public class TagIdGenerator {
 
     private static int nextId(int counter, boolean simple) {
         int firstId = simple ? ++SHARED_SIMPLE_ID : ++SHARED_ID;
-        for (int i = 0; i <= (counter * 2); i++) {
-            if (simple) {
+        if (simple) {
+            for (int i = 0; i <= (counter * 2); i++) {
                 if ((firstId + i) > 0) {
                     SHARED_SIMPLE_ID = Short.MIN_VALUE;
                     return nextId(counter, simple);
                 }
                 continue;
             }
-
-            /*if (REGISTERED.contains(firstId + i)) {
-                return nextId(counter);
-            } else {
-                REGISTERED.add(firstId + i);
-            }*/
-        }
-        if (simple) {
             SHARED_SIMPLE_ID += counter * 2;
         } else {
             SHARED_ID += counter * 2;
