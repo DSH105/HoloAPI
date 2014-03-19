@@ -20,6 +20,12 @@ public class TagFormatter {
         content = content.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
         content = content.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
         content = UnicodeFormatter.replaceAll(content);
+
+        if (content.length() > 64 && !HoloAPI.isUsingNetty) {
+            // 1.6.x client crashes if a name tag is longer than 64 characters
+            // Unfortunate, but it must be countered for
+            content = content.substring(0, 64);
+        }
         return content;
     }
 }

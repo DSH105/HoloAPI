@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.util.wrapper;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 import org.bukkit.util.Vector;
@@ -109,10 +110,10 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setMetadata(WrappedDataWatcher metadata) {
-        this.write("l", metadata.getHandle());
+        this.write(HoloAPI.isUsingNetty ? "l" : "t", metadata.getHandle());
     }
 
     public Object getMetadata() {
-        return this.read("l");
+        return this.read(HoloAPI.isUsingNetty ? "l" : "t");
     }
 }
