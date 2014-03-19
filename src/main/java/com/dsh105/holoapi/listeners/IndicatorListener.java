@@ -133,8 +133,7 @@ public class IndicatorListener implements Listener {
 
     private void showPotionHologram(Entity e, Collection<PotionEffect> effects) {
         for (PotionEffect effect : effects) {
-            //String type = StringUtil.capitalise(effect.getType().getName().replace("_", " "));
-            int amp = effect.getAmplifier() < 1 ? 1 : effect.getAmplifier();
+            int amp = (effect.getAmplifier() < 1 ? 1 : effect.getAmplifier()) + 1;
             String content = ChatColor.translateAlternateColorCodes('&', config.getString("indicators.potion.format." + effect.getType().getName().toLowerCase(), "&e+ %effect% %amp%"));
             content = content.replace("%effect%", StringUtil.capitalise(effect.getType().getName().replace("_", " "))).replace("%amp%", "" + new RomanNumeral(amp));
             HoloAPI.getManager().createSimpleHologram(e.getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, content);
