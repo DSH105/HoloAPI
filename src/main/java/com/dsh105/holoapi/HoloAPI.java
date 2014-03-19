@@ -172,7 +172,7 @@ public class HoloAPI extends DSHPlugin {
 
     @Override
     public void onDisable() {
-        this.COMMAND_MANAGER.unregister();
+        COMMAND_MANAGER.unregister();
         MANAGER.clearAll();
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
@@ -228,29 +228,6 @@ public class HoloAPI extends DSHPlugin {
             }.runTaskTimer(this, 20 * 5, 20 * 10);
         }
     }
-
-    /*private void registerCommands() {
-        try {
-            Class craftServer = Class.forName("org.bukkit.craftbukkit." + VersionUtil.getServerVersion() + ".CraftServer");
-            if (craftServer.isInstance(Bukkit.getServer())) {
-                final Field f = craftServer.getDeclaredField("commandMap");
-                f.setAccessible(true);
-                this.commandMap = (CommandMap) f.get(Bukkit.getServer());
-            }
-        } catch (Exception e) {
-            Logger.log(Logger.LogLevel.WARNING, "Registration of commands failed.", e, true);
-        }
-
-        String cmdString = this.getConfig(ConfigType.MAIN).getString("command", "holo");
-        if (this.commandMap.getCommand(cmdString) != null) {
-            Logger.log(Logger.LogLevel.WARNING, "A command under the name /" + cmdString + " already exists. Registering command under /holoapi:" + cmdString, true);
-        }
-
-        CustomCommand cmd = new CustomCommand(cmdString);
-        this.commandMap.register("holoapi", cmd);
-        cmd.setExecutor(new HoloCommand(cmdString));
-        //cmd.setTabCompleter(new CommandComplete());
-    }*/
 
     private void loadConfiguration() {
         String[] header = {"HoloAPI Configuration File", "---------------------",
@@ -311,6 +288,7 @@ public class HoloAPI extends DSHPlugin {
         if (commandLabel.equalsIgnoreCase("holoupdate")) {
             if (Perm.UPDATE.hasPerm(sender, true, true)) {
                 if (updateChecked) {
+                    // Silly SuppressWarnings...
                     @SuppressWarnings("unused")
                     Updater updater = new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
                     return true;
