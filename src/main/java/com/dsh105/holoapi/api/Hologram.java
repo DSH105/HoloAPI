@@ -301,6 +301,9 @@ public class Hologram {
                 this.updateNametag(p, index);
             }
         }
+        if (!this.isSimple()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
     }
 
     /**
