@@ -2,10 +2,11 @@ package com.dsh105.holoapi.conversation.builder;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.Lang;
-import java.util.ArrayList;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
+
+import java.util.ArrayList;
 
 public class BuilderInputPrompt extends ValidatingPrompt {
 
@@ -37,10 +38,7 @@ public class BuilderInputPrompt extends ValidatingPrompt {
         if (s.equalsIgnoreCase("DONE")) {
             return true;
         }
-        if (this.currentBuilder == null) {
-            return s.equalsIgnoreCase("TEXT") || s.equalsIgnoreCase("IMAGE");
-        }
-        return true;
+        return this.currentBuilder != null || s.equalsIgnoreCase("TEXT") || s.equalsIgnoreCase("IMAGE");
     }
 
     @Override

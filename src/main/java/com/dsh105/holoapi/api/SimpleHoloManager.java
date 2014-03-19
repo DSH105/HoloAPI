@@ -8,12 +8,6 @@ import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.TagIdGenerator;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,6 +17,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+
+import java.util.*;
+import java.util.logging.Level;
 
 public class SimpleHoloManager implements HoloManager {
 
@@ -156,7 +153,7 @@ public class SimpleHoloManager implements HoloManager {
                         this.config.set(path + "animatedImage.frames." + index + ".delay", f.getDelay());
                         int tagIndex = 0;
                         for (String tag : f.getLines()) {
-                            this.config.set(path + "animatedImage.frames." + index + "." + tagIndex, tag);
+                            this.config.set(path + "animatedImage.frames." + index + "." + tagIndex, tag.replace(ChatColor.COLOR_CHAR, '&'));
                             tagIndex++;
                         }
                         index++;
@@ -209,7 +206,7 @@ public class SimpleHoloManager implements HoloManager {
                                     int delay = config.getInt("holograms." + key + ".animatedImage.frames." + frameKey + ".delay", 5);
                                     for (String tagKey : lines.getKeys(false)) {
                                         if (!tagKey.equalsIgnoreCase("delay")) {
-                                            tagList.add(config.getString("holograms." + key + ".animatedImage.frames." + frameKey + "." + tagKey));
+                                            tagList.add(ChatColor.translateAlternateColorCodes('&', config.getString("holograms." + key + ".animatedImage.frames." + frameKey + "." + tagKey)));
                                         }
                                     }
                                     if (!tagList.isEmpty()) {
@@ -240,8 +237,7 @@ public class SimpleHoloManager implements HoloManager {
                                 }
 
                             } else {
-                                HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
-                                continue;
+                                HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
                             }
                         }
                         if (containsImage) {
@@ -286,8 +282,7 @@ public class SimpleHoloManager implements HoloManager {
                         hf.withText(ChatColor.translateAlternateColorCodes('&', value));
                     }
                 } else {
-                    HoloAPI.getInstance().LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
-                    continue;
+                    HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
                 }
             }
             if (!hf.isEmpty()) {
@@ -324,10 +319,10 @@ public class SimpleHoloManager implements HoloManager {
         BukkitTask t = null;
 
         if (rise) {
-            final Location l = location.clone();
             t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
                 @Override
                 public void run() {
+                    Location l = hologram.getDefaultLocation();
                     l.add(0.0D, 0.02D, 0.0D);
                     hologram.move(l.toVector());
                 }
@@ -340,7 +335,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, Vector velocity, List<String> lines) {
-        return this.createSimpleHologram(location, secondsUntilRemoved, velocity, lines);
+        return this.createSimpleHologram(location, secondsUntilRemoved, velocity, lines.toArray(new String[lines.size()]));
     }
 
     @Override
@@ -353,10 +348,10 @@ public class SimpleHoloManager implements HoloManager {
             }
         }
 
-        final Location l = location.clone();
         BukkitTask t = HoloAPI.getInstance().getServer().getScheduler().runTaskTimer(HoloAPI.getInstance(), new Runnable() {
             @Override
             public void run() {
+                Location l = hologram.getDefaultLocation();
                 l.add(velocity);
                 hologram.move(l.toVector());
             }
@@ -382,18 +377,18 @@ public class SimpleHoloManager implements HoloManager {
                 t.cancel();
             }
             stopTracking(hologram);
-            for (Hologram h : getAllHolograms().keySet()) {
+            /*for (Hologram h : getAllHolograms().keySet()) {
                 if (h.isSimple()) {
-                    h.refreshDisplay();
+                    //h.refreshDisplay();
                 }
-            }
+            }*/
         }
     }
 
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 10);
+            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 60);
         }
 
         @Override

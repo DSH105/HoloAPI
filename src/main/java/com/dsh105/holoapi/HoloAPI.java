@@ -12,26 +12,23 @@ import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
-import com.dsh105.holoapi.image.AnimatedImageGenerator;
-import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.image.ImageLoader;
-import com.dsh105.holoapi.image.SimpleAnimationLoader;
-import com.dsh105.holoapi.image.SimpleImageLoader;
+import com.dsh105.holoapi.hook.VaultHook;
+import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class HoloAPI extends DSHPlugin {
 
@@ -44,6 +41,8 @@ public class HoloAPI extends DSHPlugin {
     private YAMLConfig config;
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
+
+    public VaultHook vaultHook;
 
     // Update Checker stuff
     public boolean updateAvailable = false;
@@ -76,7 +75,7 @@ public class HoloAPI extends DSHPlugin {
 
     /**
      * Gets the HoloAPI Hologram Manager.
-     * <p>
+     * <p/>
      * The Hologram Manager is used to register and manage the holograms created from both within and outside the HoloAPI plugin
      *
      * @return {@link com.dsh105.holoapi.api.HoloManager} that manages and controls registration of holograms
@@ -87,7 +86,7 @@ public class HoloAPI extends DSHPlugin {
 
     /**
      * Gets the HoloAPI Image Loader
-     * <p>
+     * <p/>
      * The Image Loader stores and handles registration of all images configured in the HoloAPI Configuration file
      *
      * @return Image Loader that controls and stores all pre-loaded image generators
@@ -98,7 +97,7 @@ public class HoloAPI extends DSHPlugin {
 
     /**
      * Gets the HoloAPI Animation Loader
-     * <p>
+     * <p/>
      * The Animated Loader stores and handles registration of all animations configured in the HoloAPI Configuration file
      *
      * @return Animation Loader that controls and stores all pre-loaded animation generators
@@ -131,6 +130,10 @@ public class HoloAPI extends DSHPlugin {
         return null;
     }
 
+    public VaultHook getVaultHook() {
+        return vaultHook;
+    }
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -139,9 +142,9 @@ public class HoloAPI extends DSHPlugin {
         this.loadConfiguration();
 
         // detect version, this needs some improvements, it doesn't look too pretty now.
-        if(Bukkit.getVersion().contains("1.7")) {
+        if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
-        } else if(Bukkit.getVersion().contains("1.6")) {
+        } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
         }
 
@@ -157,7 +160,16 @@ public class HoloAPI extends DSHPlugin {
 
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new IndicatorListener(), this);
-        this.loadHolograms(this);
+
+        // Vault Hook
+        vaultHook = new VaultHook(this);
+
+        if (manager.getPlugin("Vault") != null && manager.getPlugin("Vault").isEnabled()) {
+            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and Hooked Vault.");
+            vaultHook.loadHook();
+        }
+
+        this.loadHolograms();
 
         try {
             Metrics metrics = new Metrics(this);
@@ -168,6 +180,7 @@ public class HoloAPI extends DSHPlugin {
         }
 
         this.checkUpdates();
+
     }
 
     @Override
@@ -200,33 +213,31 @@ public class HoloAPI extends DSHPlugin {
         }
     }
 
-    public void loadHolograms(Plugin plugin) {
-        if (plugin.getName().equals("HoloAPI")) {
-            MANAGER.clearAll();
+    public void loadHolograms() {
+        MANAGER.clearAll();
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
-                    ANIMATION_LOADER.loadAnimationConfiguration(getConfig(ConfigType.MAIN));
-                }
-            }.runTaskAsynchronously(this);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
+                ANIMATION_LOADER.loadAnimationConfiguration(getConfig(ConfigType.MAIN));
+            }
+        }.runTaskAsynchronously(this);
 
-            final ArrayList<String> unprepared = MANAGER.loadFileData();
+        final ArrayList<String> unprepared = MANAGER.loadFileData();
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (getImageLoader().isLoaded()) {
-                        for (String s : unprepared) {
-                            MANAGER.loadFromFile(s);
-                        }
-                        LOGGER.log(Level.INFO, "Holograms loaded");
-                        this.cancel();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (getImageLoader().isLoaded()) {
+                    for (String s : unprepared) {
+                        MANAGER.loadFromFile(s);
                     }
+                    LOGGER.log(Level.INFO, "Holograms loaded");
+                    this.cancel();
                 }
-            }.runTaskTimer(this, 20 * 5, 20 * 10);
-        }
+            }
+        }.runTaskTimer(this, 20 * 5, 20 * 10);
     }
 
     private void loadConfiguration() {
@@ -288,9 +299,7 @@ public class HoloAPI extends DSHPlugin {
         if (commandLabel.equalsIgnoreCase("holoupdate")) {
             if (Perm.UPDATE.hasPerm(sender, true, true)) {
                 if (updateChecked) {
-                    // Silly SuppressWarnings...
-                    @SuppressWarnings("unused")
-                    Updater updater = new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+                    new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
                     return true;
                 } else {
                     Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.getValue());

@@ -6,8 +6,9 @@ import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.PlayerUtil;
 import com.dsh105.holoapi.util.ReflectionUtil;
-import java.util.Map;
 import org.bukkit.entity.Player;
+
+import java.util.Map;
 
 public class Packet {
 
@@ -22,7 +23,7 @@ public class Packet {
 
     public Packet(Protocol protocol, Sender sender, int id, int legacyId) {
 
-        if(HoloAPI.isUsingNetty) {
+        if (HoloAPI.isUsingNetty) {
 
             this.packetClass = PacketUtil.getPacket(protocol, sender, id);
             try {

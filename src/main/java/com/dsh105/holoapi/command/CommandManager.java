@@ -3,20 +3,20 @@ package com.dsh105.holoapi.command;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.SimplePluginManager;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class CommandManager {
 
-    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new SafeField<CommandMap>(SimplePluginManager.class, "commandMap");
+    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new SafeField<CommandMap>(Bukkit.getServer().getPluginManager().getClass(), "commandMap");
     protected static final FieldAccessor<Map<String, Command>> KNOWN_COMMANDS = new SafeField<Map<String, org.bukkit.command.Command>>(SimpleCommandMap.class, "knownCommands");
 
     private CommandMap fallback;
@@ -38,7 +38,7 @@ public class CommandManager {
         if (knownCommands == null) {
             return false;
         }
-        for (Iterator<Command> i = knownCommands.values().iterator(); i.hasNext();) {
+        for (Iterator<Command> i = knownCommands.values().iterator(); i.hasNext(); ) {
             org.bukkit.command.Command cmd = i.next();
             if (cmd instanceof DynamicPluginCommand) {
                 i.remove();
@@ -57,18 +57,17 @@ public class CommandManager {
     }
 
     public CommandMap getCommandMap() {
-        CommandMap map = null;
+        CommandMap map;
 
         try {
             map = SERVER_COMMAND_MAP.get(Bukkit.getPluginManager());
-        } catch (Throwable t) {
-            // Some plugins inject a custom PluginManager and don't see the n
+        } catch (Exception e) {
             HoloAPI.LOGGER.warning("Failed to retrieve the CommandMap! Using fallback instead...");
             map = null;
         }
 
-        if(map == null) {
-            if(fallback != null) {
+        if (map == null) {
+            if (fallback != null) {
                 return fallback;
             } else {
                 fallback = map = new SimpleCommandMap(Bukkit.getServer());

@@ -19,9 +19,6 @@ import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
-import com.dsh105.holoapi.util.UnicodeFormatter;
-import java.util.ArrayList;
-import java.util.Map;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,11 +31,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+
 public class HoloCommand implements CommandExecutor {
 
     private Paginator help;
 
-    private String[] HELP_CREATE;
+    //private String[] HELP_CREATE;
 
     public HoloCommand() {
         ArrayList<String> list = new ArrayList<String>();
@@ -75,13 +76,7 @@ public class HoloCommand implements CommandExecutor {
                     return true;
                 } else {
                     sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + ChatColor.DARK_AQUA + "----------------");
-                    if (args[1].equalsIgnoreCase("create")) {
-                        for (String s : HELP_CREATE) {
-                            sender.sendMessage(s);
-                        }
-                    } else {
-                        sender.sendMessage(ChatColor.DARK_AQUA + "Help could not be found for \"" + ChatColor.AQUA + args[1] + ChatColor.DARK_AQUA + "\".");
-                    }
+                    sender.sendMessage(ChatColor.DARK_AQUA + "Help could not be found for \"" + ChatColor.AQUA + args[1] + ChatColor.DARK_AQUA + "\".");
                     sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                     return true;
                 }
@@ -140,7 +135,7 @@ public class HoloCommand implements CommandExecutor {
                     HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
                     Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
                     Lang.sendTo(sender, Lang.HOLOGRAM_RELOAD.getValue());
-                    HoloAPI.getInstance().loadHolograms(HoloAPI.getInstance());
+                    HoloAPI.getInstance().loadHolograms();
                     return true;
                 } else return true;
             }
@@ -160,9 +155,7 @@ public class HoloCommand implements CommandExecutor {
                             if (animatedHologram.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(animatedHologram.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(animatedHologram.getAnimationKey())) {
                                 list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + animatedHologram.getAnimationKey() + " (ANIMATION)");
                             } else {
-                                for (String tag : animatedHologram.getFrames().get(0).getLines()) {
-                                    list.add(tag);
-                                }
+                                Collections.addAll(list, animatedHologram.getFrames().get(0).getLines());
                             }
                         } else {
                             if (h.getLines().length > 1) {
@@ -304,12 +297,12 @@ public class HoloCommand implements CommandExecutor {
                         @Override
                         public void onFunction(ConversationContext context, String input) {
                             this.input = input;
-                            h.updateLine(index - 1, UnicodeFormatter.replaceAll(input));
+                            h.updateLine(index - 1, ChatColor.translateAlternateColorCodes('&', input));
                         }
 
                         @Override
                         public String getSuccessMessage() {
-                            return Lang.HOLOGRAM_UPDATE_LINE.getValue().replace("%index%", index + "").replace("%input%", input);
+                            return Lang.HOLOGRAM_UPDATE_LINE.getValue().replace("%index%", index + "").replace("%input%", ChatColor.translateAlternateColorCodes('&', input));
                         }
 
                         @Override

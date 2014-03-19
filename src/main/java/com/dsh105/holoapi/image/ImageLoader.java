@@ -12,11 +12,11 @@ public interface ImageLoader<T extends Generator> {
 
     /**
      * Gets a loaded generator. If the generator found has a URL type and has not yet been loaded, the loading process will be started and the method will return null
-     * <p>
+     * <p/>
      * Also sends a message to the {@link org.bukkit.command.CommandSender} if the URL image is being loaded
      *
      * @param sender sender to send the URL loading message to
-     * @param key key to search for a generator with
+     * @param key    key to search for a generator with
      * @return Image or Animation loader loaded with HoloAPI. Returns null if the image generator is not found or a URL generator is being loaded
      */
     public T getGenerator(CommandSender sender, String key);
@@ -64,6 +64,6 @@ public interface ImageLoader<T extends Generator> {
         /**
          * Represents an image that can be located within the HoloAPI plugin data folder
          */
-        FILE;
+        FILE
     }
 }

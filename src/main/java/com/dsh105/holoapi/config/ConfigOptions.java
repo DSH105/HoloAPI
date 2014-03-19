@@ -22,22 +22,17 @@ public class ConfigOptions extends Options {
         set("checkForUpdates", true);
 
         set("verticalLineSpacing", HoloAPI.getHologramLineSpacing());
+        set("timezone.offset", 0);
+        set("timezone.showZoneMarker", true);
 
         set("chatBubbles.show", false);
         set("chatBubbles.rise", true);
         set("chatBubbles.followPlayer", false);
+        set("chatBubbles.showPlayerName", true);
         set("chatBubbles.nameFormat", "&6&o");
         set("chatBubbles.displayDurationSeconds", 8);
         set("chatBubbles.charactersPerLine", 30);
-
-        set("indicators.damage.enable", false);
-        set("indicators.damage.format", "&c");
-        set("indicators.damage.timeVisible", 4);
-        set("indicators.damage.showForPlayers", true);
-        set("indicators.damage.showForMobs", true);
-        set("indicators.exp.enable", false);
-        set("indicators.exp.format", "&a");
-        set("indicators.exp.timeVisible", 4);
+        set("chatBubbles.distanceAbovePlayerTag", 0.5);
 
         // HoloAPI will automatically replace the following to the specified unicode character if it is found in a hologram
         set("specialCharacters.[x]", "2591");
@@ -50,6 +45,42 @@ public class ConfigOptions extends Options {
         set("specialCharacters.[:(]", "2639");
         set("specialCharacters.[s]", "2600");
         set("specialCharacters.[*]", "2605");
+
+        set("indicators.damage.enable", false);
+        set("indicators.damage.format.default", "&c");
+        set("indicators.damage.format.drowning", "&b");
+        set("indicators.damage.format.fire", "&4");
+        set("indicators.damage.format.magic", "&5");
+        set("indicators.damage.format.poison", "&2");
+        set("indicators.damage.format.starvation", "&6");
+        set("indicators.damage.format.thorns", "&e");
+        set("indicators.damage.format.wither", "&8");
+        set("indicators.damage.timeVisible", 4);
+        set("indicators.damage.showForPlayers", true);
+        set("indicators.damage.showForMobs", true);
+
+        set("indicators.exp.enable", false);
+        set("indicators.exp.format", "&a");
+        set("indicators.exp.timeVisible", 4);
+
+        set("indicators.potion.enable", false);
+        set("indicators.potion.timeVisible", 4);
+        set("indicators.potion.showForPlayers", true);
+        set("indicators.potion.showForMobs", true);
+        set("indicators.potion.goldenapple.format", "&e+ %effect%");
+        set("indicators.potion.godapple.format", "&e+ %effect% II");
+
+        String[] potions = new String[]{"speed", "slow", "fast_digging", "slow_digging", "increase_damage", "heal", "harm", "jump", "confusion", "regeneration", "damage_resistance", "fire_resistance", "water_breathing", "invisibility", "blindness", "night_vision", "hunger", "weakness", "poison", "wither", "health_boost", "absorption", "saturation"};
+
+        for (String s : potions) {
+            set("indicators.potion.format." + s, "&e %effect% %amp%");
+        }
+
+        set("indicators.gainHealth.enable", false);
+        set("indicators.gainHealth.format", "&a");
+        set("indicators.gainHealth.timeVisible", 4);
+        set("indicators.gainHealth.showForPlayers", true);
+        set("indicators.gainHealth.showForMobs", true);
 
         config.saveConfig();
     }

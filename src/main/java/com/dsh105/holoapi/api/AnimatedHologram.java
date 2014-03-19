@@ -4,16 +4,9 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
+import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
-import com.dsh105.holoapi.util.wrapper.WrappedDataWatcher;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketAttachEntity;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityDestroy;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketEntityMetadata;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntity;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketSpawnEntityLiving;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -21,6 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Represents an AnimatedHologram that consists of either image or text frames displayed in a constant sequence
@@ -65,7 +62,7 @@ public class AnimatedHologram extends Hologram {
 
     /**
      * Gets the animation key of the hologram
-     * <p>
+     * <p/>
      * If the hologram is image based, the animation will have an animation key, as defined by the {@link com.dsh105.holoapi.image.AnimatedImageGenerator} used to create it
      *
      * @return key of the animation used to create the hologram. Returns null if the hologram is text-based
@@ -178,11 +175,11 @@ public class AnimatedHologram extends Hologram {
 
     /**
      * Updates the animation for an observer
-     * <p>
+     * <p/>
      * Important to note: This method may yield unexpected results if not used properly
      *
      * @param observer Player to update the animation for
-     * @param lines Lines to display
+     * @param lines    Lines to display
      */
     public void updateAnimation(Player observer, String[] lines) {
         for (int index = 0; index < lines.length; index++) {
@@ -207,11 +204,11 @@ public class AnimatedHologram extends Hologram {
 
     /**
      * Shows the the animation to an observer
-     * <p>
+     * <p/>
      * Important to note: This method may yield unexpected results if not used properly
      *
      * @param observer Player to show the animation to
-     * @param lines Lines to display
+     * @param lines    Lines to display
      */
     public void showAnimation(Player observer, String[] lines) {
         this.showAnimation(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), lines);
@@ -219,12 +216,12 @@ public class AnimatedHologram extends Hologram {
 
     /**
      * Shows the the animation to an observer at a position
-     * <p>
+     * <p/>
      * Important to note: This method may yield unexpected results if not used properly
      *
      * @param observer Player to show the animation to
-     * @param v Position to show the animation at
-     * @param lines Lines to display
+     * @param v        Position to show the animation at
+     * @param lines    Lines to display
      */
     public void showAnimation(Player observer, Vector v, String[] lines) {
         this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), lines);
@@ -232,14 +229,14 @@ public class AnimatedHologram extends Hologram {
 
     /**
      * Shows the the animation to an observer at a position
-     * <p>
+     * <p/>
      * Important to note: This method may yield unexpected results if not used properly
      *
      * @param observer Player to show the animation to
-     * @param x x value of the position the animation is to be shown
-     * @param y y value of the position the animation is to be shown
-     * @param z z value of the position the animation is to be shown
-     * @param lines Lines to display
+     * @param x        x value of the position the animation is to be shown
+     * @param y        y value of the position the animation is to be shown
+     * @param z        z value of the position the animation is to be shown
+     * @param lines    Lines to display
      */
     private void showAnimation(Player observer, double x, double y, double z, String[] lines) {
         for (int index = 0; index < lines.length; index++) {
@@ -309,7 +306,7 @@ public class AnimatedHologram extends Hologram {
         horse.setZ(z);
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message.replace("%name%", observer.getName()));
+        dw.watch(10, TagFormatter.format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setMetadata(dw);
@@ -336,7 +333,7 @@ public class AnimatedHologram extends Hologram {
 
     protected void updateNametag(Player observer, String message, int index) {
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, message.replace("%name%", observer.getName()));
+        dw.watch(10, TagFormatter.format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
 

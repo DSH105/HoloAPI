@@ -83,7 +83,7 @@ public enum Lang {
     }
 
     public static void sendTo(CommandSender sender, String msg) {
-        if (msg != null || !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
+        if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
             sender.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
         }
     }
@@ -92,11 +92,6 @@ public enum Lang {
         if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !(msg.equalsIgnoreCase("none"))) {
             p.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
         }
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 
     public String getValue() {
