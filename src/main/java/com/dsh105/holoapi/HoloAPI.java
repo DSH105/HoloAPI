@@ -160,6 +160,15 @@ public class HoloAPI extends DSHPlugin {
 
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new IndicatorListener(), this);
+
+        // Vault Hook
+        vaultHook = new VaultHook(this);
+
+        if (manager.getPlugin("Vault") != null && manager.getPlugin("Vault").isEnabled()) {
+            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and Hooked Vault.");
+            vaultHook.loadHook();
+        }
+
         this.loadHolograms();
 
         try {
@@ -172,13 +181,6 @@ public class HoloAPI extends DSHPlugin {
 
         this.checkUpdates();
 
-        // Vault Hook
-        vaultHook = new VaultHook(this);
-
-        if (manager.getPlugin("Vault") != null && manager.getPlugin("Vault").isEnabled()) {
-            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and Hooked Vault.");
-            vaultHook.loadHook();
-        }
     }
 
     @Override
