@@ -35,14 +35,8 @@ public class VaultHook {
     }
 
     public void loadHook() {
-        // Logging isn't needed here. Server owners would know if they haven't got Vault installed
-        if (!setupPermissions()) {
-            //ConsoleLogger.log(Logger.LogLevel.WARNING, "[Hook] [Vault] Unable to Hook into Permissions.");
-        }
-
-        if (setupEconomy()) {
-            //ConsoleLogger.log(Logger.LogLevel.WARNING, "[Hook] [Vault] Unable to Hook into Economy.");
-        }
+        setupPermissions();
+        setupEconomy();
     }
 
     public String getBalance(Player observer) {
@@ -52,15 +46,19 @@ public class VaultHook {
             return "%balance%";
         }
 
-        double bal = economy.getBalance(observer.getName());
+        try {
+            double bal = economy.getBalance(observer.getName());
 
-        if (bal == (int) bal) {
-            balance = String.valueOf((int) bal);
-        } else {
-            balance = String.valueOf(bal);
+            if (bal == (int) bal) {
+                balance = String.valueOf((int) bal);
+            } else {
+                balance = String.valueOf(bal);
+            }
+
+            return balance;
+        } catch (Exception ex) {
+            return "%balance%";
         }
-
-        return balance;
     }
 
     public String getRank(Player observer) {
@@ -68,6 +66,10 @@ public class VaultHook {
             return "%rank%";
         }
 
-        return permission.getPrimaryGroup(observer);
+        try {
+            return permission.getPrimaryGroup(observer);
+        } catch (Exception ex) {
+            return "%rank";
+        }
     }
 }
