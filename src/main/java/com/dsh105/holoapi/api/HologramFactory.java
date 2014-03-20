@@ -128,9 +128,9 @@ public class HologramFactory {
     public HologramFactory withImage(ImageGenerator imageGenerator) {
         int first = this.tags.size() - 1;
         if (first < 0) first = 0;
-        int last = imageGenerator.getLines().length - 1;
+        int length = imageGenerator.getLines().length - 1;
         if (imageGenerator.getKey() != null) {
-            this.imageIdMap.put(new TagSize(first, last), imageGenerator.getKey());
+            this.imageIdMap.put(new TagSize(first, first + length), imageGenerator.getKey());
         }
         return this.withText(imageGenerator.getLines());
     }
