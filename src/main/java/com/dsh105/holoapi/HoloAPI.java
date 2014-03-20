@@ -12,7 +12,7 @@ import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
-import com.dsh105.holoapi.hook.VaultHook;
+import com.dsh105.holoapi.hook.VaultProvider;
 import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
@@ -42,7 +42,7 @@ public class HoloAPI extends DSHPlugin {
     private YAMLConfig dataConfig;
     private YAMLConfig langConfig;
 
-    public VaultHook vaultHook;
+    private VaultProvider vaultProvider;
 
     // Update Checker stuff
     public boolean updateAvailable = false;
@@ -130,8 +130,11 @@ public class HoloAPI extends DSHPlugin {
         return null;
     }
 
-    public VaultHook getVaultHook() {
-        return vaultHook;
+    public VaultProvider getVaultProvider() {
+        if(this.vaultProvider == null) {
+            throw new RuntimeException("VaultProvider is NULL!");
+        }
+        return this.vaultProvider;
     }
 
     @Override
@@ -162,12 +165,7 @@ public class HoloAPI extends DSHPlugin {
         manager.registerEvents(new IndicatorListener(), this);
 
         // Vault Hook
-        vaultHook = new VaultHook(this);
-
-        if (manager.getPlugin("Vault") != null && manager.getPlugin("Vault").isEnabled()) {
-            vaultHook.loadHook();
-            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and hooked Vault.");
-        }
+        this.vaultProvider = new VaultProvider(this);
 
         this.loadHolograms();
 

@@ -12,8 +12,8 @@ public class VaultProvider extends PluginDependencyProvider<Vault> {
     public static Permission permission = null;
     public static Economy economy = null;
 
-    public VaultProvider(Plugin myPluginInstance, String dependencyName) {
-        super(myPluginInstance, dependencyName);
+    public VaultProvider(Plugin myPluginInstance) {
+        super(myPluginInstance, "Vault");
     }
 
     @Override

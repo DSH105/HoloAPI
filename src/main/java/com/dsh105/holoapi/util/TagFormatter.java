@@ -21,8 +21,8 @@ public class TagFormatter {
         content = content.replace("%mctime%", TimeFormat.format12(observer.getWorld().getTime()));
         content = content.replace("%name%", observer.getName());
         content = content.replace("%displayname%", observer.getDisplayName());
-        content = content.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
-        content = content.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
+        content = content.replace("%balance%", HoloAPI.getInstance().getVaultProvider().getBalance(observer));
+        content = content.replace("%rank%", HoloAPI.getInstance().getVaultProvider().getRank(observer));
         content = content.replace("%world%", observer.getWorld().getName());
         content = content.replace("%health%", String.valueOf(observer.getHealth() == (int) observer.getHealth() ? (int) observer.getHealth() : observer.getHealth()));
         content = content.replace("%playercount%", String.valueOf(Bukkit.getOnlinePlayers().length));
