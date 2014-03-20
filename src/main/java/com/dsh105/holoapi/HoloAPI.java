@@ -16,6 +16,7 @@ import com.dsh105.holoapi.hook.VaultHook;
 import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
+import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
@@ -159,6 +160,7 @@ public class HoloAPI extends DSHPlugin {
         COMMAND_MANAGER.register(holoCommand);
 
         manager.registerEvents(new HoloListener(), this);
+        manager.registerEvents(new WorldListener(), this);
         manager.registerEvents(new IndicatorListener(), this);
 
         // Vault Hook
