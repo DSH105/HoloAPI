@@ -19,6 +19,7 @@ public enum Lang {
     INT_ONLY("int_only", "&b%string% &3must to be an integer."),
     WHUPS("whups", "&3Whups. Something bad happened."),
     CONFIGS_RELOADED("configs_reloaded", "&3Configuration files reloaded."),
+    PLUGIN_INFORMATION("plugin_information", "&3Running HoloAPI v&b%version%&3. Use &b/" + HoloAPI.getInstance().getCommandLabel() + " help &3for help."),
 
     LINE_INDEX_TOO_BIG("line_index_too_big", "&3Line &b%index% &3does not exist."),
     TIP_HOVER_PREVIEW("hover_tip", "&e&oHover over to see a preview of the hologram. Click to insert teleport command."),
@@ -29,7 +30,7 @@ public enum Lang {
     IMAGES_NOT_LOADED("images_not_loaded", "&3Images are not loaded yet. Try again later."),
 
     FAILED_IMAGE_LOAD("failed_image_load", "&3Failed to load custom image. Make sure that it is correctly configured in &bconfig.yml&3."),
-    IMAGE_NOT_FOUND("image_not_found", "&3Image &3not found. Use &b/holo build image &3to create a new image configuration."),
+    IMAGE_NOT_FOUND("image_not_found", "&3Image &3not found. Use &b/" + HoloAPI.getInstance().getCommandLabel() + " build image &3to create a new image configuration."),
     HOLOGRAM_NOT_FOUND("hologram_not_found", "&3Hologram of ID &b%id% &3not found."),
     NO_ACTIVE_HOLOGRAMS("no_active_holograms", "&3There are currently no active holographic displays."),
     HOLOGRAM_CREATED("hologram_created", "&3Hologram of ID &b%id% &3created."),
