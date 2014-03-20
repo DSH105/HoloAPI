@@ -8,8 +8,16 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Needs some optimization
+ */
 public abstract class PluginDependencyProvider<T extends Plugin> {
 
+    protected PluginDependencyProvider<T> instance;
+    private List<HookedHandler> hookedHandlerList;
     private T dependency;
     protected boolean hooked;
     private Plugin myPluginInstance;
@@ -18,7 +26,10 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
     // TODO: add more utils, plugin stuff mostly.
 
     public PluginDependencyProvider(Plugin myPluginInstance, String dependencyName) {
+        this.instance = this;
+        this.hookedHandlerList = new ArrayList<HookedHandler>();
         this.myPluginInstance = myPluginInstance;
+        this.dependencyName = dependencyName;
 
         if(dependency == null && !this.hooked) {
             try {
@@ -42,6 +53,15 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
                         dependency = (T) event.getPlugin();
                         hooked = true;
                         HoloAPI.LOGGER.info("[" + getDependencyName() + "] Successfully hooked");
+
+                        Bukkit.getScheduler().runTaskAsynchronously(getHandlingPlugin(), new Runnable() {
+                            @Override
+                            public void run() {
+                                 for(HookedHandler handler : hookedHandlerList) {
+                                     handler.onReload(instance);
+                                 }
+                            }
+                        });
                     } catch (Exception e) {
                         throw new RuntimeException("Failed to hook plugin: " + event.getPlugin().getName());
                     }
@@ -78,5 +98,31 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
 
     public String getDependencyName() {
         return this.dependencyName;
+    }
+
+    public boolean hasHookHandler(HookedHandler hookedHandler) {
+        if(hookedHandler == null)
+            return false;
+        if(hookedHandlerList == null)
+            throw new RuntimeException("ReloadHandlerList is NULL!");
+        if(hookedHandlerList.contains(hookedHandler))
+            return true;
+        return false;
+    }
+
+    public void addHookHandler(HookedHandler handler) {
+        if(hasHookHandler(handler))
+            throw new IllegalArgumentException("Cannot register a handler twice!");
+        this.hookedHandlerList.add(handler);
+    }
+
+    public void removeHookHandler(HookedHandler hookedHandler) {
+        if(!hasHookHandler(hookedHandler))
+            throw new IllegalArgumentException("Cannot remove an non-existing handler!");
+        this.hookedHandlerList.remove(hookedHandler);
+    }
+
+    public abstract class HookedHandler {
+        public abstract void onReload(PluginDependencyProvider<T> dependencyProvider);
     }
 }
