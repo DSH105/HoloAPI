@@ -3,7 +3,6 @@ package com.dsh105.holoapi.hook;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -15,19 +14,17 @@ public class VaultProvider extends PluginDependencyProvider<Vault> {
 
     public VaultProvider(Plugin myPluginInstance, String dependencyName) {
         super(myPluginInstance, dependencyName);
+    }
 
-        addHookHandler(new HookedHandler() {
-            @Override
-            public void onReload(PluginDependencyProvider<Vault> dependencyProvider) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(getHandlingPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        setupPermissions();
-                        setupEconomy();
-                    }
-                });
-            }
-        });
+    @Override
+    public void onHook() {
+        setupEconomy();
+        setupPermissions();
+    }
+
+    @Override
+    public void onUnhook() {
+         // Ignore
     }
 
     // Vault supplied methods
