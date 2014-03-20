@@ -165,8 +165,8 @@ public class HoloAPI extends DSHPlugin {
         vaultHook = new VaultHook(this);
 
         if (manager.getPlugin("Vault") != null && manager.getPlugin("Vault").isEnabled()) {
-            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and Hooked Vault.");
             vaultHook.loadHook();
+            ConsoleLogger.log(Logger.LogLevel.NORMAL, "[Hook] [Vault] Detected and hooked Vault.");
         }
 
         this.loadHolograms();

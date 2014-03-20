@@ -1,7 +1,5 @@
 package com.dsh105.holoapi.hook;
 
-import com.dsh105.dshutils.logger.ConsoleLogger;
-import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.HoloAPI;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -37,12 +35,13 @@ public class VaultHook {
     }
 
     public void loadHook() {
+        // Logging isn't needed here. Server owners would know if they haven't got Vault installed
         if (!setupPermissions()) {
-            ConsoleLogger.log(Logger.LogLevel.WARNING, "[Hook] [Vault] Unable to Hook into Permissions.");
+            //ConsoleLogger.log(Logger.LogLevel.WARNING, "[Hook] [Vault] Unable to Hook into Permissions.");
         }
 
         if (setupEconomy()) {
-            ConsoleLogger.log(Logger.LogLevel.WARNING, "[Hook] [Vault] Unable to Hook into Economy.");
+            //ConsoleLogger.log(Logger.LogLevel.WARNING, "[Hook] [Vault] Unable to Hook into Economy.");
         }
     }
 
