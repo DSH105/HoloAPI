@@ -3,6 +3,7 @@ package com.dsh105.holoapi.api;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -188,6 +189,7 @@ public class HologramFactory {
         if (Bukkit.getWorld(this.worldName) == null) {
             //HoloAPI.getManager().clearFromFile(this.saveId);
             HoloAPI.LOGGER.log(Level.SEVERE, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + "!");
+            WorldListener.store(this.saveId, this.worldName);
             return null;
         }
 
