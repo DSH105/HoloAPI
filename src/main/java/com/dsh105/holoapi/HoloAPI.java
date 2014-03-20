@@ -241,8 +241,14 @@ public class HoloAPI extends DSHPlugin {
     }
 
     private void loadConfiguration() {
-        String[] header = {"HoloAPI Configuration File", "---------------------",
-                "See the HoloAPI Wiki before editing this file"};
+        String[] header = {
+            "HoloAPI",
+            "---------------------",
+            "Configuration File",
+            "",
+            "See the HoloAPI Wiki before editing this file",
+            "(https://github.com/DSH105/HoloAPI/wiki)"
+        };
         try {
             config = this.getConfigManager().getNewConfig("config.yml", header);
             OPTIONS = new ConfigOptions(config);
@@ -270,8 +276,11 @@ public class HoloAPI extends DSHPlugin {
         }
         dataConfig.reloadConfig();
 
-        String[] langHeader = {"HoloAPI", "---------------------",
-                "Language Configuration File"};
+        String[] langHeader = {
+            "HoloAPI",
+            "---------------------",
+            "Language Configuration File"
+        };
         try {
             langConfig = this.getConfigManager().getNewConfig("language.yml", langHeader);
             try {

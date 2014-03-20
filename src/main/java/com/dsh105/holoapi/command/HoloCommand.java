@@ -127,6 +127,10 @@ public class HoloCommand implements CommandExecutor {
                     } else return true;
                 }
             }
+        } else if (args.length == 0) {
+            Lang.sendTo(sender, Lang.PLUGIN_INFORMATION.getValue()
+                    .replace("%version%", HoloAPI.getInstance().getDescription().getVersion()));
+            return true;
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (Perm.RELOAD.hasPerm(sender, true, true)) {
@@ -320,7 +324,7 @@ public class HoloCommand implements CommandExecutor {
             }
         }
         Lang.sendTo(sender, Lang.COMMAND_ERROR.getValue()
-                .replace("%cmd%", "/" + cmd.getLabel() + " " + (args.length == 0 ? "" : StringUtil.combineSplit(0, args, " "))));
+                .replace("%cmd%", "/" + cmd.getLabel() + (args.length == 0 ? "" : " " + StringUtil.combineSplit(0, args, " "))));
         return true;
     }
 }

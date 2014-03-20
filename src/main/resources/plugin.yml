@@ -5,6 +5,7 @@ description: Advanced Hologram management
 softdepend: [Vault]
 website: ${project.url}
 main: ${main.class}
+version: ${project.version}
 commands:
     holoupdate:
         description: Update the HoloAPI plugin
