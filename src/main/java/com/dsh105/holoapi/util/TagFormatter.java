@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
@@ -19,8 +20,13 @@ public class TagFormatter {
 
         content = content.replace("%mctime%", TimeFormat.format12(observer.getWorld().getTime()));
         content = content.replace("%name%", observer.getName());
+        content = content.replace("%displayname%", observer.getDisplayName());
         content = content.replace("%balance%", HoloAPI.getInstance().getVaultHook().getBalance(observer));
         content = content.replace("%rank%", HoloAPI.getInstance().getVaultHook().getRank(observer));
+        content = content.replace("%world%", observer.getWorld().getName());
+        content = content.replace("%health%", String.valueOf(observer.getHealth() == (int) observer.getHealth() ? (int) observer.getHealth() : observer.getHealth()));
+        content = content.replace("%playercount%", String.valueOf(Bukkit.getOnlinePlayers().length));
+        content = content.replace("%maxplayers%", String.valueOf(Bukkit.getMaxPlayers()));
         content = matchDate(content);
         content = UnicodeFormatter.replaceAll(content);
 
