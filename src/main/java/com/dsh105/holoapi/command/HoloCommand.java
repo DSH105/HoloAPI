@@ -15,6 +15,8 @@ import com.dsh105.holoapi.conversation.basic.YesNoFunction;
 import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPrompt;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.AnimatedTextGenerator;
+import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
@@ -291,6 +293,20 @@ public class HoloCommand implements CommandExecutor {
                     }
                     h.refreshDisplay();
                     Lang.sendTo(sender, Lang.HOLOGRAM_REFRESH.getValue().replace("%id%", h.getSaveId()));
+                    return true;
+                } else return true;
+            } else if (args[0].equalsIgnoreCase("copy")) {
+                if (Perm.COPY.hasPerm(sender, true, false)) {
+                    Hologram hologram = HoloAPI.getManager().getHologram(args[1]);
+                    if (hologram == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                    }
+                    Hologram copy = HoloAPI.getManager().copy(hologram, ((Player) sender).getLocation());
+                    if (copy instanceof AnimatedHologram) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_ANIMATED_COPIED.getValue().replace("%id%", hologram.getSaveId()));
+                    } else {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_COPIED.getValue().replace("%id%", hologram.getSaveId()));
+                    }
                     return true;
                 } else return true;
             }

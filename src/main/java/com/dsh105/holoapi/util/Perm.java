@@ -15,12 +15,17 @@ public enum Perm {
     TELEPORT("holoapi.holo.teleport"),
     BUILD("holoapi.holo.build"),
     EDIT("holoapi.holo.edit"),
-    REFRESH("holoapi.holo.refresh");
+    REFRESH("holoapi.holo.refresh"),
+    COPY("holoapi.holo.copy");
 
     String perm;
 
     Perm(String perm) {
         this.perm = perm;
+    }
+
+    public String getPermission() {
+        return perm;
     }
 
     public boolean hasPerm(CommandSender sender, boolean sendMessage, boolean allowConsole) {
