@@ -23,6 +23,7 @@ public enum Lang {
 
     LINE_INDEX_TOO_BIG("line_index_too_big", "&3Line &b%index% &3does not exist."),
     TIP_HOVER_PREVIEW("hover_tip", "&e&oHover over to see a preview of the hologram. Click to insert teleport command."),
+    TIP_HOVER_COMMANDS("hover_tip_commands", "&e&oHover over to see more information about the commands. Click to insert it into the chat window."),
     IMAGE_LOADED("url_image_loaded", "&3Custom URL image of key &b%key% loaded."),
     LOADING_URL_IMAGE("loading_url_image", "&3Loading custom URL image of key &b%key%&3. Create hologram when the image has finished loading."),
     LOADING_URL_ANIMATION("loading_url_animation", "&3Loading custom URL animation of key &b%key%&3. Create hologram when the animation has finished loading."),
@@ -106,5 +107,10 @@ public enum Lang {
 
     public String getRaw() {
         return HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
+    }
+
+    @Override
+    public String toString() {
+        return this.getValue();
     }
 }

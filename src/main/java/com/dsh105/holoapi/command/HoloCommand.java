@@ -19,6 +19,7 @@ import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import com.dsh105.holoapi.util.pagination.FancyPaginator;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,47 +38,65 @@ import java.util.Map;
 
 public class HoloCommand implements CommandExecutor {
 
-    private Paginator help;
-
-    //private String[] HELP_CREATE;
+    private Paginator helpPages;
 
     public HoloCommand() {
-        ArrayList<String> list = new ArrayList<String>();
-        for (HelpEntry he : HelpEntry.values()) {
-            list.add(he.getLine());
+        ArrayList<String> help = new ArrayList<String>();
+        for (HelpEntry entry : HelpEntry.values()) {
+            help.add(entry.getDefaultLine());
         }
-        this.help = new Paginator(list, 5);
+        this.helpPages = new Paginator(help, 5);
+    }
+
+    private FancyPaginator getHelp(CommandSender sender) {
+        ArrayList<FancyMessage> helpMessages = new ArrayList<FancyMessage>();
+        for (HelpEntry he : HelpEntry.values()) {
+            helpMessages.add(he.getFancyMessage(sender));
+        }
+        return new FancyPaginator(helpMessages, 5);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
             if (args.length == 1) {
-                String[] help = this.help.getPage(1);
-                sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help 1/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
-                sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
-                for (String s : help) {
-                    sender.sendMessage(s);
+                if (sender instanceof Player) {
+                    FancyPaginator help = this.getHelp(sender);
+                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help 1/" + help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
+                    for (FancyMessage f : help.getPage(1)) {
+                        f.send((Player) sender);
+                    }
+                    sender.sendMessage(Lang.TIP_HOVER_COMMANDS.getValue());
+                } else {
+                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help 1/" + this.helpPages.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
+                    for (String s : this.helpPages.getPage(1)) {
+                        sender.sendMessage(s);
+                    }
                 }
-                sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                 return true;
             } else if (args.length == 2) {
                 if (StringUtil.isInt(args[1])) {
-                    String[] help = this.help.getPage(Integer.parseInt(args[1]));
-                    if (help == null) {
-                        Lang.sendTo(sender, Lang.HELP_INDEX_TOO_BIG.getValue().replace("%index%", args[1]));
-                        return true;
+                    if (sender instanceof Player) {
+                        FancyPaginator help = this.getHelp(sender);
+                        sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                        sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
+                        for (FancyMessage f : help.getPage(Integer.parseInt(args[1]))) {
+                            f.send((Player) sender);
+                        }
+                        sender.sendMessage(Lang.TIP_HOVER_COMMANDS.getValue());
+                    } else {
+                        sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + this.helpPages.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
+                        sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
+                        for (String s : this.helpPages.getPage(Integer.parseInt(args[1]))) {
+                            sender.sendMessage(s);
+                        }
                     }
-                    sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + this.help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
-                    for (String s : help) {
-                        sender.sendMessage(s);
-                    }
-                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                     return true;
                 } else {
                     sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + ChatColor.DARK_AQUA + "----------------");
                     sender.sendMessage(ChatColor.DARK_AQUA + "Help could not be found for \"" + ChatColor.AQUA + args[1] + ChatColor.DARK_AQUA + "\".");
-                    sender.sendMessage(ChatColor.DARK_AQUA + "--------------------------------------------------");
                     return true;
                 }
             }
@@ -182,9 +201,7 @@ public class HoloCommand implements CommandExecutor {
                         }
                         if (sender instanceof Player && list.size() > 1) {
                             ItemStack i;
-                            String title = list.get(0);
-                            list.remove(title);
-                            i = ItemUtil.getItem(Material.SNOW, title, list.toArray(new String[list.size()]));
+                            i = ItemUtil.getItem(list.toArray(new String[list.size()]));
                             new FancyMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName()).itemTooltip(i).suggest("/holo teleport " + h.getSaveId()).send(((Player) sender));
                         } else {
                             sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());

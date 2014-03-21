@@ -9,27 +9,22 @@ import java.util.ArrayList;
 
 public class ItemUtil {
 
-    public static ItemStack getItem(Material material, int amount, String name, String... lore) {
-        ItemStack i = new ItemStack(material, amount, (short) 0);
+    public static ItemStack getItem(String[] content) {
+        ItemStack i = new ItemStack(Material.SNOW, 1, (short) 0);
         ItemMeta meta = i.getItemMeta();
         if (meta != null) {
-            if (name != null) {
-                meta.setDisplayName(name);
+            if (content.length > 0) {
+                meta.setDisplayName(content[0]);
             }
-            if (lore != null) {
+            if (content.length > 1) {
                 ArrayList<String> list = new ArrayList<String>();
-                for (String s : lore) {
-                    s = ChatColor.WHITE + s;
-                    list.add(s);
+                for (int index = 1; index < content.length; index++) {
+                    list.add(ChatColor.WHITE + content[index]);
                 }
                 meta.setLore(list);
             }
             i.setItemMeta(meta);
         }
         return i;
-    }
-
-    public static ItemStack getItem(Material material, String name, String... lore) {
-        return getItem(material, 1, name, lore);
     }
 }
