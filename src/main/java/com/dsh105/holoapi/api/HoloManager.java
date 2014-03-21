@@ -106,6 +106,15 @@ public interface HoloManager {
     public void clearFromFile(Hologram hologram);
 
     /**
+     * Copies a hologram from the provided original
+     *
+     * @param original     original hologram
+     * @param copyLocation location to copy the hologram to
+     * @return copied hologram
+     */
+    public Hologram copy(Hologram hologram, Location copyLocation);
+
+    /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
      *
      * @param location            position to place the simple hologram

@@ -293,6 +293,36 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
+    public Hologram copy(Hologram hologram, Location copyLocation) {
+        Hologram copy;
+        if (hologram instanceof AnimatedHologram) {
+            AnimatedHologramFactory animatedCopyFactory = new AnimatedHologramFactory(HoloAPI.getInstance()).withLocation(copyLocation);
+            AnimatedHologram animatedHologram = (AnimatedHologram) hologram;
+            if (animatedHologram.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(animatedHologram.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(animatedHologram.getAnimationKey())) {
+                animatedCopyFactory.withImage(HoloAPI.getAnimationLoader().getGenerator(animatedHologram.getAnimationKey()));
+            } else {
+                ArrayList<Frame> frames = animatedHologram.getFrames();
+                animatedCopyFactory.withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()])));
+            }
+            copy = animatedCopyFactory.build();
+        } else {
+            HologramFactory copyFactory = new HologramFactory(HoloAPI.getInstance()).withLocation(copyLocation);
+            for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
+                if (entry.getValue()) {
+                    ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(entry.getKey());
+                    if (generator != null) {
+                        copyFactory.withImage(generator);
+                    }
+                } else {
+                    copyFactory.withText(entry.getKey());
+                }
+            }
+            copy = copyFactory.build();
+        }
+        return copy;
+    }
+
+    @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, List<String> lines) {
         return this.createSimpleHologram(location, secondsUntilRemoved, false, lines.toArray(new String[lines.size()]));
     }
