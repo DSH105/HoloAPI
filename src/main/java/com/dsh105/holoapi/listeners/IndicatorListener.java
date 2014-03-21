@@ -110,9 +110,9 @@ public class IndicatorListener implements Listener {
                     this.showPotionHologram(event.getPlayer(), potion.getEffects());
                 }
             } else if (event.getItem().getType() == Material.GOLDEN_APPLE) {
-                String msg = config.getString("indicators.potion.goldenapple.format", "&e+ %effect%");
+                String msg = config.getString("indicators.potion.format.goldenapple", "&e+ %effect%");
                 if (event.getItem().getDurability() == 1) {
-                    msg = config.getString("indicators.potion.godapple.format", "&e+ %effect%");
+                    msg = config.getString("indicators.potion.format.godapple", "&e+ %effect%");
                 }
                 HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', msg.replace("%effect%", "Golden Apple")));
             }
