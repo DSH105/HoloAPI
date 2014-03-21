@@ -127,6 +127,9 @@ public class HologramFactory {
      * @see com.dsh105.holoapi.image.ImageGenerator
      */
     public HologramFactory withImage(ImageGenerator imageGenerator) {
+        if (imageGenerator == null) {
+            throw new IllegalArgumentException("Image generator cannot be null");
+        }
         int first = this.tags.size() - 1;
         if (first < 0) first = 0;
         int length = imageGenerator.getLines().length - 1;
