@@ -2,7 +2,7 @@ name: ${project.name}
 version: ${project.version}
 author: [DSH105, CaptainBern]
 description: Advanced Hologram management
-softdepend: [Vault]
+softdepend: [Vault, VanishNoPacket]
 website: ${project.url}
 main: ${main.class}
 version: ${project.version}

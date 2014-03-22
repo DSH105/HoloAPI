@@ -144,16 +144,18 @@ public class IndicatorListener implements Listener {
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
         if (!event.isCancelled()) {
             final Player p = event.getPlayer();
-            final String msg = event.getMessage();
-            if (event.isAsynchronous()) {
-                HoloAPI.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(HoloAPI.getInstance(), new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        showChatHologram(p, msg);
-                    }
-                });
-            } else {
-                this.showChatHologram(p, msg);
+            if (!HoloAPI.getInstance().getVanishProvider().isVanished(p)) {
+                final String msg = event.getMessage();
+                if (event.isAsynchronous()) {
+                    HoloAPI.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(HoloAPI.getInstance(), new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            showChatHologram(p, msg);
+                        }
+                    });
+                } else {
+                    this.showChatHologram(p, msg);
+                }
             }
         }
     }

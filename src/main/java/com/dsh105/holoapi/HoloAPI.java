@@ -12,6 +12,7 @@ import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
+import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
 import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
@@ -44,6 +45,7 @@ public class HoloAPI extends DSHPlugin {
     private YAMLConfig langConfig;
 
     private VaultProvider vaultProvider;
+    private VanishProvider vanishProvider;
 
     // Update Checker stuff
     public boolean updateAvailable = false;
@@ -138,6 +140,13 @@ public class HoloAPI extends DSHPlugin {
         return this.vaultProvider;
     }
 
+    public VanishProvider getVanishProvider() {
+        if (this.vanishProvider == null) {
+            throw new RuntimeException("VanishProvider is NULL!");
+        }
+        return vanishProvider;
+    }
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -168,6 +177,10 @@ public class HoloAPI extends DSHPlugin {
 
         // Vault Hook
         this.vaultProvider = new VaultProvider(this);
+
+        // VanishNoPacket Hook
+        this.vanishProvider = new VanishProvider(this);
+
 
         this.loadHolograms();
 
