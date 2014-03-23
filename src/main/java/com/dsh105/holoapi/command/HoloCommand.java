@@ -262,6 +262,7 @@ public class HoloCommand implements CommandExecutor {
                         })).buildConversation((Player) sender).begin();
                     } else {
                         HoloAPI.getManager().clearFromFile(hologramId);
+                        Lang.sendTo(sender, Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId));
                     }
 
                     HoloAPI.getManager().stopTracking(h);
