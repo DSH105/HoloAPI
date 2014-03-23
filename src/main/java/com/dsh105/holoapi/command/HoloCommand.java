@@ -29,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -230,33 +231,38 @@ public class HoloCommand implements CommandExecutor {
                     }
                     final String hologramId = h.getSaveId();
 
-                    InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
+                    if (sender instanceof Conversable) {
+                        InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
 
-                        private boolean success;
+                            private boolean success;
 
-                        @Override
-                        public void onFunction(ConversationContext context, String input) {
-                            if (input.equalsIgnoreCase("YES")) {
-                                HoloAPI.getManager().clearFromFile(hologramId);
-                                success = true;
+                            @Override
+                            public void onFunction(ConversationContext context, String input) {
+                                if (input.equalsIgnoreCase("YES")) {
+                                    HoloAPI.getManager().clearFromFile(hologramId);
+                                    success = true;
+                                }
                             }
-                        }
 
-                        @Override
-                        public String getSuccessMessage() {
-                            return success ? Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId) : Lang.HOLOGRAM_REMOVED_MEMORY.getValue().replace("%id%", hologramId);
-                        }
+                            @Override
+                            public String getSuccessMessage() {
+                                return success ? Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId) : Lang.HOLOGRAM_REMOVED_MEMORY.getValue().replace("%id%", hologramId);
+                            }
 
-                        @Override
-                        public String getPromptText() {
-                            return Lang.YES_NO_CLEAR_FROM_FILE.getValue();
-                        }
+                            @Override
+                            public String getPromptText() {
+                                return Lang.YES_NO_CLEAR_FROM_FILE.getValue();
+                            }
 
-                        @Override
-                        public String getFailedText() {
-                            return Lang.YES_NO_INPUT_INVALID.getValue();
-                        }
-                    })).buildConversation((Player) sender).begin();
+                            @Override
+                            public String getFailedText() {
+                                return Lang.YES_NO_INPUT_INVALID.getValue();
+                            }
+                        })).buildConversation((Player) sender).begin();
+                    } else {
+                        HoloAPI.getManager().clearFromFile(hologramId);
+                    }
+
                     HoloAPI.getManager().stopTracking(h);
 
                     return true;
