@@ -33,6 +33,8 @@ permissions:
         default: op
     holoapi.holo.copy:
         default: op
+    holoapi.holo.nearby:
+        default: op
     holoapi.update:
         default: op
     holoapi.*:
@@ -50,4 +52,5 @@ permissions:
             holoapi.holo.edit: true
             holoapi.holo.refresh: true
             holoapi.holo.copy: true
+            holoapi.holo.nearby: true
             holoapi.update: true

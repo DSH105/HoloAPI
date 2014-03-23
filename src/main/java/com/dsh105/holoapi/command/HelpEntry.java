@@ -22,6 +22,7 @@ public enum HelpEntry {
     TELEPORT("teleport <id>", Perm.TELEPORT.getPermission(), "Teleport to a specific hologram."),
     BUILD("build", Perm.BUILD.getPermission(), "Dynamically build a combined hologram of both text and images."),
     EDIT("edit <id> <line>", Perm.EDIT.getPermission(), "Edit a line of an existing hologram."),
+    NEARBY("nearby <radius>", Perm.NEARBY.getPermission(), "View information on all nearby holograms within the specified radius"),
     REFRESH("refresh <id>", Perm.REFRESH.getPermission(), "Refresh a Hologram of the specified ID."),
     RELOAD("reload", Perm.RELOAD.getPermission(), "Reload all HoloAPI configuration files."),;
 

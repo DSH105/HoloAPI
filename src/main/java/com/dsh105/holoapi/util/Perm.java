@@ -16,7 +16,8 @@ public enum Perm {
     BUILD("holoapi.holo.build"),
     EDIT("holoapi.holo.edit"),
     REFRESH("holoapi.holo.refresh"),
-    COPY("holoapi.holo.copy");
+    COPY("holoapi.holo.copy"),
+    NEARBY("holoapi.holo.nearby");
 
     String perm;
 

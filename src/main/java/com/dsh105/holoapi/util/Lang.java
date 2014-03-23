@@ -44,6 +44,8 @@ public enum Lang {
     HOLOGRAM_REFRESH("hologram_refresh", "&3Hologram of ID &b%id% &3refreshed."),
     HOLOGRAM_COPIED("hologram_copied", "&3Hologram of ID &b%id% &3copied."),
     HOLOGRAM_ANIMATED_COPIED("hologram_animated_copied", "&3Animated Hologram of ID &b%id% &3copied."),
+    HOLOGRAM_NEARBY("hologram_nearby", "&3Holograms within a radius of &b%radius%&3:"),
+    NO_NEARBY_HOLOGRAMS("no_nearby_holograms", "&3There are no holograms within a radius of &b%radius%&3."),
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),
     YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),

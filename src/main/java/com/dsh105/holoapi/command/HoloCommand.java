@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.command;
 
 import com.dsh105.dshutils.pagination.Paginator;
+import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
@@ -312,6 +313,67 @@ public class HoloCommand implements CommandExecutor {
                         Lang.sendTo(sender, Lang.HOLOGRAM_ANIMATED_COPIED.getValue().replace("%id%", hologram.getSaveId()));
                     } else {
                         Lang.sendTo(sender, Lang.HOLOGRAM_COPIED.getValue().replace("%id%", hologram.getSaveId()));
+                    }
+                    return true;
+                } else return true;
+            } else if (args[0].equalsIgnoreCase("nearby")) {
+                if (Perm.NEARBY.hasPerm(sender, true, false)) {
+                    if (!StringUtil.isInt(args[1])) {
+                        Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
+                        return true;
+                    }
+                    ArrayList<Hologram> holograms = new ArrayList<Hologram>();
+                    for (Hologram h : HoloAPI.getManager().getAllComplexHolograms().keySet()) {
+                        if (GeometryUtil.getNearbyEntities(h.getDefaultLocation(), Integer.parseInt(args[1])).contains((Player) sender)) {
+                            holograms.add(h);
+                        }
+                    }
+
+                    if (holograms.isEmpty()) {
+                        Lang.sendTo(sender, Lang.NO_NEARBY_HOLOGRAMS.getValue().replace("%radius%", args[1]));
+                        return true;
+                    }
+
+                    Lang.sendTo(sender, Lang.HOLOGRAM_NEARBY.getValue().replace("%radius%", args[1]));
+                    for (Hologram h : holograms) {
+                        ArrayList<String> list = new ArrayList<String>();
+                        list.add(ChatColor.GOLD + "" + ChatColor.UNDERLINE + "Hologram Preview:");
+                        if (h instanceof AnimatedHologram) {
+                            AnimatedHologram animatedHologram = (AnimatedHologram) h;
+                            if (animatedHologram.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(animatedHologram.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(animatedHologram.getAnimationKey())) {
+                                list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + animatedHologram.getAnimationKey() + " (ANIMATION)");
+                            } else {
+                                Collections.addAll(list, animatedHologram.getFrames().get(0).getLines());
+                            }
+                        } else {
+                            if (h.getLines().length > 1) {
+                                for (Map.Entry<String, Boolean> serialise : h.serialise().entrySet()) {
+                                    if (serialise.getValue()) {
+                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + serialise.getKey() + ".requiresBorder", false)) {
+                                            for (String s : HoloAPI.getImageLoader().getGenerator(serialise.getKey()).getLines()) {
+                                                list.add(ChatColor.WHITE + s);
+                                            }
+                                        } else {
+                                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + serialise.getKey() + " (IMAGE)");
+                                        }
+                                    } else {
+                                        list.add(ChatColor.WHITE + serialise.getKey());
+                                    }
+                                }
+                            } else {
+                                list.add(h.getLines()[0]);
+                            }
+                        }
+                        if (sender instanceof Player && list.size() > 1) {
+                            ItemStack i;
+                            i = ItemUtil.getItem(list.toArray(new String[list.size()]));
+                            new FancyMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName()).itemTooltip(i).suggest("/holo teleport " + h.getSaveId()).send(((Player) sender));
+                        } else {
+                            sender.sendMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName());
+                        }
+                    }
+                    if (sender instanceof Player) {
+                        sender.sendMessage(Lang.TIP_HOVER_PREVIEW.getValue());
                     }
                     return true;
                 } else return true;
