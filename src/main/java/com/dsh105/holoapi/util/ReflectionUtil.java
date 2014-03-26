@@ -26,13 +26,11 @@ import java.lang.reflect.Method;
 
 public class ReflectionUtil {
 
-    public static final String NMS_PATH = getNMSPackageName();
-
     public static String getNMSPackageName() {
         return "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     }
 
-    public static String getOBCPackageName() {
+    public static String getCBCPackageName() {
         return "org.bukkit.craftbukkit." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     }
 
@@ -50,7 +48,11 @@ public class ReflectionUtil {
     }
 
     public static Class getNMSClass(String className) {
-        return getClass(NMS_PATH + "." + className);
+        return HoloAPI.SERVER.getNMSClass(className);
+    }
+
+    public static Class getCBCClass(String className) {
+        return HoloAPI.SERVER.getCBClass(className);
     }
 
     /**

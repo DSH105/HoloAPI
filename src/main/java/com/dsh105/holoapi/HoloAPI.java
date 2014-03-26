@@ -35,6 +35,7 @@ import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
+import com.dsh105.holoapi.server.*;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
@@ -47,6 +48,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 public class HoloAPI extends DSHPlugin {
@@ -69,6 +71,7 @@ public class HoloAPI extends DSHPlugin {
     public String updateName = "";
     public boolean updateChecked = false;
 
+    public static Server SERVER;
     public static boolean isUsingNetty;
 
     private static double LINE_SPACING = 0.25D;
@@ -177,6 +180,8 @@ public class HoloAPI extends DSHPlugin {
         } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
         }
+
+        this.initServer();
 
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
@@ -331,6 +336,33 @@ public class HoloAPI extends DSHPlugin {
         }
         langConfig.reloadConfig();
         //this.prefix = Lang.PREFIX.getValue();
+    }
+
+    protected void initServer() {
+        List<Server> servers = new ArrayList<Server>();
+        servers.add(new MCPCPlusServer());
+        servers.add(new SpigotServer());
+        servers.add(new CraftBukkitServer());
+        servers.add(new UnknownServer());
+
+        for (Server server : servers) {
+            if (server.init()) {   //the first server type that returns true on init is a valid server brand.
+                SERVER = server;
+                break;
+            }
+        }
+
+        /*if (SERVER == null) {
+            LOGGER.warning("Failed to identify the server brand! The API will not run correctly -> disabling");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        } else {
+            if (!SERVER.isCompatible()) {
+                LOGGER.warning("This Server version may not be compatible with EntityAPI!");
+            }
+            LOGGER.info("Identified server brand: " + SERVER.getName());
+            LOGGER.info("MC Version: " + SERVER.getMCVersion());
+        }*/
     }
 
     @Override

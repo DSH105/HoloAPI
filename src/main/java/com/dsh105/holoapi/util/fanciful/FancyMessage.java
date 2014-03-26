@@ -96,12 +96,8 @@ public class FancyMessage {
     }
 
     public FancyMessage achievementTooltip(final Achievement which) {
-        try {
-            Object achievement = new SafeMethod(Class.forName(ReflectionUtil.getOBCPackageName() + ".CraftStatistic"), "getNMSAchievement", Achievement.class).invoke(null, which);
-            return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
-        } catch (ClassNotFoundException e) {
-            throw new FancyMessageFailedException();
-        }
+        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getNMSAchievement", Achievement.class).invoke(null, which);
+        return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
     }
 
     public FancyMessage statisticTooltip(final Statistic which) {
@@ -110,12 +106,8 @@ public class FancyMessage {
             throw new IllegalArgumentException("That statistic requires an additional " + type + " parameter!");
         }
 
-        try {
-            Object achievement = new SafeMethod(Class.forName(ReflectionUtil.getOBCPackageName() + ".CraftStatistic"), "getNMSStatistic", Statistic.class).invoke(null, which);
-            return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
-        } catch (ClassNotFoundException e) {
-            throw new FancyMessageFailedException();
-        }
+        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getNMSStatistic", Statistic.class).invoke(null, which);
+        return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
     }
 
     public FancyMessage statisticTooltip(final Statistic which, Material item) {
@@ -127,12 +119,8 @@ public class FancyMessage {
             throw new IllegalArgumentException("Wrong parameter type for that statistic - needs " + type + "!");
         }
 
-        try {
-            Object achievement = new SafeMethod(Class.forName(ReflectionUtil.getOBCPackageName() + ".CraftStatistic"), "getMaterialStatistic", Statistic.class, Material.class).invoke(null, which, item);
-            return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
-        } catch (ClassNotFoundException e) {
-            throw new FancyMessageFailedException();
-        }
+        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getMaterialStatistic", Statistic.class, Material.class).invoke(null, which, item);
+        return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
     }
 
     public FancyMessage statisticTooltip(final Statistic which, EntityType entity) {
@@ -144,12 +132,8 @@ public class FancyMessage {
             throw new IllegalArgumentException("Wrong parameter type for that statistic - needs " + type + "!");
         }
 
-        try {
-            Object achievement = new SafeMethod(Class.forName(ReflectionUtil.getOBCPackageName() + ".CraftStatistic"), "getEntityStatistic", Statistic.class, EntityType.class).invoke(null, which, entity);
-            return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
-        } catch (ClassNotFoundException e) {
-            throw new FancyMessageFailedException();
-        }
+        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getEntityStatistic", Statistic.class, EntityType.class).invoke(null, which, entity);
+        return achievementTooltip(new SafeField<String>(achievement.getClass(), "name").get(achievement));
     }
 
     public FancyMessage itemTooltip(final String itemJSON) {
@@ -158,12 +142,7 @@ public class FancyMessage {
     }
 
     public FancyMessage itemTooltip(final ItemStack itemStack) {
-        Object nmsCopy;
-        try {
-            nmsCopy = new SafeMethod(Class.forName(ReflectionUtil.getOBCPackageName() + ".inventory.CraftItemStack"), "asNMSCopy", ItemStack.class).invoke(null, itemStack);
-        } catch (ClassNotFoundException e) {
-            throw new FancyMessageFailedException();
-        }
+        Object nmsCopy = new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", ItemStack.class).invoke(null, itemStack);
         Object nbtData = new SafeMethod(nmsCopy.getClass(), "save", ReflectionUtil.getNMSClass("NBTTagCompound")).invoke(nmsCopy, new SafeConstructor(ReflectionUtil.getNMSClass("NBTTagCompound")).newInstance());
         return itemTooltip(nbtData.toString());
     }
