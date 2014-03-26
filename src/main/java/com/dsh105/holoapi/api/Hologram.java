@@ -355,6 +355,28 @@ public class Hologram {
     }
 
     /**
+     * Gets all the registered NMS entity IDs for the hologram
+     *
+     * @return all entity IDs used for the tags in the hologram
+     */
+    public int[] getAllEntityIds() {
+        int[] ids = new int[this.getTagCount()];
+
+        for (int i = 0; i < ids.length; i++) {
+            ids[i] = i;
+        }
+        int[] entityIds = new int[ids.length * 2];
+
+        for (int i = 0; i < ids.length; i++) {
+            if (ids[i] <= this.getTagCount()) {
+                entityIds[i * 2] = this.getHorseIndex(ids[i]);
+                entityIds[i * 2 + 1] = this.getSkullIndex(ids[i] * 2);
+            }
+        }
+        return entityIds;
+    }
+
+    /**
      * Shows the hologram to a player at the default location
      *
      * @param observer player to show the hologram to
@@ -442,25 +464,12 @@ public class Hologram {
      * @param observer player to clear the hologram display for
      */
     public void clear(Player observer) {
-        int[] ids = new int[this.getTagCount()];
-
-        for (int i = 0; i < ids.length; i++) {
-            ids[i] = i;
-        }
-        clearTags(observer, ids);
+        clearTags(observer, this.getAllEntityIds());
         this.playerToLocationMap.remove(observer.getName());
     }
 
-    protected void clearTags(Player observer, int... indices) {
+    protected void clearTags(Player observer, int... entityIds) {
         WrapperPacketEntityDestroy destroy = new WrapperPacketEntityDestroy();
-        int[] entityIds = new int[indices.length * 2];
-
-        for (int i = 0; i < indices.length; i++) {
-            if (indices[i] <= this.getTagCount()) {
-                entityIds[i * 2] = this.getHorseIndex(indices[i]);
-                entityIds[i * 2 + 1] = this.getSkullIndex(indices[i] * 2);
-            }
-        }
         destroy.setEntities(entityIds);
         destroy.send(observer);
     }
