@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 public class PlayerUtil {
 
-    public static final Method getHandle = ReflectionUtil.getMethod(ReflectionUtil.getCBCClass("CraftEntity"), "getHandle");
+    public static final Method getHandle = ReflectionUtil.getMethod(ReflectionUtil.getCBCClass("entity.CraftEntity"), "getHandle");
     public static final Field playerConnection = ReflectionUtil.getField(ReflectionUtil.getNMSClass("EntityPlayer"), "playerConnection");
     public static final Method sendPacket = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("PlayerConnection"), "sendPacket", ReflectionUtil.getNMSClass("Packet"));
     public static final Field networkManager = ReflectionUtil.getField(ReflectionUtil.getNMSClass("PlayerConnection"), "networkManager");
