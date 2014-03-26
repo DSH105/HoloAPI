@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.action.TouchAction;
 import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
@@ -50,6 +51,7 @@ public class Hologram {
 
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
+    protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
 
     protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
@@ -317,6 +319,39 @@ public class Hologram {
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
+    }
+
+    /**
+     * Adds an action for when the hologram is touched
+     *
+     * @param action action to perform when the hologram is touched
+     */
+    public void addTouchAction(TouchAction action) {
+        this.touchActions.add(action);
+    }
+
+    /**
+     * Removes an action that is set to fire when the hologram is touched
+     *
+     * @param action action to remove
+     */
+    public void removeTouchAction(TouchAction action) {
+        this.touchActions.remove(action);
+    }
+
+    /**
+     * Clears all touch actions for this hologram
+     */
+    public void clearAllTouchActions() {
+        this.touchActions.clear();
+    }
+
+    /**
+     * Gets a copy of all the touch actions for the hologram
+     * @return
+     */
+    public ArrayList<TouchAction> getAllTouchActions() {
+        return new ArrayList<TouchAction>(this.touchActions);
     }
 
     /**
