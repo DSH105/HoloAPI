@@ -81,7 +81,7 @@ public class HoloCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
             if (args.length == 1) {
-                if (sender instanceof Player) {
+                if (sender instanceof Player && HoloAPI.isUsingNetty) {
                     FancyPaginator help = this.getHelp(sender);
                     sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help 1/" + help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
                     sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
@@ -99,7 +99,7 @@ public class HoloCommand implements CommandExecutor {
                 return true;
             } else if (args.length == 2) {
                 if (StringUtil.isInt(args[1])) {
-                    if (sender instanceof Player) {
+                    if (sender instanceof Player && HoloAPI.isUsingNetty) {
                         FancyPaginator help = this.getHelp(sender);
                         sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
                         sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
