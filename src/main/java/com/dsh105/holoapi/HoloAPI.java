@@ -24,6 +24,7 @@ import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
@@ -35,6 +36,7 @@ import com.dsh105.holoapi.image.*;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
+import com.dsh105.holoapi.protocol.Action;
 import com.dsh105.holoapi.server.*;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
@@ -383,5 +385,9 @@ public class HoloAPI extends DSHPlugin {
 
     public enum ConfigType {
         MAIN, DATA, LANG;
+    }
+
+    public void handleTouch(Hologram hologram, Action action) {
+        // Apply some magic here
     }
 }

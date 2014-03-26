@@ -1,13 +1,17 @@
 package com.dsh105.holoapi.protocol;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.util.ReflectionUtil;
+import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 import com.google.common.collect.MapMaker;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
@@ -73,8 +77,26 @@ public class InjectionManager {
         }
     }
 
-    public Object handleIncomingPacket(ChannelPipelineInjector injector, Player player, Object packet) {
-        // TODO: handle the packet, make sure to do this on the main thread
-        return null;
+    private static final Method READ_ACTION = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("EnumEntityUseAction"), "a", ReflectionUtil.getNMSClass("EnumEntityUseAction"));
+
+    public void handleIncomingPacket(ChannelPipelineInjector injector, Player player, final Object msg) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.holoAPI, new Runnable() {
+            @Override
+            public void run() {
+                if(!"PacketPlayInUseEntity".equals(msg.getClass().getName()))
+                    return;
+                Packet packet = new Packet(msg);
+                int id = packet.read("a");
+                Action action = readAction(packet.read("action"));
+                // Handle some kind of event here?
+                // The id = the entity id of the hologram that got interacted with.
+                // This needs to be checked (if it's a hologram, if not then do nothing and return
+                // The action is whether or not it was a right or left click.
+            }
+        });
+    }
+
+    private Action readAction(Object enumAction) {
+        return Action.getFromId((Integer) ReflectionUtil.invokeMethod(READ_ACTION, null, enumAction));
     }
 }

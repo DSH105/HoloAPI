@@ -65,7 +65,16 @@ public class Packet {
         }
     }
 
-    public Object read(String fieldName) {
+    /**
+     * This class needs a lot improvement :/
+     * @param packet
+     */
+    public Packet(Object packet) {
+        this.packetHandle = packet;
+        this.packetClass = packet.getClass();
+    }
+
+    public <T> T read(String fieldName) {
         return ReflectionUtil.getField(getPacketClass(), fieldName, this.getPacketHandle());
     }
 

@@ -149,6 +149,7 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        this.injectionManager.handleIncomingPacket(this, this.player, msg);
         super.channelRead(ctx, msg);
     }
 
