@@ -91,6 +91,15 @@ public class ReflectionUtil {
         }
     }
 
+    public static <T> T getField(Field field, Object instance) {
+        try {
+            return (T) field.get(instance);
+        } catch (IllegalAccessException e) {
+            HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve field: " + field.getName());
+            return null;
+        }
+    }
+
     /**
      * Method stuff
      */
