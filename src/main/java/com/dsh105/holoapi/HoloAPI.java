@@ -340,7 +340,7 @@ public class HoloAPI extends DSHPlugin {
 
     protected void initServer() {
         List<Server> servers = new ArrayList<Server>();
-        servers.add(new MCPCPlusServer());
+        //servers.add(new MCPCPlusServer());
         servers.add(new SpigotServer());
         servers.add(new CraftBukkitServer());
         servers.add(new UnknownServer());
