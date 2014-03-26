@@ -15,6 +15,10 @@ public class ReflectionUtil {
         return "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     }
 
+    public static String getOBCPackageName() {
+        return "org.bukkit.craftbukkit." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+    }
+
     /**
      * Class stuff
      */

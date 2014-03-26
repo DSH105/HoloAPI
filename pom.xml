@@ -42,26 +42,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Java's SON -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20090211</version>
-        </dependency>
-
         <!-- DSHUtils -->
         <dependency>
             <groupId>com.dsh105</groupId>
             <artifactId>DSHUtils</artifactId>
             <version>${dshutils.version}</version>
-        </dependency>
-
-        <!-- Fanciful -->
-        <dependency>
-            <groupId>mkremins</groupId>
-            <artifactId>fanciful</artifactId>
-            <version>${fanciful.version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- Vault -->
@@ -97,12 +82,6 @@
         <repository>
             <id>hawk-repo</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
-        </repository>
-
-        <!-- Fanciful -->
-        <repository>
-            <id>fanciful-repo</id>
-            <url>https://raw2.github.com/mkremins/fanciful/mvn-repo/</url>
         </repository>
 
         <!-- Vault -->
@@ -208,8 +187,6 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.dsh105:DSHUtils</include>
-                                    <include>org.json:json</include>
-                                    <include>mkremins:fanciful</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -217,42 +194,7 @@
                                     <pattern>com.dsh105.dshutils</pattern>
                                     <shadedPattern>com.dsh105.holoapi.libs.dshutils</shadedPattern>
                                 </relocation>
-                                <relocation>
-                                    <pattern>org.json</pattern>
-                                    <shadedPattern>com.dsh105.holoapi.libs.json</shadedPattern>
-                                    <excludes>
-                                        <exclude>org.json.simple.*</exclude>
-                                    </excludes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>mkremins.fanciful</pattern>
-                                    <shadedPattern>com.dsh105.holoapi.libs.fanciful</shadedPattern>
-                                </relocation>
                             </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
-                <!--<configuration> <stylesheetfile>${project.basedir}/style/stylesheet.css</stylesheetfile>
-                  </configuration> -->
-                <executions>
-                    <execution>
-                        <id>non-aggregate</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <links>
-                                <link>http://jd.bukkit.org/rb/apidocs/</link>
-                            </links>
-                            <linksource>true</linksource>
                         </configuration>
                     </execution>
                 </executions>

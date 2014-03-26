@@ -1,6 +1,6 @@
 package com.dsh105.holoapi.util.pagination;
 
-import mkremins.fanciful.FancyMessage;
+import com.dsh105.holoapi.util.fanciful.FancyMessage;
 
 import java.util.ArrayList;
 

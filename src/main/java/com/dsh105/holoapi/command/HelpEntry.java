@@ -3,7 +3,7 @@ package com.dsh105.holoapi.command;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Perm;
-import mkremins.fanciful.FancyMessage;
+import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
