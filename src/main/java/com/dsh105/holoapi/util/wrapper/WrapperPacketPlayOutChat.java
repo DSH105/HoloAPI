@@ -31,9 +31,8 @@ public class WrapperPacketPlayOutChat extends Packet {
 
     public void setMessage(String chatComponent) {
         if (!HoloAPI.isUsingNetty) {
-            if (!(chatComponent instanceof String)) {
-                throw new IllegalArgumentException("Chat component for 1.6 chat packet must be a String!");
-            }
+            this.write("message", chatComponent);
+            return;
         }
         this.write("a", new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), "a", String.class).invoke(null, chatComponent));
     }
