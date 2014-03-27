@@ -221,22 +221,15 @@ public class Hologram {
         LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
         ArrayList<String> tags = new ArrayList<String>();
         tags.addAll(Arrays.asList(this.tags));
-        boolean cont = true;
-        int index = 0;
-        while (cont) {
-            if (index >= tags.size()) {
-                cont = false;
+        for (int index = 0; index < tags.size(); index++) {
+            String tag = tags.get(index);
+            Map.Entry<TagSize, String> entry = getImageIdOfIndex(index);
+            if (entry != null) {
+                index += entry.getKey().getLast() - entry.getKey().getFirst();
+                map.put(entry.getValue(), true);
             } else {
-                String tag = tags.get(index);
-                Map.Entry<TagSize, String> entry = getImageIdOfIndex(index);
-                if (entry != null) {
-                    index += entry.getKey().getLast() - entry.getKey().getFirst();
-                    map.put(entry.getValue(), true);
-                } else {
-                    map.put(tag, false);
-                }
+                map.put(tag, false);
             }
-            index++;
         }
         return map;
     }
