@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.protocol;
 
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.action.TouchAction;
@@ -112,6 +113,7 @@ public class InjectionManager {
     }
 
     private Action readAction(Object enumAction) {
-        return Action.getFromId((Integer) ReflectionUtil.invokeMethod(READ_ACTION, null, enumAction));
+        //return Action.getFromId((Integer) ReflectionUtil.invokeMethod(READ_ACTION, null, enumAction));
+        return Action.getFromId((Integer) ReflectionUtil.getField(ReflectionUtil.getNMSClass("EnumEntityUseAction"), "d", enumAction));
     }
 }
