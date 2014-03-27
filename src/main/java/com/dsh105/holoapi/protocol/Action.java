@@ -1,6 +1,6 @@
 package com.dsh105.holoapi.protocol;
 
-public  enum Action {
+public enum Action {
 
     LEFT_CLICK,
     RIGHT_CLICK,

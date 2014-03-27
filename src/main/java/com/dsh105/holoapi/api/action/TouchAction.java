@@ -17,6 +17,8 @@
 
 package com.dsh105.holoapi.api.action;
 
+import com.avaje.ebean.validation.NotNull;
+import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
 /**
@@ -27,7 +29,14 @@ public interface TouchAction {
     /**
      * Action to perform when a Hologram that the action is attached to is touched
      *
-     * @param interactee Player interacting with the Hologram
+     * @param who Player interacting with the Hologram
      */
-    public void onTouch(Player interactee);
+    public void onTouch(Player who, Action action);
+
+    /**
+     * Gets the String the represents the TouchAction. The serialised key is used in hologram information lists within HoloAPI
+     *
+     * @return string that represents the TouchAction
+     */
+    public @NotNull String serialise();
 }

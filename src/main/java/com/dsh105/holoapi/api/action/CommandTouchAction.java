@@ -17,18 +17,39 @@
 
 package com.dsh105.holoapi.api.action;
 
+import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
 public class CommandTouchAction implements TouchAction {
 
     private String command;
+    private boolean performAsConsole;
 
-    public CommandTouchAction(String command) {
+    public CommandTouchAction(String command, boolean performAsConsole) {
         this.command = command;
+        this.performAsConsole = performAsConsole;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public boolean shouldPerformAsConsole() {
+        return performAsConsole;
     }
 
     @Override
-    public void onTouch(Player interactee) {
-        interactee.performCommand(this.command);
+    public void onTouch(Player who, Action action) {
+        if (this.shouldPerformAsConsole()) {
+            HoloAPI.getInstance().getServer().dispatchCommand(HoloAPI.getInstance().getServer().getConsoleSender(), this.command);
+        } else {
+            who.performCommand(this.command);
+        }
+    }
+
+    @Override
+    public String serialise() {
+        return "Command: " + this.command + (this.shouldPerformAsConsole() ? " as Console" : "");
     }
 }

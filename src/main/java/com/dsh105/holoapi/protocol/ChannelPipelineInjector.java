@@ -41,6 +41,9 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
         /**
          * Channel/network stuff
          */
+        this.nmsHandle = getNmsHandle();
+        this.playerConnection = getPlayerConnection();
+        this.networkManager = getNetworkManager();
         this.channel = getChannel();
     }
 
@@ -105,7 +108,7 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
     public Object getNetworkManager() {
         if (this.networkManager == null)
             this.networkManager = PlayerUtil.getNetworkManager(this.player);
-        return this.playerConnection;
+        return this.networkManager;
     }
 
     public Channel getChannel() {

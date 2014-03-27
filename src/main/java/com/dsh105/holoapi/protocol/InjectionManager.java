@@ -1,6 +1,8 @@
 package com.dsh105.holoapi.protocol;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.api.action.TouchAction;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 import com.google.common.collect.MapMaker;
@@ -13,6 +15,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
 
 public class InjectionManager {
 
@@ -79,19 +82,27 @@ public class InjectionManager {
 
     private static final Method READ_ACTION = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("EnumEntityUseAction"), "a", ReflectionUtil.getNMSClass("EnumEntityUseAction"));
 
-    public void handleIncomingPacket(ChannelPipelineInjector injector, Player player, final Object msg) {
+    public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.holoAPI, new Runnable() {
             @Override
             public void run() {
                 if(!"PacketPlayInUseEntity".equals(msg.getClass().getName()))
                     return;
                 Packet packet = new Packet(msg);
-                int id = packet.read("a");
-                Action action = readAction(packet.read("action"));
-                // Handle some kind of event here?
-                // The id = the entity id of the hologram that got interacted with.
-                // This needs to be checked (if it's a hologram, if not then do nothing and return
+                // The entity id of the hologram that got interacted with.
+                int id = (Integer) packet.read("a");
                 // The action is whether or not it was a right or left click.
+                Action action = readAction(packet.read("action"));
+
+                for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
+                    for (int entityId : h.getAllEntityIds()) {
+                        if (id == entityId) {
+                            for (TouchAction touchAction : h.getAllTouchActions()) {
+                                touchAction.onTouch(player, action);
+                            }
+                        }
+                    }
+                }
             }
         });
     }
