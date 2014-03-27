@@ -217,8 +217,8 @@ public class Hologram {
      *
      * @return serialised map of the hologram
      */
-    public LinkedHashMap<String, Boolean> serialise() {
-        LinkedHashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
+    public ArrayList<StoredTag> serialise() {
+        ArrayList<StoredTag> tagList = new ArrayList<StoredTag>();
         ArrayList<String> tags = new ArrayList<String>();
         tags.addAll(Arrays.asList(this.tags));
         for (int index = 0; index < tags.size(); index++) {
@@ -226,12 +226,12 @@ public class Hologram {
             Map.Entry<TagSize, String> entry = getImageIdOfIndex(index);
             if (entry != null) {
                 index += entry.getKey().getLast() - entry.getKey().getFirst();
-                map.put(entry.getValue(), true);
+                tagList.add(new StoredTag(entry.getValue(), true));
             } else {
-                map.put(tag, false);
+                tagList.add(new StoredTag(tag, false));
             }
         }
-        return map;
+        return tagList;
     }
 
     protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
@@ -271,12 +271,7 @@ public class Hologram {
         while (i.hasNext()) {
             Player p = Bukkit.getPlayerExact(i.next());
             if (p != null) {
-                int[] ids = new int[this.getTagCount()];
-
-                for (int j = 0; j < this.getTagCount(); j++) {
-                    ids[j] = j;
-                }
-                clearTags(p, ids);
+                this.clearTags(p, this.getAllEntityIds());
             }
             i.remove();
         }
@@ -358,6 +353,7 @@ public class Hologram {
         for (int i = 0; i < ids.length; i++) {
             ids[i] = i;
         }
+
         int[] entityIds = new int[ids.length * 2];
 
         for (int i = 0; i < ids.length; i++) {

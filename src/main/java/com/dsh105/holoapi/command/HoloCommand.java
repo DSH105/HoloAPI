@@ -21,10 +21,7 @@ import com.dsh105.dshutils.pagination.Paginator;
 import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.AnimatedHologram;
-import com.dsh105.holoapi.api.AnimatedHologramFactory;
-import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.api.*;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.InputPrompt;
 import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
@@ -39,6 +36,7 @@ import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import com.dsh105.holoapi.util.pagination.FancyPaginator;
 import org.bukkit.ChatColor;
@@ -203,17 +201,17 @@ public class HoloCommand implements CommandExecutor {
                             }
                         } else {
                             if (h.getLines().length > 1) {
-                                for (Map.Entry<String, Boolean> serialise : h.serialise().entrySet()) {
-                                    if (serialise.getValue()) {
-                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + serialise.getKey() + ".requiresBorder", false)) {
-                                            for (String s : HoloAPI.getImageLoader().getGenerator(serialise.getKey()).getLines()) {
-                                                list.add(ChatColor.WHITE + s);
+                                for (StoredTag tag : h.serialise()) {
+                                    if (tag.isImage()) {
+                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
+                                            for (String s : HoloAPI.getImageLoader().getGenerator(tag.getContent()).getLines()) {
+                                                list.add(TagFormatter.formatBasic(ChatColor.WHITE + s));
                                             }
                                         } else {
-                                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + serialise.getKey() + " (IMAGE)");
+                                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + tag.getContent() + " (IMAGE)");
                                         }
                                     } else {
-                                        list.add(ChatColor.WHITE + serialise.getKey());
+                                        list.add(ChatColor.WHITE + tag.getContent());
                                     }
                                 }
                             } else {
@@ -365,17 +363,17 @@ public class HoloCommand implements CommandExecutor {
                             }
                         } else {
                             if (h.getLines().length > 1) {
-                                for (Map.Entry<String, Boolean> serialise : h.serialise().entrySet()) {
-                                    if (serialise.getValue()) {
-                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + serialise.getKey() + ".requiresBorder", false)) {
-                                            for (String s : HoloAPI.getImageLoader().getGenerator(serialise.getKey()).getLines()) {
-                                                list.add(ChatColor.WHITE + s);
+                                for (StoredTag tag : h.serialise()) {
+                                    if (tag.isImage()) {
+                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
+                                            for (String s : HoloAPI.getImageLoader().getGenerator(tag.getContent()).getLines()) {
+                                                list.add(TagFormatter.formatBasic(ChatColor.WHITE + s));
                                             }
                                         } else {
-                                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + serialise.getKey() + " (IMAGE)");
+                                            list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + tag.getContent() + " (IMAGE)");
                                         }
                                     } else {
-                                        list.add(ChatColor.WHITE + serialise.getKey());
+                                        list.add(ChatColor.WHITE + tag.getContent());
                                     }
                                 }
                             } else {

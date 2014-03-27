@@ -178,9 +178,9 @@ public class SimpleHoloManager implements HoloManager {
                 }
             } else {
                 int index = 0;
-                for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
-                    this.config.set(path + "lines." + index + ".type", entry.getValue() ? "image" : "text");
-                    this.config.set(path + "lines." + index + ".value", entry.getKey().replace(ChatColor.COLOR_CHAR, '&'));
+                for (StoredTag tag : hologram.serialise()) {
+                    this.config.set(path + "lines." + index + ".type", tag.isImage() ? "image" : "text");
+                    this.config.set(path + "lines." + index + ".value", tag.getContent().replace(ChatColor.COLOR_CHAR, '&'));
                     index++;
                 }
             }
@@ -324,14 +324,14 @@ public class SimpleHoloManager implements HoloManager {
             copy = animatedCopyFactory.build();
         } else {
             HologramFactory copyFactory = new HologramFactory(HoloAPI.getInstance()).withLocation(copyLocation);
-            for (Map.Entry<String, Boolean> entry : hologram.serialise().entrySet()) {
-                if (entry.getValue()) {
-                    ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(entry.getKey());
+            for (StoredTag tag : hologram.serialise()) {
+                if (tag.isImage()) {
+                    ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(tag.getContent());
                     if (generator != null) {
                         copyFactory.withImage(generator);
                     }
                 } else {
-                    copyFactory.withText(entry.getKey());
+                    copyFactory.withText(tag.getContent());
                 }
             }
             copy = copyFactory.build();

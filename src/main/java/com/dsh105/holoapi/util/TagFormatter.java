@@ -29,7 +29,27 @@ import java.util.regex.Pattern;
 
 public class TagFormatter {
 
-    public static String format(Player observer, String content) {
+    public static String formatForOldClient(String content) {
+        if (content.length() > 64 && !HoloAPI.isUsingNetty) {
+            // 1.6.x client crashes if a name tag is longer than 64 characters
+            // Unfortunate, but it must be countered for
+            content = content.substring(0, 64);
+        }
+        return content;
+    }
+
+    public static String formatBasic(String content) {
+        formatForOldClient(content);
+
+        content = UnicodeFormatter.replaceAll(content);
+        content = ChatColor.translateAlternateColorCodes('&', content);
+
+        return content;
+    }
+
+    public static String formatTags(Player observer, String content) {
+        formatForOldClient(content);
+
         if (content.contains("%time%")) {
             Calendar c = Calendar.getInstance();
             c.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
@@ -46,15 +66,14 @@ public class TagFormatter {
         content = content.replace("%playercount%", String.valueOf(Bukkit.getOnlinePlayers().length));
         content = content.replace("%maxplayers%", String.valueOf(Bukkit.getMaxPlayers()));
         content = matchDate(content);
-        content = UnicodeFormatter.replaceAll(content);
 
-        content = ChatColor.translateAlternateColorCodes('&', content);
+        return content;
+    }
 
-        if (content.length() > 64 && !HoloAPI.isUsingNetty) {
-            // 1.6.x client crashes if a name tag is longer than 64 characters
-            // Unfortunate, but it must be countered for
-            content = content.substring(0, 64);
-        }
+    public static String format(Player observer, String content) {
+        formatBasic(content);
+        formatTags(observer, content);
+
         return content;
     }
 
