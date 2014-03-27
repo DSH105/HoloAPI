@@ -15,39 +15,21 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.api.event;
+package com.dsh105.holoapi.api.events;
 
 import com.dsh105.holoapi.api.Hologram;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
  * Called before a hologram is deleted.
- * TODO: Cancellable/Modifiable?
  */
-public class HoloDeleteEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+public class HoloDeleteEvent extends HoloEvent {
 
-    private final Hologram hologram;
     private final CommandSender who;
 
     public HoloDeleteEvent(Hologram hologram, CommandSender who) {
-        this.hologram = hologram;
+        super(hologram);
         this.who = who;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    /**
-     * Gets the hologram deleted
-     *
-     * @return hologram that was deleted
-     */
-    public Hologram getHologram() {
-        return hologram;
     }
 
     /**
@@ -59,7 +41,4 @@ public class HoloDeleteEvent extends Event {
         return who;
     }
 
-    public HandlerList getHandlers() {
-        return handlers;
-    }
 }

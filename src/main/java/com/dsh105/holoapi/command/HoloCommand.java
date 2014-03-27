@@ -24,7 +24,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.*;
 import com.dsh105.holoapi.api.action.CommandTouchAction;
 import com.dsh105.holoapi.api.action.TouchAction;
-import com.dsh105.holoapi.api.event.HoloDeleteEvent;
+import com.dsh105.holoapi.api.events.HoloDeleteEvent;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.InputPrompt;
 import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
