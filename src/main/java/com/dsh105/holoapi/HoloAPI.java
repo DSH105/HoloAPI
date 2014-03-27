@@ -32,6 +32,7 @@ import com.dsh105.holoapi.config.ConfigOptions;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
 import com.dsh105.holoapi.image.*;
+import com.dsh105.holoapi.listeners.CommandTouchActionListener;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
@@ -196,6 +197,7 @@ public class HoloAPI extends DSHPlugin {
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new WorldListener(), this);
         manager.registerEvents(new IndicatorListener(), this);
+        manager.registerEvents(new CommandTouchActionListener(), this);
 
         // Vault Hook
         this.vaultProvider = new VaultProvider(this);

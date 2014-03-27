@@ -3,6 +3,7 @@ package com.dsh105.holoapi.protocol;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.action.TouchAction;
+import com.dsh105.holoapi.api.event.HologramTouchEvent;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 import com.google.common.collect.MapMaker;
@@ -94,11 +95,15 @@ public class InjectionManager {
                 // The action is whether or not it was a right or left click.
                 Action action = readAction(packet.read("action"));
 
-                for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-                    for (int entityId : h.getAllEntityIds()) {
+                for (Hologram hologram : HoloAPI.getManager().getAllHolograms().keySet()) {
+                    for (int entityId : hologram.getAllEntityIds()) {
                         if (id == entityId) {
-                            for (TouchAction touchAction : h.getAllTouchActions()) {
-                                touchAction.onTouch(player, action);
+                            for (TouchAction touchAction : hologram.getAllTouchActions()) {
+                                HologramTouchEvent touchEvent = new HologramTouchEvent(hologram, touchAction);
+                                HoloAPI.getInstance().getServer().getPluginManager().callEvent(touchEvent);
+                                if (!touchEvent.isCancelled()) {
+                                    touchAction.onTouch(player, action);
+                                }
                             }
                         }
                     }

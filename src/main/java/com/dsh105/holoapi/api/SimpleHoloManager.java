@@ -20,6 +20,9 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.action.CommandTouchAction;
+import com.dsh105.holoapi.api.action.TouchAction;
+import com.dsh105.holoapi.api.event.TouchActionLoadEvent;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
@@ -184,6 +187,15 @@ public class SimpleHoloManager implements HoloManager {
                     index++;
                 }
             }
+            for (TouchAction touch : hologram.getAllTouchActions()) {
+                Map<String, Object> map = touch.getDataToSave();
+                if (map != null && !map.isEmpty()) {
+                    for (Map.Entry<String, Object> entry : map.entrySet()) {
+                        // Let the developer implementing the API handle how data is saved and loaded to and from holograms
+                        this.config.set(path + "touchactions." + entry.getKey(), entry.getValue());
+                    }
+                }
+            }
             this.config.saveConfig();
         }
     }
@@ -233,7 +245,7 @@ public class SimpleHoloManager implements HoloManager {
                             }
                         }
                         if (!frameList.isEmpty()) {
-                            new AnimatedHologramFactory(HoloAPI.getInstance()).withText(new AnimatedTextGenerator(frameList.toArray(new Frame[frameList.size()]))).withSaveId(key).withLocation(new Vector(x, y, z), worldName).build();
+                            this.loadTouchActions(new AnimatedHologramFactory(HoloAPI.getInstance()).withText(new AnimatedTextGenerator(frameList.toArray(new Frame[frameList.size()]))).withSaveId(key).withLocation(new Vector(x, y, z), worldName).build(), key);
                         }
                     }
                 } else {
@@ -261,9 +273,10 @@ public class SimpleHoloManager implements HoloManager {
                             unprepared.add(key);
                             continue;
                         }
-                        hf.withSaveId(key).withLocation(new Vector(x, y, z), worldName).build();
+                        this.loadTouchActions(hf.withSaveId(key).withLocation(new Vector(x, y, z), worldName).build(), key);
                     }
                 }
+
             }
         }
         return unprepared;
@@ -275,11 +288,12 @@ public class SimpleHoloManager implements HoloManager {
         double x = config.getDouble(path + "x");
         double y = config.getDouble(path + "y");
         double z = config.getDouble(path + "z");
+        Hologram finalHologram = null;
         if (config.get(path + "animatedImage.image") != null) {
             if (config.getBoolean(path + "animatedImage.image")) {
                 AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage.key"));
                 if (generator != null) {
-                    return new AnimatedHologramFactory(HoloAPI.getInstance()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+                    finalHologram = new AnimatedHologramFactory(HoloAPI.getInstance()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
                 }
             }
         } else {
@@ -303,10 +317,27 @@ public class SimpleHoloManager implements HoloManager {
                 }
             }
             if (!hf.isEmpty()) {
-                return hf.withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+                finalHologram = hf.withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
             }
         }
-        return null;
+        if (finalHologram != null) {
+            this.loadTouchActions(finalHologram, hologramId);
+        }
+        return finalHologram;
+    }
+
+    private void loadTouchActions(Hologram hologram, String hologramKey) {
+        ConfigurationSection touchSection = this.config.getConfigurationSection("holograms." + hologramKey + ".touchactions");
+        if (touchSection != null) {
+            for (String touchKey : touchSection.getKeys(true)) {
+                LinkedHashMap<String, Object> configMap = new LinkedHashMap<String, Object>();
+                ConfigurationSection touchKeySection = this.config.getConfigurationSection("holograms." + hologramKey + ".touchactions." + touchKey);
+                for (String fullKey : touchKeySection.getKeys(true)) {
+                    configMap.put(fullKey, touchKeySection.get(fullKey));
+                }
+                HoloAPI.getInstance().getServer().getPluginManager().callEvent(new TouchActionLoadEvent(hologram, touchKey, configMap));
+            }
+        }
     }
 
     @Override

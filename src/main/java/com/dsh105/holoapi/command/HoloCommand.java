@@ -452,7 +452,7 @@ public class HoloCommand implements CommandExecutor {
 
                         Lang.sendTo(sender, Lang.TOUCH_ACTIONS.getValue().replace("%id%", args[2]));
                         for (TouchAction touchAction : hologram.getAllTouchActions()) {
-                            sender.sendMessage("•• " + ChatColor.AQUA + touchAction.serialise());
+                            sender.sendMessage("•• " + ChatColor.AQUA + StringUtil.capitalise(touchAction.getSaveKey().replace("_", " ")));
                         }
                         return true;
                     } else return true;
@@ -509,7 +509,7 @@ public class HoloCommand implements CommandExecutor {
                 if (Perm.TOUCH_REMOVE.hasPerm(sender, true, true)) {
                     TouchAction toRemove = null;
                     for (TouchAction touchAction : hologram.getAllTouchActions()) {
-                        if (touchAction.serialise().equalsIgnoreCase(command) || (touchAction instanceof CommandTouchAction && ((CommandTouchAction) touchAction).getCommand().equalsIgnoreCase(command))) {
+                        if (touchAction.getSaveKey().equalsIgnoreCase(command) || (touchAction instanceof CommandTouchAction && ((CommandTouchAction) touchAction).getCommand().equalsIgnoreCase(command))) {
                             toRemove = touchAction;
                             break;
                         }

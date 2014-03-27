@@ -21,6 +21,8 @@ import com.avaje.ebean.validation.NotNull;
 import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
+import java.util.LinkedHashMap;
+
 /**
  * Represents an action that is performed when a Hologram is touched
  */
@@ -38,5 +40,7 @@ public interface TouchAction {
      *
      * @return string that represents the TouchAction
      */
-    public @NotNull String serialise();
+    public @NotNull String getSaveKey();
+
+    public LinkedHashMap<String, Object> getDataToSave();
 }

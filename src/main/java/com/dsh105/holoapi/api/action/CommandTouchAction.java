@@ -21,6 +21,8 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
+import java.util.LinkedHashMap;
+
 public class CommandTouchAction implements TouchAction {
 
     private String command;
@@ -49,7 +51,15 @@ public class CommandTouchAction implements TouchAction {
     }
 
     @Override
-    public String serialise() {
-        return "Command: " + this.command + (this.shouldPerformAsConsole() ? " as Console" : "");
+    public String getSaveKey() {
+        return "command_" + this.command + "_" + this.shouldPerformAsConsole();
+    }
+
+    @Override
+    public LinkedHashMap<String, Object> getDataToSave() {
+        LinkedHashMap<String, Object> dataMap = new LinkedHashMap<String, Object>();
+        dataMap.put("command", this.getCommand());
+        dataMap.put("asConsole", this.shouldPerformAsConsole());
+        return dataMap;
     }
 }
