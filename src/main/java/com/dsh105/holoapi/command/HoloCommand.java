@@ -247,7 +247,7 @@ public class HoloCommand implements CommandExecutor {
                     }
                     final String hologramId = h.getSaveId();
 
-                    if (sender instanceof Conversable) {
+                    if (sender instanceof Player) {
                         InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
 
                             private boolean success;
