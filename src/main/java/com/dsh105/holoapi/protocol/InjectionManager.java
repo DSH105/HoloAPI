@@ -86,7 +86,7 @@ public class InjectionManager {
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.holoAPI, new Runnable() {
             @Override
             public void run() {
-                if (!"PacketPlayInUseEntity".equals(msg.getClass().getName()))
+                if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
                     return;
                 Packet packet = new Packet(msg);
                 // The entity id of the hologram that got interacted with.
