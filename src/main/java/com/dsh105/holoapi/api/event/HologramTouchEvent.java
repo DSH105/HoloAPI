@@ -24,6 +24,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Called when a hologram is touched. The onTouch function in a {@link com.dsh105.holoapi.api.action.TouchAction} is called if the event is not cancelled
+ */
 public class HologramTouchEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
@@ -39,14 +42,29 @@ public class HologramTouchEvent extends Event implements Cancellable {
         this.touchAction = touchAction;
     }
 
+    /**
+     * Gets the hologram touched
+     *
+     * @return hologram that was touched
+     */
     public Hologram getHologram() {
         return hologram;
     }
 
+    /**
+     * Gets the player that touched the hologram
+     *
+     * @return player that touched the hologram
+     */
     public Player getPlayer() {
         return who;
     }
 
+    /**
+     * Gets the TouchAction instance representing the event
+     *
+     * @return TouchAction representing the event
+     */
     public TouchAction getTouchAction() {
         return touchAction;
     }

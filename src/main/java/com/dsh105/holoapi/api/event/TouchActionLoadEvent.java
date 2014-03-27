@@ -23,6 +23,9 @@ import org.bukkit.event.HandlerList;
 
 import java.util.Map;
 
+/**
+ * Called when TouchAction data is loaded from file. The event can be used to recreate TouchActions and add them to loaded holograms. See {@link com.dsh105.holoapi.listeners.CommandTouchActionListener} for an example of this
+ */
 public class TouchActionLoadEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
@@ -37,14 +40,29 @@ public class TouchActionLoadEvent extends Event {
         this.configMap = configMap;
     }
 
+    /**
+     * Gets the hologram associated with the saved data
+     *
+     * @return hologram associated with the saved data
+     */
     public Hologram getHologram() {
         return hologram;
     }
 
+    /**
+     * Gets the save key of the saved data
+     *
+     * @return key of the saved data
+     */
     public String getLoadedTouchActionKey() {
         return loadedTouchActionKey;
     }
 
+    /**
+     * A map of all saved data for the appropriate key
+     *
+     * @return map of all saved data for the TouchAction
+     */
     public Map<String, Object> getConfigMap() {
         return configMap;
     }

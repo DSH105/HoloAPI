@@ -23,20 +23,39 @@ import org.bukkit.entity.Player;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Represents a command-based action that is performed when a Hologram is touched
+ */
 public class CommandTouchAction implements TouchAction {
 
     private String command;
     private boolean performAsConsole;
 
+    /**
+     * Constructs a new CommandTouchAction
+     *
+     * @param command command to perform when the hologram is touched
+     * @param performAsConsole true if command is to be performed as the console, false if it is to be performed as the player that touched the hologram
+     */
     public CommandTouchAction(String command, boolean performAsConsole) {
         this.command = command;
         this.performAsConsole = performAsConsole;
     }
 
+    /**
+     * Gets the command that is to be performed
+     *
+     * @return command to be performed
+     */
     public String getCommand() {
         return command;
     }
 
+    /**
+     * Gets whether the command should be executed from the console or on behalf of the player that touched the hologram
+     *
+     * @return true if command is to be performed as the console, false if it is to be performed as the player that touched the hologram
+     */
     public boolean shouldPerformAsConsole() {
         return performAsConsole;
     }
