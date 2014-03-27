@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Called when TouchAction data is loaded from file. The event can be used to recreate TouchActions and add them to loaded holograms. See {@link com.dsh105.holoapi.listeners.CommandTouchActionListener} for an example of this
  */
-public class TouchActionLoadEvent extends Event {
+public class HoloTouchActionLoadEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
@@ -34,10 +34,14 @@ public class TouchActionLoadEvent extends Event {
     private final Map<String, Object> configMap;
     private final Hologram hologram;
 
-    public TouchActionLoadEvent(Hologram hologram, String loadedTouchActionKey, Map<String, Object> configMap) {
+    public HoloTouchActionLoadEvent(Hologram hologram, String loadedTouchActionKey, Map<String, Object> configMap) {
         this.hologram = hologram;
         this.loadedTouchActionKey = loadedTouchActionKey;
         this.configMap = configMap;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -69,10 +73,6 @@ public class TouchActionLoadEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

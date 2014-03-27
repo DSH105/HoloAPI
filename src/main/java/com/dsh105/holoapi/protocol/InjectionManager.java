@@ -3,7 +3,7 @@ package com.dsh105.holoapi.protocol;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.action.TouchAction;
-import com.dsh105.holoapi.api.event.HologramTouchEvent;
+import com.dsh105.holoapi.api.event.HoloTouchEvent;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 import com.google.common.collect.MapMaker;
@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
+    private static final Method READ_ACTION = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("EnumEntityUseAction"), "a", ReflectionUtil.getNMSClass("EnumEntityUseAction"));
     protected HoloAPI holoAPI;
-
     protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
 
     public InjectionManager(final HoloAPI holoAPI) {
@@ -80,8 +80,6 @@ public class InjectionManager {
         }
     }
 
-    private static final Method READ_ACTION = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("EnumEntityUseAction"), "a", ReflectionUtil.getNMSClass("EnumEntityUseAction"));
-
     public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.holoAPI, new Runnable() {
             @Override
@@ -98,7 +96,7 @@ public class InjectionManager {
                     for (int entityId : hologram.getAllEntityIds()) {
                         if (id == entityId) {
                             for (TouchAction touchAction : hologram.getAllTouchActions()) {
-                                HologramTouchEvent touchEvent = new HologramTouchEvent(hologram, player, touchAction);
+                                HoloTouchEvent touchEvent = new HoloTouchEvent(hologram, player, touchAction);
                                 HoloAPI.getInstance().getServer().getPluginManager().callEvent(touchEvent);
                                 if (!touchEvent.isCancelled()) {
                                     touchAction.onTouch(player, action);
