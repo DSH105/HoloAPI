@@ -27,19 +27,22 @@ import org.bukkit.event.HandlerList;
 /**
  * Called when a hologram is touched. The onTouch function in a {@link com.dsh105.holoapi.api.action.TouchAction} is called if the event is not cancelled
  */
-public class HologramTouchEvent extends Event implements Cancellable {
+public class HoloTouchEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled = false;
-
     private final Hologram hologram;
     private final Player who;
     private final TouchAction touchAction;
+    private boolean cancelled = false;
 
-    public HologramTouchEvent(Hologram hologram, Player who, TouchAction touchAction) {
+    public HoloTouchEvent(Hologram hologram, Player who, TouchAction touchAction) {
         this.hologram = hologram;
         this.who = who;
         this.touchAction = touchAction;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -81,10 +84,6 @@ public class HologramTouchEvent extends Event implements Cancellable {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }
