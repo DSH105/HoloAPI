@@ -19,7 +19,7 @@ package com.dsh105.holoapi.listeners;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.action.CommandTouchAction;
-import com.dsh105.holoapi.api.event.TouchActionLoadEvent;
+import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -28,7 +28,7 @@ import java.util.logging.Level;
 public class CommandTouchActionListener implements Listener {
 
     @EventHandler
-    public void onTouchActionLoad(TouchActionLoadEvent event) {
+    public void onTouchActionLoad(HoloTouchActionLoadEvent event) {
         // Make sure it's what we're looking for
         if (event.getLoadedTouchActionKey().startsWith("command_")) {
             // Just in-case (for some reason) the command data didn't actually save

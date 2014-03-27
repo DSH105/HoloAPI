@@ -21,7 +21,7 @@ import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.action.TouchAction;
-import com.dsh105.holoapi.api.event.TouchActionLoadEvent;
+import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
@@ -334,7 +334,7 @@ public class SimpleHoloManager implements HoloManager {
                 for (String fullKey : touchKeySection.getKeys(true)) {
                     configMap.put(fullKey, touchKeySection.get(fullKey));
                 }
-                HoloAPI.getInstance().getServer().getPluginManager().callEvent(new TouchActionLoadEvent(hologram, touchKey, configMap));
+                HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloTouchActionLoadEvent(hologram, touchKey, configMap));
             }
         }
     }
@@ -440,8 +440,8 @@ public class SimpleHoloManager implements HoloManager {
 
     class HologramRemoveTask extends BukkitRunnable {
 
-        private Hologram hologram;
         BukkitTask t = null;
+        private Hologram hologram;
 
         HologramRemoveTask(Hologram hologram, BukkitTask t) {
             this.hologram = hologram;
