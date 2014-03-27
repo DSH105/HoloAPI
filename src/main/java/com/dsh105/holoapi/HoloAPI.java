@@ -178,14 +178,22 @@ public class HoloAPI extends DSHPlugin {
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
 
+        this.initServer();
+
         // detect version, this needs some improvements, it doesn't look too pretty now.
         if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
         } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
-        }
 
-        this.initServer();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    // So that it is noticed
+                    LOGGER.log(Level.WARNING, "This version of CraftBukkit does NOT support TouchScreen Holograms. Using them will have no effect.");
+                }
+            }.runTaskLater(this, 1L);
+        }
 
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
