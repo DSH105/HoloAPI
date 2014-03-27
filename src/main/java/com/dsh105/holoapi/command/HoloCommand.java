@@ -211,11 +211,11 @@ public class HoloCommand implements CommandExecutor {
                                             list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + tag.getContent() + " (IMAGE)");
                                         }
                                     } else {
-                                        list.add(ChatColor.WHITE + tag.getContent());
+                                        list.add(TagFormatter.formatBasic(ChatColor.WHITE + tag.getContent()));
                                     }
                                 }
                             } else {
-                                list.add(h.getLines()[0]);
+                                list.add(TagFormatter.formatBasic(h.getLines()[0]));
                             }
                         }
                         if (sender instanceof Player && list.size() > 1) {
@@ -373,11 +373,11 @@ public class HoloCommand implements CommandExecutor {
                                             list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + tag.getContent() + " (IMAGE)");
                                         }
                                     } else {
-                                        list.add(ChatColor.WHITE + tag.getContent());
+                                        list.add(TagFormatter.formatBasic(ChatColor.WHITE + tag.getContent()));
                                     }
                                 }
                             } else {
-                                list.add(h.getLines()[0]);
+                                list.add(TagFormatter.formatBasic(h.getLines()[0]));
                             }
                         }
                         if (sender instanceof Player && list.size() > 1) {
