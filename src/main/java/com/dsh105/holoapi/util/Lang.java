@@ -47,6 +47,14 @@ public enum Lang {
     ACTIVE_DISPLAYS("active_displays", "&3Active Holographic Displays:"),
     IMAGES_NOT_LOADED("images_not_loaded", "&3Images are not loaded yet. Try again later."),
 
+    TOUCH_ACTIONS("touch_actions", "&3Touch actions for hologram of ID &b%id%&3:"),
+    NO_TOUCH_ACTIONS("no_touch_actions", "&3Hologram of ID &b%id% &3does not have any Touch Actions stored."),
+    TOUCH_ACTIONS_CLEARED("touch_actions_cleared", "&3Touch Actions for Hologram of ID &b%id% &3cleared."),
+    COMMAND_TOUCH_ACTION_ADDED("command_touch_action_added", "&3Touch Action for command &b%command% &3added to hologram of ID &b%id%&3."),
+    COMMAND_TOUCH_ACTION_REMOVED("command_touch_action_removed", "&3Touch Action for command &b%command% &3removed from hologram of ID &b%id%&3."),
+    TOUCH_ACTION_REMOVED("touch_action_removed", "&3Touch Action of ID &b%touchid% &3removed from hologram of ID &b%id%&3."),
+    TOUCH_ACTION_NOT_FOUND("touch_action_not_found", "&3Touch Action of ID &b%touchid% &3not found."),
+
     FAILED_IMAGE_LOAD("failed_image_load", "&3Failed to load custom image. Make sure that it is correctly configured in &bconfig.yml&3."),
     IMAGE_NOT_FOUND("image_not_found", "&3Image &3not found. Use &b/" + HoloAPI.getInstance().getCommandLabel() + " build image &3to create a new image configuration."),
     HOLOGRAM_NOT_FOUND("hologram_not_found", "&3Hologram of ID &b%id% &3not found."),
@@ -66,6 +74,7 @@ public enum Lang {
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),
     YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),
+    YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE("yes_no_command_touch_action_as_console", "&3Should this command be executed as the player or the console? Please enter either &bYes &3or &bNo&3."),
 
     PROMPT_UPDATE_LINE("prompt_update_line", "&3What do you want to set this line to?"),
     PROMPT_DELAY("prompt_delay", "&3Enter the desired delay (in ticks) of the frames in the new animated hologram."),

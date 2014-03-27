@@ -34,7 +34,12 @@ public enum Perm {
     EDIT("holoapi.holo.edit"),
     REFRESH("holoapi.holo.refresh"),
     COPY("holoapi.holo.copy"),
-    NEARBY("holoapi.holo.nearby");
+    NEARBY("holoapi.holo.nearby"),
+
+    TOUCH_ADD("holoapi.holo.touch.add"),
+    TOUCH_REMOVE("holoapi.holo.touch.remove"),
+    TOUCH_CLEAR("holoapi.holo.touch.clear"),
+    TOUCH_INFO("holoapi.holo.touch.info");
 
     String perm;
 

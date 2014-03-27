@@ -17,12 +17,14 @@
 
 package com.dsh105.holoapi.conversation.basic;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.conversations.ConversationContext;
 
 public abstract class YesNoFunction extends SimpleInputFunction {
 
     @Override
-    public boolean isValid(ConversationContext conversationContext, String s) {
-        return s.equalsIgnoreCase("YES") || s.equalsIgnoreCase("NO");
+    public boolean isValid(ConversationContext conversationContext, String input) {
+        String[] accepted = {"true", "false", "on", "off", "yes", "no"};
+        return ArrayUtils.contains(accepted, input.toLowerCase());
     }
 }

@@ -35,12 +35,21 @@ permissions:
         default: op
     holoapi.holo.nearby:
         default: op
+    holoapi.holo.touch.add:
+        default: op
+    holoapi.holo.touch.remove:
+        default: op
+    holoapi.holo.touch.clear:
+        default: op
+    holoapi.holo.touch.info:
+        default: op
     holoapi.update:
         default: op
     holoapi.*:
         default: op
         description: All HoloAPI commands
         children:
+            holoapi.holo.touch.*: true
             holoapi.holo: true
             holoapi.holo.create: true
             holoapi.holo.remove: true
@@ -54,3 +63,11 @@ permissions:
             holoapi.holo.copy: true
             holoapi.holo.nearby: true
             holoapi.update: true
+    holoapi.touch.*:
+        default: op
+        description: All HoloAPI commands under /holo touch
+        children:
+            holoapi.holo.touch.add: true
+            holoapi.holo.touch.remove: true
+            holoapi.holo.touch.clear: true
+            holoapi.holo.touch.info: true

@@ -22,6 +22,8 @@ import com.dsh105.dshutils.util.GeometryUtil;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.*;
+import com.dsh105.holoapi.api.action.CommandTouchAction;
+import com.dsh105.holoapi.api.action.TouchAction;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.InputPrompt;
 import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
@@ -30,8 +32,6 @@ import com.dsh105.holoapi.conversation.basic.YesNoFunction;
 import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPrompt;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
-import com.dsh105.holoapi.image.AnimatedTextGenerator;
-import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
@@ -39,13 +39,12 @@ import com.dsh105.holoapi.util.Perm;
 import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import com.dsh105.holoapi.util.pagination.FancyPaginator;
+import org.apache.commons.lang.BooleanUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -438,6 +437,107 @@ public class HoloCommand implements CommandExecutor {
                     })).buildConversation((Player) sender).begin();
                     return true;
                 } else return true;
+            } else if (args[0].equalsIgnoreCase("touch")) {
+                Hologram hologram = HoloAPI.getManager().getHologram(args[2]);
+                if (hologram == null) {
+                    Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[2]));
+                    return true;
+                }
+                if (args[1].equalsIgnoreCase("info")) {
+                    if (Perm.TOUCH_INFO.hasPerm(sender, true, true)) {
+                        if (hologram.getAllTouchActions().isEmpty()) {
+                            Lang.sendTo(sender, Lang.NO_TOUCH_ACTIONS.getValue().replace("%id%", args[2]));
+                            return true;
+                        }
+
+                        Lang.sendTo(sender, Lang.TOUCH_ACTIONS.getValue().replace("%id%", args[2]));
+                        for (TouchAction touchAction : hologram.getAllTouchActions()) {
+                            sender.sendMessage("•• " + ChatColor.AQUA + touchAction.serialise());
+                        }
+                        return true;
+                    } else return true;
+                } else if (args[1].equalsIgnoreCase("clear")) {
+                    if (Perm.TOUCH_CLEAR.hasPerm(sender, true, true)) {
+                        if (hologram.getAllTouchActions().isEmpty()) {
+                            Lang.sendTo(sender, Lang.NO_TOUCH_ACTIONS.getValue().replace("%id%", args[2]));
+                            return true;
+                        }
+
+                        hologram.clearAllTouchActions();
+                        Lang.sendTo(sender, Lang.TOUCH_ACTIONS_CLEARED.getValue().replace("%id%", args[2]));
+                        return true;
+                    } else return true;
+                }
+            }
+        } else if (args.length >= 4 && args[0].equalsIgnoreCase("touch")) {
+            final Hologram hologram = HoloAPI.getManager().getHologram(args[2]);
+            if (hologram == null) {
+                Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[2]));
+                return true;
+            }
+            final String command = StringUtil.combineSplit(3, args, " ");
+            if (args[1].equalsIgnoreCase("add")) {
+                if (!(sender instanceof Player)) {
+
+                    return true;
+                }
+                if (Perm.TOUCH_ADD.hasPerm(sender, true, false)) {
+                    InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new YesNoFunction() {
+                        @Override
+                        public void onFunction(ConversationContext context, String input) {
+                            hologram.addTouchAction(new CommandTouchAction(command, BooleanUtils.toBoolean(input)));
+                        }
+
+                        @Override
+                        public String getSuccessMessage() {
+                            return Lang.COMMAND_TOUCH_ACTION_ADDED.getValue().replace("%command%", command).replace("%id%", hologram.getSaveId());
+                        }
+
+                        @Override
+                        public String getPromptText() {
+                            return Lang.YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE.getValue();
+                        }
+
+                        @Override
+                        public String getFailedText() {
+                            return Lang.YES_NO_INPUT_INVALID.getValue();
+                        }
+                    })).buildConversation((Player) sender).begin();
+                    return true;
+                } else return true;
+            } else if (args[1].equalsIgnoreCase("remove")) {
+                if (Perm.TOUCH_REMOVE.hasPerm(sender, true, true)) {
+                    TouchAction toRemove = null;
+                    for (TouchAction touchAction : hologram.getAllTouchActions()) {
+                        if (touchAction.serialise().equalsIgnoreCase(command) || (touchAction instanceof CommandTouchAction && ((CommandTouchAction) touchAction).getCommand().equalsIgnoreCase(command))) {
+                            toRemove = touchAction;
+                            break;
+                        }
+                    }
+                    if (toRemove == null) {
+                        Lang.sendTo(sender, Lang.TOUCH_ACTION_NOT_FOUND.getValue().replace("%touchid%", command));
+                        return true;
+                    }
+                    hologram.removeTouchAction(toRemove);
+                    if (toRemove instanceof CommandTouchAction) {
+                        Lang.sendTo(sender, Lang.COMMAND_TOUCH_ACTION_REMOVED.getValue().replace("%command%", command).replace("%id%", hologram.getSaveId()));
+                    } else {
+                        Lang.sendTo(sender, Lang.TOUCH_ACTION_REMOVED.getValue().replace("%touchid%", command).replace("%id%", hologram.getSaveId()));
+                    }
+                    return true;
+                } else return true;
+            }
+        } else if (args.length >= 5 && args[0].equalsIgnoreCase("touch")) {
+            if (args[1].equalsIgnoreCase("add")) {
+                final Hologram hologram = HoloAPI.getManager().getHologram(args[2]);
+                if (hologram == null) {
+                    Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[2]));
+                    return true;
+                }
+                final String command = StringUtil.combineSplit(4, args, " ");
+                hologram.addTouchAction(new CommandTouchAction(command, BooleanUtils.toBoolean(args[3])));
+                Lang.sendTo(sender, Lang.COMMAND_TOUCH_ACTION_ADDED.getValue().replace("%command%", command).replace("%id%", hologram.getSaveId()));
+                return true;
             }
         }
         Lang.sendTo(sender, Lang.COMMAND_ERROR.getValue()
