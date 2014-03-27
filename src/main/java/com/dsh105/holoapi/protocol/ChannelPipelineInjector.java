@@ -59,7 +59,7 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
                 throw new IllegalStateException("Channel is NULL! Cannot inject handler without a Channel!");
 
             // Yay, let's inject
-            this.channel.pipeline().addAfter("packet_handler", getHandlerName(), this);
+            this.channel.pipeline().addBefore("packet_handler", getHandlerName(), this);
 
             injected = true;
             return true;
