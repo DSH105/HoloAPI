@@ -38,7 +38,7 @@ public class HoloInputBuilder {
     }
 
     public HoloInputBuilder withLineData(String lineData) {
-        this.lineData = ChatColor.translateAlternateColorCodes('&', lineData);
+        this.lineData = lineData;
         return this;
     }
 

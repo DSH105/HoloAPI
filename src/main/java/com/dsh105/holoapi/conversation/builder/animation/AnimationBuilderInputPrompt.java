@@ -86,8 +86,8 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
             conversationContext.setSessionData("nextFrame", true);
             return new AnimationBuilderInputPrompt(this.lines, this.frames);
         }
-        conversationContext.setSessionData("lastAdded", ChatColor.translateAlternateColorCodes('&', s));
-        this.lines.add(ChatColor.translateAlternateColorCodes('&', s));
+        conversationContext.setSessionData("lastAdded", s);
+        this.lines.add(s);
         return new AnimationBuilderInputPrompt(this.lines, this.frames);
     }
 

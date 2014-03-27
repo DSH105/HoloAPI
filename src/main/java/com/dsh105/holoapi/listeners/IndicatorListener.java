@@ -82,7 +82,7 @@ public class IndicatorListener implements Listener {
                         colours = config.getString("indicators.damage.format.wither", "&8");
                     }
 
-                    String text = ChatColor.translateAlternateColorCodes('&', colours) + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
+                    String text = colours + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
                     HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, text);
                 }
             }
@@ -96,7 +96,7 @@ public class IndicatorListener implements Listener {
                     || config.getBoolean("indicators.damage.showForMobs", true)) {
                 Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
                 v.setY(v.getY() + 0.05D);
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.damage.format.default", "&c")) + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, config.getString("indicators.damage.format.default", "&c") + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
             }
         }
     }
@@ -104,7 +104,7 @@ public class IndicatorListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExpGain(PlayerExpChangeEvent event) {
         if (config.getBoolean("indicators.exp.enable", false)) {
-            HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.exp.format", "&a")) + "+" + event.getAmount() + " exp");
+            HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, config.getString("indicators.exp.format", "&a") + "+" + event.getAmount() + " exp");
         }
     }
 
@@ -113,7 +113,7 @@ public class IndicatorListener implements Listener {
         if (config.getBoolean("indicators.gainHealth.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.gainHealth.showForPlayers", true)
                     || config.getBoolean("indicators.gainHealth.showForMobs", true)) {
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.gainHealth.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', config.getString("indicators.gainHealth.format", "&a")) + "+" + event.getAmount() + " " + HEART_CHARACTER);
+                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.gainHealth.timeVisible", 4), true, config.getString("indicators.gainHealth.format", "&a") + "+" + event.getAmount() + " " + HEART_CHARACTER);
             }
         }
     }
@@ -131,7 +131,7 @@ public class IndicatorListener implements Listener {
                 if (event.getItem().getDurability() == 1) {
                     msg = config.getString("indicators.potion.format.godapple", "&e+ %effect%");
                 }
-                HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, ChatColor.translateAlternateColorCodes('&', msg.replace("%effect%", "Golden Apple")));
+                HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, msg.replace("%effect%", "Golden Apple"));
             }
         }
     }
@@ -151,7 +151,7 @@ public class IndicatorListener implements Listener {
     private void showPotionHologram(Entity e, Collection<PotionEffect> effects) {
         for (PotionEffect effect : effects) {
             int amp = (effect.getAmplifier() < 1 ? 1 : effect.getAmplifier()) + 1;
-            String content = ChatColor.translateAlternateColorCodes('&', config.getString("indicators.potion.format." + effect.getType().getName().toLowerCase(), "&e+ %effect% %amp%"));
+            String content = config.getString("indicators.potion.format." + effect.getType().getName().toLowerCase(), "&e+ %effect% %amp%");
             content = content.replace("%effect%", StringUtil.capitalise(effect.getType().getName().replace("_", " "))).replace("%amp%", "" + new RomanNumeral(amp));
             HoloAPI.getManager().createSimpleHologram(e.getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, content);
         }
@@ -189,7 +189,7 @@ public class IndicatorListener implements Listener {
 
             ArrayList<String> lines = new ArrayList<String>();
             if (config.getBoolean("chatBubbles.showPlayerName")) {
-                lines.add(ChatColor.translateAlternateColorCodes('&', config.getString("chatBubbles.nameFormat", "&6&o")) + p.getName() + ":");
+                lines.add(config.getString("chatBubbles.nameFormat", "&6&o") + p.getName() + ":");
             }
             int index = 0;
             while (index < msg.length()) {

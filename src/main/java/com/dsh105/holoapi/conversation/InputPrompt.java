@@ -59,8 +59,8 @@ public class InputPrompt extends ValidatingPrompt {
             conversationContext.setSessionData("lines", this.lines.toArray(new String[this.lines.size()]));
             return this.successPrompt;
         }
-        this.lines.add(ChatColor.translateAlternateColorCodes('&', s));
-        return new InputPrompt(this.lines, this.successPrompt, ChatColor.translateAlternateColorCodes('&', s));
+        this.lines.add(s);
+        return new InputPrompt(this.lines, this.successPrompt, s);
     }
 
     @Override

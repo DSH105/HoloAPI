@@ -223,7 +223,7 @@ public class SimpleHoloManager implements HoloManager {
                                     int delay = config.getInt("holograms." + key + ".animatedImage.frames." + frameKey + ".delay", 5);
                                     for (String tagKey : lines.getKeys(false)) {
                                         if (!tagKey.equalsIgnoreCase("delay")) {
-                                            tagList.add(ChatColor.translateAlternateColorCodes('&', config.getString("holograms." + key + ".animatedImage.frames." + frameKey + "." + tagKey)));
+                                            tagList.add(config.getString("holograms." + key + ".animatedImage.frames." + frameKey + "." + tagKey));
                                         }
                                     }
                                     if (!tagList.isEmpty()) {
@@ -250,7 +250,7 @@ public class SimpleHoloManager implements HoloManager {
                                     containsImage = true;
                                     break;
                                 } else {
-                                    hf.withText(ChatColor.translateAlternateColorCodes('&', value));
+                                    hf.withText(value);
                                 }
 
                             } else {
@@ -296,7 +296,7 @@ public class SimpleHoloManager implements HoloManager {
                             hf.withImage(generator);
                         }
                     } else {
-                        hf.withText(ChatColor.translateAlternateColorCodes('&', value));
+                        hf.withText(value);
                     }
                 } else {
                     HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
