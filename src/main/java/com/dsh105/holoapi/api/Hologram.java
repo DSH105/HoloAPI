@@ -316,6 +316,9 @@ public class Hologram {
      */
     public void addTouchAction(TouchAction action) {
         this.touchActions.add(action);
+        if (!this.isSimple()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
     }
 
     /**
@@ -325,6 +328,9 @@ public class Hologram {
      */
     public void removeTouchAction(TouchAction action) {
         this.touchActions.remove(action);
+        if (!this.isSimple()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
     }
 
     /**
@@ -332,6 +338,9 @@ public class Hologram {
      */
     public void clearAllTouchActions() {
         this.touchActions.clear();
+        if (!this.isSimple()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
     }
 
     /**

@@ -452,7 +452,11 @@ public class HoloCommand implements CommandExecutor {
 
                         Lang.sendTo(sender, Lang.TOUCH_ACTIONS.getValue().replace("%id%", args[2]));
                         for (TouchAction touchAction : hologram.getAllTouchActions()) {
-                            sender.sendMessage("•• " + ChatColor.AQUA + StringUtil.capitalise(touchAction.getSaveKey().replace("_", " ")));
+                            if (touchAction instanceof CommandTouchAction) {
+                                sender.sendMessage("•• " + ChatColor.AQUA + "Command" + ChatColor.DARK_AQUA + " /" + ((CommandTouchAction) touchAction).getCommand() + ChatColor.AQUA + " " + (((CommandTouchAction) touchAction).shouldPerformAsConsole() ? "as console" : "as player"));
+                            } else {
+                                sender.sendMessage("•• " + ChatColor.AQUA + StringUtil.capitalise(touchAction.getSaveKey().replace("_", " ")));
+                            }
                         }
                         return true;
                     } else return true;
@@ -490,7 +494,7 @@ public class HoloCommand implements CommandExecutor {
 
                         @Override
                         public String getSuccessMessage() {
-                            return Lang.COMMAND_TOUCH_ACTION_ADDED.getValue().replace("%command%", command).replace("%id%", hologram.getSaveId());
+                            return Lang.COMMAND_TOUCH_ACTION_ADDED.getValue().replace("%command%", "/" + command).replace("%id%", hologram.getSaveId());
                         }
 
                         @Override
@@ -520,7 +524,7 @@ public class HoloCommand implements CommandExecutor {
                     }
                     hologram.removeTouchAction(toRemove);
                     if (toRemove instanceof CommandTouchAction) {
-                        Lang.sendTo(sender, Lang.COMMAND_TOUCH_ACTION_REMOVED.getValue().replace("%command%", command).replace("%id%", hologram.getSaveId()));
+                        Lang.sendTo(sender, Lang.COMMAND_TOUCH_ACTION_REMOVED.getValue().replace("%command%", "/" + command).replace("%id%", hologram.getSaveId()));
                     } else {
                         Lang.sendTo(sender, Lang.TOUCH_ACTION_REMOVED.getValue().replace("%touchid%", command).replace("%id%", hologram.getSaveId()));
                     }
@@ -536,7 +540,7 @@ public class HoloCommand implements CommandExecutor {
                 }
                 final String command = StringUtil.combineSplit(4, args, " ");
                 hologram.addTouchAction(new CommandTouchAction(command, BooleanUtils.toBoolean(args[3])));
-                Lang.sendTo(sender, Lang.COMMAND_TOUCH_ACTION_ADDED.getValue().replace("%command%", command).replace("%id%", hologram.getSaveId()));
+                Lang.sendTo(sender, Lang.COMMAND_TOUCH_ACTION_ADDED.getValue().replace("%command%", "/" + command).replace("%id%", hologram.getSaveId()));
                 return true;
             }
         }

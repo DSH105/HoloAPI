@@ -191,7 +191,7 @@ public class SimpleHoloManager implements HoloManager {
                 if (map != null && !map.isEmpty()) {
                     for (Map.Entry<String, Object> entry : map.entrySet()) {
                         // Let the developer implementing the API handle how data is saved and loaded to and from holograms
-                        this.config.set(path + "touchactions." + entry.getKey(), entry.getValue());
+                        this.config.set(path + "touchactions." + touch.getSaveKey() + "." + entry.getKey(), entry.getValue());
                     }
                 }
             }
