@@ -19,6 +19,7 @@ package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +47,8 @@ public class TagFormatter {
         content = content.replace("%maxplayers%", String.valueOf(Bukkit.getMaxPlayers()));
         content = matchDate(content);
         content = UnicodeFormatter.replaceAll(content);
+
+        content = ChatColor.translateAlternateColorCodes('&', content);
 
         if (content.length() > 64 && !HoloAPI.isUsingNetty) {
             // 1.6.x client crashes if a name tag is longer than 64 characters
