@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.util;
 
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,22 +36,21 @@ public class TagFormatter {
             // Unfortunate, but it must be countered for
             content = content.substring(0, 64);
         }
+
         return content;
     }
 
     public static String formatBasic(String content) {
-        formatForOldClient(content);
-
-        content = UnicodeFormatter.replaceAll(content);
         content = ChatColor.translateAlternateColorCodes('&', content);
+        content = UnicodeFormatter.replaceAll(content);
+
+        content = formatForOldClient(content);
 
         return content;
     }
 
     public static String formatTags(Player observer, String content) {
-        formatForOldClient(content);
-
-        if (content.contains("%time%")) {
+       if (content.contains("%time%")) {
             Calendar c = Calendar.getInstance();
             c.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
             content = content.replace("%time%", new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime()));
@@ -67,12 +67,14 @@ public class TagFormatter {
         content = content.replace("%maxplayers%", String.valueOf(Bukkit.getMaxPlayers()));
         content = matchDate(content);
 
+        content = formatForOldClient(content);
+
         return content;
     }
 
     public static String format(Player observer, String content) {
-        formatBasic(content);
-        formatTags(observer, content);
+        content = formatTags(observer, content);
+        content = formatBasic(content);
 
         return content;
     }
