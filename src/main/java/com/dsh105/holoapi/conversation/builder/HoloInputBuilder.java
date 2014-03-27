@@ -17,8 +17,6 @@
 
 package com.dsh105.holoapi.conversation.builder;
 
-import org.bukkit.ChatColor;
-
 public class HoloInputBuilder {
 
     private String type;

@@ -40,11 +40,13 @@ public interface TouchAction {
      *
      * @return string that represents the TouchAction
      */
-    public @NotNull String getSaveKey();
+    public
+    @NotNull
+    String getSaveKey();
 
     /**
      * Gets a map of the TouchAction data to save to file.
-     * <p>
+     * <p/>
      * HoloAPI uses this data for saving Hologram TouchAction data to file so that it can be loaded again when the hologram is recreated from the save file. See {@link com.dsh105.holoapi.api.event.TouchActionLoadEvent} for information on how to load TouchAction data back into holograms
      *
      * @return a map of all data to save to file. See {@link com.dsh105.holoapi.api.action.CommandTouchAction} for a working example of this

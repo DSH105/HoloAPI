@@ -17,11 +17,6 @@
 
 package com.dsh105.holoapi.util.fanciful;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.dsh105.holoapi.exceptions.FancyMessageFailedException;
 import com.dsh105.holoapi.reflection.SafeConstructor;
 import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.reflection.SafeMethod;
@@ -36,6 +31,10 @@ import org.bukkit.craftbukkit.libs.com.google.gson.stream.JsonWriter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FancyMessage {
 

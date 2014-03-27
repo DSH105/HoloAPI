@@ -36,7 +36,10 @@ import com.dsh105.holoapi.listeners.CommandTouchActionListener;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
-import com.dsh105.holoapi.server.*;
+import com.dsh105.holoapi.server.CraftBukkitServer;
+import com.dsh105.holoapi.server.Server;
+import com.dsh105.holoapi.server.SpigotServer;
+import com.dsh105.holoapi.server.UnknownServer;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
@@ -155,7 +158,7 @@ public class HoloAPI extends DSHPlugin {
     }
 
     public VaultProvider getVaultProvider() {
-        if(this.vaultProvider == null) {
+        if (this.vaultProvider == null) {
             throw new RuntimeException("VaultProvider is NULL!");
         }
         return this.vaultProvider;
@@ -279,12 +282,12 @@ public class HoloAPI extends DSHPlugin {
 
     private void loadConfiguration() {
         String[] header = {
-            "HoloAPI",
-            "---------------------",
-            "Configuration File",
-            "",
-            "See the HoloAPI Wiki before editing this file",
-            "(https://github.com/DSH105/HoloAPI/wiki)"
+                "HoloAPI",
+                "---------------------",
+                "Configuration File",
+                "",
+                "See the HoloAPI Wiki before editing this file",
+                "(https://github.com/DSH105/HoloAPI/wiki)"
         };
         try {
             config = this.getConfigManager().getNewConfig("config.yml", header);
@@ -314,9 +317,9 @@ public class HoloAPI extends DSHPlugin {
         dataConfig.reloadConfig();
 
         String[] langHeader = {
-            "HoloAPI",
-            "---------------------",
-            "Language Configuration File"
+                "HoloAPI",
+                "---------------------",
+                "Language Configuration File"
         };
         try {
             langConfig = this.getConfigManager().getNewConfig("language.yml", langHeader);

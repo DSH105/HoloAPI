@@ -41,7 +41,7 @@ public class VaultProvider extends PluginDependencyProvider<Vault> {
 
     @Override
     public void onUnhook() {
-         // Ignore
+        // Ignore
     }
 
     // Vault supplied methods

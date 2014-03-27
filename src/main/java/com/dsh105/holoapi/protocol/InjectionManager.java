@@ -16,7 +16,6 @@ import org.bukkit.event.server.PluginDisableEvent;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
-import java.util.logging.Level;
 
 public class InjectionManager {
 
@@ -25,7 +24,7 @@ public class InjectionManager {
     protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
 
     public InjectionManager(final HoloAPI holoAPI) {
-        if(holoAPI == null) {
+        if (holoAPI == null) {
             throw new IllegalArgumentException("Provided HoloAPI instance can't be NULL!");
         }
 
@@ -40,7 +39,7 @@ public class InjectionManager {
 
             @EventHandler
             public void onDisable(PluginDisableEvent event) {
-                if(event.getPlugin().equals(holoAPI)) {
+                if (event.getPlugin().equals(holoAPI)) {
                     close();
                 }
             }
@@ -53,7 +52,7 @@ public class InjectionManager {
     }
 
     public void inject(Player player) {
-        if(injectors.containsKey(player)) {
+        if (injectors.containsKey(player)) {
             ChannelPipelineInjector injector = injectors.get(player);
             injector.setPlayer(player);
         } else {
@@ -64,19 +63,19 @@ public class InjectionManager {
     }
 
     public void unInject(Player player) {
-        if(!injectors.containsKey(player)) {
+        if (!injectors.containsKey(player)) {
             return;
         }
 
         ChannelPipelineInjector injector = injectors.get(player);
 
-        if(injector.isInjected()) {
+        if (injector.isInjected()) {
             injector.close();
         }
     }
 
     public void close() {
-        for(Player player : injectors.keySet()) {
+        for (Player player : injectors.keySet()) {
             unInject(player);
         }
     }
@@ -87,7 +86,7 @@ public class InjectionManager {
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.holoAPI, new Runnable() {
             @Override
             public void run() {
-                if(!"PacketPlayInUseEntity".equals(msg.getClass().getName()))
+                if (!"PacketPlayInUseEntity".equals(msg.getClass().getName()))
                     return;
                 Packet packet = new Packet(msg);
                 // The entity id of the hologram that got interacted with.

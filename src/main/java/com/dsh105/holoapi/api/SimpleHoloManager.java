@@ -20,7 +20,6 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.action.CommandTouchAction;
 import com.dsh105.holoapi.api.action.TouchAction;
 import com.dsh105.holoapi.api.event.TouchActionLoadEvent;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;

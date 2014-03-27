@@ -34,7 +34,7 @@ public class CommandTouchAction implements TouchAction {
     /**
      * Constructs a new CommandTouchAction
      *
-     * @param command command to perform when the hologram is touched
+     * @param command          command to perform when the hologram is touched
      * @param performAsConsole true if command is to be performed as the console, false if it is to be performed as the player that touched the hologram
      */
     public CommandTouchAction(String command, boolean performAsConsole) {

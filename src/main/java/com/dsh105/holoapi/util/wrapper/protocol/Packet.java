@@ -67,6 +67,7 @@ public class Packet {
 
     /**
      * This class needs a lot improvement :/
+     *
      * @param packet
      */
     public Packet(Object packet) {

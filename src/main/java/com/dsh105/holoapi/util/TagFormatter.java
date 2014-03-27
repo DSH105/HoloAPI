@@ -17,7 +17,6 @@
 
 package com.dsh105.holoapi.util;
 
-import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,7 +49,7 @@ public class TagFormatter {
     }
 
     public static String formatTags(Player observer, String content) {
-       if (content.contains("%time%")) {
+        if (content.contains("%time%")) {
             Calendar c = Calendar.getInstance();
             c.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
             content = content.replace("%time%", new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime()));
@@ -84,7 +83,7 @@ public class TagFormatter {
         Pattern datePattern = Pattern.compile("\\%date:(.+?)\\%");
         Matcher matcher = datePattern.matcher(content);
 
-        while(matcher.find()) {
+        while (matcher.find()) {
             SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
 
             Calendar calendar = Calendar.getInstance();

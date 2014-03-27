@@ -43,11 +43,11 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
         this.myPluginInstance = myPluginInstance;
         this.dependencyName = dependencyName;
 
-        if(dependency == null && !this.hooked) {
+        if (dependency == null && !this.hooked) {
             try {
                 dependency = (T) Bukkit.getPluginManager().getPlugin(getDependencyName());
 
-                if(this.dependency != null && this.dependency.isEnabled()) {
+                if (this.dependency != null && this.dependency.isEnabled()) {
                     this.hooked = true;
                     onHook();
                     HoloAPI.LOGGER.info("[" + this.dependency.getName() + "] Successfully hooked");
@@ -61,7 +61,7 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
 
             @EventHandler
             protected void onEnable(PluginEnableEvent event) {
-                if((dependency == null) && (event.getPlugin().getName().equalsIgnoreCase(getDependencyName()))) {
+                if ((dependency == null) && (event.getPlugin().getName().equalsIgnoreCase(getDependencyName()))) {
                     try {
                         dependency = (T) event.getPlugin();
                         hooked = true;
@@ -75,7 +75,7 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
 
             @EventHandler
             protected void onDisable(PluginDisableEvent event) {
-                if((dependency != null) && (event.getPlugin().getName().equalsIgnoreCase(getDependencyName()))) {
+                if ((dependency != null) && (event.getPlugin().getName().equalsIgnoreCase(getDependencyName()))) {
                     dependency = null;
                     hooked = false;
                     onUnhook();
@@ -95,7 +95,7 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
     public abstract void onUnhook();
 
     public T getDependency() {
-        if(this.dependency == null) {
+        if (this.dependency == null) {
             throw new RuntimeException("Dependency is NULL!");
         }
         return this.dependency;
@@ -106,14 +106,14 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
     }
 
     public Plugin getHandlingPlugin() {
-        if(this.myPluginInstance == null) {
+        if (this.myPluginInstance == null) {
             throw new RuntimeException("HandlingPlugin is NULL!");
         }
         return this.myPluginInstance;
     }
 
     public String getDependencyName() {
-        if(this.dependencyName == null) {
+        if (this.dependencyName == null) {
             throw new RuntimeException("Dependency name is NULL!");
         }
         return this.dependencyName;

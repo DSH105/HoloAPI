@@ -336,7 +336,8 @@ public class Hologram {
 
     /**
      * Gets a copy of all the touch actions for the hologram
-     * @return
+     *
+     * @return copy of all touch actions for the hologram
      */
     public ArrayList<TouchAction> getAllTouchActions() {
         return new ArrayList<TouchAction>(this.touchActions);
