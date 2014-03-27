@@ -19,6 +19,7 @@ package com.dsh105.holoapi.api.event;
 
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.action.TouchAction;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -29,15 +30,21 @@ public class HologramTouchEvent extends Event implements Cancellable {
     private boolean cancelled = false;
 
     private final Hologram hologram;
+    private final Player who;
     private final TouchAction touchAction;
 
-    public HologramTouchEvent(Hologram hologram, TouchAction touchAction) {
+    public HologramTouchEvent(Hologram hologram, Player who, TouchAction touchAction) {
         this.hologram = hologram;
+        this.who = who;
         this.touchAction = touchAction;
     }
 
     public Hologram getHologram() {
         return hologram;
+    }
+
+    public Player getPlayer() {
+        return who;
     }
 
     public TouchAction getTouchAction() {
