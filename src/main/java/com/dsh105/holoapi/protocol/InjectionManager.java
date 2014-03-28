@@ -1,6 +1,5 @@
 package com.dsh105.holoapi.protocol;
 
-import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.action.TouchAction;

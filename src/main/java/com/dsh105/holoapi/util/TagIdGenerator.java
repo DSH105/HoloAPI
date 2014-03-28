@@ -17,6 +17,8 @@
 
 package com.dsh105.holoapi.util;
 
+import com.dsh105.holoapi.HoloAPI;
+
 public class TagIdGenerator {
 
     private volatile static int SHARED_ID = Short.MAX_VALUE;
@@ -33,16 +35,16 @@ public class TagIdGenerator {
     private static int nextId(int counter, boolean simple) {
         int firstId = simple ? ++SHARED_SIMPLE_ID : ++SHARED_ID;
         if (simple) {
-            for (int i = 0; i <= (counter * 2); i++) {
+            for (int i = 0; i <= (counter * HoloAPI.getTagEntityMultiplier()); i++) {
                 if ((firstId + i) > 0) {
                     SHARED_SIMPLE_ID = Short.MIN_VALUE;
                     return nextId(counter, simple);
                 }
                 continue;
             }
-            SHARED_SIMPLE_ID += counter * 2;
+            SHARED_SIMPLE_ID += counter * HoloAPI.getTagEntityMultiplier();
         } else {
-            SHARED_ID += counter * 2;
+            SHARED_ID += counter * HoloAPI.getTagEntityMultiplier();
         }
         return firstId;
     }

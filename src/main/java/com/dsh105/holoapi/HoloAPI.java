@@ -36,6 +36,7 @@ import com.dsh105.holoapi.listeners.CommandTouchActionListener;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
+import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.server.CraftBukkitServer;
 import com.dsh105.holoapi.server.Server;
 import com.dsh105.holoapi.server.SpigotServer;
@@ -62,6 +63,7 @@ public class HoloAPI extends DSHPlugin {
     private static SimpleImageLoader IMAGE_LOADER;
     private static SimpleAnimationLoader ANIMATION_LOADER;
     private ConfigOptions OPTIONS;
+    private InjectionManager INJECTION_MANAGER;
 
     private YAMLConfig config;
     private YAMLConfig dataConfig;
@@ -79,6 +81,7 @@ public class HoloAPI extends DSHPlugin {
     public static boolean isUsingNetty;
 
     private static double LINE_SPACING = 0.25D;
+    private static int TAG_ENTITY_MULTIPLIER = 4;
 
     //private CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
@@ -142,6 +145,10 @@ public class HoloAPI extends DSHPlugin {
         return LINE_SPACING;
     }
 
+    public static int getTagEntityMultiplier() {
+        return TAG_ENTITY_MULTIPLIER;
+    }
+
     public String getCommandLabel() {
         return OPTIONS.getConfig().getString("command", "holo");
     }
@@ -195,6 +202,8 @@ public class HoloAPI extends DSHPlugin {
             }.runTaskLater(this, 1L);
         }
 
+        INJECTION_MANAGER = new InjectionManager(this);
+
         //this.registerCommands();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
@@ -235,6 +244,7 @@ public class HoloAPI extends DSHPlugin {
     public void onDisable() {
         COMMAND_MANAGER.unregister();
         MANAGER.clearAll();
+        INJECTION_MANAGER.close();
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
     }

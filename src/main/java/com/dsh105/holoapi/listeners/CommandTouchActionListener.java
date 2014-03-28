@@ -35,7 +35,7 @@ public class CommandTouchActionListener implements Listener {
             if (event.getConfigMap().get("command") != null) {
                 try {
                     Object asConsole = event.getConfigMap().get("asConsole");
-                    event.getHologram().addTouchAction(new CommandTouchAction((String) event.getConfigMap().get("command"), (asConsole == null && asConsole instanceof Boolean) ? (Boolean) asConsole : false));
+                    event.getHologram().addTouchAction(new CommandTouchAction((String) event.getConfigMap().get("command"), (asConsole != null && asConsole instanceof Boolean) ? (Boolean) asConsole : false));
                 } catch (ClassCastException e) {
                     HoloAPI.LOGGER.log(Level.SEVERE, "Failed to load command touch action data for hologram (" + event.getHologram().getSaveId() + "). Maybe the save data was edited?");
                 }

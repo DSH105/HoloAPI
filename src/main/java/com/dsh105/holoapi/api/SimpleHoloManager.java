@@ -331,8 +331,10 @@ public class SimpleHoloManager implements HoloManager {
             for (String touchKey : touchSection.getKeys(true)) {
                 LinkedHashMap<String, Object> configMap = new LinkedHashMap<String, Object>();
                 ConfigurationSection touchKeySection = this.config.getConfigurationSection("holograms." + hologramKey + ".touchactions." + touchKey);
-                for (String fullKey : touchKeySection.getKeys(true)) {
-                    configMap.put(fullKey, touchKeySection.get(fullKey));
+                if (touchKeySection != null) {
+                    for (String fullKey : touchKeySection.getKeys(true)) {
+                        configMap.put(fullKey, touchKeySection.get(fullKey));
+                    }
                 }
                 HoloAPI.getInstance().getServer().getPluginManager().callEvent(new TouchActionLoadEvent(hologram, touchKey, configMap));
             }

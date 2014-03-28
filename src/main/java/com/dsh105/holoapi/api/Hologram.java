@@ -38,20 +38,18 @@ import java.util.*;
 
 public class Hologram {
 
+    protected int firstTagId;
+    protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
+    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
+    protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
     private String worldName;
-
     private double defX;
     private double defY;
     private double defZ;
     private String[] tags;
-
-    protected int firstTagId;
     private String saveId;
     private boolean simple = false;
-
-    protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
-    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
-    protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
+    private boolean hasRegisteredTouchActions;
 
     protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
@@ -72,7 +70,6 @@ public class Hologram {
         this.defX = x;
         this.defY = y;
         this.defZ = z;
-
     }
 
     /**
@@ -243,6 +240,15 @@ public class Hologram {
         return null;
     }
 
+    protected Map.Entry<TagSize, String> getForPartOfImage(int index) {
+        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
+            if (index >= entry.getKey().getFirst() && index <= entry.getKey().getLast()) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
     /**
      * Changes the world the hologram is visible in
      * <p/>
@@ -301,7 +307,7 @@ public class Hologram {
         for (String name : this.playerToLocationMap.keySet()) {
             Player p = Bukkit.getPlayerExact(name);
             if (p != null) {
-                this.updateNametag(p, index);
+                this.updateNametag(p, this.tags[index], index);
             }
         }
         if (!this.isSimple()) {
@@ -318,6 +324,17 @@ public class Hologram {
         this.touchActions.add(action);
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
+        }
+        if (!this.hasRegisteredTouchActions) {
+            // So that the entities aren't cleared before they're created
+            for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
+                final Player p = Bukkit.getPlayerExact(entry.getKey());
+                if (p != null) {
+                    clearTags(p, this.getAllEntityIds());
+                }
+            }
+            this.hasRegisteredTouchActions = true;
+            this.refreshDisplay();
         }
     }
 
@@ -358,21 +375,21 @@ public class Hologram {
      * @return all entity IDs used for the tags in the hologram
      */
     public int[] getAllEntityIds() {
-        int[] ids = new int[this.getTagCount()];
 
-        for (int i = 0; i < ids.length; i++) {
-            ids[i] = i;
-        }
-
-        int[] entityIds = new int[ids.length * 2];
-
-        for (int i = 0; i < ids.length; i++) {
-            if (ids[i] <= this.getTagCount()) {
-                entityIds[i * 2] = this.getHorseIndex(ids[i]);
-                entityIds[i * 2 + 1] = this.getSkullIndex(ids[i] * 2);
+        ArrayList<Integer> entityIdList = new ArrayList<Integer>();
+        for (int index = 0; index < this.getTagCount(); index++) {
+            for (int i = 0; i < HoloAPI.getTagEntityMultiplier(); i++) {
+                entityIdList.add(this.getHorseIndex(index) + i);
             }
         }
-        return entityIds;
+
+        int[] ids = new int[entityIdList.size()];
+
+        for (int i = 0; i < ids.length; i++) {
+            ids[i] = entityIdList.get(i);
+        }
+
+        return ids;
     }
 
     /**
@@ -407,7 +424,7 @@ public class Hologram {
             this.move(observer, new Vector(x, y, z));
         }*/
         for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
+            this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }
@@ -488,9 +505,30 @@ public class Hologram {
 
         teleportHorse.send(observer);
         teleportSkull.send(observer);
+
+        if (this.hasRegisteredTouchActions) {
+            this.teleportTouchSlime(observer, index, to);
+        }
     }
 
-    protected void generate(Player observer, int index, double diffY, double x, double y, double z) {
+    protected void teleportTouchSlime(Player observer, int index, Vector to) {
+        WrapperPacketEntityTeleport teleportTouchSlime = new WrapperPacketEntityTeleport();
+        teleportTouchSlime.setEntityId(this.getTouchSlimeIndex(index));
+        teleportTouchSlime.setX(to.getX());
+        teleportTouchSlime.setY(to.getY());
+        teleportTouchSlime.setZ(to.getZ());
+
+        WrapperPacketEntityTeleport teleportTouchSkull = new WrapperPacketEntityTeleport();
+        teleportTouchSkull.setEntityId(this.getTouchSkullIndex(index));
+        teleportTouchSkull.setX(to.getX());
+        teleportTouchSkull.setY(to.getY());
+        teleportTouchSkull.setZ(to.getZ());
+
+        teleportTouchSlime.send(observer);
+        teleportTouchSkull.send(observer);
+    }
+
+    protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
         WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
 
         WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
@@ -501,7 +539,7 @@ public class Hologram {
         horse.setZ(z);
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, TagFormatter.format(observer, this.tags[index]));
+        dw.watch(10, TagFormatter.format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setMetadata(dw);
@@ -519,11 +557,61 @@ public class Hologram {
         horse.send(observer);
         skull.send(observer);
         attach.send(observer);
+
+        if (this.hasRegisteredTouchActions) {
+            this.prepareTouchScreen(observer, index, diffY, x, y, z);
+        }
     }
 
-    protected void updateNametag(Player observer, int index) {
+    protected void prepareTouchScreen(Player observer, int index, double diffY, double x, double y, double z) {
+        int size = (this.calculateMaxLineLength() / 2);
+        Map.Entry<TagSize, String> imagePart = this.getForPartOfImage(index);
+        if (imagePart != null) {
+            if (index == imagePart.getKey().getLast() || index == ((imagePart.getKey().getLast() - size / 4) + 1)) {
+                this.generateTouchScreen(size / 10, observer, index, diffY, x, y, z);
+            }
+        } else if (index % (size < 1 ? 1 : size) == 0 || index >= (this.tags.length - 1)) {
+            if (tags.length > 1 && index == 0) {
+                return;
+            }
+            this.generateTouchScreen(size / 3, observer, index, diffY, x, y, z);
+        }
+    }
+
+    protected void generateTouchScreen(int slimeSize, Player observer, int index, double diffY, double x, double y, double z) {
+        WrapperPacketAttachEntity attachTouch = new WrapperPacketAttachEntity();
+
+        WrapperPacketSpawnEntityLiving touchSlime = new WrapperPacketSpawnEntityLiving();
+        touchSlime.setEntityId(this.getTouchSlimeIndex(index));
+        touchSlime.setEntityType(EntityType.SLIME.getTypeId());
+        touchSlime.setX(x);
+        touchSlime.setY(y + diffY);
+        touchSlime.setZ(z);
+
+        WrappedDataWatcher touchDw = new WrappedDataWatcher();
+        //touchDw.watch(0, Byte.valueOf((byte) 32));
+        int size = (this.calculateMaxLineLength() / (this.getForPartOfImage(index) != null ? 20 : 6));
+        touchDw.watch(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
+        touchSlime.setMetadata(touchDw);
+
+        WrapperPacketSpawnEntity touchSkull = new WrapperPacketSpawnEntity();
+        touchSkull.setEntityId(this.getTouchSkullIndex(index));
+        touchSkull.setX(x);
+        touchSkull.setY(y + diffY);
+        touchSkull.setZ(z);
+        touchSkull.setEntityType(66);
+
+        attachTouch.setEntityId(touchSlime.getEntityId());
+        attachTouch.setVehicleId(touchSkull.getEntityId());
+
+        touchSlime.send(observer);
+        touchSkull.send(observer);
+        attachTouch.send(observer);
+    }
+
+    protected void updateNametag(Player observer, String content, int index) {
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, TagFormatter.format(observer, this.tags[index]));
+        dw.watch(10, TagFormatter.format(observer, content));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
 
@@ -535,11 +623,26 @@ public class Hologram {
     }
 
     protected int getHorseIndex(int index) {
-        return firstTagId + (index * 2);
+        return firstTagId + (index * HoloAPI.getTagEntityMultiplier());
     }
 
     protected int getSkullIndex(int index) {
         return this.getHorseIndex(index) + 1;
     }
 
+    protected int getTouchSlimeIndex(int index) {
+        return this.getHorseIndex(index) + 2;
+    }
+
+    protected int getTouchSkullIndex(int index) {
+        return this.getSkullIndex(index) + 2;
+    }
+
+    protected int calculateMaxLineLength() {
+        int max = 0;
+        for (String tag : this.tags) {
+            max = Math.max(tag.length(), max);
+        }
+        return max;
+    }
 }
