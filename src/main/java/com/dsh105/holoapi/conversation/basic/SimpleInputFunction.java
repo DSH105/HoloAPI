@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.conversation.basic;
 
+import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationContext;
 
 public abstract class SimpleInputFunction {
@@ -34,11 +35,11 @@ public abstract class SimpleInputFunction {
 
     public abstract void onFunction(ConversationContext context, String input);
 
-    public abstract String getSuccessMessage();
+    public abstract String getSuccessMessage(ConversationContext context, String input);
 
-    public abstract String getPromptText();
+    public abstract String getPromptText(ConversationContext context);
 
-    public abstract String getFailedText();
+    public abstract String getFailedText(ConversationContext context, String invalidInput);
 
     public boolean isValid(ConversationContext conversationContext, String s) {
         return true;

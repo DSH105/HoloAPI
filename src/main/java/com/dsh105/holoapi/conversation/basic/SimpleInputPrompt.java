@@ -35,18 +35,18 @@ public class SimpleInputPrompt extends ValidatingPrompt {
     }
 
     @Override
-    protected Prompt acceptValidatedInput(ConversationContext conversationContext, String s) {
-        this.function.function(conversationContext, s);
-        return new SimpleInputSuccessPrompt(this.function.getSuccessMessage());
+    protected Prompt acceptValidatedInput(ConversationContext context, String input) {
+        this.function.function(context, input);
+        return new SimpleInputSuccessPrompt(this.function.getSuccessMessage(context, input));
     }
 
     @Override
-    public String getPromptText(ConversationContext conversationContext) {
-        return this.function.getPromptText();
+    public String getPromptText(ConversationContext context) {
+        return this.function.getPromptText(context);
     }
 
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return this.function.getFailedText();
+        return this.function.getFailedText(context, invalidInput);
     }
 }

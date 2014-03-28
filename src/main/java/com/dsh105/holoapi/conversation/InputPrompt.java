@@ -119,7 +119,7 @@ public class InputPrompt extends ValidatingPrompt {
         } else if (failFormat != null && (Boolean) failFormat) {
             return Lang.PROMPT_INPUT_FAIL_FORMAT.getValue();
         } else if (failWorld != null && (Boolean) failWorld) {
-            return Lang.PROMPT_INPUT_FAIL_WORLD.getValue();
+            return Lang.PROMPT_INPUT_FAIL_WORLD.getValue().replace("%world%", invalidInput.split(" ")[0]);
         }
         return Lang.PROMPT_INPUT_FAIL.getValue();
     }
