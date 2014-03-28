@@ -3,8 +3,8 @@
 ### [Download Now](https://github.com/DSH105/HoloAPI/releases)
 ----
 
-#### Authors: ![DSH105](https://minotar.net/avatar/_DSH105_/15)[ DSH105](https://github.com/DSH105), ![CaptainBern](https://minotar.net/avatar/CaptainBern/15)[ CaptainBern](https://github.com/CaptainBern)
-#### Contributors: ![hawkfalcon](https://minotar.net/avatar/Hawkfalcon/15)[ hawkfalcon](https://github.com/hawkfalcon), ![Frostalf](https://minotar.net/avatar/MHF_Question/15)[ Frostalf](https://github.com/Frostalf), ![drthock](https://minotar.net/avatar/drtshock/15.png)[ drtshock](https://github.com/drtshock), ![stuntguy3000](https://minotar.net/avatar/stuntguy3000/15)[ stuntguy3000](https://github.com/stuntguy3000)
+#### Authors: ![DSH105](https://minotar.net/avatar/_DSH105_/15)[ DSH105](https://github.com/DSH105), ![CaptainBern](https://minotar.net/helm/CaptainBern/15)[ CaptainBern](https://github.com/CaptainBern)
+#### Contributors: ![hawkfalcon](https://minotar.net/helm/Hawkfalcon/15)[ hawkfalcon](https://github.com/hawkfalcon), ![Frostalf](https://minotar.net/helm/MHF_Question/15)[ Frostalf](https://github.com/Frostalf), ![drthock](https://minotar.net/helm/drtshock/15)[ drtshock](https://github.com/drtshock), ![stuntguy3000](https://minotar.net/helm/stuntguy3000/15)[ stuntguy3000](https://github.com/stuntguy3000)
 
 ----
 
