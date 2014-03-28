@@ -7,7 +7,6 @@
 #### Contributors: [hawkfalcon](https://github.com/hawkfalcon), [Frostalf](https://github.com/Frostalf)
 
 ----
-----
 
 ### Need help? Visit the [Wiki](https://github.com/DSH105/HoloAPI/wiki)!
 #### Want to contribute? Read [CONTRIBUTING.md](https://github.com/DSH105/HoloAPI/blob/master/CONTRIBUTING.md)!
