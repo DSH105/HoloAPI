@@ -589,8 +589,8 @@ public class Hologram {
         touchSlime.setZ(z);
 
         WrappedDataWatcher touchDw = new WrappedDataWatcher();
-        //touchDw.watch(0, Byte.valueOf((byte) 32));
-        int size = (this.calculateMaxLineLength() / (this.getForPartOfImage(index) != null ? 20 : 6));
+        touchDw.watch(0, Byte.valueOf((byte) 32));
+        //int size = (this.calculateMaxLineLength() / (this.getForPartOfImage(index) != null ? 20 : 6));
         touchDw.watch(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
         touchSlime.setMetadata(touchDw);
 
