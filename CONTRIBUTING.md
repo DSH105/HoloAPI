@@ -18,12 +18,12 @@ If you're not familiar with Git or GitHub, use the following guide to get starte
 * If you're editing any of our volatile Minecraft Internal code, make sure you know **exactly** what you are doing and what you are changing.
     * This also applies to our built-in NMS, Reflection and NBT libraries.
     * Additions to these areas may likely be accepted if they provide useful changes.
-* Make sure that:
+* *Make sure that*:
     * You follow the [coding requirements](https://github.com/DSH105/HoloAPI/wiki/Contributing#code-requirements) as outlined 
-    * Your commit messages are in the [appropriate format]((https://github.com/DSH105/HoloAPI/wiki/Contributing#commit-messages)
+    * Your commit messages are in the [appropriate format](https://github.com/DSH105/HoloAPI/wiki/Contributing#commit-messages)
     * Your Pull Request is formatted appropriately, according to our [guidelines](https://github.com/DSH105/HoloAPI/wiki/Contributing#pull-request-formatting).
     * You're compiling using Java 6.
-    * Your contributions are TESTED and work as expected.
+    * Your contributions are **TESTED** and work as expected.
 
 ##Code Requirements
 General guidelines:
@@ -109,3 +109,21 @@ Pull Requests should be formatted as follows.
 >
 > e.g.
 > https://github.com/DSH105/HoloAPI/pull/#### - Reason
+
+*The code:*
+```
+**The Issue**
+Brief summary explaining what this PR is addressing
+
+**Justification for this PR:**
+Provide an explanation of why the proposed changes are required
+
+**PR Breakdown**
+Explanation of what this PR achieves and what the code is doing.
+
+**Relevant PR(s) and Issue(s)**
+If applicable, link to any related PR(s) and Issue(s), accompanied with a reason as to why it is being referenced.
+
+e.g.
+https://github.com/DSH105/HoloAPI/pull/#### - Reason
+```
