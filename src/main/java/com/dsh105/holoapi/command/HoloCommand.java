@@ -24,6 +24,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.*;
 import com.dsh105.holoapi.api.action.CommandTouchAction;
 import com.dsh105.holoapi.api.action.TouchAction;
+import com.dsh105.holoapi.api.events.HoloDeleteEvent;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.InputPrompt;
 import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
@@ -75,7 +76,7 @@ public class HoloCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
             if (args.length == 1) {
                 if (sender instanceof Player && HoloAPI.isUsingNetty) {
@@ -239,7 +240,7 @@ public class HoloCommand implements CommandExecutor {
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("remove")) {
                 if (Perm.REMOVE.hasPerm(sender, true, true)) {
-                    Hologram h = HoloAPI.getManager().getHologram(args[1]);
+                    final Hologram h = HoloAPI.getManager().getHologram(args[1]);
                     if (h == null) {
                         Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
                         return true;
@@ -254,6 +255,7 @@ public class HoloCommand implements CommandExecutor {
                             @Override
                             public void onFunction(ConversationContext context, String input) {
                                 if (input.equalsIgnoreCase("YES")) {
+                                    HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloDeleteEvent(h, sender));
                                     HoloAPI.getManager().clearFromFile(hologramId);
                                     success = true;
                                 }
@@ -275,6 +277,7 @@ public class HoloCommand implements CommandExecutor {
                             }
                         })).buildConversation((Player) sender).begin();
                     } else {
+                        HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloDeleteEvent(h, sender));
                         HoloAPI.getManager().clearFromFile(hologramId);
                         Lang.sendTo(sender, Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId));
                     }
