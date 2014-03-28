@@ -96,7 +96,7 @@ public class InjectionManager {
                     for (int entityId : hologram.getAllEntityIds()) {
                         if (id == entityId) {
                             for (TouchAction touchAction : hologram.getAllTouchActions()) {
-                                HoloTouchEvent touchEvent = new HoloTouchEvent(hologram, player, touchAction);
+                                HoloTouchEvent touchEvent = new HoloTouchEvent(hologram, player, touchAction, action);
                                 HoloAPI.getInstance().getServer().getPluginManager().callEvent(touchEvent);
                                 if (!touchEvent.isCancelled()) {
                                     touchAction.onTouch(player, action);

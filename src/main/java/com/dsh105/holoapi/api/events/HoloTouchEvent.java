@@ -19,6 +19,7 @@ package com.dsh105.holoapi.api.events;
 
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.action.TouchAction;
+import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
 /**
@@ -29,11 +30,13 @@ public class HoloTouchEvent extends HoloEvent {
 
     private final Player who;
     private final TouchAction touchAction;
+    private final Action clickAction;
 
-    public HoloTouchEvent(Hologram hologram, Player who, TouchAction touchAction) {
+    public HoloTouchEvent(Hologram hologram, Player who, TouchAction touchAction, Action clickAction) {
         super(hologram);
         this.who = who;
         this.touchAction = touchAction;
+        this.clickAction = clickAction;
     }
 
     /**
@@ -54,4 +57,12 @@ public class HoloTouchEvent extends HoloEvent {
         return touchAction;
     }
 
+    /**
+     * Gets the action the player performed when touching the hologram
+     *
+     * @return action performed when touching the hologram
+     */
+    public Action getClickAction() {
+        return clickAction;
+    }
 }
