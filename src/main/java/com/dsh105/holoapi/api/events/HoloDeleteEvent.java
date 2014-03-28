@@ -25,20 +25,8 @@ import org.bukkit.command.CommandSender;
  */
 public class HoloDeleteEvent extends HoloEvent {
 
-    private final CommandSender who;
-
-    public HoloDeleteEvent(Hologram hologram, CommandSender who) {
+    public HoloDeleteEvent(Hologram hologram) {
         super(hologram);
-        this.who = who;
-    }
-
-    /**
-     * Gets the CommandSender that deleted the hologram
-     *
-     * @return CommandSender that deleted the hologram
-     */
-    public CommandSender getCommandSender() {
-        return who;
     }
 
 }

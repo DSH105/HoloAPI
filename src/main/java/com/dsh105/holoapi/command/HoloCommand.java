@@ -256,7 +256,6 @@ public class HoloCommand implements CommandExecutor {
                             @Override
                             public void onFunction(ConversationContext context, String input) {
                                 if (input.equalsIgnoreCase("YES")) {
-                                    HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloDeleteEvent(h, sender));
                                     HoloAPI.getManager().clearFromFile(hologramId);
                                     success = true;
                                 }
@@ -276,9 +275,8 @@ public class HoloCommand implements CommandExecutor {
                             public String getFailedText() {
                                 return Lang.YES_NO_INPUT_INVALID.getValue();
                             }
-                        })).buildConversation((Player) sender).begin();
+                        })).buildConversation((Conversable) sender).begin();
                     } else {
-                        HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloDeleteEvent(h, sender));
                         HoloAPI.getManager().clearFromFile(hologramId);
                         Lang.sendTo(sender, Lang.HOLOGRAM_CLEARED_FILE.getValue().replace("%id%", hologramId));
                     }

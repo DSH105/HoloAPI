@@ -21,6 +21,8 @@ import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.action.TouchAction;
+import com.dsh105.holoapi.api.events.HoloCreateEvent;
+import com.dsh105.holoapi.api.events.HoloDeleteEvent;
 import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
@@ -120,6 +122,7 @@ public class SimpleHoloManager implements HoloManager {
         if (hologram instanceof AnimatedHologram && !((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).animate();
         }
+        HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloCreateEvent(hologram));
     }
 
     @Override
@@ -133,6 +136,7 @@ public class SimpleHoloManager implements HoloManager {
         if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).cancelAnimation();
         }
+        HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloDeleteEvent(hologram));
         //this.clearFromFile(hologram);
     }
 

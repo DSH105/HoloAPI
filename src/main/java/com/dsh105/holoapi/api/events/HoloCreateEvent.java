@@ -25,20 +25,7 @@ import org.bukkit.command.CommandSender;
  */
 public class HoloCreateEvent extends HoloEvent {
 
-    private final CommandSender who;
-
-    public HoloCreateEvent(Hologram hologram, CommandSender who) {
+    public HoloCreateEvent(Hologram hologram) {
         super(hologram);
-        this.who = who;
     }
-
-    /**
-     * Gets the CommandSender that created the hologram
-     *
-     * @return CommandSender that created the hologram
-     */
-    public CommandSender getCommandSender() {
-        return who;
-    }
-
 }
