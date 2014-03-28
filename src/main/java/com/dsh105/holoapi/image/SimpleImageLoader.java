@@ -64,7 +64,9 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
             }
         }
         loaded = true;
-        HoloAPI.LOGGER.log(Level.INFO, "Custom images loaded.");
+        if (!KEY_TO_IMAGE_MAP.isEmpty() || !URL_UNLOADED.isEmpty()) {
+            HoloAPI.LOGGER.log(Level.INFO, "Custom images loaded.");
+        }
     }
 
     private ImageGenerator findGenerator(ImageLoader.ImageLoadType type, String key, String imagePath, int imageHeight, String imageCharType, boolean requiresBorder) {
