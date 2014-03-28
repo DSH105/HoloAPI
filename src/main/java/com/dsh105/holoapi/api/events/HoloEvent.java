@@ -46,7 +46,12 @@ public class HoloEvent extends Event implements Cancellable {
         this.cancelled = cancel;
     }
 
+    @Override
     public HandlerList getHandlers() {
+        return this.handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
