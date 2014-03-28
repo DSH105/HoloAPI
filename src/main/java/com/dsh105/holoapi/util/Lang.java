@@ -17,9 +17,11 @@
 
 package com.dsh105.holoapi.util;
 
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public enum Lang {
@@ -116,7 +118,11 @@ public enum Lang {
 
     public static void sendTo(CommandSender sender, String msg) {
         if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
-            sender.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
+            if (sender instanceof ConsoleCommandSender) {
+                ConsoleLogger.log(ChatColor.DARK_AQUA + msg);
+            } else {
+                sender.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
+            }
         }
     }
 
