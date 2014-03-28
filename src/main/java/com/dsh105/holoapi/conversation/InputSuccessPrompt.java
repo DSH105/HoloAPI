@@ -21,6 +21,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.util.Lang;
+import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
@@ -36,7 +37,8 @@ public class InputSuccessPrompt extends MessagePrompt {
     @Override
     public String getPromptText(ConversationContext conversationContext) {
         String[] lines = (String[]) conversationContext.getSessionData("lines");
-        Hologram h = new HologramFactory(HoloAPI.getInstance()).withText(lines).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
+        Location location = (Location) conversationContext.getSessionData("location");
+        Hologram h = new HologramFactory(HoloAPI.getInstance()).withText(lines).withLocation(location).build();
         return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
     }
 }

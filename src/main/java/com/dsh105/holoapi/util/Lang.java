@@ -86,6 +86,10 @@ public enum Lang {
     PROMPT_INPUT_FAIL("prompt_input_fail", "&3Hologram lines cannot be empty. Retry or enter &bExit &3 to cancel."),
     PROMPT_INPUT_INVALID("prompt_input_invalid", "&3Input invalid."),
     PROMPT_NEXT_FRAME("prompt_next_frame", "&3Frame %num% selected. Enter first line."),
+    PROMPT_FIND_LOCATION("prompt_find_location", "&3Enter the location of the new hologram in the following format: &bworld x y z&3."),
+    PROMPT_INPUT_FAIL_INT("prompt_input_fail_int", "&3X, Y and Z coordinates must be integers."),
+    PROMPT_INPUT_FAIL_WORLD("prompt_input_fail_world", "&b%world% &3world doesn't exist. Please re-enter the location."),
+    PROMPT_INPUT_FAIL_FORMAT("prompt_input_fail_format", "&3Please use the following format: &bworld x y z&3."),
 
     BUILDER_EMPTY_LINES("hologram_not_created", "&3The hologram was not created as it was empty."),
     BUILDER_INPUT_FAIL_TEXT_IMAGE("builder_input_fail_text_image", "&3Enter a valid line type (&bText &3or &bImage&3)."),

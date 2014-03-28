@@ -46,6 +46,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -122,8 +123,8 @@ public class HoloCommand implements CommandExecutor {
             return true;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("create")) {
             if (args.length == 1) {
-                if (Perm.CREATE.hasPerm(sender, true, false)) {
-                    InputFactory.buildBasicConversation().withFirstPrompt(new InputPrompt()).buildConversation((Player) sender).begin();
+                if (Perm.CREATE.hasPerm(sender, true, true)) {
+                    InputFactory.buildBasicConversation().withFirstPrompt(new InputPrompt()).buildConversation((Conversable) sender).begin();
                     return true;
                 } else return true;
             } else if (args.length == 2) {
