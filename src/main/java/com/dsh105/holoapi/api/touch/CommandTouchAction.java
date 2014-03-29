@@ -63,6 +63,7 @@ public class CommandTouchAction implements TouchAction {
     @Override
     public void onTouch(Player who, Action action) {
         String command = this.command.replace("%name%", who.getName());
+        command = command.replace("%world%", who.getWorld().getName());
         if (this.shouldPerformAsConsole()) {
             HoloAPI.getInstance().getServer().dispatchCommand(HoloAPI.getInstance().getServer().getConsoleSender(), command);
         } else {
