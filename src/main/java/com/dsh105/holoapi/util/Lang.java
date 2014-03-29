@@ -76,7 +76,7 @@ public enum Lang {
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),
     YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),
-    YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE("yes_no_command_touch_action_as_console", "&3Should this command be executed as the player or the console? Please enter either &bYes &3or &bNo&3."),
+    YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE("yes_no_command_touch_action_as_console", "&3Should this command be executed as the console? Please enter either &bYes &3or &bNo&3."),
 
     PROMPT_UPDATE_LINE("prompt_update_line", "&3What do you want to set this line to?"),
     PROMPT_DELAY("prompt_delay", "&3Enter the desired delay (in ticks) of the frames in the new animated hologram."),
