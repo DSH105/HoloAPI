@@ -39,6 +39,7 @@ public enum HelpEntry {
     TELEPORT("teleport <id>", Perm.TELEPORT.getPermission(), "Teleport to a specific hologram."),
     BUILD("build", Perm.BUILD.getPermission(), "Dynamically build a combined hologram of both text and images."),
     EDIT("edit <id> <line>", Perm.EDIT.getPermission(), "Edit a line of an existing hologram."),
+    EDIT_CONTENT("edit <id> <line> <content>", Perm.EDIT.getPermission(), "Edit a line of an existing hologram.", "<content> can be more than one word"),
     NEARBY("nearby <radius>", Perm.NEARBY.getPermission(), "View information on all nearby holograms within the specified radius"),
     REFRESH("refresh <id>", Perm.REFRESH.getPermission(), "Refresh a Hologram of the specified ID."),
     TOUCH_ADD("touch add <id> <command>", Perm.TOUCH_ADD.getPermission(), "Add an action for a certain hologram to perform when touched.", "Actions defined without the use of the API may only be commands", "Touch Actions are fired when a user left or right clicks a hologram", "The %name% placeholder can be used to define the user that touched the hologram", "Commands can be more than one word."),
