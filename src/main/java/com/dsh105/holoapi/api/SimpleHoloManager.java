@@ -191,11 +191,13 @@ public class SimpleHoloManager implements HoloManager {
                 }
             }
             for (TouchAction touch : hologram.getAllTouchActions()) {
-                Map<String, Object> map = touch.getDataToSave();
-                if (map != null && !map.isEmpty()) {
-                    for (Map.Entry<String, Object> entry : map.entrySet()) {
-                        // Let the developer implementing the API handle how data is saved and loaded to and from holograms
-                        this.config.set(path + "touchactions." + touch.getSaveKey() + "." + entry.getKey(), entry.getValue());
+                if (touch.getSaveKey() != null) {
+                    Map<String, Object> map = touch.getDataToSave();
+                    if (map != null && !map.isEmpty()) {
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            // Let the developer implementing the API handle how data is saved and loaded to and from holograms
+                            this.config.set(path + "touchactions." + touch.getSaveKey() + "." + entry.getKey(), entry.getValue());
+                        }
                     }
                 }
             }

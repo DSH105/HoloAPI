@@ -34,6 +34,7 @@ import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPrompt;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.protocol.Action;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
@@ -54,6 +55,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HoloCommand implements CommandExecutor {
@@ -470,7 +472,11 @@ public class HoloCommand implements CommandExecutor {
                             if (touchAction instanceof CommandTouchAction) {
                                 sender.sendMessage("•• " + ChatColor.AQUA + "Command" + ChatColor.DARK_AQUA + " /" + ((CommandTouchAction) touchAction).getCommand() + ChatColor.AQUA + " " + (((CommandTouchAction) touchAction).shouldPerformAsConsole() ? "as console" : "as player"));
                             } else {
-                                sender.sendMessage("•• " + ChatColor.AQUA + StringUtil.capitalise(touchAction.getSaveKey().replace("_", " ")));
+                                if (touchAction.getSaveKey() == null) {
+                                    sender.sendMessage("•• " + ChatColor.AQUA + "Unidentified TouchAction.");
+                                } else {
+                                    sender.sendMessage("•• " + ChatColor.AQUA + StringUtil.capitalise(touchAction.getSaveKey().replace("_", " ")));
+                                }
                             }
                         }
                         return true;
@@ -549,7 +555,7 @@ public class HoloCommand implements CommandExecutor {
                 if (Perm.TOUCH_REMOVE.hasPerm(sender, true, true)) {
                     TouchAction toRemove = null;
                     for (TouchAction touchAction : hologram.getAllTouchActions()) {
-                        if (touchAction.getSaveKey().equalsIgnoreCase(command) || (touchAction instanceof CommandTouchAction && ((CommandTouchAction) touchAction).getCommand().equalsIgnoreCase(command))) {
+                        if (touchAction != null && touchAction.getSaveKey().equalsIgnoreCase(command) || (touchAction instanceof CommandTouchAction && ((CommandTouchAction) touchAction).getCommand().equalsIgnoreCase(command))) {
                             toRemove = touchAction;
                             break;
                         }

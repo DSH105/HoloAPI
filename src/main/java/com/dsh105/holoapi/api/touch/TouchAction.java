@@ -17,7 +17,6 @@
 
 package com.dsh105.holoapi.api.touch;
 
-import com.avaje.ebean.validation.NotNull;
 import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
@@ -40,9 +39,7 @@ public interface TouchAction {
      *
      * @return string that represents the TouchAction
      */
-    public
-    @NotNull
-    String getSaveKey();
+    public String getSaveKey();
 
     /**
      * Gets a map of the TouchAction data to save to file.
