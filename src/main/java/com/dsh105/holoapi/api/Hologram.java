@@ -18,7 +18,7 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.action.TouchAction;
+import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;

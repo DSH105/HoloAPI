@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.api.action;
+package com.dsh105.holoapi.api.touch;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.protocol.Action;
@@ -62,10 +62,11 @@ public class CommandTouchAction implements TouchAction {
 
     @Override
     public void onTouch(Player who, Action action) {
+        String command = this.command.replace("%name%", who.getName());
         if (this.shouldPerformAsConsole()) {
-            HoloAPI.getInstance().getServer().dispatchCommand(HoloAPI.getInstance().getServer().getConsoleSender(), this.command);
+            HoloAPI.getInstance().getServer().dispatchCommand(HoloAPI.getInstance().getServer().getConsoleSender(), command);
         } else {
-            who.performCommand(this.command);
+            who.performCommand(command);
         }
     }
 

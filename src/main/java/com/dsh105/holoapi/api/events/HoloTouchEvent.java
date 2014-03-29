@@ -18,12 +18,12 @@
 package com.dsh105.holoapi.api.events;
 
 import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.action.TouchAction;
+import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
 /**
- * Called when a hologram is touched. The onTouch function in a {@link com.dsh105.holoapi.api.action.TouchAction} is
+ * Called when a hologram is touched. The onTouch function in a {@link com.dsh105.holoapi.api.touch.TouchAction} is
  * called if the event is not cancelled
  */
 public class HoloTouchEvent extends HoloEvent {
