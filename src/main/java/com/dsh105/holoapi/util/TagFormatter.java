@@ -18,6 +18,8 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.TagConversion;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -61,13 +63,13 @@ public class TagFormatter {
         content = content.replace("%balance%", HoloAPI.getInstance().getVaultProvider().getBalance(observer));
         content = content.replace("%rank%", HoloAPI.getInstance().getVaultProvider().getRank(observer));
         content = content.replace("%world%", observer.getWorld().getName());
-        content = content.replace("%health%", String.valueOf(observer.getHealth() == (int) observer.getHealth() ? (int) observer.getHealth() : observer.getHealth()));
+        //content = content.replace("%health%", String.valueOf(observer.getHealth() == (int) observer.getHealth() ? (int) observer.getHealth() : observer.getHealth()));
         content = content.replace("%playercount%", String.valueOf(Bukkit.getOnlinePlayers().length));
         content = content.replace("%maxplayers%", String.valueOf(Bukkit.getMaxPlayers()));
         content = matchDate(content);
 
         content = formatForOldClient(content);
-
+        content=TagConversion.Transform(observer, content);
         return content;
     }
 
