@@ -19,6 +19,7 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.touch.TouchAction;
+import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
@@ -191,7 +192,7 @@ public class Hologram {
     }*/
 
     /**
-     * Gets the save id of this hologram
+     * Gets the save id of the hologram
      * <p/>
      * Used to save the hologram to the HoloAPI save files
      *
@@ -201,8 +202,32 @@ public class Hologram {
         return saveId;
     }
 
-    protected void setSaveId(String saveId) {
+    /**
+     * Sets the save id of the hologram
+     * <p/>
+     * Any existing save data will be cleared and overwritten with the new assigned id
+     *
+     * @param saveId save id to be assigned to this hologram
+     */
+    public void setSaveId(String saveId) {
+        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
+            throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID" + saveId + " already exists in the HoloAPI data files!");
+        }
+        
+        if (!this.isSimple()) {
+            // Make sure all our changes are reflected by the file
+            HoloAPI.getManager().saveToFile(this);
+            // Clear any existing file data
+            HoloAPI.getManager().clearFromFile(this);
+        }
+
+        // Set the new save id
         this.saveId = saveId;
+
+        if (!this.isSimple()) {
+            // And save the data back to the file again under the new id
+            HoloAPI.getManager().saveToFile(this);
+        }
     }
 
     protected void setImageTagMap(HashMap<TagSize, String> map) {
