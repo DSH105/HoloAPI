@@ -43,6 +43,7 @@ import com.dsh105.holoapi.server.SpigotServer;
 import com.dsh105.holoapi.server.UnknownServer;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import com.dsh105.holoapi.api.TagFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -62,6 +63,7 @@ public class HoloAPI extends DSHPlugin {
     private static SimpleHoloManager MANAGER;
     private static SimpleImageLoader IMAGE_LOADER;
     private static SimpleAnimationLoader ANIMATION_LOADER;
+    private static TagFormatter TAG_FORMATTER;
     private ConfigOptions OPTIONS;
     private InjectionManager INJECTION_MANAGER;
 
@@ -136,6 +138,10 @@ public class HoloAPI extends DSHPlugin {
         return ANIMATION_LOADER;
     }
 
+    public static TagFormatter getTagFormatter() {
+        return TAG_FORMATTER;
+    }
+
     /**
      * Gets the spacing between hologram lines
      *
@@ -205,6 +211,7 @@ public class HoloAPI extends DSHPlugin {
         INJECTION_MANAGER = new InjectionManager(this);
 
         //this.registerCommands();
+        TAG_FORMATTER = new TagFormatter();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
         ANIMATION_LOADER = new SimpleAnimationLoader();

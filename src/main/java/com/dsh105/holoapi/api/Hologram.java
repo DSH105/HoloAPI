@@ -20,7 +20,6 @@ package com.dsh105.holoapi.api;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
-import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
@@ -213,7 +212,7 @@ public class Hologram {
         if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
             throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID" + saveId + " already exists in the HoloAPI data files!");
         }
-        
+
         if (!this.isSimple()) {
             // Make sure all our changes are reflected by the file
             HoloAPI.getManager().saveToFile(this);
@@ -564,7 +563,7 @@ public class Hologram {
         horse.setZ(z);
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, TagFormatter.format(observer, message));
+        dw.watch(10, HoloAPI.getTagFormatter().format(observer, message));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
         horse.setMetadata(dw);
@@ -636,7 +635,7 @@ public class Hologram {
 
     protected void updateNametag(Player observer, String content, int index) {
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, TagFormatter.format(observer, content));
+        dw.watch(10, HoloAPI.getTagFormatter().format(observer, content));
         dw.watch(11, Byte.valueOf((byte) 1));
         dw.watch(12, Integer.valueOf(-1700000));
 

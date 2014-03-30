@@ -34,11 +34,9 @@ import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPrompt;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.protocol.Action;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
-import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import com.dsh105.holoapi.util.pagination.FancyPaginator;
 import org.apache.commons.lang.BooleanUtils;
@@ -55,7 +53,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HoloCommand implements CommandExecutor {
@@ -223,17 +220,17 @@ public class HoloCommand implements CommandExecutor {
                                     if (tag.isImage()) {
                                         if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
                                             for (String s : HoloAPI.getImageLoader().getGenerator(tag.getContent()).getLines()) {
-                                                list.add(TagFormatter.formatBasic(ChatColor.WHITE + s));
+                                                list.add(HoloAPI.getTagFormatter().formatBasic(ChatColor.WHITE + s));
                                             }
                                         } else {
                                             list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + tag.getContent() + " (IMAGE)");
                                         }
                                     } else {
-                                        list.add(TagFormatter.formatBasic(ChatColor.WHITE + tag.getContent()));
+                                        list.add(HoloAPI.getTagFormatter().formatBasic(ChatColor.WHITE + tag.getContent()));
                                     }
                                 }
                             } else {
-                                list.add(TagFormatter.formatBasic(h.getLines()[0]));
+                                list.add(HoloAPI.getTagFormatter().formatBasic(h.getLines()[0]));
                             }
                         }
                         if (sender instanceof Player && list.size() > 1) {
@@ -385,17 +382,17 @@ public class HoloCommand implements CommandExecutor {
                                     if (tag.isImage()) {
                                         if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
                                             for (String s : HoloAPI.getImageLoader().getGenerator(tag.getContent()).getLines()) {
-                                                list.add(TagFormatter.formatBasic(ChatColor.WHITE + s));
+                                                list.add(HoloAPI.getTagFormatter().formatBasic(ChatColor.WHITE + s));
                                             }
                                         } else {
                                             list.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + tag.getContent() + " (IMAGE)");
                                         }
                                     } else {
-                                        list.add(TagFormatter.formatBasic(ChatColor.WHITE + tag.getContent()));
+                                        list.add(HoloAPI.getTagFormatter().formatBasic(ChatColor.WHITE + tag.getContent()));
                                     }
                                 }
                             } else {
-                                list.add(TagFormatter.formatBasic(h.getLines()[0]));
+                                list.add(HoloAPI.getTagFormatter().formatBasic(h.getLines()[0]));
                             }
                         }
                         if (sender instanceof Player && list.size() > 1) {
