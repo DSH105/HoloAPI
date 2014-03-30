@@ -110,10 +110,21 @@ public class TagFormatter {
         });
     }
 
+    /**
+     * Adds a formatter for all Holograms to utilise
+     *
+     * @param tag tag to be formatted (replaced)
+     * @param format format to apply
+     */
     public void addFormatter(String tag, TagFormat format) {
         this.formatters.put(tag, format);
     }
 
+    /**
+     * Removes a formatter from the list of applied formats
+     *
+     * @param tag tag of the format to remove
+     */
     public void removeFormatter(String tag) {
         this.formatters.remove(tag);
     }
