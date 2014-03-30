@@ -473,7 +473,7 @@ public class SimpleHoloManager implements HoloManager {
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 60);
+            //this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 60);
         }
 
         @Override
