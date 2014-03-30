@@ -80,11 +80,6 @@
             <artifactId>VanishNoPacket</artifactId>
             <version>LATEST</version>
         </dependency>
-        <dependency>
-            <groupId>org.kitteh</groupId>
-            <artifactId>VanishNoPacket</artifactId>
-            <version>3.18.4-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <!-- Repositories -->
