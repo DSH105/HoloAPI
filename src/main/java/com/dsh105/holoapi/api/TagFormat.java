@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi;
+package com.dsh105.holoapi.api;
 
 import org.bukkit.entity.Player;
 

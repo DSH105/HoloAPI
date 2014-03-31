@@ -18,7 +18,6 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.TagFormat;
 import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
