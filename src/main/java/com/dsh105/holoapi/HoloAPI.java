@@ -196,6 +196,7 @@ public class HoloAPI extends DSHPlugin {
         // detect version, this needs some improvements, it doesn't look too pretty now.
         if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
+            INJECTION_MANAGER = new InjectionManager(this);
         } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
 
@@ -207,8 +208,6 @@ public class HoloAPI extends DSHPlugin {
                 }
             }.runTaskLater(this, 1L);
         }
-
-        INJECTION_MANAGER = new InjectionManager(this);
 
         //this.registerCommands();
         TAG_FORMATTER = new TagFormatter();
@@ -251,7 +250,9 @@ public class HoloAPI extends DSHPlugin {
     public void onDisable() {
         COMMAND_MANAGER.unregister();
         MANAGER.clearAll();
-        INJECTION_MANAGER.close();
+        if (INJECTION_MANAGER != null) {
+            INJECTION_MANAGER.close();
+        }
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
     }
