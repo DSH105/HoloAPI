@@ -45,7 +45,7 @@ import java.util.logging.Level;
 public class SimpleHoloManager implements HoloManager {
 
     YAMLConfig config;
-    private UpdateDisplayTask updateDisplayTask;
+    //private UpdateDisplayTask updateDisplayTask;
     private HashMap<Hologram, Plugin> holograms = new HashMap<Hologram, Plugin>();
 
     public SimpleHoloManager() {
@@ -113,9 +113,9 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public void track(Hologram hologram, Plugin owningPlugin) {
         this.holograms.put(hologram, owningPlugin);
-        if (this.updateDisplayTask == null) {
+        /*if (this.updateDisplayTask == null) {
             this.updateDisplayTask = new UpdateDisplayTask();
-        }
+        }*/
         if (!hologram.isSimple() && this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
             this.saveToFile(hologram);
         }
@@ -129,10 +129,10 @@ public class SimpleHoloManager implements HoloManager {
     public void stopTracking(Hologram hologram) {
         hologram.clearAllPlayerViews();
         this.holograms.remove(hologram);
-        if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
+        /*if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
             this.updateDisplayTask.cancel();
             this.updateDisplayTask = null;
-        }
+        }*/
         if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).cancelAnimation();
         }
