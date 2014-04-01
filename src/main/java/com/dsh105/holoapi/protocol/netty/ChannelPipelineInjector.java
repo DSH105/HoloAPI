@@ -1,5 +1,8 @@
-package com.dsh105.holoapi.protocol;
+package com.dsh105.holoapi.protocol.netty;
 
+import com.dsh105.holoapi.protocol.InjectionManager;
+import com.dsh105.holoapi.protocol.PlayerInjector;
+import com.dsh105.holoapi.protocol.PlayerUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Protocol;
 import com.google.common.base.Preconditions;
 import net.minecraft.util.io.netty.channel.Channel;
@@ -7,7 +10,7 @@ import net.minecraft.util.io.netty.channel.ChannelDuplexHandler;
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
 import org.bukkit.entity.Player;
 
-public class ChannelPipelineInjector extends ChannelDuplexHandler {
+public class ChannelPipelineInjector extends ChannelDuplexHandler implements PlayerInjector {
 
     // The player
     private Player player;
@@ -41,15 +44,11 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
         /**
          * Channel/network stuff
          */
-        this.nmsHandle = getNmsHandle();
-        this.playerConnection = getPlayerConnection();
-        this.networkManager = getNetworkManager();
-        this.channel = getChannel();
+        this.channel = getChannel(); // By doing this we also initialize all the other fields.
     }
 
     public boolean inject() {
         synchronized (networkManager) {
-
             if (this.closed)
                 return false;
             if (!this.channel.isActive())
@@ -67,8 +66,7 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
     }
 
     public boolean close() {
-        if (this.closed) {
-
+        if (!this.closed) {
             // Remove our handler from the pipeline
             try {
                 getChannel().pipeline().remove(getHandlerName());
@@ -78,7 +76,7 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
                 this.closed = false;
             }
         }
-        return false;
+        return this.closed;
     }
 
     public Player getPlayer() {
@@ -101,19 +99,19 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler {
 
     public Object getPlayerConnection() {
         if (this.playerConnection == null)
-            this.playerConnection = PlayerUtil.getPlayerConnection(this.player);
+            this.playerConnection = PlayerUtil.getPlayerConnection(getNmsHandle());
         return this.playerConnection;
     }
 
     public Object getNetworkManager() {
         if (this.networkManager == null)
-            this.networkManager = PlayerUtil.getNetworkManager(this.player);
+            this.networkManager = PlayerUtil.getNetworkManager(getPlayerConnection());
         return this.networkManager;
     }
 
     public Channel getChannel() {
         if (this.channel == null)
-            this.channel = (Channel) PlayerUtil.getChannel(this.player);
+            this.channel = (Channel) PlayerUtil.getChannel(getNetworkManager());
         return this.channel;
     }
 

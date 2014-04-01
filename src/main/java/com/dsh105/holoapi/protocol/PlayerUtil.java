@@ -20,23 +20,23 @@ public class PlayerUtil {
         return ReflectionUtil.invokeMethod(getHandle, player);
     }
 
-    public static Object getPlayerConnection(Player player) {
-        return ReflectionUtil.getField(playerConnection, toNMS(player));
+    public static Object getPlayerConnection(Object nmsPlayer) {
+        return ReflectionUtil.getField(playerConnection, nmsPlayer);
     }
 
-    public static void sendPacket(Player player, Object packet) {
-        ReflectionUtil.invokeMethod(sendPacket, getPlayerConnection(player), packet);
+    public static void sendPacket(Object playerConnection, Object packet) {
+        ReflectionUtil.invokeMethod(sendPacket, playerConnection, packet);
     }
 
-    public static Object getNetworkManager(Player player) {
-        return ReflectionUtil.getField(networkManager, getPlayerConnection(player));
+    public static Object getNetworkManager(Object playerConnection) {
+        return ReflectionUtil.getField(networkManager, playerConnection);
     }
 
-    public static Object getChannel(Player player) {
-        return ReflectionUtil.getField(channelField, getNetworkManager(player));
+    public static Object getChannel(Object networkManager) {
+        return ReflectionUtil.getField(channelField, networkManager);
     }
 
-    public static Enum getProtocolPhase(Player player) {
-        return ReflectionUtil.getField(protocolPhase, getNetworkManager(player));
+    public static Enum getProtocolPhase(Object networkManager) {
+        return ReflectionUtil.getField(protocolPhase, networkManager);
     }
 }

@@ -4,6 +4,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.action.TouchAction;
 import com.dsh105.holoapi.api.event.HologramTouchEvent;
+import com.dsh105.holoapi.protocol.netty.ChannelPipelineInjector;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 import com.google.common.collect.MapMaker;
