@@ -73,7 +73,9 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
             }
         }
         loaded = true;
-        HoloAPI.LOGGER.log(Level.INFO, "Animations loaded.");
+        if (!KEY_TO_IMAGE_MAP.isEmpty() || !URL_UNLOADED.isEmpty()) {
+            HoloAPI.LOGGER.log(Level.INFO, "Animations loaded.");
+        }
     }
 
     private AnimatedImageGenerator findGenerator(YAMLConfig config, AnimationLoadType type, String key, String imagePath, int frameRate, int imageHeight, String imageCharType, boolean requiresBorder) {

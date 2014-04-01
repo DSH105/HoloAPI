@@ -20,8 +20,10 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.action.TouchAction;
-import com.dsh105.holoapi.api.event.TouchActionLoadEvent;
+import com.dsh105.holoapi.api.touch.TouchAction;
+import com.dsh105.holoapi.api.events.HoloCreateEvent;
+import com.dsh105.holoapi.api.events.HoloDeleteEvent;
+import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
@@ -43,7 +45,7 @@ import java.util.logging.Level;
 public class SimpleHoloManager implements HoloManager {
 
     YAMLConfig config;
-    private UpdateDisplayTask updateDisplayTask;
+    //private UpdateDisplayTask updateDisplayTask;
     private HashMap<Hologram, Plugin> holograms = new HashMap<Hologram, Plugin>();
 
     public SimpleHoloManager() {
@@ -111,28 +113,30 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public void track(Hologram hologram, Plugin owningPlugin) {
         this.holograms.put(hologram, owningPlugin);
-        if (this.updateDisplayTask == null) {
+        /*if (this.updateDisplayTask == null) {
             this.updateDisplayTask = new UpdateDisplayTask();
-        }
+        }*/
         if (!hologram.isSimple() && this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
             this.saveToFile(hologram);
         }
         if (hologram instanceof AnimatedHologram && !((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).animate();
         }
+        HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloCreateEvent(hologram));
     }
 
     @Override
     public void stopTracking(Hologram hologram) {
         hologram.clearAllPlayerViews();
         this.holograms.remove(hologram);
-        if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
+        /*if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
             this.updateDisplayTask.cancel();
             this.updateDisplayTask = null;
-        }
+        }*/
         if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).cancelAnimation();
         }
+        HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloDeleteEvent(hologram));
         //this.clearFromFile(hologram);
     }
 
@@ -187,11 +191,13 @@ public class SimpleHoloManager implements HoloManager {
                 }
             }
             for (TouchAction touch : hologram.getAllTouchActions()) {
-                Map<String, Object> map = touch.getDataToSave();
-                if (map != null && !map.isEmpty()) {
-                    for (Map.Entry<String, Object> entry : map.entrySet()) {
-                        // Let the developer implementing the API handle how data is saved and loaded to and from holograms
-                        this.config.set(path + "touchactions." + entry.getKey(), entry.getValue());
+                if (touch.getSaveKey() != null) {
+                    Map<String, Object> map = touch.getDataToSave();
+                    if (map != null && !map.isEmpty()) {
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            // Let the developer implementing the API handle how data is saved and loaded to and from holograms
+                            this.config.set(path + "touchactions." + touch.getSaveKey() + "." + entry.getKey(), entry.getValue());
+                        }
                     }
                 }
             }
@@ -331,10 +337,12 @@ public class SimpleHoloManager implements HoloManager {
             for (String touchKey : touchSection.getKeys(true)) {
                 LinkedHashMap<String, Object> configMap = new LinkedHashMap<String, Object>();
                 ConfigurationSection touchKeySection = this.config.getConfigurationSection("holograms." + hologramKey + ".touchactions." + touchKey);
-                for (String fullKey : touchKeySection.getKeys(true)) {
-                    configMap.put(fullKey, touchKeySection.get(fullKey));
+                if (touchKeySection != null) {
+                    for (String fullKey : touchKeySection.getKeys(true)) {
+                        configMap.put(fullKey, touchKeySection.get(fullKey));
+                    }
                 }
-                HoloAPI.getInstance().getServer().getPluginManager().callEvent(new TouchActionLoadEvent(hologram, touchKey, configMap));
+                HoloAPI.getInstance().getServer().getPluginManager().callEvent(new HoloTouchActionLoadEvent(hologram, touchKey, configMap));
             }
         }
     }
@@ -440,8 +448,8 @@ public class SimpleHoloManager implements HoloManager {
 
     class HologramRemoveTask extends BukkitRunnable {
 
-        private Hologram hologram;
         BukkitTask t = null;
+        private Hologram hologram;
 
         HologramRemoveTask(Hologram hologram, BukkitTask t) {
             this.hologram = hologram;
@@ -465,7 +473,7 @@ public class SimpleHoloManager implements HoloManager {
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 60);
+            //this.runTaskTimer(HoloAPI.getInstance(), 0L, 20 * 60);
         }
 
         @Override

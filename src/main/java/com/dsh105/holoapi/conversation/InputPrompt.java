@@ -18,10 +18,13 @@
 package com.dsh105.holoapi.conversation;
 
 import com.dsh105.holoapi.util.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
@@ -55,16 +58,51 @@ public class InputPrompt extends ValidatingPrompt {
 
     @Override
     protected Prompt acceptValidatedInput(ConversationContext conversationContext, String s) {
-        if (s.equalsIgnoreCase("DONE")) {
+        Object findLoc = conversationContext.getSessionData("findloc");
+        if (findLoc != null && ((Boolean) findLoc)) {
+            if (s.contains(" ")) {
+                String[] split = s.split(" ");
+                if (split.length == 4) {
+                    if (Bukkit.getWorld(split[0]) != null) {
+                        try {
+                            conversationContext.setSessionData("location", new Location(Bukkit.getWorld(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3])));
+                            return this.successPrompt;
+                        } catch (NumberFormatException e) {
+                            conversationContext.setSessionData("fail_int", true);
+                        }
+                    } else {
+                        conversationContext.setSessionData("fail_world", true);
+                    }
+                } else {
+                    conversationContext.setSessionData("fail_format", true);
+                }
+            } else {
+                conversationContext.setSessionData("fail_format", true);
+            }
+        } else if (s.equalsIgnoreCase("DONE")) {
             conversationContext.setSessionData("lines", this.lines.toArray(new String[this.lines.size()]));
-            return this.successPrompt;
+            if (conversationContext.getSessionData("location") == null) {
+                if (conversationContext.getForWhom() instanceof Player) {
+                    conversationContext.setSessionData("location", ((Player) conversationContext.getForWhom()).getLocation());
+                    return this.successPrompt;
+                } else {
+                    conversationContext.setSessionData("findloc", true);
+                }
+            } else {
+                return this.successPrompt;
+            }
+        } else {
+            this.lines.add(s);
         }
-        this.lines.add(s);
         return new InputPrompt(this.lines, this.successPrompt, s);
     }
 
     @Override
     public String getPromptText(ConversationContext conversationContext) {
+        Object findLoc = conversationContext.getSessionData("findloc");
+        if (findLoc != null && ((Boolean) findLoc)) {
+            return Lang.PROMPT_FIND_LOCATION.getValue();
+        }
         if (this.first) {
             return Lang.PROMPT_INPUT.getValue();
         } else
@@ -73,6 +111,16 @@ public class InputPrompt extends ValidatingPrompt {
 
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
+        Object failInt = context.getSessionData("fail_int");
+        Object failFormat = context.getSessionData("fail_format");
+        Object failWorld = context.getSessionData("fail_world");
+        if (failInt != null && ((Boolean) failInt)) {
+            return Lang.PROMPT_INPUT_FAIL_INT.getValue();
+        } else if (failFormat != null && (Boolean) failFormat) {
+            return Lang.PROMPT_INPUT_FAIL_FORMAT.getValue();
+        } else if (failWorld != null && (Boolean) failWorld) {
+            return Lang.PROMPT_INPUT_FAIL_WORLD.getValue().replace("%world%", invalidInput.split(" ")[0]);
+        }
         return Lang.PROMPT_INPUT_FAIL.getValue();
     }
 }

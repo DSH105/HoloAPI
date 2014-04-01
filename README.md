@@ -1,21 +1,12 @@
 ![HoloAPI](https://dev.bukkit.org/media/images/70/44/Banner_PNG.png "HoloAPI")
-## Add Holograms to your Bukkit server!
-#### Authors: [DSH105](https://github.com/DSH105), [CaptainBern](https://github.com/CaptainBern)
-#### Contributors: [hawkfalcon](https://github.com/hawkfalcon), [Frostalf](https://github.com/Frostalf)
+## [HoloAPI](https://dev.bukkit.org/bukkit-plugins/holoapi/) adds Holograms to your Bukkit server!
+### [Download Now](https://github.com/DSH105/HoloAPI/releases)
+----
+
+#### Authors: ![DSH105](https://minotar.net/avatar/_DSH105_/15)[ DSH105](https://github.com/DSH105), ![CaptainBern](https://minotar.net/helm/CaptainBern/15)[ CaptainBern](https://github.com/CaptainBern)
+#### Contributors: ![hawkfalcon](https://minotar.net/helm/Hawkfalcon/15)[ hawkfalcon](https://github.com/hawkfalcon), ![Frostalf](https://minotar.net/helm/MHF_Question/15)[ Frostalf](https://github.com/Frostalf), ![drthock](https://minotar.net/helm/drtshock/15)[ drtshock](https://github.com/drtshock), ![stuntguy3000](https://minotar.net/helm/stuntguy3000/15)[ stuntguy3000](https://github.com/stuntguy3000)
 
 ----
 
-Need help? Visit the [Wiki](https://github.com/DSH105/HoloAPI/wiki)!
-
-----
-
-If stuntguy3000 reaches the magic number of 1337 lines of contribution code; then he will be added to the contributor list
-(see the Legal Terms for more info)
-
-
-Legal Terms
-----
-In this case stuntguy3000 needs to have exactly 1337 lines of contribution code (see the diff). If he
-has 1338 or 1336 lines, it won't count. It also needs to be + and not -. All hail stuntguy3000.
-
-We wish stuntguy3000 a lot of peace, love and code. Coffee wouldn't hurt also.
+### Need help? Visit the [Wiki](https://github.com/DSH105/HoloAPI/wiki)!
+#### Want to contribute? Read [CONTRIBUTING.md](https://github.com/DSH105/HoloAPI/blob/master/CONTRIBUTING.md)!

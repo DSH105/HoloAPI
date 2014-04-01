@@ -21,19 +21,15 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
-import com.dsh105.holoapi.util.TagFormatter;
 import com.dsh105.holoapi.util.TagIdGenerator;
-import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -244,20 +240,9 @@ public class AnimatedHologram extends Hologram {
         this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), lines);
     }
 
-    /**
-     * Shows the the animation to an observer at a position
-     * <p/>
-     * Important to note: This method may yield unexpected results if not used properly
-     *
-     * @param observer Player to show the animation to
-     * @param x        x value of the position the animation is to be shown
-     * @param y        y value of the position the animation is to be shown
-     * @param z        z value of the position the animation is to be shown
-     * @param lines    Lines to display
-     */
     private void showAnimation(Player observer, double x, double y, double z, String[] lines) {
         for (int index = 0; index < lines.length; index++) {
-            this.generateAnimation(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
+            this.generate(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
         this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
     }
@@ -267,97 +252,5 @@ public class AnimatedHologram extends Hologram {
         this.cancelAnimation();
         super.move(observer, to);
         this.animate();
-    }
-
-    @Override
-    public void clear(Player observer) {
-        int[] ids = new int[currentFrame.getLines().length];
-
-        for (int i = 0; i < currentFrame.getLines().length; i++) {
-            ids[i] = i;
-        }
-        clearTags(observer, ids);
-        this.playerToLocationMap.remove(observer.getName());
-    }
-
-    @Override
-    protected void clearTags(Player observer, int... indices) {
-        WrapperPacketEntityDestroy destroy = new WrapperPacketEntityDestroy();
-        int[] entityIds = new int[indices.length * 2];
-
-        for (int i = 0; i < indices.length; i++) {
-            if (indices[i] <= currentFrame.getLines().length) {
-                entityIds[i * 2] = this.getHorseIndex(indices[i]);
-                entityIds[i * 2 + 1] = this.getSkullIndex(indices[i] * 2);
-            }
-        }
-        destroy.setEntities(entityIds);
-        destroy.send(observer);
-    }
-
-    @Override
-    public void clearAllPlayerViews() {
-        Iterator<String> i = this.playerToLocationMap.keySet().iterator();
-        while (i.hasNext()) {
-            Player p = Bukkit.getPlayerExact(i.next());
-            if (p != null) {
-                int[] ids = new int[currentFrame.getLines().length];
-
-                for (int j = 0; j < currentFrame.getLines().length; j++) {
-                    ids[j] = j;
-                }
-                clearTags(p, ids);
-            }
-            i.remove();
-        }
-    }
-
-    protected void generateAnimation(Player observer, String message, int index, double diffY, double x, double y, double z) {
-        WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
-
-        WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
-        horse.setEntityId(this.getHorseIndex(index));
-        horse.setEntityType(EntityType.HORSE.getTypeId());
-        horse.setX(x);
-        horse.setY(y + diffY + 55);
-        horse.setZ(z);
-
-        WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, TagFormatter.format(observer, message));
-        dw.watch(11, Byte.valueOf((byte) 1));
-        dw.watch(12, Integer.valueOf(-1700000));
-        horse.setMetadata(dw);
-
-        WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
-        skull.setEntityId(this.getSkullIndex(index));
-        skull.setX(x);
-        skull.setY(y + diffY + 55);
-        skull.setZ(z);
-        skull.setEntityType(66);
-
-        attach.setEntityId(horse.getEntityId());
-        attach.setVehicleId(skull.getEntityId());
-
-        horse.send(observer);
-        skull.send(observer);
-        attach.send(observer);
-    }
-
-    @Override
-    protected void updateNametag(Player observer, int index) {
-        this.updateNametag(observer, this.getCurrent().getLines()[index], index);
-    }
-
-    protected void updateNametag(Player observer, String message, int index) {
-        WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, TagFormatter.format(observer, message));
-        dw.watch(11, Byte.valueOf((byte) 1));
-        dw.watch(12, Integer.valueOf(-1700000));
-
-        WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
-        metadata.setEntityId(this.getHorseIndex(index));
-        metadata.setMetadata(dw);
-
-        metadata.send(observer);
     }
 }

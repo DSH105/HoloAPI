@@ -17,9 +17,11 @@
 
 package com.dsh105.holoapi.util;
 
+import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public enum Lang {
@@ -74,7 +76,7 @@ public enum Lang {
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),
     YES_NO_CLEAR_FROM_FILE("yes_no_clear_from_file", "&3Would you like to clear this hologram from the save file? Please enter either &bYes &3or &bNo&3."),
-    YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE("yes_no_command_touch_action_as_console", "&3Should this command be executed as the player or the console? Please enter either &bYes &3or &bNo&3."),
+    YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE("yes_no_command_touch_action_as_console", "&3Should this command be executed as the console? Please enter either &bYes &3or &bNo&3."),
 
     PROMPT_UPDATE_LINE("prompt_update_line", "&3What do you want to set this line to?"),
     PROMPT_DELAY("prompt_delay", "&3Enter the desired delay (in ticks) of the frames in the new animated hologram."),
@@ -84,6 +86,10 @@ public enum Lang {
     PROMPT_INPUT_FAIL("prompt_input_fail", "&3Hologram lines cannot be empty. Retry or enter &bExit &3 to cancel."),
     PROMPT_INPUT_INVALID("prompt_input_invalid", "&3Input invalid."),
     PROMPT_NEXT_FRAME("prompt_next_frame", "&3Frame %num% selected. Enter first line."),
+    PROMPT_FIND_LOCATION("prompt_find_location", "&3Enter the location of the new hologram in the following format: &bworld x y z&3."),
+    PROMPT_INPUT_FAIL_INT("prompt_input_fail_int", "&3X, Y and Z coordinates must be integers."),
+    PROMPT_INPUT_FAIL_WORLD("prompt_input_fail_world", "&b%world% &3world doesn't exist. Please re-enter the location."),
+    PROMPT_INPUT_FAIL_FORMAT("prompt_input_fail_format", "&3Please use the following format: &bworld x y z&3."),
 
     BUILDER_EMPTY_LINES("hologram_not_created", "&3The hologram was not created as it was empty."),
     BUILDER_INPUT_FAIL_TEXT_IMAGE("builder_input_fail_text_image", "&3Enter a valid line type (&bText &3or &bImage&3)."),
@@ -116,7 +122,11 @@ public enum Lang {
 
     public static void sendTo(CommandSender sender, String msg) {
         if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
-            sender.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
+            if (sender instanceof ConsoleCommandSender) {
+                ConsoleLogger.log(ChatColor.DARK_AQUA + msg);
+            } else {
+                sender.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
+            }
         }
     }
 

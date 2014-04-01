@@ -18,8 +18,8 @@
 package com.dsh105.holoapi.listeners;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.action.CommandTouchAction;
-import com.dsh105.holoapi.api.event.TouchActionLoadEvent;
+import com.dsh105.holoapi.api.touch.CommandTouchAction;
+import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -28,14 +28,14 @@ import java.util.logging.Level;
 public class CommandTouchActionListener implements Listener {
 
     @EventHandler
-    public void onTouchActionLoad(TouchActionLoadEvent event) {
+    public void onTouchActionLoad(HoloTouchActionLoadEvent event) {
         // Make sure it's what we're looking for
         if (event.getLoadedTouchActionKey().startsWith("command_")) {
             // Just in-case (for some reason) the command data didn't actually save
             if (event.getConfigMap().get("command") != null) {
                 try {
                     Object asConsole = event.getConfigMap().get("asConsole");
-                    event.getHologram().addTouchAction(new CommandTouchAction((String) event.getConfigMap().get("command"), (asConsole == null && asConsole instanceof Boolean) ? (Boolean) asConsole : false));
+                    event.getHologram().addTouchAction(new CommandTouchAction((String) event.getConfigMap().get("command"), (asConsole != null && asConsole instanceof Boolean) ? (Boolean) asConsole : false));
                 } catch (ClassCastException e) {
                     HoloAPI.LOGGER.log(Level.SEVERE, "Failed to load command touch action data for hologram (" + event.getHologram().getSaveId() + "). Maybe the save data was edited?");
                 }

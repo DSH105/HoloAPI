@@ -39,16 +39,22 @@ public enum HelpEntry {
     TELEPORT("teleport <id>", Perm.TELEPORT.getPermission(), "Teleport to a specific hologram."),
     BUILD("build", Perm.BUILD.getPermission(), "Dynamically build a combined hologram of both text and images."),
     EDIT("edit <id> <line>", Perm.EDIT.getPermission(), "Edit a line of an existing hologram."),
+    EDIT_CONTENT("edit <id> <line> <content>", Perm.EDIT.getPermission(), "Edit a line of an existing hologram.", "<content> can be more than one word"),
     NEARBY("nearby <radius>", Perm.NEARBY.getPermission(), "View information on all nearby holograms within the specified radius"),
     REFRESH("refresh <id>", Perm.REFRESH.getPermission(), "Refresh a Hologram of the specified ID."),
+    TOUCH_ADD("touch add <id> <command>", Perm.TOUCH_ADD.getPermission(), "Add an action for a certain hologram to perform when touched.", "Actions defined without the use of the API may only be commands", "Touch Actions are fired when a user left or right clicks a hologram", "The %name% placeholder can be used to define the user that touched the hologram", "Commands can be more than one word."),
+    TOUCH_ADD_AS_CONSOLE("touch add <id> <command> <as_console>", Perm.TOUCH_ADD.getPermission(), "Add an action for a certain hologram to perform when touched.", "Actions defined without the use of the API may only be commands", "Touch Actions are fired when a user left or right clicks a hologram", "The %name% placeholder can be used to define the user that touched the hologram", "Commands can be more than one word.", "<as_console> defines whether the action is performed by the console or the player that touched the hologram"),
+    TOUCH_REMOVE("touch remove <id> <touch_id>", Perm.TOUCH_REMOVE.getPermission(), "Remove an action for a TouchScreen hologram", "<touch_id> is the ID of the TouchAction. To remove a comman-based Touch Action, simply enter the command"),
+    TOUCH_CLEAR("touch clear <id>", Perm.TOUCH_CLEAR.getPermission(), "Clear all Touch Actions for a particular TouchScreen hologram"),
+    TOUCH_INFO("touch info <id>", Perm.TOUCH_INFO.getPermission(), "View information on all Touch Actions for a particular TouchScreen hologram"),
     RELOAD("reload", Perm.RELOAD.getPermission(), "Reload all HoloAPI configuration files."),;
 
     private String commandArguments;
-    private String description;
+    private String[] description;
     private String permission;
     private final String defaultLine;
 
-    HelpEntry(String commandArguments, String permission, String description) {
+    HelpEntry(String commandArguments, String permission, String... description) {
         this.commandArguments = commandArguments;
         this.description = description;
         this.defaultLine = ChatColor.AQUA + "/" + HoloAPI.getInstance().getCommandLabel() + " " + this.getCommandArguments() + ChatColor.WHITE + "  •••  " + ChatColor.DARK_AQUA + description;
@@ -59,7 +65,7 @@ public enum HelpEntry {
         return commandArguments;
     }
 
-    public String getDescription() {
+    public String[] getDescription() {
         return description;
     }
 
@@ -70,7 +76,9 @@ public enum HelpEntry {
     public FancyMessage getFancyMessage(CommandSender sender) {
         ArrayList<String> description = new ArrayList<String>();
         description.add(ChatColor.AQUA + "" + ChatColor.BOLD + "Usage for /" + HoloAPI.getInstance().getCommandLabel() + " " + this.getCommandArguments() + ":");
-        description.add("• " + ChatColor.DARK_AQUA + this.getDescription());
+        for (String part : this.getDescription()) {
+            description.add("• " + ChatColor.DARK_AQUA + part);
+        }
         if (sender != null) {
             description.add(sender.hasPermission(this.getPermission()) ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command");
         }

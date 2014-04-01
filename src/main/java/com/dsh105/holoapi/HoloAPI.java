@@ -36,12 +36,14 @@ import com.dsh105.holoapi.listeners.CommandTouchActionListener;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
+import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.server.CraftBukkitServer;
 import com.dsh105.holoapi.server.Server;
 import com.dsh105.holoapi.server.SpigotServer;
 import com.dsh105.holoapi.server.UnknownServer;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
+import com.dsh105.holoapi.api.TagFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -61,7 +63,9 @@ public class HoloAPI extends DSHPlugin {
     private static SimpleHoloManager MANAGER;
     private static SimpleImageLoader IMAGE_LOADER;
     private static SimpleAnimationLoader ANIMATION_LOADER;
+    private static TagFormatter TAG_FORMATTER;
     private ConfigOptions OPTIONS;
+    private InjectionManager INJECTION_MANAGER;
 
     private YAMLConfig config;
     private YAMLConfig dataConfig;
@@ -79,6 +83,7 @@ public class HoloAPI extends DSHPlugin {
     public static boolean isUsingNetty;
 
     private static double LINE_SPACING = 0.25D;
+    private static int TAG_ENTITY_MULTIPLIER = 4;
 
     //private CommandMap commandMap;
     public ChatColor primaryColour = ChatColor.DARK_AQUA;
@@ -133,6 +138,10 @@ public class HoloAPI extends DSHPlugin {
         return ANIMATION_LOADER;
     }
 
+    public static TagFormatter getTagFormatter() {
+        return TAG_FORMATTER;
+    }
+
     /**
      * Gets the spacing between hologram lines
      *
@@ -140,6 +149,10 @@ public class HoloAPI extends DSHPlugin {
      */
     public static double getHologramLineSpacing() {
         return LINE_SPACING;
+    }
+
+    public static int getTagEntityMultiplier() {
+        return TAG_ENTITY_MULTIPLIER;
     }
 
     public String getCommandLabel() {
@@ -183,6 +196,7 @@ public class HoloAPI extends DSHPlugin {
         // detect version, this needs some improvements, it doesn't look too pretty now.
         if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
+            INJECTION_MANAGER = new InjectionManager(this);
         } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
 
@@ -196,6 +210,7 @@ public class HoloAPI extends DSHPlugin {
         }
 
         //this.registerCommands();
+        TAG_FORMATTER = new TagFormatter();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
         ANIMATION_LOADER = new SimpleAnimationLoader();
@@ -235,6 +250,9 @@ public class HoloAPI extends DSHPlugin {
     public void onDisable() {
         COMMAND_MANAGER.unregister();
         MANAGER.clearAll();
+        if (INJECTION_MANAGER != null) {
+            INJECTION_MANAGER.close();
+        }
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();
     }

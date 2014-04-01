@@ -17,8 +17,7 @@
 
 package com.dsh105.holoapi.reflection;
 
-import com.dsh105.dshutils.logger.ConsoleLogger;
-import com.dsh105.dshutils.logger.Logger;
+import com.dsh105.holoapi.HoloAPI;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -37,7 +36,7 @@ public class SafeConstructor<T> {
             Constructor constructor = coreClass.getConstructor(params);
             setConstructor(constructor);
         } catch (NoSuchMethodException e) {
-            ConsoleLogger.log(Logger.LogLevel.WARNING, "No such constructor!");
+            HoloAPI.LOGGER_REFLECTION.warning("No such constructor!");
         }
     }
 
