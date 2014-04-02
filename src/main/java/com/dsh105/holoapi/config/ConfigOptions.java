@@ -64,37 +64,37 @@ public class ConfigOptions extends Options {
         set("specialCharacters.[*]", "2605");
 
         set("indicators.damage.enable", false);
-        set("indicators.damage.format.default", "&c");
-        set("indicators.damage.format.drowning", "&b");
-        set("indicators.damage.format.fire", "&4");
-        set("indicators.damage.format.magic", "&5");
-        set("indicators.damage.format.poison", "&2");
-        set("indicators.damage.format.starvation", "&6");
-        set("indicators.damage.format.thorns", "&e");
-        set("indicators.damage.format.wither", "&8");
+        set("indicators.damage.format.default", "&c&l");
+        set("indicators.damage.format.drowning", "&b&l");
+        set("indicators.damage.format.fire", "&4&l");
+        set("indicators.damage.format.magic", "&5&l");
+        set("indicators.damage.format.poison", "&2&l");
+        set("indicators.damage.format.starvation", "&6&l");
+        set("indicators.damage.format.thorns", "&e&l");
+        set("indicators.damage.format.wither", "&8&l");
         set("indicators.damage.timeVisible", 4);
         set("indicators.damage.showForPlayers", true);
         set("indicators.damage.showForMobs", true);
 
         set("indicators.exp.enable", false);
-        set("indicators.exp.format", "&a");
+        set("indicators.exp.format", "&a&l");
         set("indicators.exp.timeVisible", 4);
 
         set("indicators.potion.enable", false);
         set("indicators.potion.timeVisible", 4);
         set("indicators.potion.showForPlayers", true);
         set("indicators.potion.showForMobs", true);
-        set("indicators.potion.format.goldenapple", "&e+ %effect%");
-        set("indicators.potion.format.godapple", "&e+ %effect% II");
+        set("indicators.potion.format.goldenapple", "&e&l+ %effect%");
+        set("indicators.potion.format.godapple", "&e&l+ %effect% II");
 
         String[] potions = new String[]{"speed", "slow", "fast_digging", "slow_digging", "increase_damage", "heal", "harm", "jump", "confusion", "regeneration", "damage_resistance", "fire_resistance", "water_breathing", "invisibility", "blindness", "night_vision", "hunger", "weakness", "poison", "wither", "health_boost", "absorption", "saturation"};
 
         for (String s : potions) {
-            set("indicators.potion.format." + s, "&e %effect% %amp%");
+            set("indicators.potion.format." + s, "&e&l %effect% %amp%");
         }
 
         set("indicators.gainHealth.enable", false);
-        set("indicators.gainHealth.format", "&a");
+        set("indicators.gainHealth.format", "&a&l");
         set("indicators.gainHealth.timeVisible", 4);
         set("indicators.gainHealth.showForPlayers", true);
         set("indicators.gainHealth.showForMobs", true);
