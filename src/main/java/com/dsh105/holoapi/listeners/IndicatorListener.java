@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -91,6 +92,9 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof LivingEntity && ((LivingEntity) event.getEntity()).getNoDamageTicks() > ((LivingEntity) event.getEntity()).getMaximumNoDamageTicks() / 2.0F) {
+            return;
+        }
         if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
                     || config.getBoolean("indicators.damage.showForMobs", true)) {
