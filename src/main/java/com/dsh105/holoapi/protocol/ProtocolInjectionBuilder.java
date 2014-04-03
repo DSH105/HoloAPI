@@ -1,11 +1,11 @@
 package com.dsh105.holoapi.protocol;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.util.MinecraftVersion;
 
 public class ProtocolInjectionBuilder {
 
-    private HoloAPI holoAPI;
+    private HoloAPICore holoAPI;
 
     private InjectionManager injectionManager;
 
@@ -13,7 +13,7 @@ public class ProtocolInjectionBuilder {
 
     private MinecraftVersion version;
 
-    public ProtocolInjectionBuilder(HoloAPI holoAPI) {
+    public ProtocolInjectionBuilder(HoloAPICore holoAPI) {
         if(holoAPI == null) {
             throw new IllegalArgumentException("HoloAPI Instance can't be NULL!");
         }
