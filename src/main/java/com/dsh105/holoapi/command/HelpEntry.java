@@ -33,6 +33,7 @@ public enum HelpEntry {
     CREATE_ANIMATION("create animation <animation_id>", Perm.CREATE.getPermission(), "Create an animated holographic display. Animations can be defined in the config.yml."),
     CREATE_ANIMATION_TEXT("create animation", Perm.CREATE.getPermission(), "Create an animated holographic display from lines of text."),
     REMOVE("remove <id>", Perm.REMOVE.getPermission(), "Remove an existing holographic display using its ID."),
+    ADD_LINE("addline <id> <content>", Perm.ADDLINE.getPermission(), "Add a new line to an existing hologram.", "New line content can be more than one word."),
     INFO("info", Perm.INFO.getPermission(), "View information on active holographic displays."),
     COPY("copy <id>", Perm.COPY.getPermission(), "Copy a hologram to your current position."),
     MOVE("move <id>", Perm.MOVE.getPermission(), "Move a hologram to your current position."),
