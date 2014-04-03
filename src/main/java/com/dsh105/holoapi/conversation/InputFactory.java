@@ -23,7 +23,7 @@ import org.bukkit.conversations.ConversationFactory;
 public class InputFactory {
 
     public static ConversationFactory buildBasicConversation() {
-        return new ConversationFactory(HoloAPI.getInstance())
+        return new ConversationFactory(HoloAPI.getPlugin())
                 .withModality(true)
                 .withLocalEcho(false)
                 .withPrefix(new InputConversationPrefix())

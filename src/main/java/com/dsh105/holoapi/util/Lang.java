@@ -30,7 +30,7 @@ public enum Lang {
 
     UPDATE_NOT_AVAILABLE("update_not_available", "&3An update is not available."),
     NO_PERMISSION("no_permission", "&3You are not permitted to do that."),
-    COMMAND_ERROR("cmd_error", "&3Error for input string: &b%cmd%&3. Use &b/" + HoloAPI.getInstance().getCommandLabel() + " help &3for help."),
+    COMMAND_ERROR("cmd_error", "&3Error for input string: &b%cmd%&3. Use &b/" + HoloAPI.getCommandLabel() + " help &3for help."),
     HELP_INDEX_TOO_BIG("help_index_too_big", "&3Page &b%index% &3does not exist."),
     IN_GAME_ONLY("in_game_only", "&3Please log in to do that."),
     STRING_ERROR("string_error", "&3Error parsing &b%string%&3. Please revise command arguments."),
@@ -38,7 +38,7 @@ public enum Lang {
     INT_ONLY("int_only", "&b%string% &3must to be an integer."),
     WHUPS("whups", "&3Whups. Something bad happened."),
     CONFIGS_RELOADED("configs_reloaded", "&3Configuration files reloaded."),
-    PLUGIN_INFORMATION("plugin_information", "&3Running HoloAPI v&b%version%&3. Use &b/" + HoloAPI.getInstance().getCommandLabel() + " help &3for help."),
+    PLUGIN_INFORMATION("plugin_information", "&3Running HoloAPI v&b%version%&3. Use &b/" + HoloAPI.getCommandLabel() + " help &3for help."),
 
     LINE_INDEX_TOO_BIG("line_index_too_big", "&3Line &b%index% &3does not exist."),
     TIP_HOVER_PREVIEW("hover_tip", "&e&oHover over to see a preview of the hologram. Click to insert teleport command."),
@@ -58,7 +58,7 @@ public enum Lang {
     TOUCH_ACTION_NOT_FOUND("touch_action_not_found", "&3Touch Action of ID &b%touchid% &3not found."),
 
     FAILED_IMAGE_LOAD("failed_image_load", "&3Failed to load custom image. Make sure that it is correctly configured in &bconfig.yml&3."),
-    IMAGE_NOT_FOUND("image_not_found", "&3Image &3not found. Use &b/" + HoloAPI.getInstance().getCommandLabel() + " build image &3to create a new image configuration."),
+    IMAGE_NOT_FOUND("image_not_found", "&3Image &3not found. Use &b/" + HoloAPI.getCommandLabel() + " build image &3to create a new image configuration."),
     HOLOGRAM_NOT_FOUND("hologram_not_found", "&3Hologram of ID &b%id% &3not found."),
     NO_ACTIVE_HOLOGRAMS("no_active_holograms", "&3There are currently no active holographic displays."),
     HOLOGRAM_CREATED("hologram_created", "&3Hologram of ID &b%id% &3created."),
@@ -127,28 +127,28 @@ public enum Lang {
             if (sender instanceof ConsoleCommandSender) {
                 ConsoleLogger.log(ChatColor.DARK_AQUA + msg);
             } else {
-                sender.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
+                sender.sendMessage(HoloAPI.getPrefix() + msg);
             }
         }
     }
 
     public static void sendTo(Player p, String msg) {
         if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !(msg.equalsIgnoreCase("none"))) {
-            p.sendMessage(HoloAPI.getInstance().getPrefix() + msg);
+            p.sendMessage(HoloAPI.getPrefix() + msg);
         }
     }
 
     public String getValue() {
-        String result = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
+        String result = HoloAPI.getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
         if (result != null && !"".equals(result) && !"none".equals(result)) {
-            return ChatColor.translateAlternateColorCodes('&', HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def));
+            return ChatColor.translateAlternateColorCodes('&', HoloAPI.getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def));
         } else {
             return "";
         }
     }
 
     public String getRaw() {
-        return HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
+        return HoloAPI.getConfig(HoloAPI.ConfigType.LANG).getString(this.path, this.def);
     }
 
     @Override

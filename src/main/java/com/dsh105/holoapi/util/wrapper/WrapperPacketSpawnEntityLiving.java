@@ -127,10 +127,10 @@ public class WrapperPacketSpawnEntityLiving extends Packet {
     }
 
     public void setMetadata(WrappedDataWatcher metadata) {
-        this.write(HoloAPI.isUsingNetty ? "l" : "t", metadata.getHandle());
+        this.write(HoloAPI.getPlugin().isUsingNetty ? "l" : "t", metadata.getHandle());
     }
 
     public Object getMetadata() {
-        return this.read(HoloAPI.isUsingNetty ? "l" : "t");
+        return this.read(HoloAPI.getPlugin().isUsingNetty ? "l" : "t");
     }
 }

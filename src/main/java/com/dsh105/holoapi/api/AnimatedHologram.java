@@ -158,7 +158,7 @@ public class AnimatedHologram extends Hologram {
                 }
                 animate();
             }
-        }.runTaskLater(HoloAPI.getInstance(), currentFrame.getDelay());
+        }.runTaskLater(HoloAPI.getPlugin(), currentFrame.getDelay());
     }
 
     /**

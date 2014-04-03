@@ -52,7 +52,7 @@ public class AnimationBuilderInputSuccessPrompt extends MessagePrompt {
             frames.add(new Frame(delay, f.getLines()));
         }
         try {
-            AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getInstance()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
+            AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getPlugin()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
             return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
         } catch (Exception e) {
             e.printStackTrace();

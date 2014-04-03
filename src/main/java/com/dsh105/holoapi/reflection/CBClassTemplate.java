@@ -30,7 +30,7 @@ public class CBClassTemplate extends ClassTemplate<Object> {
     }
 
     protected void setCBClass(String name) {
-        Class clazz = HoloAPI.SERVER.getCBClass(name);
+        Class clazz = HoloAPI.getPlugin().SERVER.getCBClass(name);
         if (clazz == null) {
             HoloAPI.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + name);
         }

@@ -79,7 +79,7 @@ public class HoloCommand implements CommandExecutor {
     public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length >= 1 && args[0].equalsIgnoreCase("help")) {
             if (args.length == 1) {
-                if (sender instanceof Player && HoloAPI.isUsingNetty) {
+                if (sender instanceof Player && HoloAPI.getPlugin().isUsingNetty) {
                     FancyPaginator help = this.getHelp(sender);
                     sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help 1/" + help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
                     sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
@@ -97,7 +97,7 @@ public class HoloCommand implements CommandExecutor {
                 return true;
             } else if (args.length == 2) {
                 if (StringUtil.isInt(args[1])) {
-                    if (sender instanceof Player && HoloAPI.isUsingNetty) {
+                    if (sender instanceof Player && HoloAPI.getPlugin().isUsingNetty) {
                         FancyPaginator help = this.getHelp(sender);
                         sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
                         sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
@@ -146,13 +146,13 @@ public class HoloCommand implements CommandExecutor {
                             return true;
                         }
                         if (sender instanceof Player) {
-                            Hologram h = new HologramFactory(HoloAPI.getInstance()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                            Hologram h = new HologramFactory(HoloAPI.getPlugin()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
                             Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                         } else {
                             InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new LocationFunction() {
                                 @Override
                                 public void onFunction(ConversationContext context, String input) {
-                                    Hologram h = new HologramFactory(HoloAPI.getInstance()).withImage(generator).withLocation(this.getLocation()).build();
+                                    Hologram h = new HologramFactory(HoloAPI.getPlugin()).withImage(generator).withLocation(this.getLocation()).build();
                                     Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                                 }
 
@@ -174,7 +174,7 @@ public class HoloCommand implements CommandExecutor {
                         if (generator == null) {
                             return true;
                         }
-                        AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getInstance()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                        AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getPlugin()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
                         Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()));
                         return true;
                     } else return true;
@@ -208,17 +208,17 @@ public class HoloCommand implements CommandExecutor {
             } else return true;
         } else if (args.length == 0) {
             Lang.sendTo(sender, Lang.PLUGIN_INFORMATION.getValue()
-                    .replace("%version%", HoloAPI.getInstance().getDescription().getVersion()));
+                    .replace("%version%", HoloAPI.getPlugin().getDescription().getVersion()));
             return true;
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (Perm.RELOAD.hasPerm(sender, true, true)) {
-                    HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).reloadConfig();
-                    HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA).reloadConfig();
-                    HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
+                    HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).reloadConfig();
+                    HoloAPI.getConfig(HoloAPI.ConfigType.DATA).reloadConfig();
+                    HoloAPI.getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
                     Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
                     Lang.sendTo(sender, Lang.HOLOGRAM_RELOAD.getValue());
-                    HoloAPI.getInstance().loadHolograms();
+                    HoloAPI.getPlugin().loadHolograms();
                     return true;
                 } else return true;
             } else if (args[0].equalsIgnoreCase("info")) {
@@ -243,7 +243,7 @@ public class HoloCommand implements CommandExecutor {
                             if (h.getLines().length > 1) {
                                 for (StoredTag tag : h.serialise()) {
                                     if (tag.isImage()) {
-                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
+                                        if (HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
                                             for (String s : HoloAPI.getImageLoader().getGenerator(tag.getContent()).getLines()) {
                                                 list.add(HoloAPI.getTagFormatter().formatBasic(ChatColor.WHITE + s));
                                             }
@@ -405,7 +405,7 @@ public class HoloCommand implements CommandExecutor {
                             if (h.getLines().length > 1) {
                                 for (StoredTag tag : h.serialise()) {
                                     if (tag.isImage()) {
-                                        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
+                                        if (HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getBoolean("images." + tag.getContent() + ".requiresBorder", false)) {
                                             for (String s : HoloAPI.getImageLoader().getGenerator(tag.getContent()).getLines()) {
                                                 list.add(HoloAPI.getTagFormatter().formatBasic(ChatColor.WHITE + s));
                                             }

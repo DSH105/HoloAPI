@@ -65,7 +65,7 @@ public class CommandTouchAction implements TouchAction {
         String command = this.command.replace("%name%", who.getName());
         command = command.replace("%world%", who.getWorld().getName());
         if (this.shouldPerformAsConsole()) {
-            HoloAPI.getInstance().getServer().dispatchCommand(HoloAPI.getInstance().getServer().getConsoleSender(), command);
+            HoloAPI.getPlugin().getServer().dispatchCommand(HoloAPI.getPlugin().getServer().getConsoleSender(), command);
         } else {
             who.performCommand(command);
         }

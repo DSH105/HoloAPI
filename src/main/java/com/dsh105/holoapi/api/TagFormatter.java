@@ -40,8 +40,8 @@ public class TagFormatter {
             @Override
             public String getValue(Player observer) {
                 Calendar c = Calendar.getInstance();
-                c.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
-                return new SimpleDateFormat("h:mm a" + (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime());
+                c.add(Calendar.HOUR_OF_DAY, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
+                return new SimpleDateFormat("h:mm a" + (HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime());
             }
         });
 
@@ -69,14 +69,14 @@ public class TagFormatter {
         this.formatters.put("%balance%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
-                return HoloAPI.getInstance().getVaultProvider().getBalance(observer);
+                return HoloAPI.getVaultProvider().getBalance(observer);
             }
         });
 
         this.formatters.put("%rank%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
-                return HoloAPI.getInstance().getVaultProvider().getRank(observer);
+                return HoloAPI.getVaultProvider().getRank(observer);
             }
         });
 
@@ -129,7 +129,7 @@ public class TagFormatter {
     }
 
     public String formatForOldClient(String content) {
-        if (content.length() > 64 && !HoloAPI.isUsingNetty) {
+        if (content.length() > 64 && !HoloAPI.getPlugin().isUsingNetty) {
             // 1.6.x client crashes if a name tag is longer than 64 characters
             // Unfortunate, but it must be countered for
             content = content.substring(0, 64);
@@ -175,7 +175,7 @@ public class TagFormatter {
             SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
 
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
+            calendar.add(Calendar.HOUR_OF_DAY, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
 
             content = content.replace(matcher.group(), format.format(calendar.getTime()));
         }

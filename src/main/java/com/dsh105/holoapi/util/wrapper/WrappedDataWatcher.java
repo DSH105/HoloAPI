@@ -26,7 +26,7 @@ public class WrappedDataWatcher extends AbstractWrapper {
 
     public WrappedDataWatcher() {
         try {
-            if (HoloAPI.isUsingNetty) {
+            if (HoloAPI.getPlugin().isUsingNetty) {
                 super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").getConstructor(ReflectionUtil.getNMSClass("Entity")).newInstance(new Object[]{null}));
             } else {
                 super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").newInstance());

@@ -171,7 +171,7 @@ public class Hologram {
                     public void run() {
                         show(p, obeyVisibility);
                     }
-                }.runTaskLater(HoloAPI.getInstance(), 1L);
+                }.runTaskLater(HoloAPI.getPlugin(), 1L);
             }
         }
     }
@@ -231,7 +231,7 @@ public class Hologram {
      * @param saveId save id to be assigned to this hologram
      */
     public void setSaveId(String saveId) {
-        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
+        if (HoloAPI.getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
             throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID" + saveId + " already exists in the HoloAPI data files!");
         }
 

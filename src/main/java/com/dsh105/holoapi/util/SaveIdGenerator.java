@@ -25,7 +25,7 @@ public class SaveIdGenerator {
 
     public static int nextId() {
         int i = ++nextId;
-        if (HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + i) != null) {
+        if (HoloAPI.getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + i) != null) {
             return nextId();
         }
         return i;

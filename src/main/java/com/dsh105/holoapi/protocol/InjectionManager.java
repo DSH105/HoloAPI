@@ -18,24 +18,18 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
-    protected HoloAPI holoAPI;
     protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
-    public InjectionManager(final HoloAPI holoAPI) {
-        if (holoAPI == null) {
-            throw new IllegalArgumentException("Provided HoloAPI instance can't be NULL!");
-        }
-
+    public InjectionManager() {
         // Deal with any players that may be online due to a reload - seeing as lots of servers actually do this
         for (Player p : Bukkit.getOnlinePlayers()) {
             inject(p);
         }
 
-        this.holoAPI = holoAPI;
         this.closed = false;
 
-        holoAPI.getServer().getPluginManager().registerEvents(new Listener() {
+        HoloAPI.getPlugin().getServer().getPluginManager().registerEvents(new Listener() {
 
             @EventHandler
             public void onJoin(PlayerJoinEvent event) {
@@ -46,7 +40,7 @@ public class InjectionManager {
             public int hashCode() {
                 return super.hashCode();
             }
-        }, holoAPI);
+        }, HoloAPI.getPlugin());
     }
 
     public void inject(Player player) {
@@ -91,7 +85,7 @@ public class InjectionManager {
     }
 
     public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this.holoAPI, new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
@@ -107,7 +101,7 @@ public class InjectionManager {
                         if (id == entityId) {
                             for (TouchAction touchAction : hologram.getAllTouchActions()) {
                                 HoloTouchEvent touchEvent = new HoloTouchEvent(hologram, player, touchAction, action);
-                                HoloAPI.getInstance().getServer().getPluginManager().callEvent(touchEvent);
+                                HoloAPI.getPlugin().getServer().getPluginManager().callEvent(touchEvent);
                                 if (!touchEvent.isCancelled()) {
                                     touchAction.onTouch(player, action);
                                 }
