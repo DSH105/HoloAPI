@@ -18,6 +18,8 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.visibility.Visibility;
+import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
@@ -45,6 +47,7 @@ public class AnimatedHologramFactory {
     private double locY;
     private double locZ;
     private String saveId;
+    private Visibility visibility = new VisibilityAll();
 
     private boolean simple = false;
     private boolean preparedId = false;
@@ -104,6 +107,17 @@ public class AnimatedHologramFactory {
     public AnimatedHologramFactory withLocation(Vector vectorLocation, String worldName) {
         this.withCoords(vectorLocation.getX(), vectorLocation.getY(), vectorLocation.getZ());
         this.withWorld(worldName);
+        return this;
+    }
+
+    /**
+     * Sets the visibility of constructed Holograms
+     *
+     * @param visibility visibility of constructed Hologram
+     * @return This object
+     */
+    public AnimatedHologramFactory withVisibility(Visibility visibility) {
+        this.visibility = visibility;
         return this;
     }
 
@@ -183,6 +197,7 @@ public class AnimatedHologramFactory {
         } else {
             animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.textGenerator);
         }
+        animatedHologram.setVisibility(this.visibility);
         animatedHologram.setSimplicity(this.simple);
         if (!animatedHologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
