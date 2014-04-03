@@ -54,15 +54,19 @@ public class Hologram {
     protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
         this.saveId = saveId;
-        this.tags = lines;
+        if (lines.length > 30) {
+            this.tags = new String[30];
+            for (int i = 0; i <= 30; i++) {
+                this.tags[i] = lines[i];
+            }
+        } else {
+            this.tags = lines;
+        }
         this.firstTagId = firstTagId;
     }
 
     protected Hologram(String saveId, String worldName, double x, double y, double z, String... lines) {
-        this(worldName, x, y, z);
-        this.saveId = saveId;
-        this.tags = lines;
-        this.firstTagId = TagIdGenerator.nextId(this.tags.length);
+        this(TagIdGenerator.nextId(lines.length > 30 ? 30 : lines.length), saveId, worldName, x, y, z, lines);
     }
 
     private Hologram(String worldName, double x, double y, double z) {
