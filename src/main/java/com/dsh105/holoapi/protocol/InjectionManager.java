@@ -18,22 +18,18 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
-    protected HoloAPI holoAPI;
-    protected ConcurrentMap<Player, PlayerInjector> injectors = new MapMaker().weakKeys().makeMap();
+    protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
-    protected InjectionStrategy strategy;
-
-    public InjectionManager(final HoloAPI holoAPI, final InjectionStrategy strategy) {
-        if (holoAPI == null) {
-            throw new IllegalArgumentException("Provided HoloAPI instance can't be NULL!");
+    public InjectionManager() {
+        // Deal with any players that may be online due to a reload - seeing as lots of servers actually do this
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            inject(p);
         }
 
-        this.holoAPI = holoAPI;
-        this.strategy = strategy;
         this.closed = false;
 
-        holoAPI.getServer().getPluginManager().registerEvents(new Listener() {
+        HoloAPI.getCore().getServer().getPluginManager().registerEvents(new Listener() {
 
             @EventHandler
             public void onJoin(PlayerJoinEvent event) {
@@ -44,7 +40,7 @@ public class InjectionManager {
             public int hashCode() {
                 return super.hashCode();
             }
-        }, holoAPI);
+        }, HoloAPI.getCore());
     }
 
     public void inject(Player player) {
@@ -52,12 +48,12 @@ public class InjectionManager {
             return;
 
         if (injectors.containsKey(player)) {
-            PlayerInjector injector = injectors.get(player);
+            ChannelPipelineInjector injector = injectors.get(player);
             injector.setPlayer(player);
         } else {
-            PlayerInjector injector = this.strategy.inject(player, this);
-            injector.inject();
-            injectors.put(player, injector);
+            ChannelPipelineInjector pipelineInjector = new ChannelPipelineInjector(player, this);
+            pipelineInjector.inject();
+            injectors.put(player, pipelineInjector);
         }
     }
 
@@ -66,7 +62,7 @@ public class InjectionManager {
             return;
         }
 
-        PlayerInjector injector = injectors.get(player);
+        ChannelPipelineInjector injector = injectors.get(player);
 
         if (injector.isInjected()) {
             injector.close();
@@ -89,7 +85,7 @@ public class InjectionManager {
     }
 
     public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this.holoAPI, new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new Runnable() {
             @Override
             public void run() {
                 if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
@@ -105,7 +101,7 @@ public class InjectionManager {
                         if (id == entityId) {
                             for (TouchAction touchAction : hologram.getAllTouchActions()) {
                                 HoloTouchEvent touchEvent = new HoloTouchEvent(hologram, player, touchAction, action);
-                                HoloAPI.getInstance().getServer().getPluginManager().callEvent(touchEvent);
+                                HoloAPI.getCore().getServer().getPluginManager().callEvent(touchEvent);
                                 if (!touchEvent.isCancelled()) {
                                     touchAction.onTouch(player, action);
                                 }

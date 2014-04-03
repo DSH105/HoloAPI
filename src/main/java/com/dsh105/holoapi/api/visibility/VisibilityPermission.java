@@ -15,29 +15,28 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.reflection;
+package com.dsh105.holoapi.api.visibility;
 
-import com.dsh105.holoapi.HoloAPI;
+import org.bukkit.entity.Player;
 
-public class CBClassTemplate extends ClassTemplate<Object> {
+/**
+ * Represents a visibility in which only players with a certain permission can see the hologram
+ */
 
-    public CBClassTemplate() {
-        setCBClass(getClass().getSimpleName());
+public class VisibilityPermission implements Visibility {
+
+    private String permission;
+
+    public VisibilityPermission(String permission) {
+        this.permission = permission;
     }
 
-    public CBClassTemplate(String className) {
-        setCBClass(className);
+    public String getPermission() {
+        return permission;
     }
 
-    protected void setCBClass(String name) {
-        Class clazz = HoloAPI.getCore().SERVER.getCBClass(name);
-        if (clazz == null) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + name);
-        }
-        setClass(clazz);
-    }
-
-    public static CBClassTemplate create(String className) {
-        return new CBClassTemplate(className);
+    @Override
+    public boolean isVisibleTo(Player player) {
+        return player.hasPermission(this.permission);
     }
 }

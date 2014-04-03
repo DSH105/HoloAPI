@@ -18,6 +18,8 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.visibility.Visibility;
+import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.listeners.WorldListener;
@@ -48,6 +50,7 @@ public class HologramFactory {
     private double locY;
     private double locZ;
     private String saveId;
+    private Visibility visibility = new VisibilityAll();
     private boolean simple = false;
     private boolean preparedId = false;
     private boolean prepared = false;
@@ -120,6 +123,17 @@ public class HologramFactory {
      */
     public boolean isEmpty() {
         return this.tags.isEmpty();
+    }
+
+    /**
+     * Sets the visibility of constructed Holograms
+     *
+     * @param visibility visibility of constructed Hologram
+     * @return This object
+     */
+    public HologramFactory withVisibility(Visibility visibility) {
+        this.visibility = visibility;
+        return this;
     }
 
     /**
@@ -220,17 +234,18 @@ public class HologramFactory {
             hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
         }
         hologram.setImageTagMap(this.imageIdMap);
+        hologram.setVisibility(this.visibility);
         hologram.setSimplicity(this.simple);
         if (!hologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
                 if (!h.isSimple()) {
-                    h.refreshDisplay();
+                    h.refreshDisplay(true);
                 }
             }
         }
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
-                hologram.show((Player) e);
+                hologram.show((Player) e, true);
             }
         }
         HoloAPI.getManager().track(hologram, this.owningPlugin);

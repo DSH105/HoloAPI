@@ -25,7 +25,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public class UnicodeFormatter {
 
     public static String replaceAll(String s) {
-        YAMLConfig config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
+        YAMLConfig config = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN);
         ConfigurationSection cs = config.getConfigurationSection("specialCharacters");
         if (cs != null) {
             for (String key : cs.getKeys(false)) {

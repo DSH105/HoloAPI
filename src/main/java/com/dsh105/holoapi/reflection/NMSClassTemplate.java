@@ -30,7 +30,7 @@ public class NMSClassTemplate extends ClassTemplate {
     }
 
     protected void setNMSClass(String name) {
-        Class clazz = HoloAPI.SERVER.getNMSClass(name);
+        Class clazz = HoloAPI.getCore().SERVER.getNMSClass(name);
         if (clazz == null) {
             HoloAPI.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + name);
         }

@@ -40,8 +40,8 @@ public class HoloListener implements Listener {
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (!h.isSimple()) {
                 if (event.getTo().getWorld().getName().equals(h.getWorldName())) {
-                    if (h.getLocationFor(player) != null) {
-                        h.show(player);
+                    if (h.getLocationFor(player) != null && h.getVisibility().isVisibleTo(player)) {
+                        h.show(player, true);
                     }
                 }
             }
@@ -63,16 +63,16 @@ public class HoloListener implements Listener {
         final Player player = event.getPlayer();
         for (final Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (!h.isSimple()) {
-                if (player.getLocation().getWorld().getName().equals(h.getWorldName())) {
+                if (player.getLocation().getWorld().getName().equals(h.getWorldName()) && h.getVisibility().isVisibleTo(player)) {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
                                 ((AnimatedHologram) h).animate();
                             }
-                            h.show(player);
+                            h.show(player, true);
                         }
-                    }.runTaskLater(HoloAPI.getInstance(), 40L);
+                    }.runTaskLater(HoloAPI.getCore(), 40L);
                 }
             }
         }
@@ -82,20 +82,20 @@ public class HoloListener implements Listener {
     public void onWorldChange(PlayerChangedWorldEvent event) {
         final Player player = event.getPlayer();
         for (final Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            if (player.getLocation().getWorld().getName().equals(h.getWorldName())) {
+            if (player.getLocation().getWorld().getName().equals(h.getWorldName()) && h.getVisibility().isVisibleTo(player)) {
                 if (!h.isSimple()) {
                     if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
                         ((AnimatedHologram) h).animate();
                     }
-                    h.show(player);
+                    h.show(player, true);
                 }
-            } else if (event.getFrom().getName().equals(h.getWorldName()) && h.getLocationFor(player) != null) {
+            } else if (event.getFrom().getName().equals(h.getWorldName()) && h.getLocationFor(player) != null && h.getVisibility().isVisibleTo(player)) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         h.clear(player);
                     }
-                }.runTaskLater(HoloAPI.getInstance(), 20L);
+                }.runTaskLater(HoloAPI.getCore(), 20L);
             }
         }
     }
@@ -115,7 +115,9 @@ public class HoloListener implements Listener {
             if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
                 for (Entity e : h.getDefaultLocation().getWorld().getEntities()) {
                     if (e instanceof Player) {
-                        h.show((Player) e);
+                        if (h.getVisibility().isVisibleTo((Player) e)) {
+                            h.show((Player) e, true);
+                        }
                     }
                 }
             }

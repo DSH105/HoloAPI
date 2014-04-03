@@ -30,7 +30,7 @@ public class WrapperPacketPlayOutChat extends Packet {
     }
 
     public void setMessage(String chatComponent) {
-        if (!HoloAPI.isUsingNetty) {
+        if (!HoloAPI.getCore().isUsingNetty) {
             this.write("message", chatComponent);
             return;
         }
@@ -38,7 +38,7 @@ public class WrapperPacketPlayOutChat extends Packet {
     }
 
     public String getMessage() {
-        if (!HoloAPI.isUsingNetty) {
+        if (!HoloAPI.getCore().isUsingNetty) {
             return (String) this.read("message");
         }
         return (String) new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), "a", ReflectionUtil.getNMSClass("IChatBaseComponent")).invoke(null, this.read("a"));

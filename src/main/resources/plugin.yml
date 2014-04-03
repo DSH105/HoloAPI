@@ -35,6 +35,8 @@ permissions:
         default: op
     holoapi.holo.nearby:
         default: op
+    holoapi.holo.addline:
+        default: op
     holoapi.holo.touch.add:
         default: op
     holoapi.holo.touch.remove:
@@ -62,6 +64,7 @@ permissions:
             holoapi.holo.refresh: true
             holoapi.holo.copy: true
             holoapi.holo.nearby: true
+            holoapi.holo.addline: true
             holoapi.update: true
     holoapi.touch.*:
         default: op

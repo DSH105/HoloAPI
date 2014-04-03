@@ -15,16 +15,21 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.conversation;
+package com.dsh105.holoapi.api.visibility;
 
-import com.dsh105.holoapi.HoloAPI;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.ConversationPrefix;
+import org.bukkit.entity.Player;
 
-public class InputConversationPrefix implements ConversationPrefix {
+/**
+ * Represents the visibility of the hologram
+ */
 
-    @Override
-    public String getPrefix(ConversationContext conversationContext) {
-        return HoloAPI.getPrefix("HoloAPI") + HoloAPI.getPrefix("Builder") + "••• ";
-    }
+public interface Visibility {
+
+    /**
+     * Gets whether a hologram can be shown to a certain player
+     *
+     * @param player player in question
+     * @return true if hologram can be shown to the player, false if it should be kept hidden
+     */
+    public boolean isVisibleTo(Player player);
 }

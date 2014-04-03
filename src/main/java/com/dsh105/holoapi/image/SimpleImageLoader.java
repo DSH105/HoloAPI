@@ -38,7 +38,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
     public void loadImageConfiguration(YAMLConfig config) {
         KEY_TO_IMAGE_MAP.clear();
         URL_UNLOADED.clear();
-        File imageFolder = new File(HoloAPI.getInstance().getDataFolder() + File.separator + "images");
+        File imageFolder = new File(HoloAPI.getCore().getDataFolder() + File.separator + "images");
         if (!imageFolder.exists()) {
             imageFolder.mkdirs();
         }
@@ -81,7 +81,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
                     this.URL_UNLOADED.put(key, new UnloadedImageStorage(imagePath, imageHeight, c, requiresBorder));
                     return null;
                 case FILE:
-                    File f = new File(HoloAPI.getInstance().getDataFolder() + File.separator + "images" + File.separator + imagePath);
+                    File f = new File(HoloAPI.getCore().getDataFolder() + File.separator + "images" + File.separator + imagePath);
                     return new ImageGenerator(key, f, imageHeight, c, requiresBorder);
             }
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
                 HoloAPI.LOGGER.log(Level.INFO, "Custom URL image '" + key + "' loaded.");
                 KEY_TO_IMAGE_MAP.put(key, g);
             }
-        }.runTaskAsynchronously(HoloAPI.getInstance());
+        }.runTaskAsynchronously(HoloAPI.getCore());
         return g;
     }
 

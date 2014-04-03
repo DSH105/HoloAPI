@@ -33,6 +33,7 @@ public enum HelpEntry {
     CREATE_ANIMATION("create animation <animation_id>", Perm.CREATE.getPermission(), "Create an animated holographic display. Animations can be defined in the config.yml."),
     CREATE_ANIMATION_TEXT("create animation", Perm.CREATE.getPermission(), "Create an animated holographic display from lines of text."),
     REMOVE("remove <id>", Perm.REMOVE.getPermission(), "Remove an existing holographic display using its ID."),
+    ADD_LINE("addline <id> <content>", Perm.ADDLINE.getPermission(), "Add a new line to an existing hologram.", "New line content can be more than one word."),
     INFO("info", Perm.INFO.getPermission(), "View information on active holographic displays."),
     COPY("copy <id>", Perm.COPY.getPermission(), "Copy a hologram to your current position."),
     MOVE("move <id>", Perm.MOVE.getPermission(), "Move a hologram to your current position."),
@@ -57,7 +58,7 @@ public enum HelpEntry {
     HelpEntry(String commandArguments, String permission, String... description) {
         this.commandArguments = commandArguments;
         this.description = description;
-        this.defaultLine = ChatColor.AQUA + "/" + HoloAPI.getInstance().getCommandLabel() + " " + this.getCommandArguments() + ChatColor.WHITE + "  •••  " + ChatColor.DARK_AQUA + description;
+        this.defaultLine = ChatColor.AQUA + "/" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments() + ChatColor.WHITE + "  •••  " + ChatColor.DARK_AQUA + description;
         this.permission = permission;
     }
 
@@ -75,14 +76,14 @@ public enum HelpEntry {
 
     public FancyMessage getFancyMessage(CommandSender sender) {
         ArrayList<String> description = new ArrayList<String>();
-        description.add(ChatColor.AQUA + "" + ChatColor.BOLD + "Usage for /" + HoloAPI.getInstance().getCommandLabel() + " " + this.getCommandArguments() + ":");
+        description.add(ChatColor.AQUA + "" + ChatColor.BOLD + "Usage for /" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments() + ":");
         for (String part : this.getDescription()) {
             description.add("• " + ChatColor.DARK_AQUA + part);
         }
         if (sender != null) {
             description.add(sender.hasPermission(this.getPermission()) ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command");
         }
-        String cmd = "/" + HoloAPI.getInstance().getCommandLabel() + " " + this.getCommandArguments();
+        String cmd = "/" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments();
         return new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + cmd).itemTooltip(ItemUtil.getItem(description.toArray(new String[description.size()]))).suggest(cmd);
     }
 

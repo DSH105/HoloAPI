@@ -35,6 +35,7 @@ public enum Perm {
     REFRESH("holoapi.holo.refresh"),
     COPY("holoapi.holo.copy"),
     NEARBY("holoapi.holo.nearby"),
+    ADDLINE("holoapi.holo.addline"),
 
     TOUCH_ADD("holoapi.holo.touch.add"),
     TOUCH_REMOVE("holoapi.holo.touch.remove"),

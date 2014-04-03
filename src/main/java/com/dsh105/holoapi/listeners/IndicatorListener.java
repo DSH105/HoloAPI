@@ -56,7 +56,7 @@ public class IndicatorListener implements Listener {
     private YAMLConfig config;
 
     public IndicatorListener() {
-        this.config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
+        this.config = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -165,10 +165,10 @@ public class IndicatorListener implements Listener {
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
         if (!event.isCancelled()) {
             final Player p = event.getPlayer();
-            if (!HoloAPI.getInstance().getVanishProvider().isVanished(p)) {
+            if (!HoloAPI.getVanishProvider().isVanished(p)) {
                 final String msg = event.getMessage();
                 if (event.isAsynchronous()) {
-                    HoloAPI.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(HoloAPI.getInstance(), new BukkitRunnable() {
+                    HoloAPI.getCore().getServer().getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new BukkitRunnable() {
                         @Override
                         public void run() {
                             showChatHologram(p, msg);
@@ -182,7 +182,7 @@ public class IndicatorListener implements Listener {
     }
 
     private void showChatHologram(final Player p, String msg) {
-        YAMLConfig config = HoloAPI.getInstance().getConfig(HoloAPI.ConfigType.MAIN);
+        YAMLConfig config = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN);
         if (config.getBoolean("chatBubbles.show", false)) {
             Location loc = p.getEyeLocation().clone();
             loc.add(0.0D, config.getDouble("chatBubbles.distanceAbovePlayerTag", 0.5D), 0.0D);
@@ -245,7 +245,7 @@ public class IndicatorListener implements Listener {
 
                     CHAT_BUBBLES.put(p.getName(), list);
                 }
-            }.runTaskLater(HoloAPI.getInstance(), duration * 20);
+            }.runTaskLater(HoloAPI.getCore(), duration * 20);
 
             if (followPlayer) {
                 class FollowPlayer extends BukkitRunnable {
@@ -266,7 +266,7 @@ public class IndicatorListener implements Listener {
                     }
                 }
 
-                new FollowPlayer().runTaskTimer(HoloAPI.getInstance(), 1L, 1L);
+                new FollowPlayer().runTaskTimer(HoloAPI.getCore(), 1L, 1L);
             }
         }
     }
