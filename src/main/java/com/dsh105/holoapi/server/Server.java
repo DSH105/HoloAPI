@@ -39,4 +39,5 @@ public interface Server {
 
     public boolean isCompatible();
 
+    public ServerBrand getServerBrand();
 }

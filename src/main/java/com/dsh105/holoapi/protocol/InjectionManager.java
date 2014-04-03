@@ -19,15 +19,18 @@ import java.util.concurrent.ConcurrentMap;
 public class InjectionManager {
 
     protected HoloAPI holoAPI;
-    protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
+    protected ConcurrentMap<Player, PlayerInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
-    public InjectionManager(final HoloAPI holoAPI) {
+    protected InjectionStrategy strategy;
+
+    public InjectionManager(final HoloAPI holoAPI, final InjectionStrategy strategy) {
         if (holoAPI == null) {
             throw new IllegalArgumentException("Provided HoloAPI instance can't be NULL!");
         }
 
         this.holoAPI = holoAPI;
+        this.strategy = strategy;
         this.closed = false;
 
         holoAPI.getServer().getPluginManager().registerEvents(new Listener() {
@@ -49,12 +52,12 @@ public class InjectionManager {
             return;
 
         if (injectors.containsKey(player)) {
-            ChannelPipelineInjector injector = injectors.get(player);
+            PlayerInjector injector = injectors.get(player);
             injector.setPlayer(player);
         } else {
-            ChannelPipelineInjector pipelineInjector = new ChannelPipelineInjector(player, this);
-            pipelineInjector.inject();
-            injectors.put(player, pipelineInjector);
+            PlayerInjector injector = this.strategy.inject(player, this);
+            injector.inject();
+            injectors.put(player, injector);
         }
     }
 
@@ -63,7 +66,7 @@ public class InjectionManager {
             return;
         }
 
-        ChannelPipelineInjector injector = injectors.get(player);
+        PlayerInjector injector = injectors.get(player);
 
         if (injector.isInjected()) {
             injector.close();

@@ -103,4 +103,9 @@ public class CraftBukkitServer implements Server {
     public boolean isCompatible() {
         return true;
     }
+
+    @Override
+    public ServerBrand getServerBrand() {
+        return ServerBrand.CRAFTBUKKIT;
+    }
 }
