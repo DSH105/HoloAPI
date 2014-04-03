@@ -41,7 +41,7 @@ public class Packet {
 
     public Packet(Protocol protocol, Sender sender, int id, int legacyId) {
 
-        if (HoloAPI.getPlugin().isUsingNetty) {
+        if (HoloAPI.getCore().isUsingNetty) {
 
             this.packetClass = PacketUtil.getPacket(protocol, sender, id);
             try {

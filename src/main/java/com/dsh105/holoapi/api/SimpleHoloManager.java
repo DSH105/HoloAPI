@@ -122,7 +122,7 @@ public class SimpleHoloManager implements HoloManager {
         if (hologram instanceof AnimatedHologram && !((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).animate();
         }
-        HoloAPI.getPlugin().getServer().getPluginManager().callEvent(new HoloCreateEvent(hologram));
+        HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloCreateEvent(hologram));
     }
 
     @Override
@@ -136,7 +136,7 @@ public class SimpleHoloManager implements HoloManager {
         if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).cancelAnimation();
         }
-        HoloAPI.getPlugin().getServer().getPluginManager().callEvent(new HoloDeleteEvent(hologram));
+        HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloDeleteEvent(hologram));
         //this.clearFromFile(hologram);
     }
 
@@ -250,7 +250,7 @@ public class SimpleHoloManager implements HoloManager {
                             }
                         }
                         if (!frameList.isEmpty()) {
-                            this.loadTouchActions(new AnimatedHologramFactory(HoloAPI.getPlugin()).withText(new AnimatedTextGenerator(frameList.toArray(new Frame[frameList.size()]))).withSaveId(key).withLocation(new Vector(x, y, z), worldName).build(), key);
+                            this.loadTouchActions(new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frameList.toArray(new Frame[frameList.size()]))).withSaveId(key).withLocation(new Vector(x, y, z), worldName).build(), key);
                         }
                     }
                 } else {
@@ -258,7 +258,7 @@ public class SimpleHoloManager implements HoloManager {
                     boolean containsImage = false;
                     if (cs1 != null) {
                         //ArrayList<String> lines = new ArrayList<String>();
-                        HologramFactory hf = new HologramFactory(HoloAPI.getPlugin());
+                        HologramFactory hf = new HologramFactory(HoloAPI.getCore());
                         for (String key1 : cs1.getKeys(false)) {
                             if (StringUtil.isInt(key1)) {
                                 String type = config.getString(path + "lines." + key1 + ".type");
@@ -298,12 +298,12 @@ public class SimpleHoloManager implements HoloManager {
             if (config.getBoolean(path + "animatedImage.image")) {
                 AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage.key"));
                 if (generator != null) {
-                    finalHologram = new AnimatedHologramFactory(HoloAPI.getPlugin()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+                    finalHologram = new AnimatedHologramFactory(HoloAPI.getCore()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
                 }
             }
         } else {
             ConfigurationSection cs1 = config.getConfigurationSection("holograms." + hologramId + ".lines");
-            HologramFactory hf = new HologramFactory(HoloAPI.getPlugin());
+            HologramFactory hf = new HologramFactory(HoloAPI.getCore());
             //ArrayList<String> lines = new ArrayList<String>();
             for (String key1 : cs1.getKeys(false)) {
                 if (StringUtil.isInt(key1)) {
@@ -342,7 +342,7 @@ public class SimpleHoloManager implements HoloManager {
                         configMap.put(fullKey, touchKeySection.get(fullKey));
                     }
                 }
-                HoloAPI.getPlugin().getServer().getPluginManager().callEvent(new HoloTouchActionLoadEvent(hologram, touchKey, configMap));
+                HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloTouchActionLoadEvent(hologram, touchKey, configMap));
             }
         }
     }
@@ -365,7 +365,7 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     private AnimatedHologramFactory buildAnimatedCopy(AnimatedHologram original, Location copyLocation) {
-        AnimatedHologramFactory animatedCopyFactory = new AnimatedHologramFactory(HoloAPI.getPlugin()).withLocation(copyLocation).withSimplicity(original.isSimple());
+        AnimatedHologramFactory animatedCopyFactory = new AnimatedHologramFactory(HoloAPI.getCore()).withLocation(copyLocation).withSimplicity(original.isSimple());
         if (original.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(original.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(original.getAnimationKey())) {
             animatedCopyFactory.withImage(HoloAPI.getAnimationLoader().getGenerator(original.getAnimationKey()));
         } else {
@@ -376,7 +376,7 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     private HologramFactory buildCopy(Hologram original, Location copyLocation) {
-        HologramFactory copyFactory = new HologramFactory(HoloAPI.getPlugin()).withLocation(copyLocation).withSimplicity(original.isSimple());
+        HologramFactory copyFactory = new HologramFactory(HoloAPI.getCore()).withLocation(copyLocation).withSimplicity(original.isSimple());
         for (StoredTag tag : original.serialise()) {
             if (tag.isImage()) {
                 ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(tag.getContent());
@@ -408,7 +408,7 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
-        final Hologram hologram = new HologramFactory(HoloAPI.getPlugin()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
+        final Hologram hologram = new HologramFactory(HoloAPI.getCore()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e, true);
@@ -417,7 +417,7 @@ public class SimpleHoloManager implements HoloManager {
         BukkitTask t = null;
 
         if (rise) {
-            t = HoloAPI.getPlugin().getServer().getScheduler().runTaskTimer(HoloAPI.getPlugin(), new Runnable() {
+            t = HoloAPI.getCore().getServer().getScheduler().runTaskTimer(HoloAPI.getCore(), new Runnable() {
                 @Override
                 public void run() {
                     Location l = hologram.getDefaultLocation();
@@ -427,7 +427,7 @@ public class SimpleHoloManager implements HoloManager {
             }, 1L, 1L);
         }
 
-        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getPlugin(), secondsUntilRemoved * 20);
+        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getCore(), secondsUntilRemoved * 20);
         return hologram;
     }
 
@@ -439,14 +439,14 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, final Vector velocity, String... lines) {
         int simpleId = TagIdGenerator.nextSimpleId(lines.length);
-        final Hologram hologram = new HologramFactory(HoloAPI.getPlugin()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
+        final Hologram hologram = new HologramFactory(HoloAPI.getCore()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e, true);
             }
         }
 
-        BukkitTask t = HoloAPI.getPlugin().getServer().getScheduler().runTaskTimer(HoloAPI.getPlugin(), new Runnable() {
+        BukkitTask t = HoloAPI.getCore().getServer().getScheduler().runTaskTimer(HoloAPI.getCore(), new Runnable() {
             @Override
             public void run() {
                 Location l = hologram.getDefaultLocation();
@@ -455,7 +455,7 @@ public class SimpleHoloManager implements HoloManager {
             }
         }, 1L, 1L);
 
-        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getPlugin(), secondsUntilRemoved * 20);
+        new HologramRemoveTask(hologram, t).runTaskLater(HoloAPI.getCore(), secondsUntilRemoved * 20);
         return hologram;
     }
 
@@ -486,7 +486,7 @@ public class SimpleHoloManager implements HoloManager {
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            //this.runTaskTimer(HoloAPI.getPlugin(), 0L, 20 * 60);
+            //this.runTaskTimer(HoloAPI.getCore(), 0L, 20 * 60);
         }
 
         @Override

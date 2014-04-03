@@ -23,7 +23,6 @@ import com.dsh105.dshutils.Updater;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
-import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.command.CommandManager;
@@ -49,7 +48,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -98,7 +96,7 @@ public class HoloAPICore extends DSHPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
-        HoloAPI.setPlugin(this);
+        HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();

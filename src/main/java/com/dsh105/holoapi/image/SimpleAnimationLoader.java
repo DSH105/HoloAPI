@@ -42,7 +42,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
     public void loadAnimationConfiguration(YAMLConfig config) {
         KEY_TO_IMAGE_MAP.clear();
         URL_UNLOADED.clear();
-        File imageFolder = new File(HoloAPI.getPlugin().getDataFolder() + File.separator + "animations");
+        File imageFolder = new File(HoloAPI.getCore().getDataFolder() + File.separator + "animations");
         if (!imageFolder.exists()) {
             imageFolder.mkdirs();
         }
@@ -87,7 +87,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
             }
             switch (type) {
                 case FILE:
-                    File f = new File(HoloAPI.getPlugin().getDataFolder() + File.separator + "animations" + File.separator + imagePath);
+                    File f = new File(HoloAPI.getCore().getDataFolder() + File.separator + "animations" + File.separator + imagePath);
                     if (frameRate == 0) {
                         return new AnimatedImageGenerator(key, f, imageHeight, c, requiresBorder);
                     } else {
@@ -166,7 +166,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(HoloAPI.getPlugin());
+        }.runTaskAsynchronously(HoloAPI.getCore());
         return generator;
     }
 

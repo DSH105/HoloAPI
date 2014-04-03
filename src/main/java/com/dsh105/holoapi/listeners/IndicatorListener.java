@@ -168,7 +168,7 @@ public class IndicatorListener implements Listener {
             if (!HoloAPI.getVanishProvider().isVanished(p)) {
                 final String msg = event.getMessage();
                 if (event.isAsynchronous()) {
-                    HoloAPI.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(HoloAPI.getPlugin(), new BukkitRunnable() {
+                    HoloAPI.getCore().getServer().getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new BukkitRunnable() {
                         @Override
                         public void run() {
                             showChatHologram(p, msg);
@@ -245,7 +245,7 @@ public class IndicatorListener implements Listener {
 
                     CHAT_BUBBLES.put(p.getName(), list);
                 }
-            }.runTaskLater(HoloAPI.getPlugin(), duration * 20);
+            }.runTaskLater(HoloAPI.getCore(), duration * 20);
 
             if (followPlayer) {
                 class FollowPlayer extends BukkitRunnable {
@@ -266,7 +266,7 @@ public class IndicatorListener implements Listener {
                     }
                 }
 
-                new FollowPlayer().runTaskTimer(HoloAPI.getPlugin(), 1L, 1L);
+                new FollowPlayer().runTaskTimer(HoloAPI.getCore(), 1L, 1L);
             }
         }
     }

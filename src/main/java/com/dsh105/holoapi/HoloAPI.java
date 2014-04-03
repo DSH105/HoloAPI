@@ -32,14 +32,14 @@ public class HoloAPI extends DSHPlugin {
     public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
 
-    public static void setPlugin(HoloAPICore plugin) {
+    public static void setCore(HoloAPICore plugin) {
         if (CORE != null) {
             return;
         }
         CORE = plugin;
     }
 
-    public static HoloAPICore getPlugin() {
+    public static HoloAPICore getCore() {
         return CORE;
     }
 
@@ -48,7 +48,7 @@ public class HoloAPI extends DSHPlugin {
     }
 
     public static String getPrefix(String internalText) {
-        return getPlugin().prefix.replace("%text%", internalText);
+        return getCore().prefix.replace("%text%", internalText);
     }
 
     /**
@@ -59,7 +59,7 @@ public class HoloAPI extends DSHPlugin {
      * @return {@link com.dsh105.holoapi.api.HoloManager} that manages and controls registration of holograms
      */
     public static HoloManager getManager() {
-        return getPlugin().MANAGER;
+        return getCore().MANAGER;
     }
 
     /**
@@ -70,7 +70,7 @@ public class HoloAPI extends DSHPlugin {
      * @return Image Loader that controls and stores all pre-loaded image generators
      */
     public static ImageLoader<ImageGenerator> getImageLoader() {
-        return getPlugin().IMAGE_LOADER;
+        return getCore().IMAGE_LOADER;
     }
 
     /**
@@ -81,11 +81,11 @@ public class HoloAPI extends DSHPlugin {
      * @return Animation Loader that controls and stores all pre-loaded animation generators
      */
     public static ImageLoader<AnimatedImageGenerator> getAnimationLoader() {
-        return getPlugin().ANIMATION_LOADER;
+        return getCore().ANIMATION_LOADER;
     }
 
     public static TagFormatter getTagFormatter() {
-        return getPlugin().TAG_FORMATTER;
+        return getCore().TAG_FORMATTER;
     }
 
     /**
@@ -94,40 +94,40 @@ public class HoloAPI extends DSHPlugin {
      * @return line spacing between holograms
      */
     public static double getHologramLineSpacing() {
-        return getPlugin().LINE_SPACING;
+        return getCore().LINE_SPACING;
     }
 
     public static int getTagEntityMultiplier() {
-        return getPlugin().TAG_ENTITY_MULTIPLIER;
+        return getCore().TAG_ENTITY_MULTIPLIER;
     }
 
     public static String getCommandLabel() {
-        return getPlugin().OPTIONS.getConfig().getString("command", "holo");
+        return getCore().OPTIONS.getConfig().getString("command", "holo");
     }
 
     public static YAMLConfig getConfig(ConfigType type) {
         if (type == ConfigType.MAIN) {
-            return getPlugin().config;
+            return getCore().config;
         } else if (type == ConfigType.DATA) {
-            return getPlugin().dataConfig;
+            return getCore().dataConfig;
         } else if (type == ConfigType.LANG) {
-            return getPlugin().langConfig;
+            return getCore().langConfig;
         }
         return null;
     }
 
     public static VaultProvider getVaultProvider() {
-        if (getPlugin().vaultProvider == null) {
+        if (getCore().vaultProvider == null) {
             throw new RuntimeException("VaultProvider is NULL!");
         }
-        return getPlugin().vaultProvider;
+        return getCore().vaultProvider;
     }
 
     public static VanishProvider getVanishProvider() {
-        if (getPlugin().vanishProvider == null) {
+        if (getCore().vanishProvider == null) {
             throw new RuntimeException("VanishProvider is NULL!");
         }
-        return getPlugin().vanishProvider;
+        return getCore().vanishProvider;
     }
 
     public enum ConfigType {

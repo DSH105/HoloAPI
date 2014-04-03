@@ -29,7 +29,7 @@ public class InjectionManager {
 
         this.closed = false;
 
-        HoloAPI.getPlugin().getServer().getPluginManager().registerEvents(new Listener() {
+        HoloAPI.getCore().getServer().getPluginManager().registerEvents(new Listener() {
 
             @EventHandler
             public void onJoin(PlayerJoinEvent event) {
@@ -40,7 +40,7 @@ public class InjectionManager {
             public int hashCode() {
                 return super.hashCode();
             }
-        }, HoloAPI.getPlugin());
+        }, HoloAPI.getCore());
     }
 
     public void inject(Player player) {
@@ -85,7 +85,7 @@ public class InjectionManager {
     }
 
     public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new Runnable() {
             @Override
             public void run() {
                 if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
@@ -101,7 +101,7 @@ public class InjectionManager {
                         if (id == entityId) {
                             for (TouchAction touchAction : hologram.getAllTouchActions()) {
                                 HoloTouchEvent touchEvent = new HoloTouchEvent(hologram, player, touchAction, action);
-                                HoloAPI.getPlugin().getServer().getPluginManager().callEvent(touchEvent);
+                                HoloAPI.getCore().getServer().getPluginManager().callEvent(touchEvent);
                                 if (!touchEvent.isCancelled()) {
                                     touchAction.onTouch(player, action);
                                 }

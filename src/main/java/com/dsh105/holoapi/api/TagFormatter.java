@@ -129,7 +129,7 @@ public class TagFormatter {
     }
 
     public String formatForOldClient(String content) {
-        if (content.length() > 64 && !HoloAPI.getPlugin().isUsingNetty) {
+        if (content.length() > 64 && !HoloAPI.getCore().isUsingNetty) {
             // 1.6.x client crashes if a name tag is longer than 64 characters
             // Unfortunate, but it must be countered for
             content = content.substring(0, 64);

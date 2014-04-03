@@ -48,11 +48,11 @@ public class ReflectionUtil {
     }
 
     public static Class getNMSClass(String className) {
-        return HoloAPI.getPlugin().SERVER.getNMSClass(className);
+        return HoloAPI.getCore().SERVER.getNMSClass(className);
     }
 
     public static Class getCBCClass(String className) {
-        return HoloAPI.getPlugin().SERVER.getCBClass(className);
+        return HoloAPI.getCore().SERVER.getCBClass(className);
     }
 
     /**

@@ -94,7 +94,7 @@ public class ClassTemplate<T> {
     }
 
     public static ClassTemplate<?> create(String className) {
-        Class clazz = HoloAPI.getPlugin().SERVER.getClass(className);
+        Class clazz = HoloAPI.getCore().SERVER.getClass(className);
 
         if (clazz == null) {
             HoloAPI.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + className);

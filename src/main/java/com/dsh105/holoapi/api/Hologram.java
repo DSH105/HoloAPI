@@ -171,7 +171,7 @@ public class Hologram {
                     public void run() {
                         show(p, obeyVisibility);
                     }
-                }.runTaskLater(HoloAPI.getPlugin(), 1L);
+                }.runTaskLater(HoloAPI.getCore(), 1L);
             }
         }
     }

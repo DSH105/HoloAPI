@@ -25,7 +25,6 @@ import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
-import org.bukkit.entity.Player;
 
 public class InputSuccessPrompt extends MessagePrompt {
 
@@ -38,7 +37,7 @@ public class InputSuccessPrompt extends MessagePrompt {
     public String getPromptText(ConversationContext conversationContext) {
         String[] lines = (String[]) conversationContext.getSessionData("lines");
         Location location = (Location) conversationContext.getSessionData("location");
-        Hologram h = new HologramFactory(HoloAPI.getPlugin()).withText(lines).withLocation(location).build();
+        Hologram h = new HologramFactory(HoloAPI.getCore()).withText(lines).withLocation(location).build();
         return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
     }
 }

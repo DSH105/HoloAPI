@@ -72,7 +72,7 @@ public class HoloListener implements Listener {
                             }
                             h.show(player, true);
                         }
-                    }.runTaskLater(HoloAPI.getPlugin(), 40L);
+                    }.runTaskLater(HoloAPI.getCore(), 40L);
                 }
             }
         }
@@ -95,7 +95,7 @@ public class HoloListener implements Listener {
                     public void run() {
                         h.clear(player);
                     }
-                }.runTaskLater(HoloAPI.getPlugin(), 20L);
+                }.runTaskLater(HoloAPI.getCore(), 20L);
             }
         }
     }
