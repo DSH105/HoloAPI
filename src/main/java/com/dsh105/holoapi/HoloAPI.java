@@ -252,6 +252,7 @@ public class HoloAPI extends DSHPlugin {
         MANAGER.clearAll();
         if (INJECTION_MANAGER != null) {
             INJECTION_MANAGER.close();
+            INJECTION_MANAGER = null;
         }
         this.getServer().getScheduler().cancelTasks(this);
         super.onDisable();

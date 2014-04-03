@@ -13,16 +13,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.server.PluginDisableEvent;
 
-import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
-    private static final Method READ_ACTION = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("EnumEntityUseAction"), "a", ReflectionUtil.getNMSClass("EnumEntityUseAction"));
     protected HoloAPI holoAPI;
     protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
+    protected boolean closed;
 
     public InjectionManager(final HoloAPI holoAPI) {
         if (holoAPI == null) {
@@ -30,19 +28,13 @@ public class InjectionManager {
         }
 
         this.holoAPI = holoAPI;
+        this.closed = false;
 
         holoAPI.getServer().getPluginManager().registerEvents(new Listener() {
 
             @EventHandler
             public void onJoin(PlayerJoinEvent event) {
                 inject(event.getPlayer());
-            }
-
-            @EventHandler
-            public void onDisable(PluginDisableEvent event) {
-                if (event.getPlugin().equals(holoAPI)) {
-                    close();
-                }
             }
 
             @Override
@@ -53,6 +45,9 @@ public class InjectionManager {
     }
 
     public void inject(Player player) {
+        if(this.closed)
+            return;
+
         if (injectors.containsKey(player)) {
             ChannelPipelineInjector injector = injectors.get(player);
             injector.setPlayer(player);
@@ -79,6 +74,15 @@ public class InjectionManager {
         for (Player player : injectors.keySet()) {
             unInject(player);
         }
+        this.closed = true;
+    }
+
+    public boolean isClosed() {
+        return this.closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
     public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
