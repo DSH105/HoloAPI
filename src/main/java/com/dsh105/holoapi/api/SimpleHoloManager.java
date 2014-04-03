@@ -349,32 +349,45 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public Hologram copy(Hologram hologram, Location copyLocation) {
-        Hologram copy;
-        if (hologram instanceof AnimatedHologram) {
-            AnimatedHologramFactory animatedCopyFactory = new AnimatedHologramFactory(HoloAPI.getInstance()).withLocation(copyLocation);
-            AnimatedHologram animatedHologram = (AnimatedHologram) hologram;
-            if (animatedHologram.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(animatedHologram.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(animatedHologram.getAnimationKey())) {
-                animatedCopyFactory.withImage(HoloAPI.getAnimationLoader().getGenerator(animatedHologram.getAnimationKey()));
-            } else {
-                ArrayList<Frame> frames = animatedHologram.getFrames();
-                animatedCopyFactory.withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()])));
-            }
-            copy = animatedCopyFactory.build();
-        } else {
-            HologramFactory copyFactory = new HologramFactory(HoloAPI.getInstance()).withLocation(copyLocation);
-            for (StoredTag tag : hologram.serialise()) {
-                if (tag.isImage()) {
-                    ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(tag.getContent());
-                    if (generator != null) {
-                        copyFactory.withImage(generator);
-                    }
-                } else {
-                    copyFactory.withText(tag.getContent());
-                }
-            }
-            copy = copyFactory.build();
+        return hologram instanceof AnimatedHologram ? this.buildAnimatedCopy((AnimatedHologram) hologram, copyLocation).build() : this.buildCopy(hologram, copyLocation).build();
+    }
+
+    @Override
+    public Hologram copyAndAddLineTo(Hologram original, String... linesToAdd) {
+        if (original instanceof AnimatedHologram) {
+            throw new IllegalArgumentException("Lines cannot be added to AnimatedHolograms.");
         }
-        return copy;
+        HologramFactory factory = this.buildCopy(original, original.getDefaultLocation()).withSaveId(original.getSaveId());
+        for (String line : linesToAdd) {
+            factory.withText(line);
+        }
+        return factory.build();
+    }
+
+    private AnimatedHologramFactory buildAnimatedCopy(AnimatedHologram original, Location copyLocation) {
+        AnimatedHologramFactory animatedCopyFactory = new AnimatedHologramFactory(HoloAPI.getInstance()).withLocation(copyLocation).withSimplicity(original.isSimple());
+        if (original.isImageGenerated() && (HoloAPI.getAnimationLoader().exists(original.getAnimationKey())) || HoloAPI.getAnimationLoader().existsAsUnloadedUrl(original.getAnimationKey())) {
+            animatedCopyFactory.withImage(HoloAPI.getAnimationLoader().getGenerator(original.getAnimationKey()));
+        } else {
+            ArrayList<Frame> frames = original.getFrames();
+            animatedCopyFactory.withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()])));
+        }
+        return animatedCopyFactory;
+    }
+
+    private HologramFactory buildCopy(Hologram original, Location copyLocation) {
+        HologramFactory copyFactory = new HologramFactory(HoloAPI.getInstance()).withLocation(copyLocation).withSimplicity(original.isSimple());
+        for (StoredTag tag : original.serialise()) {
+            if (tag.isImage()) {
+                ImageGenerator generator = HoloAPI.getImageLoader().getGenerator(tag.getContent());
+                if (generator != null) {
+                    copyFactory.withImage(generator);
+                }
+            } else {
+                copyFactory.withText(tag.getContent());
+            }
+        }
+        return copyFactory;
     }
 
     @Override

@@ -180,6 +180,32 @@ public class HoloCommand implements CommandExecutor {
                     } else return true;
                 }
             }
+        } else if (args.length >= 2 && args[0].equalsIgnoreCase("addline")) {
+            if (Perm.ADDLINE.hasPerm(sender, true, true)) {
+                Hologram hologram = HoloAPI.getManager().getHologram(args[1]);
+                if (hologram == null) {
+                    Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                    return true;
+                }
+
+                if (hologram instanceof AnimatedHologram) {
+                    Lang.sendTo(sender, Lang.HOLOGRAM_ADD_LINE_ANIMATED.getValue());
+                    return true;
+                }
+
+                // Prepare for some hax here... >:3
+
+                // Don't need this one anymore, we can delete it now
+                HoloAPI.getManager().stopTracking(hologram);
+                HoloAPI.getManager().clearFromFile(hologram);
+
+                // Oh look, a new hologram with extra lines!
+                Hologram copy = HoloAPI.getManager().copyAndAddLineTo(hologram, StringUtil.combineSplit(2, args, " "));
+                // Save it to file and overwrite the original
+                HoloAPI.getManager().saveToFile(copy);
+                Lang.sendTo(sender, Lang.HOLOGRAM_ADDED_LINE.getValue().replace("%id%", args[1]));
+                return true;
+            } else return true;
         } else if (args.length == 0) {
             Lang.sendTo(sender, Lang.PLUGIN_INFORMATION.getValue()
                     .replace("%version%", HoloAPI.getInstance().getDescription().getVersion()));
@@ -195,8 +221,7 @@ public class HoloCommand implements CommandExecutor {
                     HoloAPI.getInstance().loadHolograms();
                     return true;
                 } else return true;
-            }
-            if (args[0].equalsIgnoreCase("info")) {
+            } else if (args[0].equalsIgnoreCase("info")) {
                 if (Perm.INFO.hasPerm(sender, true, true)) {
                     if (HoloAPI.getManager().getAllComplexHolograms().isEmpty()) {
                         Lang.sendTo(sender, Lang.NO_ACTIVE_HOLOGRAMS.getValue());

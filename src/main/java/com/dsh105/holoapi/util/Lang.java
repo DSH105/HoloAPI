@@ -72,6 +72,8 @@ public enum Lang {
     HOLOGRAM_COPIED("hologram_copied", "&3Hologram of ID &b%id% &3copied."),
     HOLOGRAM_ANIMATED_COPIED("hologram_animated_copied", "&3Animated Hologram of ID &b%id% &3copied."),
     HOLOGRAM_NEARBY("hologram_nearby", "&3Holograms within a radius of &b%radius%&3:"),
+    HOLOGRAM_ADDED_LINE("hologram_added_line", "&3Line added to hologram of ID &b%id%&3."),
+    HOLOGRAM_ADD_LINE_ANIMATED("hologram_add_line_animated", "&3Lines cannot be added to Animated Holograms."),
     NO_NEARBY_HOLOGRAMS("no_nearby_holograms", "&3There are no holograms within a radius of &b%radius%&3."),
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),

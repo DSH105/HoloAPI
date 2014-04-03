@@ -129,7 +129,16 @@ public interface HoloManager {
      * @param copyLocation location to copy the hologram to
      * @return copied hologram
      */
-    public Hologram copy(Hologram hologram, Location copyLocation);
+    public Hologram copy(Hologram original, Location copyLocation);
+
+    /**
+     * Copies a hologram from the provided original and adds lines
+     *
+     * @param original original hologram
+     * @param linesToAdd lines to copy to the copied hologram
+     * @return coped hologram
+     */
+    public Hologram copyAndAddLineTo(Hologram original, String... linesToAdd);
 
     /**
      * Creates a simple hologram. Simple holograms are automatically removed after a certain period of time, are not saved to file and can only include text content.
