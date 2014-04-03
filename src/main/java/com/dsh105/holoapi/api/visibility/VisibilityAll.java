@@ -19,6 +19,10 @@ package com.dsh105.holoapi.api.visibility;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Represents a visibility in which all players can see the hologram
+ */
+
 public class VisibilityAll implements Visibility {
 
     @Override

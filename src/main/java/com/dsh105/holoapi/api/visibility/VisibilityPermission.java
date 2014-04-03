@@ -19,6 +19,10 @@ package com.dsh105.holoapi.api.visibility;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Represents a visibility in which only players with a certain permission can see the hologram
+ */
+
 public class VisibilityPermission implements Visibility {
 
     private String permission;

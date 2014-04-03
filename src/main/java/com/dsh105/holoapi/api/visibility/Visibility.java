@@ -19,7 +19,17 @@ package com.dsh105.holoapi.api.visibility;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Represents the visibility of the hologram
+ */
+
 public interface Visibility {
 
+    /**
+     * Gets whether a hologram can be shown to a certain player
+     *
+     * @param player player in question
+     * @return true if hologram can be shown to the player, false if it should be kept hidden
+     */
     public boolean isVisibleTo(Player player);
 }
