@@ -27,6 +27,11 @@ public class InjectionManager {
             throw new IllegalArgumentException("Provided HoloAPI instance can't be NULL!");
         }
 
+        // Deal with any players that may be online due to a reload - seeing as lots of servers actually do this
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            inject(p);
+        }
+
         this.holoAPI = holoAPI;
         this.closed = false;
 
