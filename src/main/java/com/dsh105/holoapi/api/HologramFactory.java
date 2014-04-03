@@ -224,13 +224,13 @@ public class HologramFactory {
         if (!hologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
                 if (!h.isSimple()) {
-                    h.refreshDisplay();
+                    h.refreshDisplay(true);
                 }
             }
         }
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
-                hologram.show((Player) e);
+                hologram.show((Player) e, true);
             }
         }
         HoloAPI.getManager().track(hologram, this.owningPlugin);

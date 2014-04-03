@@ -354,7 +354,7 @@ public class HoloCommand implements CommandExecutor {
                         Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
                         return true;
                     }
-                    h.refreshDisplay();
+                    h.refreshDisplay(true);
                     Lang.sendTo(sender, Lang.HOLOGRAM_REFRESH.getValue().replace("%id%", h.getSaveId()));
                     return true;
                 } else return true;

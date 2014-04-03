@@ -411,7 +411,7 @@ public class SimpleHoloManager implements HoloManager {
         final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
-                hologram.show((Player) e);
+                hologram.show((Player) e, true);
             }
         }
         BukkitTask t = null;
@@ -442,7 +442,7 @@ public class SimpleHoloManager implements HoloManager {
         final Hologram hologram = new HologramFactory(HoloAPI.getInstance()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
-                hologram.show((Player) e);
+                hologram.show((Player) e, true);
             }
         }
 
@@ -493,7 +493,7 @@ public class SimpleHoloManager implements HoloManager {
         public void run() {
             Iterator<Hologram> i = getAllHolograms().keySet().iterator();
             while (i.hasNext()) {
-                i.next().refreshDisplay();
+                i.next().refreshDisplay(true);
             }
         }
     }

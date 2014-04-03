@@ -19,6 +19,8 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.touch.TouchAction;
+import com.dsh105.holoapi.api.visibility.Visibility;
+import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
@@ -42,14 +44,17 @@ public class Hologram {
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
     protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
+
+    private String saveId;
     private String worldName;
     private double defX;
     private double defY;
     private double defZ;
     private String[] tags;
-    private String saveId;
+
     private boolean simple = false;
     private boolean hasRegisteredTouchActions;
+    private Visibility visibility = new VisibilityAll();
 
     protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
@@ -156,10 +161,7 @@ public class Hologram {
         return map;
     }
 
-    /**
-     * Refresh the display of the hologram
-     */
-    public void refreshDisplay() {
+    public void refreshDisplay(final boolean obeyVisibility) {
         for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
             final Player p = Bukkit.getPlayerExact(entry.getKey());
             if (p != null) {
@@ -167,7 +169,7 @@ public class Hologram {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        show(p);
+                        show(p, obeyVisibility);
                     }
                 }.runTaskLater(HoloAPI.getInstance(), 1L);
             }
@@ -175,9 +177,16 @@ public class Hologram {
     }
 
     /**
+     * Refresh the display of the hologram
+     */
+    public void refreshDisplay() {
+        this.refreshDisplay(false);
+    }
+
+    /**
      * Gets the lines that the hologram consists of
      * <p/>
-     * Important: Images will be returned as block characters in admist the text characters
+     * Important: Images will be returned as block characters in amidst the text characters
      *
      * @return lines of the hologram
      */
@@ -185,14 +194,23 @@ public class Hologram {
         return tags;
     }
 
-    // TODO: Fully implement this
-    /*public boolean isVisibleToAll() {
-        return visibleToAll;
+    /**
+     * Gets the visibility of the hologram
+     *
+     * @return visibility of the hologram
+     */
+    public Visibility getVisibility() {
+        return visibility;
     }
 
-    public void setVisibleToAll(boolean flag) {
-        this.visibleToAll = flag;
-    }*/
+    /**
+     * Sets the visibility of the hologram
+     *
+     * @param visibility visibility of the hologram
+     */
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
 
     /**
      * Gets the save id of the hologram
@@ -277,6 +295,19 @@ public class Hologram {
         return null;
     }
 
+    public void changeWorld(String worldName, boolean obeyVisibility) {
+        this.clearAllPlayerViews();
+        this.worldName = worldName;
+        if (!this.isSimple()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
+        for (Entity e : this.getDefaultLocation().getWorld().getEntities()) {
+            if (e instanceof Player) {
+                this.show((Player) e, obeyVisibility);
+            }
+        }
+    }
+
     /**
      * Changes the world the hologram is visible in
      * <p/>
@@ -285,16 +316,7 @@ public class Hologram {
      * @param worldName name of of the destination world
      */
     public void changeWorld(String worldName) {
-        this.clearAllPlayerViews();
-        this.worldName = worldName;
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-        for (Entity e : this.getDefaultLocation().getWorld().getEntities()) {
-            if (e instanceof Player) {
-                this.show((Player) e);
-            }
-        }
+        this.changeWorld(worldName, false);
     }
 
     /**
@@ -362,7 +384,7 @@ public class Hologram {
                 }
             }
             this.hasRegisteredTouchActions = true;
-            this.refreshDisplay();
+            this.refreshDisplay(true);
         }
     }
 
@@ -403,7 +425,6 @@ public class Hologram {
      * @return all entity IDs used for the tags in the hologram
      */
     public int[] getAllEntityIds() {
-
         ArrayList<Integer> entityIdList = new ArrayList<Integer>();
         for (int index = 0; index < this.getTagCount(); index++) {
             for (int i = 0; i < HoloAPI.getTagEntityMultiplier(); i++) {
@@ -420,13 +441,21 @@ public class Hologram {
         return ids;
     }
 
+    public void show(Player observer, boolean obeyVisibility) {
+        this.show(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), obeyVisibility);
+    }
+
     /**
      * Shows the hologram to a player at the default location
      *
      * @param observer player to show the hologram to
      */
     public void show(Player observer) {
-        this.show(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
+        this.show(observer, false);
+    }
+
+    public void show(Player observer, Location location, boolean obeyVisibility) {
+        this.show(observer, location.getBlockX(), location.getBlockY(), location.getBlockZ(), obeyVisibility);
     }
 
     /**
@@ -436,7 +465,16 @@ public class Hologram {
      * @param location location that the hologram is visible at
      */
     public void show(Player observer, Location location) {
-        this.show(observer, location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        this.show(observer, location, false);
+    }
+
+    public void show(Player observer, double x, double y, double z, boolean obeyVisibility) {
+        if (!obeyVisibility || this.getVisibility().isVisibleTo(observer)) {
+            for (int index = 0; index < this.getTagCount(); index++) {
+                this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
+            }
+            this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
+        }
     }
 
     /**
@@ -448,13 +486,7 @@ public class Hologram {
      * @param z        z coordinate of the location the hologram is visible at
      */
     public void show(Player observer, double x, double y, double z) {
-        /*if (this.playerToLocationMap.containsKey(observer.getName())) {
-            this.move(observer, new Vector(x, y, z));
-        }*/
-        for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
-        }
-        this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
+        this.show(observer, x, y, z, false);
     }
 
     /**

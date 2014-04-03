@@ -187,13 +187,13 @@ public class AnimatedHologramFactory {
         if (!animatedHologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
                 if (!h.isSimple()) {
-                    h.refreshDisplay();
+                    h.refreshDisplay(true);
                 }
             }
         }
         for (Entity e : animatedHologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
-                animatedHologram.show((Player) e);
+                animatedHologram.show((Player) e, true);
             }
         }
         HoloAPI.getManager().track(animatedHologram, this.owningPlugin);
