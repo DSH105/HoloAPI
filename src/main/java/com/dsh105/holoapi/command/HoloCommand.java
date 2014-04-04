@@ -24,6 +24,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.*;
 import com.dsh105.holoapi.api.touch.CommandTouchAction;
 import com.dsh105.holoapi.api.touch.TouchAction;
+import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.InputPrompt;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
@@ -433,6 +434,22 @@ public class HoloCommand implements CommandExecutor {
                     }
                     return true;
                 } else return true;
+            } else if (args[0].equalsIgnoreCase("visibility")) {
+                if (Perm.VISIBILITY.hasPerm(sender, true, true)) {
+                    Hologram hologram = HoloAPI.getManager().getHologram(args[1]);
+                    if (hologram == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                        return true;
+                    }
+                    String visKey = HoloAPI.getVisibilityMatcher().getKeyOf(hologram.getVisibility());
+                    Visibility visibility = HoloAPI.getVisibilityMatcher().get(visKey);
+                    if (visibility == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_VISIBILITY_UNREGISTERED.getValue().replace("%id%", hologram.getSaveId()));
+                    } else {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_VISIBILITY.getValue().replace("%id%", hologram.getSaveId()).replace("%visibility%", visKey));
+                    }
+                    return true;
+                } else return true;
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("edit")) {
@@ -515,6 +532,22 @@ public class HoloCommand implements CommandExecutor {
                         return true;
                     } else return true;
                 }
+            } else if (args[0].equalsIgnoreCase("visibility")) {
+                if (Perm.VISIBILITY_SET.hasPerm(sender, true, true)) {
+                    Hologram hologram = HoloAPI.getManager().getHologram(args[1]);
+                    if (hologram == null) {
+                        Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                        return true;
+                    }
+                    Visibility visibility = HoloAPI.getVisibilityMatcher().get(args[2].toLowerCase());
+                    if (visibility == null) {
+                        Lang.sendTo(sender, Lang.INVALID_VISIBILITY.getValue().replace("%visibility%", args[2].toLowerCase()));
+                        return true;
+                    }
+                    hologram.setVisibility(visibility);
+                    Lang.sendTo(sender, Lang.HOLOGRAM_VISIBILITY_SET.getValue().replace("%id%", args[1]).replace("%visibility%", args[2].toLowerCase()));
+                    return true;
+                } else return true;
             }
         } else if (args.length >= 4 && args[0].equalsIgnoreCase("edit")) {
             if (Perm.EDIT.hasPerm(sender, true, true)) {

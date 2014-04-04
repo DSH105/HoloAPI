@@ -45,6 +45,12 @@ permissions:
         default: op
     holoapi.holo.touch.info:
         default: op
+    holoapi.holo.see.all:
+        default: op
+    holoapi.holo.visibility:
+        default: op
+    holoapi.holo.visibility.set:
+        default: op
     holoapi.update:
         default: op
     holoapi.*:
@@ -65,6 +71,9 @@ permissions:
             holoapi.holo.copy: true
             holoapi.holo.nearby: true
             holoapi.holo.addline: true
+            holoapi.holo.see.all: true
+            holoapi.holo.visibility: true
+            holoapi.holo.visibility.set: true
             holoapi.update: true
     holoapi.touch.*:
         default: op

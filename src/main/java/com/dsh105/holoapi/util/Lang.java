@@ -48,6 +48,7 @@ public enum Lang {
     LOADING_URL_ANIMATION("loading_url_animation", "&3Loading custom URL animation of key &b%key%&3. Create hologram when the animation has finished loading."),
     ACTIVE_DISPLAYS("active_displays", "&3Active Holographic Displays:"),
     IMAGES_NOT_LOADED("images_not_loaded", "&3Images are not loaded yet. Try again later."),
+    INVALID_VISIBILITY("invalid_invisibility", "&b%visibility% &3is not a registered visibility type."),
 
     TOUCH_ACTIONS("touch_actions", "&3Touch actions for hologram of ID &b%id%&3:"),
     NO_TOUCH_ACTIONS("no_touch_actions", "&3Hologram of ID &b%id% &3does not have any Touch Actions stored."),
@@ -74,6 +75,9 @@ public enum Lang {
     HOLOGRAM_NEARBY("hologram_nearby", "&3Holograms within a radius of &b%radius%&3:"),
     HOLOGRAM_ADDED_LINE("hologram_added_line", "&3Line added to hologram of ID &b%id%&3."),
     HOLOGRAM_ADD_LINE_ANIMATED("hologram_add_line_animated", "&3Lines cannot be added to Animated Holograms."),
+    HOLOGRAM_VISIBILITY_SET("hologram_visibility_set", "&3Visibility of Hologram of ID &b%id% &3set to &b%visibility%&3."),
+    HOLOGRAM_VISIBILITY_UNREGISTERED("hologram_visibility_unregistered", "&3Hologram of ID &b%id% &3has an unknown or unregistered visibility."),
+    HOLOGRAM_VISIBILITY("hologram_visibility", "&3Visibility of Hologram of ID &b%id% &3is registered as &b%visibility%&3."),
     NO_NEARBY_HOLOGRAMS("no_nearby_holograms", "&3There are no holograms within a radius of &b%radius%&3."),
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),

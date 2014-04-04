@@ -45,9 +45,11 @@ public enum HelpEntry {
     REFRESH("refresh <id>", Perm.REFRESH.getPermission(), "Refresh a Hologram of the specified ID."),
     TOUCH_ADD("touch add <id> <command>", Perm.TOUCH_ADD.getPermission(), "Add an action for a certain hologram to perform when touched.", "Actions defined without the use of the API may only be commands", "Touch Actions are fired when a user left or right clicks a hologram", "The %name% placeholder can be used to define the user that touched the hologram", "Commands can be more than one word."),
     TOUCH_ADD_AS_CONSOLE("touch add <id> <as_console> <command>", Perm.TOUCH_ADD.getPermission(), "Add an action for a certain hologram to perform when touched.", "Actions defined without the use of the API may only be commands", "Touch Actions are fired when a user left or right clicks a hologram", "The %name% placeholder can be used to define the user that touched the hologram", "Commands can be more than one word.", "<as_console> defines whether the action is performed by the console or the player that touched the hologram"),
-    TOUCH_REMOVE("touch remove <id> <touch_id>", Perm.TOUCH_REMOVE.getPermission(), "Remove an action for a TouchScreen hologram", "<touch_id> is the ID of the TouchAction. To remove a comman-based Touch Action, simply enter the command"),
+    TOUCH_REMOVE("touch remove <id> <touch_id>", Perm.TOUCH_REMOVE.getPermission(), "Remove an action for a TouchScreen hologram", "<touch_id> is the ID of the TouchAction. To remove a command-based Touch Action, simply enter the command"),
     TOUCH_CLEAR("touch clear <id>", Perm.TOUCH_CLEAR.getPermission(), "Clear all Touch Actions for a particular TouchScreen hologram"),
     TOUCH_INFO("touch info <id>", Perm.TOUCH_INFO.getPermission(), "View information on all Touch Actions for a particular TouchScreen hologram"),
+    VISIBILITY_SET("visibility <id> <type>", Perm.VISIBILITY_SET.getPermission(), "Set the visibility of a particular hologram", "Valid types for HoloAPI are: all, permission", "Visibility types dynamically registered using the API may be defined using this command"),
+    VISIBILITY("visibility <id>", Perm.VISIBILITY.getPermission(), "View the visibility of a particular hologram"),
     RELOAD("reload", Perm.RELOAD.getPermission(), "Reload all HoloAPI configuration files."),;
 
     private String commandArguments;
