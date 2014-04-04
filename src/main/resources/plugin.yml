@@ -4,7 +4,7 @@ author: [DSH105, CaptainBern]
 description: Advanced Hologram management
 softdepend: [Vault, VanishNoPacket]
 website: ${project.url}
-main: ${main.class}
+main: com.dsh105.holoapi.HoloAPICore
 version: ${project.version}
 commands:
     holoupdate:
