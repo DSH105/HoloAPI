@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.api;
 
+import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.UnicodeFormatter;
@@ -180,5 +181,18 @@ public class TagFormatter {
             content = content.replace(matcher.group(), format.format(calendar.getTime()));
         }
         return content;
+    }
+
+    protected int matchItem(String content) {
+        Pattern itemPattern = Pattern.compile("\\%item:([0-9]+?)\\%");
+        Matcher matcher = itemPattern.matcher(content);
+        while (matcher.find()) {
+            try {
+                return Integer.parseInt(matcher.group(1));
+            } catch (NumberFormatException e) {
+                continue;
+            }
+        }
+        return -1;
     }
 }

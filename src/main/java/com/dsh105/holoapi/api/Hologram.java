@@ -22,10 +22,13 @@ import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
+import com.dsh105.holoapi.reflection.SafeMethod;
+import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -589,34 +592,39 @@ public class Hologram {
     }
 
     protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
-        WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
+        int matchItem = HoloAPI.getTagFormatter().matchItem(message);
+        if (matchItem >= 0) {
+            this.generateFloatingItem(observer, matchItem, index, diffY, x, y, z);
+        } else {
+            WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
 
-        WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
-        horse.setEntityId(this.getHorseIndex(index));
-        horse.setEntityType(EntityType.HORSE.getTypeId());
-        horse.setX(x);
-        horse.setY(y + diffY + 55);
-        horse.setZ(z);
+            WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
+            horse.setEntityId(this.getHorseIndex(index));
+            horse.setEntityType(EntityType.HORSE.getTypeId());
+            horse.setX(x);
+            horse.setY(y + diffY + 55);
+            horse.setZ(z);
 
-        WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, HoloAPI.getTagFormatter().format(observer, message));
-        dw.watch(11, Byte.valueOf((byte) 1));
-        dw.watch(12, Integer.valueOf(-1700000));
-        horse.setMetadata(dw);
+            WrappedDataWatcher dw = new WrappedDataWatcher();
+            dw.watch(10, HoloAPI.getTagFormatter().format(observer, message));
+            dw.watch(11, Byte.valueOf((byte) 1));
+            dw.watch(12, Integer.valueOf(-1700000));
+            horse.setMetadata(dw);
 
-        WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
-        skull.setEntityId(this.getSkullIndex(index));
-        skull.setX(x);
-        skull.setY(y + diffY + 55);
-        skull.setZ(z);
-        skull.setEntityType(66);
+            WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
+            skull.setEntityId(this.getSkullIndex(index));
+            skull.setX(x);
+            skull.setY(y + diffY + 55);
+            skull.setZ(z);
+            skull.setEntityType(66);
 
-        attach.setEntityId(horse.getEntityId());
-        attach.setVehicleId(skull.getEntityId());
+            attach.setEntityId(horse.getEntityId());
+            attach.setVehicleId(skull.getEntityId());
 
-        horse.send(observer);
-        skull.send(observer);
-        attach.send(observer);
+            horse.send(observer);
+            skull.send(observer);
+            attach.send(observer);
+        }
 
         if (this.hasRegisteredTouchActions) {
             this.prepareTouchScreen(observer, index, diffY, x, y, z);
@@ -669,11 +677,53 @@ public class Hologram {
         attachTouch.send(observer);
     }
 
+    protected void generateFloatingItem(Player observer, int itemId, int index, double diffY, double x, double y, double z) {
+        WrapperPacketAttachEntity attachItem = new WrapperPacketAttachEntity();
+
+        WrapperPacketSpawnEntity item = new WrapperPacketSpawnEntity();
+        item.setEntityId(this.getHorseIndex(index));
+        item.setX(x);
+        item.setY(y + diffY);
+        item.setZ(z);
+        item.setEntityType(2);
+        item.setData(1);
+
+        WrappedDataWatcher dw = new WrappedDataWatcher();
+        dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(itemId), 1)));
+        new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
+
+        WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
+        meta.setEntityId(item.getEntityId());
+        meta.setMetadata(dw);
+
+        WrapperPacketSpawnEntity itemSkull = new WrapperPacketSpawnEntity();
+        itemSkull.setEntityId(this.getSkullIndex(index));
+        itemSkull.setX(x);
+        itemSkull.setY(y + diffY);
+        itemSkull.setZ(z);
+        itemSkull.setEntityType(66);
+
+        attachItem.setEntityId(item.getEntityId());
+        attachItem.setVehicleId(itemSkull.getEntityId());
+
+        item.send(observer);
+        meta.send(observer);
+        itemSkull.send(observer);
+        attachItem.send(observer);
+    }
+
     protected void updateNametag(Player observer, String content, int index) {
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, HoloAPI.getTagFormatter().format(observer, content));
-        dw.watch(11, Byte.valueOf((byte) 1));
-        dw.watch(12, Integer.valueOf(-1700000));
+
+        int matchItem = HoloAPI.getTagFormatter().matchItem(content);
+        if (matchItem >= 0) {
+            dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
+            new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
+        } else {
+            dw.watch(10, HoloAPI.getTagFormatter().format(observer, content));
+            dw.watch(11, Byte.valueOf((byte) 1));
+            dw.watch(12, Integer.valueOf(-1700000));
+        }
 
         WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
         metadata.setEntityId(this.getHorseIndex(index));
