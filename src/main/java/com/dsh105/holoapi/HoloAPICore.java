@@ -90,10 +90,6 @@ public class HoloAPICore extends DSHPlugin {
     private ChatColor secondaryColour = ChatColor.AQUA;
     protected String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
 
-    public static HoloAPI getInstance() {
-        return (HoloAPI) getPluginInstance();
-    }
-
     @Override
     public void onEnable() {
         super.onEnable();
@@ -176,7 +172,7 @@ public class HoloAPICore extends DSHPlugin {
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
                 public void run() {
-                    Updater updater = new Updater(getInstance(), 74914, file, updateType, false);
+                    Updater updater = new Updater(HoloAPI.getCore(), 74914, file, updateType, false);
                     updateAvailable = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     if (updateAvailable) {
                         updateName = updater.getLatestName();
