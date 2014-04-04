@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.protocol;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.events.HoloTouchEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
@@ -18,10 +19,17 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
+    protected HoloAPICore core;
+    protected InjectionStrategy strategy;
+
     protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
-    public InjectionManager() {
+    public InjectionManager(HoloAPICore core, InjectionStrategy strategy) {
+
+        this.core = core;
+        this.strategy = strategy;
+
         // Deal with any players that may be online due to a reload - seeing as lots of servers actually do this
         for (Player p : Bukkit.getOnlinePlayers()) {
             inject(p);

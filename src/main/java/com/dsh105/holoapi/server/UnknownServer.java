@@ -34,4 +34,9 @@ public class UnknownServer extends CraftBukkitServer { //we do not know this ser
     public String getName() {
         return "UNKNOWN SERVER";
     }
+
+    @Override
+    public ServerBrand getServerBrand() {
+        return ServerBrand.UNKNOWN;
+    }
 }

@@ -36,4 +36,9 @@ public class SpigotServer extends CraftBukkitServer {
     public String getName() {
         return "Spigot";
     }
+
+    @Override
+    public ServerBrand getServerBrand() {
+        return ServerBrand.SPIGOT;
+    }
 }

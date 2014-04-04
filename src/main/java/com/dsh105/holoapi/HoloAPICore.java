@@ -31,7 +31,8 @@ import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.config.ConfigOptions;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
-import com.dsh105.holoapi.image.*;
+import com.dsh105.holoapi.image.SimpleAnimationLoader;
+import com.dsh105.holoapi.image.SimpleImageLoader;
 import com.dsh105.holoapi.listeners.CommandTouchActionListener;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
@@ -106,7 +107,7 @@ public class HoloAPICore extends DSHPlugin {
         // detect version, this needs some improvements, it doesn't look too pretty now.
         if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
-            INJECTION_MANAGER = new InjectionManager();
+            //INJECTION_MANAGER = new InjectionManager(this);
         } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
 
