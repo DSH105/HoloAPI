@@ -30,7 +30,7 @@
         <minecraft.version>1.7.5</minecraft.version>
         <craftbukkit.version>R0.1</craftbukkit.version>
         <cb_package>v1_7_R2</cb_package>
-        <main.class>com.dsh105.holoapi.HoloAPI</main.class>
+        <main.class>com.dsh105.holoapi.HoloAPICore</main.class>
     </properties>
 
     <distributionManagement>
