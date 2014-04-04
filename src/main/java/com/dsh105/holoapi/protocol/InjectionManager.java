@@ -1,7 +1,6 @@
 package com.dsh105.holoapi.protocol;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.events.HoloTouchEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
@@ -49,7 +48,7 @@ public class InjectionManager {
     }
 
     public void inject(Player player) {
-        if(this.closed)
+        if (this.closed)
             return;
 
         if (injectors.containsKey(player)) {

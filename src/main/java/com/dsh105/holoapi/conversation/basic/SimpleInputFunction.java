@@ -17,7 +17,6 @@
 
 package com.dsh105.holoapi.conversation.basic;
 
-import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationContext;
 
 public abstract class SimpleInputFunction {

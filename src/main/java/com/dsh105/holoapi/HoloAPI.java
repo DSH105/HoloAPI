@@ -20,10 +20,12 @@ package com.dsh105.holoapi;
 import com.dsh105.dshutils.DSHPlugin;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
-import com.dsh105.holoapi.image.*;
-import com.dsh105.holoapi.api.TagFormatter;
+import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.image.ImageLoader;
 
 public class HoloAPI extends DSHPlugin {
 

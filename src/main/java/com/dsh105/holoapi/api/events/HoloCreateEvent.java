@@ -18,7 +18,6 @@
 package com.dsh105.holoapi.api.events;
 
 import com.dsh105.holoapi.api.Hologram;
-import org.bukkit.command.CommandSender;
 
 /**
  * Called before a hologram is created.

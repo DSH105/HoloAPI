@@ -94,7 +94,7 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof  LivingEntity) {
+        if (event.getEntity() instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) event.getEntity();
             if (livingEntity.getNoDamageTicks() > livingEntity.getMaximumNoDamageTicks() / 2.0F) {
                 return;

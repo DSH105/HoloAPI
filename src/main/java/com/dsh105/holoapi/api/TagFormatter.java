@@ -17,7 +17,6 @@
 
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.UnicodeFormatter;
@@ -113,7 +112,7 @@ public class TagFormatter {
     /**
      * Adds a formatter for all Holograms to utilise
      *
-     * @param tag tag to be formatted (replaced)
+     * @param tag    tag to be formatted (replaced)
      * @param format format to apply
      */
     public void addFormatter(String tag, TagFormat format) {

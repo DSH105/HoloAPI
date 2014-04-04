@@ -14,10 +14,10 @@ public class ProtocolInjectionBuilder {
     private MinecraftVersion version;
 
     public ProtocolInjectionBuilder(HoloAPICore holoAPI) {
-        if(holoAPI == null) {
+        if (holoAPI == null) {
             throw new IllegalArgumentException("HoloAPI Instance can't be NULL!");
         }
-         this.holoAPI = holoAPI;
+        this.holoAPI = holoAPI;
     }
 
     public ProtocolInjectionBuilder withMinecraftVersion(MinecraftVersion minecraftVersion) {
@@ -30,10 +30,10 @@ public class ProtocolInjectionBuilder {
     }
 
     public InjectionManager build() {
-        if(this.holoAPI == null) {
-              throw new RuntimeException("HoloAPI Instance is NULL! Can't build the InjectionManager with a NULL-instance!");
+        if (this.holoAPI == null) {
+            throw new RuntimeException("HoloAPI Instance is NULL! Can't build the InjectionManager with a NULL-instance!");
         }
-        if(this.strategy == null) {
+        if (this.strategy == null) {
             throw new RuntimeException("InjectionStrategy is NULL! Can't build the InjectionManager with an undefined InjectionStrategy!");
         }
         this.injectionManager = new InjectionManager(this.holoAPI, this.strategy);

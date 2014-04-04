@@ -134,7 +134,7 @@ public interface HoloManager {
     /**
      * Copies a hologram from the provided original and adds lines
      *
-     * @param original original hologram
+     * @param original   original hologram
      * @param linesToAdd lines to copy to the copied hologram
      * @return coped hologram
      */
