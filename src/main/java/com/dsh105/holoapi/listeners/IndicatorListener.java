@@ -102,11 +102,11 @@ public class IndicatorListener implements Listener {
             if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
                 if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
                         || config.getBoolean("indicators.damage.showForMobs", true)) {
-                    Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
-                    v.setY(v.getY() + 0.05D);
+                    //Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
+                    //v.setY(v.getY() + 0.05D);
                     Location l = event.getEntity().getLocation().clone();
                     l.setY(l.getY() + config.getInt("indicators.damage.yOffset", 2));
-                    HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), v, config.getString("indicators.damage.format.default", "&c") + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
+                    HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), true, config.getString("indicators.damage.format.default", "&c") + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
                 }
             }
         }
