@@ -84,7 +84,9 @@ public class IndicatorListener implements Listener {
                     }
 
                     String text = colours + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
-                    HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), true, text);
+                    Location l = event.getEntity().getLocation().clone();
+                    l.setY(l.getY() + config.getInt("indicators.damage.yOffset", 2));
+                    HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), true, text);
                 }
             }
         }
@@ -92,15 +94,20 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof LivingEntity && ((LivingEntity) event.getEntity()).getNoDamageTicks() > ((LivingEntity) event.getEntity()).getMaximumNoDamageTicks() / 2.0F) {
-            return;
-        }
-        if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
-            if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
-                    || config.getBoolean("indicators.damage.showForMobs", true)) {
-                Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
-                v.setY(v.getY() + 0.05D);
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.damage.timeVisible", 4), v, config.getString("indicators.damage.format.default", "&c") + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
+        if (event.getEntity() instanceof  LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) event.getEntity();
+            if (livingEntity.getNoDamageTicks() > livingEntity.getMaximumNoDamageTicks() / 2.0F) {
+                return;
+            }
+            if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
+                if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
+                        || config.getBoolean("indicators.damage.showForMobs", true)) {
+                    Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
+                    v.setY(v.getY() + 0.05D);
+                    Location l = event.getEntity().getLocation().clone();
+                    l.setY(l.getY() + config.getInt("indicators.damage.yOffset", 2));
+                    HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), v, config.getString("indicators.damage.format.default", "&c") + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
+                }
             }
         }
     }
@@ -108,7 +115,9 @@ public class IndicatorListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExpGain(PlayerExpChangeEvent event) {
         if (config.getBoolean("indicators.exp.enable", false)) {
-            HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.exp.timeVisible", 4), true, config.getString("indicators.exp.format", "&a") + "+" + event.getAmount() + " exp");
+            Location l = event.getPlayer().getLocation().clone();
+            l.setY(l.getY() + config.getInt("indicators.exp.yOffset", 2));
+            HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.exp.timeVisible", 4), true, config.getString("indicators.exp.format", "&a") + "+" + event.getAmount() + " exp");
         }
     }
 
@@ -117,7 +126,9 @@ public class IndicatorListener implements Listener {
         if (config.getBoolean("indicators.gainHealth.enable", false)) {
             if (event.getEntity() instanceof Player && config.getBoolean("indicators.gainHealth.showForPlayers", true)
                     || config.getBoolean("indicators.gainHealth.showForMobs", true)) {
-                HoloAPI.getManager().createSimpleHologram(event.getEntity().getLocation(), config.getInt("indicators.gainHealth.timeVisible", 4), true, config.getString("indicators.gainHealth.format", "&a") + "+" + event.getAmount() + " " + HEART_CHARACTER);
+                Location l = event.getEntity().getLocation().clone();
+                l.setY(l.getY() + config.getInt("indicators.gainHealth.yOffset", 2));
+                HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.gainHealth.timeVisible", 4), true, config.getString("indicators.gainHealth.format", "&a") + "+" + event.getAmount() + " " + HEART_CHARACTER);
             }
         }
     }
@@ -135,7 +146,9 @@ public class IndicatorListener implements Listener {
                 if (event.getItem().getDurability() == 1) {
                     msg = config.getString("indicators.potion.format.godapple", "&e+ %effect%");
                 }
-                HoloAPI.getManager().createSimpleHologram(event.getPlayer().getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, msg.replace("%effect%", "Golden Apple"));
+                Location l = event.getPlayer().getLocation().clone();
+                l.setY(l.getY() + config.getInt("indicators.potion.yOffset", 2));
+                HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.potion.timeVisible", 4), true, msg.replace("%effect%", "Golden Apple"));
             }
         }
     }
@@ -157,7 +170,9 @@ public class IndicatorListener implements Listener {
             int amp = (effect.getAmplifier() < 1 ? 1 : effect.getAmplifier()) + 1;
             String content = config.getString("indicators.potion.format." + effect.getType().getName().toLowerCase(), "&e+ %effect% %amp%");
             content = content.replace("%effect%", StringUtil.capitalise(effect.getType().getName().replace("_", " "))).replace("%amp%", "" + new RomanNumeral(amp));
-            HoloAPI.getManager().createSimpleHologram(e.getLocation(), config.getInt("indicators.potion.timeVisible", 4), true, content);
+            Location l = e.getLocation().clone();
+            l.setY(l.getY() + config.getInt("indicators.potion.yOffset", 2));
+            HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.potion.timeVisible", 4), true, content);
         }
     }
 

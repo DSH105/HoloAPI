@@ -64,6 +64,7 @@ public class ConfigOptions extends Options {
         set("specialCharacters.[*]", "2605");
 
         set("indicators.damage.enable", false);
+        set("indicators.damage.yOffset", 2);
         set("indicators.damage.format.default", "&c&l");
         set("indicators.damage.format.drowning", "&b&l");
         set("indicators.damage.format.fire", "&4&l");
@@ -77,10 +78,12 @@ public class ConfigOptions extends Options {
         set("indicators.damage.showForMobs", true);
 
         set("indicators.exp.enable", false);
+        set("indicators.exp.yOffset", 2);
         set("indicators.exp.format", "&a&l");
         set("indicators.exp.timeVisible", 4);
 
         set("indicators.potion.enable", false);
+        set("indicators.potion.yOffset", 2);
         set("indicators.potion.timeVisible", 4);
         set("indicators.potion.showForPlayers", true);
         set("indicators.potion.showForMobs", true);
@@ -94,6 +97,7 @@ public class ConfigOptions extends Options {
         }
 
         set("indicators.gainHealth.enable", false);
+        set("indicators.gainHealth.yOffset", 2);
         set("indicators.gainHealth.format", "&a&l");
         set("indicators.gainHealth.timeVisible", 4);
         set("indicators.gainHealth.showForPlayers", true);
