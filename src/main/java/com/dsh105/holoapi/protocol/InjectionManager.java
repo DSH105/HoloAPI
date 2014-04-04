@@ -19,15 +19,12 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
-    protected HoloAPICore core;
     protected InjectionStrategy strategy;
 
     protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
-    public InjectionManager(HoloAPICore core, InjectionStrategy strategy) {
-
-        this.core = core;
+    public InjectionManager(InjectionStrategy strategy) {
         this.strategy = strategy;
 
         // Deal with any players that may be online due to a reload - seeing as lots of servers actually do this

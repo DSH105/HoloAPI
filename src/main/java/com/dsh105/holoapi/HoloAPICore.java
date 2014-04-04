@@ -103,7 +103,7 @@ public class HoloAPICore extends DSHPlugin {
         // detect version, this needs some improvements, it doesn't look too pretty now.
         if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
-            //INJECTION_MANAGER = new InjectionManager(this);
+            //INJECTION_MANAGER = new InjectionManager();
         } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
 
