@@ -25,6 +25,7 @@ import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
+import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
 import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
@@ -64,6 +65,7 @@ public class HoloAPICore extends DSHPlugin {
     protected static SimpleImageLoader IMAGE_LOADER;
     protected static SimpleAnimationLoader ANIMATION_LOADER;
     protected static TagFormatter TAG_FORMATTER;
+    protected static VisibilityMatcher VISIBILITY_MATCHER;
     protected ConfigOptions OPTIONS;
     protected InjectionManager INJECTION_MANAGER;
 
@@ -118,6 +120,7 @@ public class HoloAPICore extends DSHPlugin {
 
         //this.registerCommands();
         TAG_FORMATTER = new TagFormatter();
+        VISIBILITY_MATCHER = new VisibilityMatcher();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
         ANIMATION_LOADER = new SimpleAnimationLoader();

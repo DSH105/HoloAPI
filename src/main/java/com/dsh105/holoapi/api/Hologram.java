@@ -472,7 +472,7 @@ public class Hologram {
     }
 
     public void show(Player observer, double x, double y, double z, boolean obeyVisibility) {
-        if (!obeyVisibility || this.getVisibility().isVisibleTo(observer)) {
+        if (!obeyVisibility || this.getVisibility().isVisibleTo(observer, this.getSaveId())) {
             for (int index = 0; index < this.getTagCount(); index++) {
                 this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
             }

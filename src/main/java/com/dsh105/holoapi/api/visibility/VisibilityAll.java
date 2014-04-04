@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 public class VisibilityAll implements Visibility {
 
     @Override
-    public boolean isVisibleTo(Player player) {
+    public boolean isVisibleTo(Player player, String hologramId) {
         return true;
     }
 }

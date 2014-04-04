@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.api.visibility;
 
+import com.dsh105.holoapi.util.Perm;
 import org.bukkit.entity.Player;
 
 /**
@@ -27,6 +28,9 @@ public class VisibilityPermission implements Visibility {
 
     private String permission;
 
+    public VisibilityPermission() {
+    }
+
     public VisibilityPermission(String permission) {
         this.permission = permission;
     }
@@ -36,7 +40,7 @@ public class VisibilityPermission implements Visibility {
     }
 
     @Override
-    public boolean isVisibleTo(Player player) {
-        return player.hasPermission(this.permission);
+    public boolean isVisibleTo(Player player, String hologramId) {
+        return this.permission == null ? (Perm.hasPerm("holoapi.holo.see." + hologramId, player, false) || Perm.SEE_ALL.hasPerm(player, false)) : Perm.hasPerm(this.permission, player, false);
     }
 }
