@@ -164,23 +164,49 @@ public class Hologram {
         return map;
     }
 
+    /**
+     * Refreshes the display of the hologram
+     *
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     */
     public void refreshDisplay(final boolean obeyVisibility) {
         for (Map.Entry<UUID, Vector> entry : this.getPlayerViews().entrySet()) {
             final Player p = Bukkit.getPlayer(entry.getKey());
             if (p != null) {
-                this.clear(p);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        show(p, obeyVisibility);
-                    }
-                }.runTaskLater(HoloAPI.getCore(), 1L);
+                this.refreshDisplay(obeyVisibility, p);
             }
         }
     }
 
     /**
-     * Refresh the display of the hologram
+     * Refreshes the display of the hologram to a certain player
+     *
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     * @param observer player to refresh the hologram for
+     */
+    public void refreshDisplay(final boolean obeyVisibility, final Player observer) {
+        if (observer != null) {
+            this.clear(observer);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    show(observer, obeyVisibility);
+                }
+            }.runTaskLater(HoloAPI.getCore(), 1L);
+        }
+    }
+
+    /**
+     * Refreshes the display of the hologram
+     *
+     * @param observer player to refresh the hologram for
+     */
+    public void refreshDisplay(Player observer) {
+        this.refreshDisplay(false, observer);
+    }
+
+    /**
+     * Refreshes the display of the hologram
      */
     public void refreshDisplay() {
         this.refreshDisplay(false);
@@ -298,6 +324,14 @@ public class Hologram {
         return null;
     }
 
+    /**
+     * Changes the world the hologram is visible in
+     * <p/>
+     * Hologram coordinates will remain the same if the world is changed
+     *
+     * @param worldName name of of the destination world
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     */
     public void changeWorld(String worldName, boolean obeyVisibility) {
         this.clearAllPlayerViews();
         this.worldName = worldName;
@@ -365,6 +399,22 @@ public class Hologram {
         }
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
+        }
+    }
+
+    /**
+     * Sets the content of a line of the hologram for a certain player
+     *
+     * @param index index of the line to set
+     * @param content new content for the hologram line
+     * @param observer player to show the changes to
+     */
+    public void updateLine(int index, String content, Player observer) {
+        if (index >= this.tags.length) {
+            throw new IllegalArgumentException("Tag index doesn't exist!");
+        }
+        if (observer != null) {
+            this.updateNametag(observer, content, index);
         }
     }
 
