@@ -26,8 +26,9 @@ public class VisibilityMatcher {
 
     public VisibilityMatcher() {
         this.visibilities.put("all", new VisibilityAll());
-        this.visibilities.put("perm", new VisibilityPermission());
-        this.visibilities.put("permission", new VisibilityPermission());
+        Visibility perm = new VisibilityPermission();
+        this.visibilities.put("perm", perm);
+        this.visibilities.put("permission", perm);
     }
 
     /**
