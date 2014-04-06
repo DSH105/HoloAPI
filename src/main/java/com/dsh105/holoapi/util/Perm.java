@@ -36,6 +36,7 @@ public enum Perm {
     COPY("holoapi.holo.copy"),
     NEARBY("holoapi.holo.nearby"),
     ADDLINE("holoapi.holo.addline"),
+    READTXT("holoapi.holo.readtxt"),
 
     SEE_ALL("holoapi.holo.see.all"),
     VISIBILITY("holoapi.holo.visibility"),

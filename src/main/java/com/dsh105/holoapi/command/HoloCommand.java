@@ -37,6 +37,7 @@ import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.util.MiscUtil;
 import com.dsh105.holoapi.util.Perm;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import com.dsh105.holoapi.util.pagination.FancyPaginator;
@@ -51,7 +52,9 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -448,6 +451,29 @@ public class HoloCommand implements CommandExecutor {
                     } else {
                         Lang.sendTo(sender, Lang.HOLOGRAM_VISIBILITY.getValue().replace("%id%", hologram.getSaveId()).replace("%visibility%", visKey));
                     }
+                    return true;
+                } else return true;
+            } else if (args[0].equalsIgnoreCase("readtxt")) {
+                if (Perm.READTXT.hasPerm(sender, true, false)) {
+                    final String url = args[1];
+                    final Player p = (Player) sender;
+                    final Location location = p.getLocation();
+                    Lang.sendTo(sender, Lang.READING_TXT.getValue().replace("%url%", url));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            final String[] lines = MiscUtil.readWebsiteContentsSoWeCanUseTheText(url);
+                            if (lines != null) {
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        Hologram h = new HologramFactory(HoloAPI.getCore()).withLocation(location).withText(lines).build();
+                                        Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()));
+                                    }
+                                }.runTask(HoloAPI.getCore());
+                            }
+                        }
+                    }.runTaskAsynchronously(HoloAPI.getCore());
                     return true;
                 } else return true;
             }
