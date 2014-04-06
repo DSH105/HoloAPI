@@ -38,6 +38,9 @@ public enum Perm {
     ADDLINE("holoapi.holo.addline"),
     READTXT("holoapi.holo.readtxt"),
 
+    SHOW("holoapi.holo.show"),
+    HIDE("holoapi.holo.hide"),
+
     SEE_ALL("holoapi.holo.see.all"),
     VISIBILITY("holoapi.holo.visibility"),
     VISIBILITY_SET("holoapi.holo.visibility.set"),

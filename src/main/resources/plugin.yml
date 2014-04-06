@@ -53,6 +53,10 @@ permissions:
         default: op
     holoapi.holo.readtxt:
         default: op
+    holoapi.holo.show:
+        default: op
+    holoapi.holo.hide:
+        default: op
     holoapi.update:
         default: op
     holoapi.*:
@@ -77,6 +81,8 @@ permissions:
             holoapi.holo.visibility: true
             holoapi.holo.visibility.set: true
             holoapi.holo.readtxt: true
+            holoapi.holo.show: true
+            holoapi.holo.hide: true
             holoapi.update: true
     holoapi.touch.*:
         default: op

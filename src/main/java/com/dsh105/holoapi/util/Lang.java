@@ -79,6 +79,10 @@ public enum Lang {
     HOLOGRAM_VISIBILITY_SET("hologram_visibility_set", "&3Visibility of Hologram of ID &b%id% &3set to &b%visibility%&3."),
     HOLOGRAM_VISIBILITY_UNREGISTERED("hologram_visibility_unregistered", "&3Hologram of ID &b%id% &3has an unknown or unregistered visibility."),
     HOLOGRAM_VISIBILITY("hologram_visibility", "&3Visibility of Hologram of ID &b%id% &3is registered as &b%visibility%&3."),
+    HOLOGRAM_ALREADY_SEE("hologram_already_see", "&b%player% &3can already see Hologram &b%id%&3."),
+    HOLOGRAM_ALREADY_NOT_SEE("hologram_already_not_see", "&3Hologram &b%id% &3is already hidden for &b%player%&3."),
+    HOLOGRAM_SHOW("hologram_show", "&b%player% &3can now see Hologram &b%id%&3."),
+    HOLOGRAM_HIDE("hologram_hide", "&3Hologram &b%id% &3hidden for &b%player%&3."),
     NO_NEARBY_HOLOGRAMS("no_nearby_holograms", "&3There are no holograms within a radius of &b%radius%&3."),
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),
