@@ -64,7 +64,7 @@ public class Hologram {
         this.saveId = saveId;
         if (lines.length > 30) {
             this.tags = new String[30];
-            for (int i = 0; i <= 30; i++) {
+            for (int i = 0; i < 30; i++) {
                 this.tags[i] = lines[i];
             }
         } else {
