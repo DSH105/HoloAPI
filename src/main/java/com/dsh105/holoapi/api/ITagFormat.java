@@ -19,19 +19,24 @@ package com.dsh105.holoapi.api;
 
 import org.bukkit.entity.Player;
 
-import java.util.regex.Matcher;
+public interface ITagFormat {
 
-public abstract class DynamicTagFormat extends TagFormat {
+    /**
+     * Gets the value to use in the hologram instead of the registered key
+     *
+     * @param observer player viewing the hologram
+     * @deprecated use {@link com.dsh105.holoapi.api.ITagFormat#getValue(Hologram, org.bukkit.entity.Player)}
+     * @return
+     */
+    @Deprecated
+    public String getValue(Player observer);
 
-    public abstract String match(Matcher matcher, String lineContent, Hologram h, Player observer);
-
-    @Override
-    public String getValue(Player observer) {
-        return null;
-    }
-
-    @Override
-    public String getValue(Hologram hologram, Player observer) {
-        return null;
-    }
+    /**
+     * Gets the value to use in the hologram instead of the registered key
+     *
+     * @param hologram hologram using this function
+     * @param observer player viewing the hologram
+     * @return
+     */
+    public String getValue(Hologram hologram, Player observer);
 }

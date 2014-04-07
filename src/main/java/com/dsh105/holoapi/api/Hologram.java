@@ -656,7 +656,7 @@ public class Hologram {
             horse.setZ(z);
 
             WrappedDataWatcher dw = new WrappedDataWatcher();
-            dw.watch(10, HoloAPI.getTagFormatter().format(observer, message));
+            dw.watch(10, HoloAPI.getTagFormatter().format(this, observer, message));
             dw.watch(11, Byte.valueOf((byte) 1));
             dw.watch(12, Integer.valueOf(-1700000));
             horse.setMetadata(dw);
@@ -770,7 +770,7 @@ public class Hologram {
             dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
             new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
         } else {
-            dw.watch(10, HoloAPI.getTagFormatter().format(observer, content));
+            dw.watch(10, HoloAPI.getTagFormatter().format(this, observer, content));
             dw.watch(11, Byte.valueOf((byte) 1));
             dw.watch(12, Integer.valueOf(-1700000));
         }

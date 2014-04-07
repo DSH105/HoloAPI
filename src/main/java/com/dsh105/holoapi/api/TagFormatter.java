@@ -111,7 +111,7 @@ public class TagFormatter {
 
         this.addFormat(Pattern.compile("\\%date:(.+?)\\%"), new DynamicTagFormat() {
             @Override
-            public String match(Matcher matcher, String lineContent, Player observer) {
+            public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
                 SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
 
                 Calendar calendar = Calendar.getInstance();
@@ -178,15 +178,15 @@ public class TagFormatter {
         return content;
     }
 
-    public String formatTags(Player observer, String content) {
+    public String formatTags(Hologram h, Player observer, String content) {
         for (Map.Entry<String, TagFormat> entry : this.tagFormats.entrySet()) {
-            content = content.replace(entry.getKey(), entry.getValue().getValue(observer));
+            content = content.replace(entry.getKey(), entry.getValue().getValue(h, observer));
         }
 
         for (Map.Entry<Pattern, DynamicTagFormat> entry : this.dynamicTagFormats.entrySet()) {
             Matcher matcher = entry.getKey().matcher(content);
             while (matcher.find()) {
-                content = entry.getValue().match(matcher, content, observer);
+                content = entry.getValue().match(matcher, content, h, observer);
             }
         }
 
@@ -196,8 +196,8 @@ public class TagFormatter {
         return content;
     }
 
-    public String format(Player observer, String content) {
-        content = formatTags(observer, content);
+    public String format(Hologram h, Player observer, String content) {
+        content = formatTags(h, observer, content);
         content = formatBasic(content);
 
         return content;

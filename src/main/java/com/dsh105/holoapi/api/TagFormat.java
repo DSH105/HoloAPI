@@ -19,7 +19,13 @@ package com.dsh105.holoapi.api;
 
 import org.bukkit.entity.Player;
 
-public interface TagFormat {
+public abstract class TagFormat implements ITagFormat {
 
-    public String getValue(Player observer);
+    @Override
+    public abstract String getValue(Player observer);
+
+    @Override
+    public String getValue(Hologram hologram, Player observer) {
+        return getValue(observer);
+    }
 }
