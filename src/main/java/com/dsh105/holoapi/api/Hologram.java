@@ -642,7 +642,8 @@ public class Hologram {
     }
 
     protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
-        int matchItem = HoloAPI.getTagFormatter().matchItem(message);
+        String content = HoloAPI.getTagFormatter().format(this, observer, message);
+        int matchItem = HoloAPI.getTagFormatter().matchItem(content);
         if (matchItem >= 0) {
             this.generateFloatingItem(observer, matchItem, index, diffY, x, y, z);
         } else {
@@ -656,7 +657,7 @@ public class Hologram {
             horse.setZ(z);
 
             WrappedDataWatcher dw = new WrappedDataWatcher();
-            dw.watch(10, HoloAPI.getTagFormatter().format(this, observer, message));
+            dw.watch(10, content);
             dw.watch(11, Byte.valueOf((byte) 1));
             dw.watch(12, Integer.valueOf(-1700000));
             horse.setMetadata(dw);
@@ -762,15 +763,16 @@ public class Hologram {
         attachItem.send(observer);
     }
 
-    protected void updateNametag(Player observer, String content, int index) {
+    protected void updateNametag(Player observer, String message, int index) {
         WrappedDataWatcher dw = new WrappedDataWatcher();
+        String content = HoloAPI.getTagFormatter().format(this, observer, message);
 
         int matchItem = HoloAPI.getTagFormatter().matchItem(content);
         if (matchItem >= 0) {
             dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
             new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
         } else {
-            dw.watch(10, HoloAPI.getTagFormatter().format(this, observer, content));
+            dw.watch(10, content);
             dw.watch(11, Byte.valueOf((byte) 1));
             dw.watch(12, Integer.valueOf(-1700000));
         }
