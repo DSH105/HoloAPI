@@ -43,6 +43,7 @@ import com.dsh105.holoapi.server.Server;
 import com.dsh105.holoapi.server.SpigotServer;
 import com.dsh105.holoapi.server.UnknownServer;
 import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.util.MinecraftVersion;
 import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -79,6 +80,8 @@ public class HoloAPICore extends DSHPlugin {
     public String updateName = "";
     public boolean updateChecked = false;
 
+    public static MinecraftVersion MINECRAFT_VERSION;
+
     public static Server SERVER;
     public static boolean isUsingNetty;
 
@@ -102,6 +105,7 @@ public class HoloAPICore extends DSHPlugin {
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
 
+        MINECRAFT_VERSION = new MinecraftVersion(getServer().getVersion());
         this.initServer();
 
         // detect version, this needs some improvements, it doesn't look too pretty now.

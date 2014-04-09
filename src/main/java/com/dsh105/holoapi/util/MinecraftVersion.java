@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 public class MinecraftVersion {
 
+    public static final String FORGE_LIB_DIR = "net.minecraft.server.util.";
+
     public static final Pattern VERSION_FILTER = Pattern.compile(".*\\\\(.*MC.\\\\s*([a-zA-z0-9\\\\-\\\\.]+)\\\\s*\\\\)");
 
     private int minor;
@@ -24,6 +26,7 @@ public class MinecraftVersion {
     }
 
     protected final int[] parseVersion(String version) {
+        version = version.replaceAll("[^0-9]", "");
         int[] parts = new int[2];
 
         String[] versionSplitted = version.split("\\.");
@@ -53,5 +56,9 @@ public class MinecraftVersion {
 
     public String getVersion() {
         return String.format("%s.%s.%s", getMajor(), getMinor(), getBuildNumber());
+    }
+
+    public boolean isNetty() {
+        return false;
     }
 }

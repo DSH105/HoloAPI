@@ -22,20 +22,19 @@ public class InjectionManager {
     protected HoloAPICore core;
     protected InjectionStrategy strategy;
 
-    protected ConcurrentMap<Player, ChannelPipelineInjector> injectors = new MapMaker().weakKeys().makeMap();
+    protected ConcurrentMap<Player, PlayerInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
     public InjectionManager(HoloAPICore core, InjectionStrategy strategy) {
 
         this.core = core;
         this.strategy = strategy;
+        this.closed = false; // Houston, we're up and running
 
         // Deal with any players that may be online due to a reload - seeing as lots of servers actually do this
         for (Player p : Bukkit.getOnlinePlayers()) {
             inject(p);
         }
-
-        this.closed = false;
 
         HoloAPI.getCore().getServer().getPluginManager().registerEvents(new Listener() {
 
@@ -56,7 +55,7 @@ public class InjectionManager {
             return;
 
         if (injectors.containsKey(player)) {
-            ChannelPipelineInjector injector = injectors.get(player);
+            PlayerInjector injector = injectors.get(player);
             injector.setPlayer(player);
         } else {
             ChannelPipelineInjector pipelineInjector = new ChannelPipelineInjector(player, this);
@@ -70,7 +69,7 @@ public class InjectionManager {
             return;
         }
 
-        ChannelPipelineInjector injector = injectors.get(player);
+        PlayerInjector injector = injectors.get(player);
 
         if (injector.isInjected()) {
             injector.close();
