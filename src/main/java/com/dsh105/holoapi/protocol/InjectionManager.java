@@ -18,11 +18,28 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
+    /**
+     * The injection-strategy that will be used
+     * to inject the player
+     */
     protected InjectionStrategy strategy;
 
+    /**
+     * A "Cache" system for the injectors. (Eg: A reload will go slightly faster etc)
+     *
+     * Don't worry about concurrency, we use weak-keys so the GC'ing will go fine...
+     */
     protected ConcurrentMap<Player, PlayerInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
+    /**
+     * The default constructor. The InjectionStrategy is the method that will
+     * be used to inject our custom ProtocolHandler in the player obejct.
+     *
+     * (Used to detect packet IO)
+     *
+     * @param strategy
+     */
     public InjectionManager(InjectionStrategy strategy) {
         this.strategy = strategy;
         this.closed = false; // Houston, we're up and running
@@ -46,6 +63,10 @@ public class InjectionManager {
         }, HoloAPI.getCore());
     }
 
+    /**
+     * Injects a specific player
+     * @param player
+     */
     public void inject(Player player) {
         if (this.closed)
             return;
@@ -54,12 +75,16 @@ public class InjectionManager {
             PlayerInjector injector = injectors.get(player);
             injector.setPlayer(player);
         } else {
-            ChannelPipelineInjector pipelineInjector = new ChannelPipelineInjector(player, this);
-            pipelineInjector.inject();
-            injectors.put(player, pipelineInjector);
+            PlayerInjector playerInjector = this.strategy.inject(player, this);
+            playerInjector.inject();
+            injectors.put(player, playerInjector);
         }
     }
 
+    /**
+     * Un-injects a specific player
+     * @param player
+     */
     public void unInject(Player player) {
         if (!injectors.containsKey(player)) {
             return;
@@ -72,6 +97,9 @@ public class InjectionManager {
         }
     }
 
+    /**
+     * Closes this InjectionManager
+     */
     public void close() {
         for (Player player : injectors.keySet()) {
             unInject(player);
@@ -79,20 +107,28 @@ public class InjectionManager {
         this.closed = true;
     }
 
+    /**
+     * Returns whether or not this InjectionManager is closed
+     * @return
+     */
     public boolean isClosed() {
         return this.closed;
     }
 
+    /**
+     * Changes the "closed" state of this InjectionManager
+     * @param closed
+     */
     public void setClosed(boolean closed) {
         this.closed = closed;
     }
 
     public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
+        if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
+            return;
         Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new Runnable() {
             @Override
             public void run() {
-                if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
-                    return;
                 Packet packet = new Packet(msg);
                 // The entity id of the hologram that got interacted with.
                 int id = (Integer) packet.read("a");

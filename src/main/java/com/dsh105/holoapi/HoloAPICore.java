@@ -39,12 +39,11 @@ import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.protocol.InjectionManager;
-import com.dsh105.holoapi.server.CraftBukkitServer;
-import com.dsh105.holoapi.server.Server;
-import com.dsh105.holoapi.server.SpigotServer;
-import com.dsh105.holoapi.server.UnknownServer;
+import com.dsh105.holoapi.protocol.InjectionStrategy;
+import com.dsh105.holoapi.protocol.ProtocolInjectionBuilder;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
+import com.dsh105.holoapi.server.*;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.MinecraftVersion;
 import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -82,8 +81,6 @@ public class HoloAPICore extends DSHPlugin {
     public String updateName = "";
     public boolean updateChecked = false;
 
-    public static MinecraftVersion MINECRAFT_VERSION;
-
     public static Server SERVER;
     public static boolean isUsingNetty;
 
@@ -107,21 +104,11 @@ public class HoloAPICore extends DSHPlugin {
 
         this.initServer();
 
-        // detect version, this needs some improvements, it doesn't look too pretty now.
-        if (Bukkit.getVersion().contains("1.7")) {
-            isUsingNetty = true;
-            //INJECTION_MANAGER = new InjectionManager();
-        } else if (Bukkit.getVersion().contains("1.6")) {
-            isUsingNetty = false;
+        isUsingNetty = CommonReflection.isUsingNetty();
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    // So that it is noticed
-                    LOGGER.log(Level.WARNING, "This version of CraftBukkit does NOT support TouchScreen Holograms. Using them will have no effect.");
-                }
-            }.runTaskLater(this, 1L);
-        }
+        // Needs a much better method since this is not really reliable
+        // TODO: Improve this
+        INJECTION_MANAGER = new ProtocolInjectionBuilder().withStrategy(isUsingNetty ? InjectionStrategy.NETTY : InjectionStrategy.PROXY).build();
 
         //this.registerCommands();
         TAG_FORMATTER = new TagFormatter();
@@ -287,7 +274,7 @@ public class HoloAPICore extends DSHPlugin {
 
     protected void initServer() {
         List<Server> servers = new ArrayList<Server>();
-        //servers.add(new MCPCPlusServer());
+        servers.add(new MCPCPlusServer());
         servers.add(new SpigotServer());
         servers.add(new CraftBukkitServer());
         servers.add(new UnknownServer());
@@ -313,7 +300,9 @@ public class HoloAPICore extends DSHPlugin {
     }
 
     public static Server getHoloServer() {
-        return null;
+        if(SERVER == null)
+            throw new RuntimeException("SERVER is NULL!");
+        return SERVER;
     }
 
     @Override
