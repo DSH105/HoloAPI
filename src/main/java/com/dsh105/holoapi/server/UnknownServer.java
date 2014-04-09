@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.server;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 
 public class UnknownServer extends CraftBukkitServer { //we do not know this server brand so let's guess it's some random bukkit server.
 
@@ -26,7 +26,7 @@ public class UnknownServer extends CraftBukkitServer { //we do not know this ser
         if (!super.init()) {
             return false;
         }
-        HoloAPI.LOGGER.warning("Could not identify this server brand! The API may not work correctly now!");
+        HoloAPICore.LOGGER.warning("Could not identify this server brand! The API may not work correctly now!");
         return true;
     }
 

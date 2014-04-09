@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.listeners;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
 import com.dsh105.holoapi.api.touch.CommandTouchAction;
 import org.bukkit.event.EventHandler;
@@ -37,7 +37,7 @@ public class CommandTouchActionListener implements Listener {
                     Object asConsole = event.getConfigMap().get("asConsole");
                     event.getHologram().addTouchAction(new CommandTouchAction((String) event.getConfigMap().get("command"), (asConsole != null && asConsole instanceof Boolean) ? (Boolean) asConsole : false));
                 } catch (ClassCastException e) {
-                    HoloAPI.LOGGER.log(Level.SEVERE, "Failed to load command touch action data for hologram (" + event.getHologram().getSaveId() + "). Maybe the save data was edited?");
+                    HoloAPICore.LOGGER.log(Level.SEVERE, "Failed to load command touch action data for hologram (" + event.getHologram().getSaveId() + "). Maybe the save data was edited?");
                 }
             }
         }

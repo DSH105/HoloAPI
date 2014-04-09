@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.command;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
 import org.bukkit.Bukkit;
@@ -79,7 +79,7 @@ public class CommandManager {
         try {
             map = SERVER_COMMAND_MAP.get(Bukkit.getPluginManager());
         } catch (Exception e) {
-            HoloAPI.LOGGER.warning("Failed to retrieve the CommandMap! Using fallback instead...");
+            HoloAPICore.LOGGER.warning("Failed to retrieve the CommandMap! Using fallback instead...");
             map = null;
         }
 

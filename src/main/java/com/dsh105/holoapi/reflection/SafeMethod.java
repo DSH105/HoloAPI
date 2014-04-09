@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.reflection;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -41,14 +41,14 @@ public class SafeMethod<T> implements MethodAccessor<T> {
             Method method = coreClass.getDeclaredMethod(methodname, params);
             setMethod(method);
         } catch (NoSuchMethodException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to find a matching method with name: " + methodname);
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching method with name: " + methodname);
             e.printStackTrace();
         }
     }
 
     protected void setMethod(Method method) {
         if (method == null) {
-            HoloAPI.LOGGER_REFLECTION.warning("Cannot create a SafeMethod with a null method!");
+            HoloAPICore.LOGGER_REFLECTION.warning("Cannot create a SafeMethod with a null method!");
         }
         if (!method.isAccessible()) {
             method.setAccessible(true);

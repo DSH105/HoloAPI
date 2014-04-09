@@ -90,10 +90,12 @@ public class HoloAPICore extends DSHPlugin {
     protected static double LINE_SPACING = 0.25D;
     protected static int TAG_ENTITY_MULTIPLIER = 4;
 
-    //private CommandMap commandMap;
     private ChatColor primaryColour = ChatColor.DARK_AQUA;
     private ChatColor secondaryColour = ChatColor.AQUA;
     protected String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
+
+    public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
+    public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
 
     @Override
     public void onEnable() {
@@ -103,7 +105,6 @@ public class HoloAPICore extends DSHPlugin {
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
 
-        MINECRAFT_VERSION = new MinecraftVersion(getServer().getVersion());
         this.initServer();
 
         // detect version, this needs some improvements, it doesn't look too pretty now.
@@ -117,7 +118,7 @@ public class HoloAPICore extends DSHPlugin {
                 @Override
                 public void run() {
                     // So that it is noticed
-                    HoloAPI.LOGGER.log(Level.WARNING, "This version of CraftBukkit does NOT support TouchScreen Holograms. Using them will have no effect.");
+                    LOGGER.log(Level.WARNING, "This version of CraftBukkit does NOT support TouchScreen Holograms. Using them will have no effect.");
                 }
             }.runTaskLater(this, 1L);
         }
@@ -214,7 +215,7 @@ public class HoloAPICore extends DSHPlugin {
                     for (String s : unprepared) {
                         MANAGER.loadFromFile(s);
                     }
-                    HoloAPI.LOGGER.log(Level.INFO, "Holograms loaded");
+                    LOGGER.log(Level.INFO, "Holograms loaded");
                     this.cancel();
                 }
             }
@@ -298,7 +299,7 @@ public class HoloAPICore extends DSHPlugin {
             }
         }
 
-        /*if (SERVER == null) {
+        if (SERVER == null) {
             LOGGER.warning("Failed to identify the server brand! The API will not run correctly -> disabling");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
@@ -308,7 +309,7 @@ public class HoloAPICore extends DSHPlugin {
             }
             LOGGER.info("Identified server brand: " + SERVER.getName());
             LOGGER.info("MC Version: " + SERVER.getMCVersion());
-        }*/
+        }
     }
 
     public static Server getHoloServer() {

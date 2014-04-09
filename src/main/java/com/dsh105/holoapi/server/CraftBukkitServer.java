@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.server;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.reflection.refs.MinecraftServerRef;
 import org.bukkit.Bukkit;
 
@@ -64,7 +64,7 @@ public class CraftBukkitServer implements Server {
         try {
             return Class.forName(name);
         } catch (Exception e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to find matching class for: " + name);
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find matching class for: " + name);
             return null;
         }
     }

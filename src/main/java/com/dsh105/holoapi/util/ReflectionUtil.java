@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
@@ -42,7 +43,7 @@ public class ReflectionUtil {
         try {
             return Class.forName(name);
         } catch (ClassNotFoundException e) {
-            HoloAPI.LOGGER.warning("Could not find class: " + name + "!");
+            HoloAPICore.LOGGER.warning("Could not find class: " + name + "!");
             return null;
         }
     }
@@ -69,7 +70,7 @@ public class ReflectionUtil {
 
             return field;
         } catch (NoSuchFieldException e) {
-            HoloAPI.LOGGER.warning("No such field: " + fieldName + "!");
+            HoloAPICore.LOGGER.warning("No such field: " + fieldName + "!");
             return null;
         }
     }
@@ -78,7 +79,7 @@ public class ReflectionUtil {
         try {
             return (T) getField(clazz, fieldName).get(instance);
         } catch (IllegalAccessException e) {
-            HoloAPI.LOGGER.warning("Failed to access field: " + fieldName + "!");
+            HoloAPICore.LOGGER.warning("Failed to access field: " + fieldName + "!");
             return null;
         }
     }
@@ -87,7 +88,7 @@ public class ReflectionUtil {
         try {
             getField(clazz, fieldName).set(instance, value);
         } catch (IllegalAccessException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Could not set new field value for: " + fieldName);
+            HoloAPICore.LOGGER_REFLECTION.warning("Could not set new field value for: " + fieldName);
         }
     }
 
@@ -95,7 +96,7 @@ public class ReflectionUtil {
         try {
             return (T) field.get(instance);
         } catch (IllegalAccessException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve field: " + field.getName());
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to retrieve field: " + field.getName());
             return null;
         }
     }
@@ -108,7 +109,7 @@ public class ReflectionUtil {
         try {
             return clazz.getDeclaredMethod(methodName, params);
         } catch (NoSuchMethodException e) {
-            HoloAPI.LOGGER.warning("No such method: " + methodName + "!");
+            HoloAPICore.LOGGER.warning("No such method: " + methodName + "!");
             return null;
         }
     }
@@ -117,10 +118,10 @@ public class ReflectionUtil {
         try {
             return (T) method.invoke(instance, args);
         } catch (IllegalAccessException e) {
-            HoloAPI.LOGGER.warning("Failed to access method: " + method.getName() + "!");
+            HoloAPICore.LOGGER.warning("Failed to access method: " + method.getName() + "!");
             return null;
         } catch (InvocationTargetException e) {
-            HoloAPI.LOGGER.warning("Failed to invoke method: " + method.getName() + "!");
+            HoloAPICore.LOGGER.warning("Failed to invoke method: " + method.getName() + "!");
             return null;
         }
     }

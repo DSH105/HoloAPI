@@ -1,5 +1,8 @@
 package com.dsh105.holoapi.reflection.utility;
 
+/**
+ * Handles the loading/finding of specific classes. This is mainly to be compatible with third and fourth party mods like MCPC+
+ */
 public abstract class ClassHandler {
 
     protected ClassLoader classLoader;

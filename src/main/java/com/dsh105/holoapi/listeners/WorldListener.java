@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.listeners;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +36,7 @@ public class WorldListener implements Listener {
     public void onWorldLoad(WorldLoadEvent event) {
         for (Map.Entry<String, String> entry : UNLOADED_HOLOGRAMS.entrySet()) {
             if (entry.getValue().equals(event.getWorld().getName())) {
-                HoloAPI.LOGGER.log(Level.INFO, "Attempting to load hologram " + entry.getKey() + " into world " + entry.getValue() + ".");
+                HoloAPICore.LOGGER.log(Level.INFO, "Attempting to load hologram " + entry.getKey() + " into world " + entry.getValue() + ".");
                 if (((SimpleHoloManager) HoloAPI.getManager()).loadFromFile(entry.getKey()) != null) {
                     UNLOADED_HOLOGRAMS.remove(entry.getKey());
                 }

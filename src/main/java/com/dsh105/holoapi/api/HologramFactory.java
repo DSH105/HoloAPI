@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
@@ -222,7 +223,7 @@ public class HologramFactory {
 
         if (Bukkit.getWorld(this.worldName) == null) {
             //HoloAPI.getManager().clearFromFile(this.saveId);
-            HoloAPI.LOGGER.log(Level.SEVERE, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + "!");
+            HoloAPICore.LOGGER.log(Level.SEVERE, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + "!");
             WorldListener.store(this.saveId, this.worldName);
             return null;
         }

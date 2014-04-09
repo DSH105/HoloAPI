@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.reflection;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 
 public class CBClassTemplate extends ClassTemplate<Object> {
 
@@ -32,7 +33,7 @@ public class CBClassTemplate extends ClassTemplate<Object> {
     protected void setCBClass(String name) {
         Class clazz = HoloAPI.getCore().SERVER.getCBClass(name);
         if (clazz == null) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + name);
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + name);
         }
         setClass(clazz);
     }

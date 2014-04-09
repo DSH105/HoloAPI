@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.reflection;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -87,7 +88,7 @@ public class ClassTemplate<T> {
 
     public static ClassTemplate<?> create(Class<?> type) {
         if (type == null) {
-            HoloAPI.LOGGER_REFLECTION.warning("Cannot create a ClassTemplate with a null type!");
+            HoloAPICore.LOGGER_REFLECTION.warning("Cannot create a ClassTemplate with a null type!");
             return null;
         }
         return new ClassTemplate(type);
@@ -97,7 +98,7 @@ public class ClassTemplate<T> {
         Class clazz = HoloAPI.getCore().SERVER.getClass(className);
 
         if (clazz == null) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + className);
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + className);
             return null;
         }
         return new ClassTemplate<Object>(clazz);

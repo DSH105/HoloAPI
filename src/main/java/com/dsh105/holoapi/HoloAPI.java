@@ -32,9 +32,6 @@ public class HoloAPI extends DSHPlugin {
 
     private static HoloAPICore CORE;
 
-    public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
-    public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
-
     public static void setCore(HoloAPICore plugin) {
         if (CORE != null) {
             return;

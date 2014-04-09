@@ -20,6 +20,7 @@ package com.dsh105.holoapi.image;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.EnumUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -52,7 +53,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 String path = "animations." + key + ".";
                 String imagePath = config.getString(path + "path");
                 if (imagePath == null) {
-                    HoloAPI.LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invalid path");
+                    HoloAPICore.LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invalid path");
                     continue;
                 }
                 int imageHeight = config.getInt(path + "height", 10);
@@ -61,7 +62,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
                 if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
-                    HoloAPI.LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invalid image type.");
+                    HoloAPICore.LOGGER.log(Level.INFO, "Failed to load animation: " + key + ". Invalid image type.");
                     continue;
                 }
                 AnimationLoadType type = AnimationLoadType.valueOf(imageType.toUpperCase());
@@ -74,7 +75,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         }
         loaded = true;
         if (!KEY_TO_IMAGE_MAP.isEmpty() || !URL_UNLOADED.isEmpty()) {
-            HoloAPI.LOGGER.log(Level.INFO, "Animations loaded.");
+            HoloAPICore.LOGGER.log(Level.INFO, "Animations loaded.");
         }
     }
 
@@ -82,7 +83,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         try {
             ImageChar c = ImageChar.fromHumanName(imageCharType);
             if (c == null) {
-                HoloAPI.LOGGER.log(Level.INFO, "Invalid image char type for " + key + ". Using default.");
+                HoloAPICore.LOGGER.log(Level.INFO, "Invalid image char type for " + key + ". Using default.");
                 c = ImageChar.BLOCK;
             }
             switch (type) {
@@ -109,7 +110,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         AnimatedImageGenerator g = this.KEY_TO_IMAGE_MAP.get(key);
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
-                HoloAPI.LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
+                HoloAPICore.LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
                 Lang.sendTo(sender, Lang.LOADING_URL_ANIMATION.getValue().replace("%key%", key));
                 if (sender != null) {
                     this.prepareUrlGenerator(sender, key);
@@ -127,7 +128,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         AnimatedImageGenerator g = this.KEY_TO_IMAGE_MAP.get(key);
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
-                HoloAPI.LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
+                HoloAPICore.LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
                 this.prepareUrlGenerator(null, key);
                 return null;
             }
@@ -159,7 +160,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                     if (sender != null) {
                         Lang.sendTo(sender, Lang.IMAGE_LOADED.getValue().replace("%key%", key));
                     }
-                    HoloAPI.LOGGER.log(Level.INFO, "Custom URL animation '" + key + "' loaded.");
+                    HoloAPICore.LOGGER.log(Level.INFO, "Custom URL animation '" + key + "' loaded.");
                     KEY_TO_IMAGE_MAP.put(key, generator);
                     URL_UNLOADED.remove(key);
                 } catch (IOException e) {

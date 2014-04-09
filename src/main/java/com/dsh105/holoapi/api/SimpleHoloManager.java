@@ -20,6 +20,7 @@ package com.dsh105.holoapi.api;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.HoloCreateEvent;
 import com.dsh105.holoapi.api.events.HoloDeleteEvent;
 import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
@@ -271,7 +272,7 @@ public class SimpleHoloManager implements HoloManager {
                                 }
 
                             } else {
-                                HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                                HoloAPICore.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
                             }
                         }
                         if (containsImage) {
@@ -318,7 +319,7 @@ public class SimpleHoloManager implements HoloManager {
                         hf.withText(value);
                     }
                 } else {
-                    HoloAPI.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
+                    HoloAPICore.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
                 }
             }
             if (!hf.isEmpty()) {

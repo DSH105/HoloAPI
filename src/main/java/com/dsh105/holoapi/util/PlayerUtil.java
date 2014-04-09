@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.util;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,11 +32,11 @@ public class PlayerUtil {
         try {
             sendPacket.invoke(playerConnection, packet);
         } catch (IllegalAccessException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
         } catch (IllegalArgumentException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
         } catch (InvocationTargetException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to retrieve the PlayerConnection of: " + player.getName());
         }
     }
 
@@ -45,13 +45,13 @@ public class PlayerUtil {
         try {
             return getHandle.invoke(player);
         } catch (IllegalAccessException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
             return null;
         } catch (IllegalArgumentException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
             return null;
         } catch (InvocationTargetException e) {
-            HoloAPI.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed retrieve the NMS Player-Object of:" + player.getName());
             return null;
         }
     }
