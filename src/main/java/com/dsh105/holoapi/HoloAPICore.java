@@ -311,6 +311,10 @@ public class HoloAPICore extends DSHPlugin {
         }*/
     }
 
+    public static Server getHoloServer() {
+        return null;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (commandLabel.equalsIgnoreCase("holoupdate")) {
