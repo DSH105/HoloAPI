@@ -1,9 +1,9 @@
 package com.dsh105.holoapi.reflection.utility;
 
-import com.captainbern.yggdrasil.core.Yggdrasil;
-import com.captainbern.yggdrasil.reflection.ClassTemplate;
-import com.captainbern.yggdrasil.reflection.MethodAccessor;
-import com.captainbern.yggdrasil.server.ServerBrand;
+import com.dsh105.holoapi.HoloAPICore;
+import com.dsh105.holoapi.reflection.ClassTemplate;
+import com.dsh105.holoapi.reflection.MethodAccessor;
+import com.dsh105.holoapi.server.ServerBrand;
 
 public class RemappedClassHandler extends ClassHandler {
 
@@ -20,7 +20,7 @@ public class RemappedClassHandler extends ClassHandler {
     }
 
     protected RemappedClassHandler initialize() throws UnsupportedOperationException, IllegalStateException {
-        if(Yggdrasil.getCommonServer().getServerBrand() != ServerBrand.MCPC_PLUS)
+        if(HoloAPICore.getHoloServer().getServerBrand() != ServerBrand.MCPC_PLUS)
             throw new UnsupportedOperationException("The current brand doesn't support Remmapers!");
 
         this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper");
