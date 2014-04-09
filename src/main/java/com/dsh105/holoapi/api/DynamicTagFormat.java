@@ -15,17 +15,23 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.api.events;
+package com.dsh105.holoapi.api;
 
-import com.dsh105.holoapi.api.Hologram;
+import org.bukkit.entity.Player;
 
-/**
- * Called before a hologram is deleted.
- */
-public class HoloDeleteEvent extends HoloEvent {
+import java.util.regex.Matcher;
 
-    public HoloDeleteEvent(Hologram hologram) {
-        super(hologram);
+public abstract class DynamicTagFormat extends TagFormat {
+
+    public abstract String match(Matcher matcher, String lineContent, Hologram h, Player observer);
+
+    @Override
+    public String getValue(Player observer) {
+        return null;
     }
 
+    @Override
+    public String getValue(Hologram hologram, Player observer) {
+        return null;
+    }
 }

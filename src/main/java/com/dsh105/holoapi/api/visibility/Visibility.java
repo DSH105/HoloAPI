@@ -31,5 +31,5 @@ public interface Visibility {
      * @param player player in question
      * @return true if hologram can be shown to the player, false if it should be kept hidden
      */
-    public boolean isVisibleTo(Player player);
+    public boolean isVisibleTo(Player player, String hologramId);
 }

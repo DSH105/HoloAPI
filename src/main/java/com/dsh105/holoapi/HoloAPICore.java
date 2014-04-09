@@ -25,6 +25,7 @@ import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
+import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
 import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
@@ -65,6 +66,7 @@ public class HoloAPICore extends DSHPlugin {
     protected static SimpleImageLoader IMAGE_LOADER;
     protected static SimpleAnimationLoader ANIMATION_LOADER;
     protected static TagFormatter TAG_FORMATTER;
+    protected static VisibilityMatcher VISIBILITY_MATCHER;
     protected ConfigOptions OPTIONS;
     protected InjectionManager INJECTION_MANAGER;
 
@@ -93,10 +95,6 @@ public class HoloAPICore extends DSHPlugin {
     private ChatColor secondaryColour = ChatColor.AQUA;
     protected String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
 
-    public static HoloAPI getInstance() {
-        return (HoloAPI) getPluginInstance();
-    }
-
     @Override
     public void onEnable() {
         super.onEnable();
@@ -111,7 +109,7 @@ public class HoloAPICore extends DSHPlugin {
         // detect version, this needs some improvements, it doesn't look too pretty now.
         if (Bukkit.getVersion().contains("1.7")) {
             isUsingNetty = true;
-            //INJECTION_MANAGER = new InjectionManager(this);
+            //INJECTION_MANAGER = new InjectionManager();
         } else if (Bukkit.getVersion().contains("1.6")) {
             isUsingNetty = false;
 
@@ -126,6 +124,7 @@ public class HoloAPICore extends DSHPlugin {
 
         //this.registerCommands();
         TAG_FORMATTER = new TagFormatter();
+        VISIBILITY_MATCHER = new VisibilityMatcher();
         MANAGER = new SimpleHoloManager();
         IMAGE_LOADER = new SimpleImageLoader();
         ANIMATION_LOADER = new SimpleAnimationLoader();
@@ -180,7 +179,7 @@ public class HoloAPICore extends DSHPlugin {
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
                 public void run() {
-                    Updater updater = new Updater(getInstance(), 74914, file, updateType, false);
+                    Updater updater = new Updater(HoloAPI.getCore(), 74914, file, updateType, false);
                     updateAvailable = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     if (updateAvailable) {
                         updateName = updater.getLatestName();

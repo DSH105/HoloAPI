@@ -50,7 +50,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
     }
 
     private Object getLock() {
-        if(this.lock != null) {
+        if (this.lock != null) {
             return this.lock;
         }
         return this.lock = h_lock.get(getNetworkManager());
@@ -58,7 +58,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     @Override
     public Object getNmsHandle() {
-        if(this.nmsHandle != null) {
+        if (this.nmsHandle != null) {
             return this.nmsHandle;
         }
         return this.nmsHandle = PlayerUtil.toNMS(this.player);
@@ -66,7 +66,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     @Override
     public Object getPlayerConnection() {
-        if(this.playerConnection != null) {
+        if (this.playerConnection != null) {
             return this.playerConnection;
         }
         return this.playerConnection = PlayerUtil.getPlayerConnection(getNmsHandle());
@@ -74,7 +74,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     @Override
     public Object getNetworkManager() {
-        if(this.networkManager != null) {
+        if (this.networkManager != null) {
             return this.networkManager;
         }
         return this.networkManager = PlayerUtil.getNetworkManager(getPlayerConnection());
@@ -88,7 +88,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
             oldQueue = inboundQueue.get(getNetworkManager());
 
-            if(oldQueue == null)
+            if (oldQueue == null)
                 throw new IllegalStateException("InboundQueue is NULL for player: " + this.player.getName());
 
             this.delegate = new ConcurrentLinkedQueue();
@@ -104,7 +104,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     @Override
     public boolean close() {
-        if(!this.closed) {
+        if (!this.closed) {
             try {
                 oldQueue.addAll(delegate);
                 inboundQueue.set(getNetworkManager(), oldQueue);
@@ -144,7 +144,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     @Override
     public void setExempted(boolean state) {
-       this.exempted = state;
+        this.exempted = state;
     }
 
     @Override
@@ -154,7 +154,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     @Override
     public boolean add(Object packet) {
-        if(isExempted())
+        if (isExempted())
             return delegate().add(packet);
         //Handle packet add here
         return delegate().add(packet);

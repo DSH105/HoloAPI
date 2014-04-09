@@ -22,10 +22,13 @@ import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
+import com.dsh105.holoapi.reflection.SafeMethod;
+import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -41,7 +44,7 @@ import java.util.*;
 public class Hologram {
 
     protected int firstTagId;
-    protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
+    protected HashMap<UUID, Vector> playerToLocationMap = new HashMap<UUID, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
     protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
 
@@ -61,7 +64,7 @@ public class Hologram {
         this.saveId = saveId;
         if (lines.length > 30) {
             this.tags = new String[30];
-            for (int i = 0; i <= 30; i++) {
+            for (int i = 0; i < 30; i++) {
                 this.tags[i] = lines[i];
             }
         } else {
@@ -155,29 +158,55 @@ public class Hologram {
      *
      * @return player name to {@link org.bukkit.util.Vector} map of all viewed positions
      */
-    public HashMap<String, Vector> getPlayerViews() {
-        HashMap<String, Vector> map = new HashMap<String, Vector>();
+    public HashMap<UUID, Vector> getPlayerViews() {
+        HashMap<UUID, Vector> map = new HashMap<UUID, Vector>();
         map.putAll(this.playerToLocationMap);
         return map;
     }
 
+    /**
+     * Refreshes the display of the hologram
+     *
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     */
     public void refreshDisplay(final boolean obeyVisibility) {
-        for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
-            final Player p = Bukkit.getPlayerExact(entry.getKey());
+        for (Map.Entry<UUID, Vector> entry : this.getPlayerViews().entrySet()) {
+            final Player p = Bukkit.getPlayer(entry.getKey());
             if (p != null) {
-                this.clear(p);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        show(p, obeyVisibility);
-                    }
-                }.runTaskLater(HoloAPI.getCore(), 1L);
+                this.refreshDisplay(obeyVisibility, p);
             }
         }
     }
 
     /**
-     * Refresh the display of the hologram
+     * Refreshes the display of the hologram to a certain player
+     *
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     * @param observer player to refresh the hologram for
+     */
+    public void refreshDisplay(final boolean obeyVisibility, final Player observer) {
+        if (observer != null) {
+            this.clear(observer);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    show(observer, obeyVisibility);
+                }
+            }.runTaskLater(HoloAPI.getCore(), 1L);
+        }
+    }
+
+    /**
+     * Refreshes the display of the hologram
+     *
+     * @param observer player to refresh the hologram for
+     */
+    public void refreshDisplay(Player observer) {
+        this.refreshDisplay(false, observer);
+    }
+
+    /**
+     * Refreshes the display of the hologram
      */
     public void refreshDisplay() {
         this.refreshDisplay(false);
@@ -295,6 +324,14 @@ public class Hologram {
         return null;
     }
 
+    /**
+     * Changes the world the hologram is visible in
+     * <p/>
+     * Hologram coordinates will remain the same if the world is changed
+     *
+     * @param worldName name of of the destination world
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     */
     public void changeWorld(String worldName, boolean obeyVisibility) {
         this.clearAllPlayerViews();
         this.worldName = worldName;
@@ -323,9 +360,9 @@ public class Hologram {
      * Clears all views of the hologram, making it invisible to all players who could previously see it
      */
     public void clearAllPlayerViews() {
-        Iterator<String> i = this.playerToLocationMap.keySet().iterator();
+        Iterator<UUID> i = this.playerToLocationMap.keySet().iterator();
         while (i.hasNext()) {
-            Player p = Bukkit.getPlayerExact(i.next());
+            Player p = Bukkit.getPlayer(i.next());
             if (p != null) {
                 this.clearTags(p, this.getAllEntityIds());
             }
@@ -340,7 +377,7 @@ public class Hologram {
      * @return {@link org.bukkit.util.Vector} representing a player's viewpoint of the hologram
      */
     public Vector getLocationFor(Player player) {
-        return this.playerToLocationMap.get(player.getName());
+        return this.playerToLocationMap.get(player.getUniqueId());
     }
 
     /**
@@ -354,14 +391,30 @@ public class Hologram {
             throw new IllegalArgumentException("Tag index doesn't exist!");
         }
         this.tags[index] = content;
-        for (String name : this.playerToLocationMap.keySet()) {
-            Player p = Bukkit.getPlayerExact(name);
+        for (UUID uuid : this.playerToLocationMap.keySet()) {
+            Player p = Bukkit.getPlayer(uuid);
             if (p != null) {
                 this.updateNametag(p, this.tags[index], index);
             }
         }
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
+        }
+    }
+
+    /**
+     * Sets the content of a line of the hologram for a certain player
+     *
+     * @param index index of the line to set
+     * @param content new content for the hologram line
+     * @param observer player to show the changes to
+     */
+    public void updateLine(int index, String content, Player observer) {
+        if (index >= this.tags.length) {
+            throw new IllegalArgumentException("Tag index doesn't exist!");
+        }
+        if (observer != null) {
+            this.updateNametag(observer, content, index);
         }
     }
 
@@ -377,8 +430,8 @@ public class Hologram {
         }
         if (!this.hasRegisteredTouchActions) {
             // So that the entities aren't cleared before they're created
-            for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
-                final Player p = Bukkit.getPlayerExact(entry.getKey());
+            for (Map.Entry<UUID, Vector> entry : this.getPlayerViews().entrySet()) {
+                final Player p = Bukkit.getPlayer(entry.getKey());
                 if (p != null) {
                     clearTags(p, this.getAllEntityIds());
                 }
@@ -469,11 +522,11 @@ public class Hologram {
     }
 
     public void show(Player observer, double x, double y, double z, boolean obeyVisibility) {
-        if (!obeyVisibility || this.getVisibility().isVisibleTo(observer)) {
+        if (!obeyVisibility || this.getVisibility().isVisibleTo(observer, this.getSaveId())) {
             for (int index = 0; index < this.getTagCount(); index++) {
                 this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
             }
-            this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
+            this.playerToLocationMap.put(observer.getUniqueId(), new Vector(x, y, z));
         }
     }
 
@@ -517,8 +570,8 @@ public class Hologram {
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
-        for (String pName : this.getPlayerViews().keySet()) {
-            Player p = Bukkit.getPlayerExact(pName);
+        for (UUID uuid : this.getPlayerViews().keySet()) {
+            Player p = Bukkit.getPlayer(uuid);
             if (p != null) {
                 this.move(p, to);
             }
@@ -531,7 +584,7 @@ public class Hologram {
             this.moveTag(observer, index, loc);
             loc.setY(loc.getY() - HoloAPI.getHologramLineSpacing());
         }
-        this.playerToLocationMap.put(observer.getName(), to);
+        this.playerToLocationMap.put(observer.getUniqueId(), to);
     }
 
     /**
@@ -541,7 +594,7 @@ public class Hologram {
      */
     public void clear(Player observer) {
         clearTags(observer, this.getAllEntityIds());
-        this.playerToLocationMap.remove(observer.getName());
+        this.playerToLocationMap.remove(observer.getUniqueId());
     }
 
     protected void clearTags(Player observer, int... entityIds) {
@@ -589,34 +642,40 @@ public class Hologram {
     }
 
     protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
-        WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
+        String content = HoloAPI.getTagFormatter().format(this, observer, message);
+        int matchItem = HoloAPI.getTagFormatter().matchItem(content);
+        if (matchItem >= 0) {
+            this.generateFloatingItem(observer, matchItem, index, diffY, x, y, z);
+        } else {
+            WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
 
-        WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
-        horse.setEntityId(this.getHorseIndex(index));
-        horse.setEntityType(EntityType.HORSE.getTypeId());
-        horse.setX(x);
-        horse.setY(y + diffY + 55);
-        horse.setZ(z);
+            WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
+            horse.setEntityId(this.getHorseIndex(index));
+            horse.setEntityType(EntityType.HORSE.getTypeId());
+            horse.setX(x);
+            horse.setY(y + diffY + 55);
+            horse.setZ(z);
 
-        WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, HoloAPI.getTagFormatter().format(observer, message));
-        dw.watch(11, Byte.valueOf((byte) 1));
-        dw.watch(12, Integer.valueOf(-1700000));
-        horse.setMetadata(dw);
+            WrappedDataWatcher dw = new WrappedDataWatcher();
+            dw.watch(10, content);
+            dw.watch(11, Byte.valueOf((byte) 1));
+            dw.watch(12, Integer.valueOf(-1700000));
+            horse.setMetadata(dw);
 
-        WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
-        skull.setEntityId(this.getSkullIndex(index));
-        skull.setX(x);
-        skull.setY(y + diffY + 55);
-        skull.setZ(z);
-        skull.setEntityType(66);
+            WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
+            skull.setEntityId(this.getSkullIndex(index));
+            skull.setX(x);
+            skull.setY(y + diffY + 55);
+            skull.setZ(z);
+            skull.setEntityType(66);
 
-        attach.setEntityId(horse.getEntityId());
-        attach.setVehicleId(skull.getEntityId());
+            attach.setEntityId(horse.getEntityId());
+            attach.setVehicleId(skull.getEntityId());
 
-        horse.send(observer);
-        skull.send(observer);
-        attach.send(observer);
+            horse.send(observer);
+            skull.send(observer);
+            attach.send(observer);
+        }
 
         if (this.hasRegisteredTouchActions) {
             this.prepareTouchScreen(observer, index, diffY, x, y, z);
@@ -669,11 +728,54 @@ public class Hologram {
         attachTouch.send(observer);
     }
 
-    protected void updateNametag(Player observer, String content, int index) {
+    protected void generateFloatingItem(Player observer, int itemId, int index, double diffY, double x, double y, double z) {
+        WrapperPacketAttachEntity attachItem = new WrapperPacketAttachEntity();
+
+        WrapperPacketSpawnEntity item = new WrapperPacketSpawnEntity();
+        item.setEntityId(this.getHorseIndex(index));
+        item.setX(x);
+        item.setY(y + diffY);
+        item.setZ(z);
+        item.setEntityType(2);
+        item.setData(1);
+
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, HoloAPI.getTagFormatter().format(observer, content));
-        dw.watch(11, Byte.valueOf((byte) 1));
-        dw.watch(12, Integer.valueOf(-1700000));
+        dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(itemId), 1)));
+        new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
+
+        WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
+        meta.setEntityId(item.getEntityId());
+        meta.setMetadata(dw);
+
+        WrapperPacketSpawnEntity itemSkull = new WrapperPacketSpawnEntity();
+        itemSkull.setEntityId(this.getSkullIndex(index));
+        itemSkull.setX(x);
+        itemSkull.setY(y + diffY);
+        itemSkull.setZ(z);
+        itemSkull.setEntityType(66);
+
+        attachItem.setEntityId(item.getEntityId());
+        attachItem.setVehicleId(itemSkull.getEntityId());
+
+        item.send(observer);
+        meta.send(observer);
+        itemSkull.send(observer);
+        attachItem.send(observer);
+    }
+
+    protected void updateNametag(Player observer, String message, int index) {
+        WrappedDataWatcher dw = new WrappedDataWatcher();
+        String content = HoloAPI.getTagFormatter().format(this, observer, message);
+
+        int matchItem = HoloAPI.getTagFormatter().matchItem(content);
+        if (matchItem >= 0) {
+            dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
+            new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
+        } else {
+            dw.watch(10, content);
+            dw.watch(11, Byte.valueOf((byte) 1));
+            dw.watch(12, Integer.valueOf(-1700000));
+        }
 
         WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
         metadata.setEntityId(this.getHorseIndex(index));

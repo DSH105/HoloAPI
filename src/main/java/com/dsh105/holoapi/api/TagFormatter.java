@@ -33,10 +33,11 @@ import java.util.regex.Pattern;
 
 public class TagFormatter {
 
-    private HashMap<String, TagFormat> formatters = new HashMap<String, TagFormat>();
+    private HashMap<String, TagFormat> tagFormats = new HashMap<String, TagFormat>();
+    private HashMap<Pattern, DynamicTagFormat> dynamicTagFormats = new HashMap<Pattern, DynamicTagFormat>();
 
     public TagFormatter() {
-        this.formatters.put("%time%", new TagFormat() {
+        this.addFormat("%time%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 Calendar c = Calendar.getInstance();
@@ -45,66 +46,77 @@ public class TagFormatter {
             }
         });
 
-        this.formatters.put("%mctime%", new TagFormat() {
+        this.addFormat("%mctime%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return TimeFormat.format12(observer.getWorld().getTime());
             }
         });
 
-        this.formatters.put("%name%", new TagFormat() {
+        this.addFormat("%name%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return observer.getName();
             }
         });
 
-        this.formatters.put("%displayname%", new TagFormat() {
+        this.addFormat("%displayname%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return observer.getDisplayName();
             }
         });
 
-        this.formatters.put("%balance%", new TagFormat() {
+        this.addFormat("%balance%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return HoloAPI.getVaultProvider().getBalance(observer);
             }
         });
 
-        this.formatters.put("%rank%", new TagFormat() {
+        this.addFormat("%rank%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return HoloAPI.getVaultProvider().getRank(observer);
             }
         });
 
-        this.formatters.put("%world%", new TagFormat() {
+        this.addFormat("%world%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return observer.getWorld().getName();
             }
         });
 
-        this.formatters.put("%health%", new TagFormat() {
+        this.addFormat("%health%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return String.valueOf(observer.getHealth() == (int) observer.getHealth() ? (int) observer.getHealth() : observer.getHealth());
             }
         });
 
-        this.formatters.put("%playercount%", new TagFormat() {
+        this.addFormat("%playercount%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return String.valueOf(Bukkit.getOnlinePlayers().length);
             }
         });
 
-        this.formatters.put("%maxplayers%", new TagFormat() {
+        this.addFormat("%maxplayers%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 return String.valueOf(Bukkit.getMaxPlayers());
+            }
+        });
+
+        this.addFormat(Pattern.compile("\\%date:(.+?)\\%"), new DynamicTagFormat() {
+            @Override
+            public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
+                SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.HOUR_OF_DAY, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
+                return lineContent.replace(matcher.group(), format.format(calendar.getTime()));
             }
         });
     }
@@ -112,11 +124,11 @@ public class TagFormatter {
     /**
      * Adds a formatter for all Holograms to utilise
      *
-     * @param tag tag to be formatted (replaced)
+     * @param tag    tag to be formatted (replaced)
      * @param format format to apply
      */
-    public void addFormatter(String tag, TagFormat format) {
-        this.formatters.put(tag, format);
+    public void addFormat(String tag, TagFormat format) {
+        this.tagFormats.put(tag, format);
     }
 
     /**
@@ -124,14 +136,33 @@ public class TagFormatter {
      *
      * @param tag tag of the format to remove
      */
-    public void removeFormatter(String tag) {
-        this.formatters.remove(tag);
+    public void removeFormat(String tag) {
+        this.tagFormats.remove(tag);
+    }
+
+    /**
+     * Adds a dynamic formatter for all Holograms to utilise
+     *
+     * @param pattern regex pattern to apply
+     * @param format  format to apply
+     */
+    public void addFormat(Pattern pattern, DynamicTagFormat format) {
+        this.dynamicTagFormats.put(pattern, format);
+    }
+
+    /**
+     * Removes a formatter from the list of applied formats
+     *
+     * @param pattern pattern of the format to remove
+     */
+    public void removeFormat(Pattern pattern) {
+        this.dynamicTagFormats.remove(pattern);
     }
 
     public String formatForOldClient(String content) {
         if (content.length() > 64 && !HoloAPI.getCore().isUsingNetty) {
             // 1.6.x client crashes if a name tag is longer than 64 characters
-            // Unfortunate, but it must be countered for
+            // Unfortunate, but it must be accounted for
             content = content.substring(0, 64);
         }
 
@@ -147,38 +178,41 @@ public class TagFormatter {
         return content;
     }
 
-    public String formatTags(Player observer, String content) {
-        for (Map.Entry<String, TagFormat> entry : this.formatters.entrySet()) {
-            content = content.replace(entry.getKey(), entry.getValue().getValue(observer));
+    public String formatTags(Hologram h, Player observer, String content) {
+        for (Map.Entry<String, TagFormat> entry : this.tagFormats.entrySet()) {
+            content = content.replace(entry.getKey(), entry.getValue().getValue(h, observer));
         }
 
-        content = matchDate(content);
+        for (Map.Entry<Pattern, DynamicTagFormat> entry : this.dynamicTagFormats.entrySet()) {
+            Matcher matcher = entry.getKey().matcher(content);
+            while (matcher.find()) {
+                content = entry.getValue().match(matcher, content, h, observer);
+            }
+        }
 
+
+        //content = matchDate(content);
         content = formatForOldClient(content);
-
         return content;
     }
 
-    public String format(Player observer, String content) {
-        content = formatTags(observer, content);
+    public String format(Hologram h, Player observer, String content) {
+        content = formatTags(h, observer, content);
         content = formatBasic(content);
 
         return content;
     }
 
-
-    private String matchDate(String content) {
-        Pattern datePattern = Pattern.compile("\\%date:(.+?)\\%");
-        Matcher matcher = datePattern.matcher(content);
-
+    protected int matchItem(String content) {
+        Pattern itemPattern = Pattern.compile("\\%item:([0-9]+?)\\%");
+        Matcher matcher = itemPattern.matcher(content);
         while (matcher.find()) {
-            SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
-
-            content = content.replace(matcher.group(), format.format(calendar.getTime()));
+            try {
+                return Integer.parseInt(matcher.group(1));
+            } catch (NumberFormatException e) {
+                continue;
+            }
         }
-        return content;
+        return -1;
     }
 }

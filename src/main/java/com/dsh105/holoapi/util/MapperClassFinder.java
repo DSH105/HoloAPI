@@ -18,17 +18,17 @@ public class MapperClassFinder {
     }
 
     protected void initialize() {
-       /** if(HoloAPICore.getCommonServer().getServerBrand() != ServerBrand.MCPC_PLUS)
-            throw new UnsupportedOperationException("The current brand doesn't support Remmapers!");
+        /** if(HoloAPICore.getCommonServer().getServerBrand() != ServerBrand.MCPC_PLUS)
+         throw new UnsupportedOperationException("The current brand doesn't support Remmapers!");
 
-        this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper");
+         this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper");
 
-        if(this.remapper == null)
-            throw new IllegalStateException("Remapper is NULL!");
+         if(this.remapper == null)
+         throw new IllegalStateException("Remapper is NULL!");
 
-        Class<?> remapperClass = this.remapper.getClass();
+         Class<?> remapperClass = this.remapper.getClass();
 
-        this.map = ClassTemplate.create(remapperClass).getMethod("map", String.class);   */
+         this.map = ClassTemplate.create(remapperClass).getMethod("map", String.class);   */
     }
 
     public String getRemappedName(String className) {

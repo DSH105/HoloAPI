@@ -4,7 +4,7 @@ author: [DSH105, CaptainBern]
 description: Advanced Hologram management
 softdepend: [Vault, VanishNoPacket]
 website: ${project.url}
-main: ${main.class}
+main: com.dsh105.holoapi.HoloAPICore
 version: ${project.version}
 commands:
     holoupdate:
@@ -45,6 +45,18 @@ permissions:
         default: op
     holoapi.holo.touch.info:
         default: op
+    holoapi.holo.see.all:
+        default: op
+    holoapi.holo.visibility:
+        default: op
+    holoapi.holo.visibility.set:
+        default: op
+    holoapi.holo.readtxt:
+        default: op
+    holoapi.holo.show:
+        default: op
+    holoapi.holo.hide:
+        default: op
     holoapi.update:
         default: op
     holoapi.*:
@@ -65,6 +77,12 @@ permissions:
             holoapi.holo.copy: true
             holoapi.holo.nearby: true
             holoapi.holo.addline: true
+            holoapi.holo.see.all: true
+            holoapi.holo.visibility: true
+            holoapi.holo.visibility.set: true
+            holoapi.holo.readtxt: true
+            holoapi.holo.show: true
+            holoapi.holo.hide: true
             holoapi.update: true
     holoapi.touch.*:
         default: op

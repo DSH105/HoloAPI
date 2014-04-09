@@ -18,8 +18,8 @@
 package com.dsh105.holoapi.listeners;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.touch.CommandTouchAction;
 import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
+import com.dsh105.holoapi.api.touch.CommandTouchAction;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

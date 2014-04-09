@@ -31,6 +31,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Represents an AnimatedHologram that consists of either image or text frames displayed in a constant sequence
@@ -141,24 +142,22 @@ public class AnimatedHologram extends Hologram {
         if (this.isAnimating()) {
             this.cancelAnimation();
         }
-        //final ImageGenerator image = this.currentFrame.getL;
         this.displayTask = new BukkitRunnable() {
             @Override
             public void run() {
-                for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
-                    final Player p = Bukkit.getPlayerExact(entry.getKey());
-                    if (p != null) {
-                        //final Vector v = entry.getValue();
-                        currentFrame = getNext();
-                        updateAnimation(p, currentFrame.getLines());
-                        //clear(p);
-                        //showAnimation(p, v, currentFrame.getLines());
-
-                    }
-                }
-                animate();
+                runAnimation();
             }
-        }.runTaskLater(HoloAPI.getCore(), currentFrame.getDelay());
+        }.runTaskTimer(HoloAPI.getCore(), 0L, currentFrame.getDelay());
+    }
+
+    private void runAnimation() {
+        for (Map.Entry<UUID, Vector> entry : getPlayerViews().entrySet()) {
+            final Player p = Bukkit.getPlayer(entry.getKey());
+            if (p != null) {
+                currentFrame = getNext();
+                updateAnimation(p, currentFrame.getLines());
+            }
+        }
     }
 
     /**
@@ -244,7 +243,7 @@ public class AnimatedHologram extends Hologram {
         for (int index = 0; index < lines.length; index++) {
             this.generate(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
-        this.playerToLocationMap.put(observer.getName(), new Vector(x, y, z));
+        this.playerToLocationMap.put(observer.getUniqueId(), new Vector(x, y, z));
     }
 
     @Override

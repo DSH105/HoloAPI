@@ -20,21 +20,30 @@ package com.dsh105.holoapi.util;
 import com.google.common.collect.BiMap;
 import net.minecraft.util.org.apache.commons.io.IOUtils;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class MiscUtil {
 
-    public static String readWebsiteContentsSoWeCanUseTheText(String link) {
+    public static String[] readWebsiteContentsSoWeCanUseTheText(String link) {
         try {
             URL url = new URL(link);
             URLConnection con = url.openConnection();
-            InputStream in = con.getInputStream();
-            String encoding = con.getContentEncoding();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            ArrayList<String> list = new ArrayList<String>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                list.add(line);
+            }
+            return list.toArray(new String[list.size()]);
+            /*String encoding = con.getContentEncoding();
             encoding = encoding == null ? "UTF-8" : encoding;
-            return IOUtils.toString(in, encoding);
+            return IOUtils.toString(in, encoding);*/
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,10 +20,13 @@ package com.dsh105.holoapi;
 import com.dsh105.dshutils.DSHPlugin;
 import com.dsh105.dshutils.config.YAMLConfig;
 import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.TagFormatter;
+import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
-import com.dsh105.holoapi.image.*;
-import com.dsh105.holoapi.api.TagFormatter;
+import com.dsh105.holoapi.image.AnimatedImageGenerator;
+import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.image.ImageLoader;
 
 public class HoloAPI extends DSHPlugin {
 
@@ -84,8 +87,27 @@ public class HoloAPI extends DSHPlugin {
         return getCore().ANIMATION_LOADER;
     }
 
+    /**
+     * Gets the HoloAPI TagFormatter
+     * <p/>
+     * The TagFormatter stores all valid replacements for hologram tags
+     *
+     * @return TagFormatter that stores all valid replacements for hologram tags
+     */
     public static TagFormatter getTagFormatter() {
         return getCore().TAG_FORMATTER;
+    }
+
+    /**
+     * Gets the HoloAPI VisibilityMatcher
+     * <p/>
+     * The VisibilityMatcher stores all registrations of hologram visibilities for use in commands and other HoloAPI functions
+     *
+     * @return VisibilityMatcher that stores all registrations of hologram visibilities
+     */
+
+    public static VisibilityMatcher getVisibilityMatcher() {
+        return getCore().VISIBILITY_MATCHER;
     }
 
     /**

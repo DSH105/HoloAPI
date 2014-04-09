@@ -31,11 +31,11 @@ public class MinecraftVersion {
 
         String[] versionSplitted = version.split("\\.");
 
-        if(versionSplitted.length < 1) {
+        if (versionSplitted.length < 1) {
             throw new IllegalStateException("Incorrect Minecraft version! (This should never happen)");
         }
 
-        for(int i = 0; i < Math.min(parts.length, versionSplitted.length); i++) {
+        for (int i = 0; i < Math.min(parts.length, versionSplitted.length); i++) {
             parts[i] = Integer.parseInt(versionSplitted[i].trim());
         }
 

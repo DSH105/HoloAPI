@@ -1,7 +1,6 @@
 package com.dsh105.holoapi.protocol;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.events.HoloTouchEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
@@ -19,15 +18,12 @@ import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
 
-    protected HoloAPICore core;
     protected InjectionStrategy strategy;
 
     protected ConcurrentMap<Player, PlayerInjector> injectors = new MapMaker().weakKeys().makeMap();
     protected boolean closed;
 
-    public InjectionManager(HoloAPICore core, InjectionStrategy strategy) {
-
-        this.core = core;
+    public InjectionManager(InjectionStrategy strategy) {
         this.strategy = strategy;
         this.closed = false; // Houston, we're up and running
 
@@ -51,7 +47,7 @@ public class InjectionManager {
     }
 
     public void inject(Player player) {
-        if(this.closed)
+        if (this.closed)
             return;
 
         if (injectors.containsKey(player)) {

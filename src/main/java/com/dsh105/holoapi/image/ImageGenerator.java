@@ -45,17 +45,22 @@ public class ImageGenerator implements Generator {
 
     private String imageKey;
 
-    private String storedImageUrl;
-
-    private int storedImageHeight;
-    private ImageChar storedImgChar = ImageChar.BLOCK;
-    private boolean storedRequiresBorder;
+    private String imageUrl;
+    private int imageHeight;
+    private ImageChar imageChar = ImageChar.BLOCK;
+    private boolean requiresBorder;
+    private boolean hasLoaded;
 
     protected ImageGenerator(BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
+        this.imageHeight = height;
+        this.imageChar = imgChar;
+        this.requiresBorder = requiresBorder;
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
     }
 
     protected ImageGenerator(BufferedImage image, int height, ImageChar imgChar) {
+        this.imageHeight = height;
+        this.imageChar = imgChar;
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), false);
     }
 
@@ -70,6 +75,9 @@ public class ImageGenerator implements Generator {
      */
     public ImageGenerator(String imageKey, BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
         this.imageKey = imageKey;
+        this.imageHeight = height;
+        this.imageChar = imgChar;
+        this.requiresBorder = requiresBorder;
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
     }
 
@@ -98,13 +106,12 @@ public class ImageGenerator implements Generator {
      */
     public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean loadUrl, boolean requiresBorder) {
         this.imageKey = imageKey;
+        this.imageUrl = imageUrl;
+        this.imageHeight = height;
+        this.imageChar = imgChar;
+        this.requiresBorder = requiresBorder;
         if (loadUrl) {
             this.loadUrlImage();
-        } else {
-            this.storedImageUrl = imageUrl;
-            this.storedImageHeight = height;
-            this.storedImgChar = imgChar;
-            this.storedRequiresBorder = requiresBorder;
         }
     }
 
@@ -118,6 +125,9 @@ public class ImageGenerator implements Generator {
      * @param requiresBorder whether the display requires a border
      */
     public ImageGenerator(String imageKey, File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {
+        this.imageHeight = height;
+        this.imageChar = imgChar;
+        this.requiresBorder = requiresBorder;
         BufferedImage image;
         try {
             image = ImageIO.read(imageFile);
@@ -133,18 +143,22 @@ public class ImageGenerator implements Generator {
         return imageKey;
     }
 
-    protected void loadUrlImage() {
-        if (this.storedImageUrl == null) {
+    public void loadUrlImage() {
+        if (this.hasLoaded) {
+            return;
+        }
+        if (this.imageUrl == null) {
             throw new NullPointerException("URL not initiated for ImageGenerator.");
         }
-        URI uri = URI.create(this.storedImageUrl);
+        URI uri = URI.create(this.imageUrl);
         BufferedImage image;
         try {
             image = ImageIO.read(uri.toURL());
         } catch (IOException e) {
             throw new RuntimeException("Cannot read image " + uri, e);
         }
-        this.lines = this.generate(generateColours(image, this.storedImageHeight), this.storedImgChar.getImageChar(), storedRequiresBorder);
+        this.lines = this.generate(generateColours(image, this.imageHeight), this.imageChar.getImageChar(), requiresBorder);
+        this.hasLoaded = true;
     }
 
     /**

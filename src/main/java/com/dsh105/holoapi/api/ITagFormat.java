@@ -15,18 +15,28 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.api.visibility;
+package com.dsh105.holoapi.api;
 
 import org.bukkit.entity.Player;
 
-/**
- * Represents a visibility in which all players can see the hologram
- */
+public interface ITagFormat {
 
-public class VisibilityAll implements Visibility {
+    /**
+     * Gets the value to use in the hologram instead of the registered key
+     *
+     * @param observer player viewing the hologram
+     * @deprecated use {@link com.dsh105.holoapi.api.ITagFormat#getValue(Hologram, org.bukkit.entity.Player)}
+     * @return
+     */
+    @Deprecated
+    public String getValue(Player observer);
 
-    @Override
-    public boolean isVisibleTo(Player player, String hologramId) {
-        return true;
-    }
+    /**
+     * Gets the value to use in the hologram instead of the registered key
+     *
+     * @param hologram hologram using this function
+     * @param observer player viewing the hologram
+     * @return
+     */
+    public String getValue(Hologram hologram, Player observer);
 }

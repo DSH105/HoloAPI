@@ -36,6 +36,14 @@ public enum Perm {
     COPY("holoapi.holo.copy"),
     NEARBY("holoapi.holo.nearby"),
     ADDLINE("holoapi.holo.addline"),
+    READTXT("holoapi.holo.readtxt"),
+
+    SHOW("holoapi.holo.show"),
+    HIDE("holoapi.holo.hide"),
+
+    SEE_ALL("holoapi.holo.see.all"),
+    VISIBILITY("holoapi.holo.visibility"),
+    VISIBILITY_SET("holoapi.holo.visibility.set"),
 
     TOUCH_ADD("holoapi.holo.touch.add"),
     TOUCH_REMOVE("holoapi.holo.touch.remove"),
@@ -53,8 +61,16 @@ public enum Perm {
     }
 
     public boolean hasPerm(CommandSender sender, boolean sendMessage, boolean allowConsole) {
+        return hasPerm(this.perm, sender, sendMessage, allowConsole);
+    }
+
+    public boolean hasPerm(Player player, boolean sendMessage) {
+        return hasPerm(this.perm, player, sendMessage);
+    }
+
+    public static boolean hasPerm(String perm, CommandSender sender, boolean sendMessage, boolean allowConsole) {
         if (sender instanceof Player) {
-            return hasPerm(((Player) sender), sendMessage);
+            return hasPerm(perm, ((Player) sender), sendMessage);
         } else {
             if (!allowConsole && sendMessage) {
                 Lang.sendTo(sender, Lang.IN_GAME_ONLY.getValue());
@@ -63,12 +79,12 @@ public enum Perm {
         }
     }
 
-    public boolean hasPerm(Player player, boolean sendMessage) {
-        if (player.hasPermission(this.perm)) {
+    public static boolean hasPerm(String perm, Player player, boolean sendMessage) {
+        if (player.hasPermission(perm)) {
             return true;
         }
         if (sendMessage) {
-            Lang.sendTo(player, Lang.NO_PERMISSION.getValue().replace("%perm%", this.perm));
+            Lang.sendTo(player, Lang.NO_PERMISSION.getValue().replace("%perm%", perm));
         }
         return false;
     }
