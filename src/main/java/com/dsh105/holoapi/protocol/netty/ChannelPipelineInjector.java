@@ -10,6 +10,8 @@ import net.minecraft.util.io.netty.channel.ChannelDuplexHandler;
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.Callable;
+
 public class ChannelPipelineInjector extends ChannelDuplexHandler implements PlayerInjector {
 
     // The player
@@ -58,25 +60,33 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler implements Pla
                 throw new IllegalStateException("Channel is NULL! Cannot inject handler without a Channel!");
 
             // Yay, let's inject
-            this.channel.pipeline().addBefore("packet_handler", getHandlerName(), this);
+            this.channel.pipeline().addBefore("packet_handler", "holoapi_packet_handler", this);
 
             injected = true;
             return true;
         }
     }
 
-    public boolean close() {
+    public void close() {
         if (!this.closed) {
-            // Remove our handler from the pipeline
-            try {
-                getChannel().pipeline().remove(getHandlerName());
-                this.closed = true;
-            } catch (Throwable t) {
-                // this should never be called, but if so..
-                this.closed = false;
+
+            this.closed = true;
+
+            if(injected) {
+
+                getChannel().eventLoop().submit(new Callable<Object>() {
+
+                    @Override
+                    public Object call() throws Exception {
+                        getChannel().pipeline().remove(ChannelPipelineInjector.this);
+                        return null;
+                    }
+
+                });
+
+                injected = false;
             }
         }
-        return this.closed;
     }
 
     public Player getPlayer() {
@@ -135,10 +145,6 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler implements Pla
 
     public Protocol getProtocolPhase() {
         return Protocol.fromVanilla(PlayerUtil.getProtocolPhase(this.player));
-    }
-
-    private String getHandlerName() {
-        return toString();
     }
 
     private InjectionManager getInjectionManager() {

@@ -103,7 +103,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
     }
 
     @Override
-    public boolean close() {
+    public void close() {
         if (!this.closed) {
             try {
                 oldQueue.addAll(delegate);
@@ -115,7 +115,6 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
                 throw new RuntimeException("Failed to re-swap the queue for player: " + player.getName());
             }
         }
-        return this.closed;
     }
 
     @Override

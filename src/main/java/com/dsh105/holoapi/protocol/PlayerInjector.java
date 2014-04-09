@@ -12,7 +12,7 @@ public interface PlayerInjector {
 
     public boolean inject();
 
-    public boolean close();
+    public void close();
 
     public Player getPlayer();
 
