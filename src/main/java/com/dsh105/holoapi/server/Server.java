@@ -25,8 +25,6 @@ public interface Server {
 
     public String getName();
 
-    public int getVersion();
-
     public Object getMinecraftServer();
 
     public String getMCVersion();

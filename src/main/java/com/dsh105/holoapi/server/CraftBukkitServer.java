@@ -24,8 +24,6 @@ public class CraftBukkitServer implements Server {
 
     public String MC_VERSION;
 
-    public int MC_VERSION_NUMERIC;
-
     public String CRAFTBUKKIT_VERSIONED;
 
     public String MINECRAFT_VERSIONED;
@@ -38,11 +36,11 @@ public class CraftBukkitServer implements Server {
             return false;
         }
 
-        Class<?> carftServer = Bukkit.getServer().getClass();
+        Class<?> craftServer = Bukkit.getServer().getClass();
 
-        if(carftServer != null) {
+        if(craftServer != null) {
 
-            MC_VERSION = trimPackageName(Bukkit.getServer().getClass().getCanonicalName());
+            MC_VERSION = trimPackageName(craftServer.getCanonicalName());
 
             if (MC_VERSION.isEmpty()) {
                 CRAFTBUKKIT_VERSIONED = "org.bukkit.craftbukkit";
@@ -51,8 +49,6 @@ public class CraftBukkitServer implements Server {
                 CRAFTBUKKIT_VERSIONED = "org.bukkit.craftbukkit." + MC_VERSION;
                 MINECRAFT_VERSIONED = "net.minecraft.server." + MC_VERSION;
             }
-
-            MC_VERSION_NUMERIC = Integer.valueOf(MC_VERSION.replaceAll("[^0-9]", ""));
 
         } else {
             throw new RuntimeException("Bukkit not found!");
@@ -79,11 +75,6 @@ public class CraftBukkitServer implements Server {
     @Override
     public String getName() {
         return "CraftBukkit";
-    }
-
-    @Override
-    public int getVersion() {
-        return MC_VERSION_NUMERIC;
     }
 
     @Override
