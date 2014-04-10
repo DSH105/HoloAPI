@@ -17,10 +17,10 @@
 
 package com.dsh105.holoapi;
 
-import com.dsh105.dshutils.DSHPlugin;
 import com.dsh105.dshutils.Metrics;
 import com.dsh105.dshutils.Updater;
 import com.dsh105.dshutils.config.YAMLConfig;
+import com.dsh105.dshutils.config.YAMLConfigManager;
 import com.dsh105.dshutils.logger.ConsoleLogger;
 import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.api.SimpleHoloManager;
@@ -50,6 +50,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -58,7 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class HoloAPICore extends DSHPlugin {
+public class HoloAPICore extends JavaPlugin {
 
     protected static CommandManager COMMAND_MANAGER;
     protected static SimpleHoloManager MANAGER;
@@ -69,6 +70,7 @@ public class HoloAPICore extends DSHPlugin {
     protected ConfigOptions OPTIONS;
     protected InjectionManager INJECTION_MANAGER;
 
+    protected YAMLConfigManager configManager;
     protected YAMLConfig config;
     protected YAMLConfig dataConfig;
     protected YAMLConfig langConfig;
@@ -96,8 +98,8 @@ public class HoloAPICore extends DSHPlugin {
 
     @Override
     public void onEnable() {
-        super.onEnable();
         HoloAPI.setCore(this);
+        ConsoleLogger.initiate();
         PluginManager manager = getServer().getPluginManager();
         Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
@@ -109,8 +111,6 @@ public class HoloAPICore extends DSHPlugin {
         // Needs a much better method since this is not really reliable
         // TODO: Improve this
         INJECTION_MANAGER = new ProtocolInjectionBuilder().withStrategy(isUsingNetty ? InjectionStrategy.NETTY : InjectionStrategy.PROXY).build();
-
-        //this.registerCommands();
         TAG_FORMATTER = new TagFormatter();
         VISIBILITY_MATCHER = new VisibilityMatcher();
         MANAGER = new SimpleHoloManager();
@@ -210,6 +210,7 @@ public class HoloAPICore extends DSHPlugin {
     }
 
     private void loadConfiguration() {
+        this.configManager = new YAMLConfigManager(this);
         String[] header = {
                 "HoloAPI",
                 "---------------------",
@@ -219,7 +220,7 @@ public class HoloAPICore extends DSHPlugin {
                 "(https://github.com/DSH105/HoloAPI/wiki)"
         };
         try {
-            config = this.getConfigManager().getNewConfig("config.yml", header);
+            config = this.configManager.getNewConfig("config.yml", header);
             OPTIONS = new ConfigOptions(config);
         } catch (Exception e) {
             Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (config.yml).", e, true);
@@ -239,7 +240,7 @@ public class HoloAPICore extends DSHPlugin {
         LINE_SPACING = config.getDouble("verticalLineSpacing", 0.25D);
 
         try {
-            dataConfig = this.getConfigManager().getNewConfig("data.yml");
+            dataConfig = this.configManager.getNewConfig("data.yml");
         } catch (Exception e) {
             Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (data.yml).", e, true);
         }
@@ -251,7 +252,7 @@ public class HoloAPICore extends DSHPlugin {
                 "Language Configuration File"
         };
         try {
-            langConfig = this.getConfigManager().getNewConfig("language.yml", langHeader);
+            langConfig = this.configManager.getNewConfig("language.yml", langHeader);
             try {
                 for (Lang l : Lang.values()) {
                     String[] desc = l.getDescription();
