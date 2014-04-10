@@ -17,10 +17,10 @@
 
 package com.dsh105.holoapi.image;
 
-import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.util.EnumUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
+import com.dsh105.holoapi.config.YAMLConfig;
+import com.dsh105.holoapi.util.EnumUtil;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;

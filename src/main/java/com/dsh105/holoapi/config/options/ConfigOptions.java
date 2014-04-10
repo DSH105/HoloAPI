@@ -15,11 +15,10 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.config;
+package com.dsh105.holoapi.config.options;
 
-import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.config.options.Options;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.config.YAMLConfig;
 
 public class ConfigOptions extends Options {
 

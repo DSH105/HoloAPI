@@ -17,19 +17,17 @@
 
 package com.dsh105.holoapi;
 
-import com.dsh105.dshutils.Metrics;
-import com.dsh105.dshutils.Updater;
-import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.config.YAMLConfigManager;
-import com.dsh105.dshutils.logger.ConsoleLogger;
-import com.dsh105.dshutils.logger.Logger;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
 import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
-import com.dsh105.holoapi.config.ConfigOptions;
+import com.dsh105.holoapi.config.YAMLConfig;
+import com.dsh105.holoapi.config.YAMLConfigManager;
+import com.dsh105.holoapi.config.options.ConfigOptions;
+import com.dsh105.holoapi.data.Metrics;
+import com.dsh105.holoapi.data.Updater;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
 import com.dsh105.holoapi.image.SimpleAnimationLoader;
@@ -43,6 +41,7 @@ import com.dsh105.holoapi.protocol.InjectionStrategy;
 import com.dsh105.holoapi.protocol.ProtocolInjectionBuilder;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.server.*;
+import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
@@ -99,9 +98,7 @@ public class HoloAPICore extends JavaPlugin {
     @Override
     public void onEnable() {
         HoloAPI.setCore(this);
-        ConsoleLogger.initiate();
         PluginManager manager = getServer().getPluginManager();
-        Logger.initiate(this, "HoloAPI", "[HoloAPI]");
         this.loadConfiguration();
 
         this.initServer();
@@ -140,7 +137,7 @@ public class HoloAPICore extends JavaPlugin {
             Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (IOException e) {
-            ConsoleLogger.log(Logger.LogLevel.WARNING, "Plugin Metrics (MCStats) has failed to start.");
+            LOGGER.warning("Plugin Metrics (MCStats) has failed to start.");
             e.printStackTrace();
         }
 
@@ -171,8 +168,8 @@ public class HoloAPICore extends JavaPlugin {
                     updateAvailable = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     if (updateAvailable) {
                         updateName = updater.getLatestName();
-                        ConsoleLogger.log(ChatColor.DARK_AQUA + "An update is available: " + updateName);
-                        ConsoleLogger.log(ChatColor.DARK_AQUA + "Type /holoupdate to update.");
+                        ConsoleLogger.sendMessage(ChatColor.DARK_AQUA + "An update is available: " + updateName);
+                        ConsoleLogger.sendMessage(ChatColor.DARK_AQUA + "Type /holoupdate to update.");
                         if (!updateChecked) {
                             updateChecked = true;
                         }
@@ -223,7 +220,8 @@ public class HoloAPICore extends JavaPlugin {
             config = this.configManager.getNewConfig("config.yml", header);
             OPTIONS = new ConfigOptions(config);
         } catch (Exception e) {
-            Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (config.yml).", e, true);
+            LOGGER.severe("Failed to generate Configuration File (config.yml).");
+            e.printStackTrace();
         }
 
         config.reloadConfig();
@@ -242,7 +240,8 @@ public class HoloAPICore extends JavaPlugin {
         try {
             dataConfig = this.configManager.getNewConfig("data.yml");
         } catch (Exception e) {
-            Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (data.yml).", e, true);
+            LOGGER.severe("Failed to generate Configuration File (data.yml).");
+            e.printStackTrace();
         }
         dataConfig.reloadConfig();
 
@@ -263,11 +262,13 @@ public class HoloAPICore extends JavaPlugin {
                 }
                 langConfig.saveConfig();
             } catch (Exception e) {
-                Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (language.yml).", e, true);
+                LOGGER.severe("Failed to generate Configuration File (language.yml).");
+                e.printStackTrace();
             }
 
         } catch (Exception e) {
-            Logger.log(Logger.LogLevel.SEVERE, "Failed to generate Configuration File (language.yml).", e, true);
+            LOGGER.severe("Failed to generate Configuration File (language.yml).");
+            e.printStackTrace();
         }
         langConfig.reloadConfig();
         //this.prefix = Lang.PREFIX.getValue();

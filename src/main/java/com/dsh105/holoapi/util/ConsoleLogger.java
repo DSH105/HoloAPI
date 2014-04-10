@@ -18,22 +18,10 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.config.YAMLConfig;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.configuration.ConfigurationSection;
 
-public class UnicodeFormatter {
+public class ConsoleLogger {
 
-    public static String replaceAll(String s) {
-        YAMLConfig config = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN);
-        ConfigurationSection cs = config.getConfigurationSection("specialCharacters");
-        if (cs != null) {
-            for (String key : cs.getKeys(false)) {
-                if (s.contains(key)) {
-                    s = s.replace(key, StringEscapeUtils.unescapeJava("\\u" + config.getString("specialCharacters." + key)));
-                }
-            }
-        }
-        return s;
+    public static void sendMessage(String message) {
+        HoloAPI.getCore().getServer().getConsoleSender().sendMessage(message);
     }
 }

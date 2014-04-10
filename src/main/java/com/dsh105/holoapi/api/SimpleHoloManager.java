@@ -17,18 +17,18 @@
 
 package com.dsh105.holoapi.api;
 
-import com.dsh105.dshutils.config.YAMLConfig;
-import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.HoloCreateEvent;
 import com.dsh105.holoapi.api.events.HoloDeleteEvent;
 import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
+import com.dsh105.holoapi.config.YAMLConfig;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
+import com.dsh105.holoapi.util.StringUtil;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

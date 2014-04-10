@@ -17,9 +17,9 @@
 
 package com.dsh105.holoapi.conversation.builder.animation;
 
-import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

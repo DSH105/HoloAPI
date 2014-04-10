@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.conversation.basic;
 
-import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;

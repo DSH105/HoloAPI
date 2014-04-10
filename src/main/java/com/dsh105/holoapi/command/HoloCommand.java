@@ -17,9 +17,6 @@
 
 package com.dsh105.holoapi.command;
 
-import com.dsh105.dshutils.pagination.Paginator;
-import com.dsh105.dshutils.util.GeometryUtil;
-import com.dsh105.dshutils.util.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.*;
 import com.dsh105.holoapi.api.touch.CommandTouchAction;
@@ -35,12 +32,10 @@ import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPrompt;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.ItemUtil;
-import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.MiscUtil;
-import com.dsh105.holoapi.util.Perm;
+import com.dsh105.holoapi.util.*;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import com.dsh105.holoapi.util.pagination.FancyPaginator;
+import com.dsh105.holoapi.util.pagination.Paginator;
 import org.apache.commons.lang.BooleanUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -55,7 +50,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
