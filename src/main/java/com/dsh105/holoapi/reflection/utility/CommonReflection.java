@@ -34,7 +34,7 @@ public class CommonReflection {
     /**
      * The Version tag
      */
-    private static String VERSION_TAG;
+    private static String VERSION_TAG = "";
 
     /**
      * Pattern
