@@ -20,7 +20,11 @@ public class CommonReflection {
     /**
      * The Minecraft package
      */
-    private static String NMS_PACKAGE;
+    private static String MINECARFT_PACKAGE;
+
+    private static String MINECARFT_PACKAGE_PREFIX = "net.minecraft.server";
+
+    private static String FORGE_ENTITY_PACKAGE = "net.minecraft.entity";
 
     /**
      * The Craftbukkit package
@@ -56,9 +60,9 @@ public class CommonReflection {
      * @return
      */
     public static String getMinecraftPackage() {
-        if(NMS_PACKAGE == null)
+        if(MINECARFT_PACKAGE == null)
             initializePackageNames();
-        return NMS_PACKAGE;
+        return MINECARFT_PACKAGE;
     }
 
     /**
@@ -94,7 +98,19 @@ public class CommonReflection {
             // Handle NMS-Package
             Class<?> craftEntityClass = getCraftEntityClass();
             MethodAccessor<Object> getHandle = ClassTemplate.create(craftEntityClass).getMethod("getHandle");
-            NMS_PACKAGE = trimPackageName(getHandle.getReturnType().getCanonicalName());
+            MINECARFT_PACKAGE = trimPackageName(getHandle.getReturnType().getCanonicalName());
+
+            if(!MINECARFT_PACKAGE.startsWith(MINECARFT_PACKAGE_PREFIX)) {
+
+                // We're dealing with a Forge server.
+                // Credits to ProtocolLib for this method
+                if(MINECARFT_PACKAGE.equals(FORGE_ENTITY_PACKAGE)) {
+                     MINECARFT_PACKAGE = MINECARFT_PACKAGE + "." + VERSION_TAG;
+                } else {
+                    MINECARFT_PACKAGE_PREFIX = MINECARFT_PACKAGE;
+                }
+
+            }
 
         } else {
             throw new IllegalStateException("Failed to find Bukkit!");
