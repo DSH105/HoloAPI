@@ -23,7 +23,7 @@ public class RemappedClassHandler extends ClassHandler {
         if(HoloAPICore.getHoloServer().getServerBrand() != ServerBrand.MCPC_PLUS)
             throw new UnsupportedOperationException("The current brand doesn't support Remmapers!");
 
-        this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper");
+        this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper").get(null);
 
         if(this.remapper == null)
             throw new IllegalStateException("Remapper is NULL!");
