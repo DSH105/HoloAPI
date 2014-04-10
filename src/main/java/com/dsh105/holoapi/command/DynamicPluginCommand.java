@@ -28,15 +28,13 @@ import java.util.Arrays;
 
 public class DynamicPluginCommand extends Command implements PluginIdentifiableCommand {
     protected final CommandExecutor owner;
-    protected final Object registeredWith;
     protected final Plugin owningPlugin;
     protected String[] permissions = new String[0];
 
-    public DynamicPluginCommand(String name, String[] aliases, String desc, String usage, CommandExecutor owner, Object registeredWith, Plugin plugin) {
+    public DynamicPluginCommand(String name, String[] aliases, String desc, String usage, CommandExecutor owner, Plugin plugin) {
         super(name, desc, usage, Arrays.asList(aliases));
         this.owner = owner;
         this.owningPlugin = plugin;
-        this.registeredWith = registeredWith;
     }
 
     @Override
@@ -46,10 +44,6 @@ public class DynamicPluginCommand extends Command implements PluginIdentifiableC
 
     public Object getOwner() {
         return owner;
-    }
-
-    public Object getRegisteredWith() {
-        return registeredWith;
     }
 
     public void setPermissions(String[] permissions) {
@@ -73,17 +67,6 @@ public class DynamicPluginCommand extends Command implements PluginIdentifiableC
     public boolean testPermissionSilent(CommandSender sender) {
         if (permissions == null || permissions.length == 0) {
             return true;
-        }
-
-        if (registeredWith instanceof CommandManager) {
-            try {
-                for (String permission : permissions) {
-                    if (sender.hasPermission(permission))
-                        return true;
-                }
-                return false;
-            } catch (Throwable ignore) {
-            }
         }
         return super.testPermissionSilent(sender);
     }

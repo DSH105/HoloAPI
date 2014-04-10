@@ -23,6 +23,7 @@ import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
 import com.dsh105.holoapi.command.CommandManager;
 import com.dsh105.holoapi.command.DynamicPluginCommand;
 import com.dsh105.holoapi.command.HoloCommand;
+import com.dsh105.holoapi.command.HoloDebugCommand;
 import com.dsh105.holoapi.config.YAMLConfig;
 import com.dsh105.holoapi.config.YAMLConfigManager;
 import com.dsh105.holoapi.config.options.ConfigOptions;
@@ -115,9 +116,12 @@ public class HoloAPICore extends JavaPlugin {
         ANIMATION_LOADER = new SimpleAnimationLoader();
 
         COMMAND_MANAGER = new CommandManager(this);
-        DynamicPluginCommand holoCommand = new DynamicPluginCommand(HoloAPI.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getCommandLabel() + " help &3for help.", new HoloCommand(), null, this);
+        DynamicPluginCommand holoCommand = new DynamicPluginCommand(HoloAPI.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getCommandLabel() + " help &3for help.", new HoloCommand(), this);
+        DynamicPluginCommand debugCommand = new DynamicPluginCommand("holodebug", new String[0], "Smashing bugs and coloring books", "You shouldn't be using this", new HoloDebugCommand(), this);
         holoCommand.setPermission("holoapi.holo");
+        debugCommand.setPermission("holoapi.debug");
         COMMAND_MANAGER.register(holoCommand);
+        COMMAND_MANAGER.register(debugCommand);
 
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new WorldListener(), this);
