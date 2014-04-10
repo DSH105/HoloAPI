@@ -17,7 +17,6 @@
 
 package com.dsh105.holoapi.server;
 
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.reflection.refs.MinecraftServerRef;
 import org.bukkit.Bukkit;
 
@@ -39,17 +38,25 @@ public class CraftBukkitServer implements Server {
             return false;
         }
 
-        MC_VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        Class<?> carftServer = Bukkit.getServer().getClass();
 
-        if (MC_VERSION.isEmpty()) {
-            CRAFTBUKKIT_VERSIONED = "org.bukkit.craftbukkit";
-            MINECRAFT_VERSIONED = "net.minecraft.server";
+        if(carftServer != null) {
+
+            MC_VERSION = trimPackageName(Bukkit.getServer().getClass().getCanonicalName());
+
+            if (MC_VERSION.isEmpty()) {
+                CRAFTBUKKIT_VERSIONED = "org.bukkit.craftbukkit";
+                MINECRAFT_VERSIONED = "net.minecraft.server";
+            } else {
+                CRAFTBUKKIT_VERSIONED = "org.bukkit.craftbukkit." + MC_VERSION;
+                MINECRAFT_VERSIONED = "net.minecraft.server." + MC_VERSION;
+            }
+
+            MC_VERSION_NUMERIC = Integer.valueOf(MC_VERSION.replaceAll("[^0-9]", ""));
+
         } else {
-            CRAFTBUKKIT_VERSIONED = "org.bukkit.craftbukkit." + MC_VERSION;
-            MINECRAFT_VERSIONED = "net.minecraft.server." + MC_VERSION;
+            throw new RuntimeException("Bukkit not found!");
         }
-
-        MC_VERSION_NUMERIC = Integer.valueOf(MC_VERSION.replaceAll("[^0-9]", ""));
 
         return true;
     }
@@ -59,24 +66,14 @@ public class CraftBukkitServer implements Server {
         return false;
     }
 
-    @Override
-    public Class getClass(String name) {
-        try {
-            return Class.forName(name);
-        } catch (Exception e) {
-            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find matching class for: " + name);
-            return null;
+    private static String trimPackageName(String packageName) {
+        int index = packageName.lastIndexOf('.');
+
+        if(index > 0) {
+            return packageName.substring(0, index);
+        } else {
+            return "<unknown>";
         }
-    }
-
-    @Override
-    public Class getNMSClass(String name) {
-        return getClass(MINECRAFT_VERSIONED + "." + name);
-    }
-
-    @Override
-    public Class getCBClass(String name) {
-        return getClass(CRAFTBUKKIT_VERSIONED + "." + name);
     }
 
     @Override

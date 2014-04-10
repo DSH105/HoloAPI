@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.reflection;
 
-import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -95,7 +95,7 @@ public class ClassTemplate<T> {
     }
 
     public static ClassTemplate<?> create(String className) {
-        Class clazz = HoloAPI.getCore().SERVER.getClass(className);
+        Class clazz = CommonReflection.getClass(className);
 
         if (clazz == null) {
             HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + className);

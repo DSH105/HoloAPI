@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.util;
 
-import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
@@ -49,11 +49,11 @@ public class ReflectionUtil {
     }
 
     public static Class getNMSClass(String className) {
-        return HoloAPI.getCore().SERVER.getNMSClass(className);
+        return CommonReflection.getMinecraftClass(className);
     }
 
     public static Class getCBCClass(String className) {
-        return HoloAPI.getCore().SERVER.getCBClass(className);
+        return CommonReflection.getCraftBukkitClass(className);
     }
 
     /**

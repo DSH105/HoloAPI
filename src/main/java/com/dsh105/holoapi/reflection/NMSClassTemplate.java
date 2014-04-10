@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.reflection;
 
-import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 
 public class NMSClassTemplate extends ClassTemplate {
 
@@ -31,7 +31,7 @@ public class NMSClassTemplate extends ClassTemplate {
     }
 
     protected void setNMSClass(String name) {
-        Class clazz = HoloAPI.getCore().SERVER.getNMSClass(name);
+        Class clazz = CommonReflection.getMinecraftClass(name);
         if (clazz == null) {
             HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + name);
         }
