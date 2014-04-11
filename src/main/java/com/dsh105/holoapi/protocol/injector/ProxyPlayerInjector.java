@@ -16,7 +16,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInjector {
 
     // Fields
+    // The Object lock
     private final FieldAccessor<Object> h_lock = new SafeField<Object>(ReflectionUtil.getNMSClass("NetworkManager"), "h");
+    // The inboundQueue field
     private final FieldAccessor<Queue> inboundQueue = new SafeField<Queue>(ReflectionUtil.getNMSClass("NetworkManager"), "inboundQueue");
 
     private Player player;
@@ -89,7 +91,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
             oldQueue = inboundQueue.get(getNetworkManager());
 
             if (oldQueue == null)
-                throw new IllegalStateException("InboundQueue is NULL for player: " + this.player.getName());
+                throw new IllegalStateException("InboundQueue is NULL for player: " + this.player.getName());  // Deprecation; Ugh;
 
             this.delegate = new ConcurrentLinkedQueue();
             delegate.addAll(oldQueue);

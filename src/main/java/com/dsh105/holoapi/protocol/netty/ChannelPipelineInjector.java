@@ -26,7 +26,7 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler implements Pla
     // Is this player exempted?
     private boolean exempted;
 
-    // TODO: make sure to init those in the constructor
+    // The Minecraft player handle
     private Object nmsHandle;
 
     private Object playerConnection;
@@ -162,6 +162,6 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler implements Pla
 
     @Override
     public String toString() {
-        return "PacketHandler{player=" + this.player.getName() + "}";
+        return "PacketHandler{player=" + this.player.getUniqueId() + "}"; // Not that it matters but better use the UUID.
     }
 }

@@ -109,6 +109,7 @@ public class HoloAPICore extends JavaPlugin {
         // Needs a much better method since this is not really reliable
         // TODO: Improve this
         INJECTION_MANAGER = new ProtocolInjectionBuilder().withStrategy(isUsingNetty ? InjectionStrategy.NETTY : InjectionStrategy.PROXY).build();
+
         TAG_FORMATTER = new TagFormatter();
         VISIBILITY_MATCHER = new VisibilityMatcher();
         MANAGER = new SimpleHoloManager();
@@ -151,14 +152,13 @@ public class HoloAPICore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        COMMAND_MANAGER.unregister();
+        COMMAND_MANAGER.unregister(); // Unregister the commands
         MANAGER.clearAll();
         if (INJECTION_MANAGER != null) {
             INJECTION_MANAGER.close();
             INJECTION_MANAGER = null;
         }
         this.getServer().getScheduler().cancelTasks(this);
-        super.onDisable();
     }
 
     protected void checkUpdates() {
@@ -300,8 +300,8 @@ public class HoloAPICore extends JavaPlugin {
             if (!SERVER.isCompatible()) {
                 LOGGER.warning("This Server version may not be compatible with EntityAPI!");
             }
-            LOGGER.info("Identified server brand: " + SERVER.getName());
-            LOGGER.info("MC Version: " + SERVER.getMCVersion());
+            // LOGGER.info("Identified server brand: " + SERVER.getName());
+            // LOGGER.info("MC Version: " + SERVER.getMCVersion());
         }
     }
 

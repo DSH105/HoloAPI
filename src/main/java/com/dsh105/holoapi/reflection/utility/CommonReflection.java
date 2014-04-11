@@ -1,7 +1,6 @@
 package com.dsh105.holoapi.reflection.utility;
 
-import com.dsh105.holoapi.reflection.ClassTemplate;
-import com.dsh105.holoapi.reflection.MethodAccessor;
+import com.dsh105.holoapi.reflection.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
@@ -105,7 +104,7 @@ public class CommonReflection {
                 // We're dealing with a Forge server.
                 // Credits to ProtocolLib for this method
                 if(MINECARFT_PACKAGE.equals(FORGE_ENTITY_PACKAGE)) {
-                     MINECARFT_PACKAGE = MINECARFT_PACKAGE + "." + VERSION_TAG;
+                    MINECARFT_PACKAGE = MINECARFT_PACKAGE + "." + VERSION_TAG;
                 } else {
                     MINECARFT_PACKAGE_PREFIX = MINECARFT_PACKAGE;
                 }
@@ -190,6 +189,20 @@ public class CommonReflection {
         return CRAFTBUKKIT_HANDLER.getClass(className);
     }
 
+    public static boolean isUsingNetty() {
+        try {
+            Class<?> enumProtocol = getMinecraftClass("EnumProtocol");
+
+            if(enumProtocol != null) {   // Better be safe then sorry...
+                return true;
+            }
+
+        } catch (RuntimeException e) {
+            return false;
+        }
+        return false;
+    }
+
     // Usefull classes here
 
     /**
@@ -216,17 +229,27 @@ public class CommonReflection {
         return getCraftBukkitClass("entity.CraftPlayer");
     }
 
-    public static boolean isUsingNetty() {
+    public static Class<?> getMinecraftEntityClass() {
         try {
-            Class<?> enumProtocol = getMinecraftClass("EnumProtocol");
-
-            if(enumProtocol != null) {   // Better be safe then sorry...
-                return true;
-            }
-
+            return getMinecraftClass("Entity");
         } catch (RuntimeException e) {
-             return false;
+            Class<?> craftEntity = getCraftEntityClass();
+            MethodAccessor<Object> getHandle = new SafeMethod<Object>(craftEntity, "getHandle"); // Each bukkit-version has this method for sure.
+
+            Class<?> nmsEntity = getHandle.getReturnType();
+
+            return nmsEntity;
         }
-        return false;
+    }
+
+    public static Class<?> getDataWatcherClasss() {
+        try {
+            return getMinecraftClass("DataWatcher");
+        } catch (RuntimeException e) {
+            Class<?> entityClass = getMinecraftEntityClass();
+
+            FieldAccessor<Object> dataWatcherField = new SafeField<Object>(entityClass, "dataWatcher");
+            return dataWatcherField.getField().getType();
+        }
     }
 }
