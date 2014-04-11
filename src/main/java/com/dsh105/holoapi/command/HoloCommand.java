@@ -98,17 +98,26 @@ public class HoloCommand implements CommandExecutor {
                 if (StringUtil.isInt(args[1])) {
                     if (sender instanceof Player && HoloAPI.getCore().isUsingNetty) {
                         FancyPaginator help = this.getHelp(sender);
-                        sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + help.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
-                        for (FancyMessage f : help.getPage(Integer.parseInt(args[1]))) {
-                            f.send((Player) sender);
+                        sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + help.getIndex() + " " + ChatColor.DARK_AQUA + "----------------");
+                        if (help.getPage(Integer.parseInt(args[1])) != null) {
+                            sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
+                            for (FancyMessage f : help.getPage(Integer.parseInt(args[1]))) {
+                                f.send((Player) sender);
+                            }
+                            sender.sendMessage(Lang.TIP_HOVER_COMMANDS.getValue());
+                        } else {
+                            sender.sendMessage(ChatColor.DARK_AQUA + "Help page \"" + ChatColor.AQUA + args[1] + ChatColor.DARK_AQUA + "\" is invalid.");
                         }
-                        sender.sendMessage(Lang.TIP_HOVER_COMMANDS.getValue());
                     } else {
-                        sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + this.helpPages.getIndex() + "  " + ChatColor.DARK_AQUA + "----------------");
-                        sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
-                        for (String s : this.helpPages.getPage(Integer.parseInt(args[1]))) {
-                            sender.sendMessage(s);
+                        sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + args[1] + "/" + this.helpPages.getIndex() + " " + ChatColor.DARK_AQUA + "----------------");
+                        if (this.helpPages.getPage(Integer.parseInt(args[1])) != null) {
+                            sender.sendMessage(ChatColor.DARK_AQUA + "Parameters: <> = Required      [] = Optional");
+                            for (String s : this.helpPages.getPage(Integer.parseInt(args[1]))) {
+                                sender.sendMessage(s);
+                            }
+                            sender.sendMessage(Lang.TIP_HOVER_COMMANDS.getValue());
+                        } else {
+                            sender.sendMessage(ChatColor.DARK_AQUA + "Help page \"" + ChatColor.AQUA + args[1] + ChatColor.DARK_AQUA + "\" is invalid.");
                         }
                     }
                     return true;
