@@ -89,7 +89,7 @@ public class HoloListener implements Listener {
                     }
                     h.show(player, true);
                 }
-            } else if (event.getFrom().getName().equals(h.getWorldName()) && h.getLocationFor(player) != null && h.getVisibility().isVisibleTo(player, h.getSaveId())) {
+            } else if (event.getFrom().getName().equals(h.getWorldName()) && h.getLocationFor(player) != null) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
