@@ -1,7 +1,7 @@
 name: ${project.name}
 version: ${project.version}
 author: [DSH105, CaptainBern]
-description: Advanced Hologram management
+description: Advanced Hologram Management
 softdepend: [Vault, VanishNoPacket]
 website: ${project.url}
 main: com.dsh105.holoapi.HoloAPICore
