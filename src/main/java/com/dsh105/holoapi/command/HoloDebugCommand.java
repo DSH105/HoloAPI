@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.command;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import org.bukkit.Bukkit;
@@ -27,7 +28,7 @@ public class HoloDebugCommand implements CommandExecutor {
 
         sender.sendMessage("Debug results: ");
         sender.sendMessage("---------------------------[HoloAPI Stuff]---------------------------");
-        sender.sendMessage("HoloAPI-Version: " + HoloAPICore.getInstance().getDescription().getVersion());
+        sender.sendMessage("HoloAPI-Version: " + HoloAPI.getCore().getDescription().getVersion());
         sender.sendMessage("Message of the day: " + messages[generator.nextInt()]);
         sender.sendMessage("---------------------------[CraftBukkit Stuff]---------------------------");
         sender.sendMessage("Version tag: " + CommonReflection.getVersionTag());
