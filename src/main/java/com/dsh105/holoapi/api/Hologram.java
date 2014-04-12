@@ -598,9 +598,11 @@ public class Hologram {
     }
 
     protected void clearTags(Player observer, int... entityIds) {
-        WrapperPacketEntityDestroy destroy = new WrapperPacketEntityDestroy();
-        destroy.setEntities(entityIds);
-        destroy.send(observer);
+        if (entityIds.length > 0) {
+            WrapperPacketEntityDestroy destroy = new WrapperPacketEntityDestroy();
+            destroy.setEntities(entityIds);
+            destroy.send(observer);
+        }
     }
 
     protected void moveTag(Player observer, int index, Vector to) {
