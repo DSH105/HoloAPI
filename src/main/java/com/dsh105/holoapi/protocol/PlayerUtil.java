@@ -1,6 +1,6 @@
 package com.dsh105.holoapi.protocol;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import org.bukkit.entity.Player;
 
@@ -13,8 +13,8 @@ public class PlayerUtil {
     public static final Field playerConnection = ReflectionUtil.getField(ReflectionUtil.getNMSClass("EntityPlayer"), "playerConnection");
     public static final Method sendPacket = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("PlayerConnection"), "sendPacket", ReflectionUtil.getNMSClass("Packet"));
     public static final Field networkManager = ReflectionUtil.getField(ReflectionUtil.getNMSClass("PlayerConnection"), "networkManager");
-    public static final Field channelField = ReflectionUtil.getField(ReflectionUtil.getNMSClass("NetworkManager"), HoloAPI.getCore().SERVER.getMCVersion().contains("v1_7_R2") ? "m" : "k");
-    public static final Field protocolPhase = ReflectionUtil.getField(ReflectionUtil.getNMSClass("NetworkManager"), HoloAPI.getCore().SERVER.getMCVersion().contains("v1_7_R2") ? "p" : "n");
+    public static final Field channelField = ReflectionUtil.getField(ReflectionUtil.getNMSClass("NetworkManager"), CommonReflection.isUsingNetty() ? "m" : "k");
+    public static final Field protocolPhase = ReflectionUtil.getField(ReflectionUtil.getNMSClass("NetworkManager"), CommonReflection.isUsingNetty() ? "p" : "n");
 
     public static Object toNMS(Player player) {
         return ReflectionUtil.invokeMethod(getHandle, player);
