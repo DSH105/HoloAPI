@@ -26,9 +26,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <fanciful.version>0.1.3-RC2</fanciful.version>
-        <minecraft.version>1.7.5</minecraft.version>
+        <minecraft.version>1.7.8</minecraft.version>
         <craftbukkit.version>R0.1</craftbukkit.version>
-        <cb_package>v1_7_R2</cb_package>
     </properties>
 
     <distributionManagement>
