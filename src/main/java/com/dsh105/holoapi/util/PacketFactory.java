@@ -59,7 +59,4 @@ public class PacketFactory {
             return this.legacyId;
         }
     }
-
-    //TODO
-
 }

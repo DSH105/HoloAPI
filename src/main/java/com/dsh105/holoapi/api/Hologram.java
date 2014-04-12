@@ -23,7 +23,7 @@ import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.reflection.SafeMethod;
-import com.dsh105.holoapi.util.ReflectionUtil;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
@@ -740,8 +740,8 @@ public class Hologram {
         item.setData(1);
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(itemId), 1)));
-        new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
+        dw.watch(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(itemId), 1)));
+        new SafeMethod(CommonReflection.getDataWatcherClasss(), "h", int.class).invoke(dw.getHandle(), 10);
 
         WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
         meta.setEntityId(item.getEntityId());
@@ -769,8 +769,8 @@ public class Hologram {
 
         int matchItem = HoloAPI.getTagFormatter().matchItem(content);
         if (matchItem >= 0) {
-            dw.watch(10, new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
-            new SafeMethod(ReflectionUtil.getNMSClass("DataWatcher"), "h", int.class).invoke(dw.getHandle(), 10);
+            dw.watch(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
+            new SafeMethod(CommonReflection.getDataWatcherClasss(), "h", int.class).invoke(dw.getHandle(), 10);
         } else {
             dw.watch(10, content);
             dw.watch(11, Byte.valueOf((byte) 1));

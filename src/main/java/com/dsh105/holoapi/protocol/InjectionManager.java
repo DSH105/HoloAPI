@@ -63,6 +63,10 @@ public class InjectionManager {
         }, HoloAPI.getCore());
     }
 
+    public InjectionStrategy getStrategy() {
+        return this.strategy;
+    }
+
     /**
      * Injects a specific player
      * @param player

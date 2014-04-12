@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.reflection.utility;
 
 import com.dsh105.holoapi.reflection.*;
+import net.minecraft.util.com.google.common.base.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
@@ -104,11 +105,10 @@ public class CommonReflection {
                 // We're dealing with a Forge server.
                 // Credits to ProtocolLib for this method
                 if(MINECARFT_PACKAGE.equals(FORGE_ENTITY_PACKAGE)) {
-                    MINECARFT_PACKAGE = MINECARFT_PACKAGE + "." + VERSION_TAG;
+                    MINECARFT_PACKAGE = combine(MINECARFT_PACKAGE, VERSION_TAG);
                 } else {
                     MINECARFT_PACKAGE_PREFIX = MINECARFT_PACKAGE;
                 }
-
             }
 
         } else {
@@ -129,6 +129,14 @@ public class CommonReflection {
         } else {
             return "<unknown>";
         }
+    }
+
+    private static String combine(String packageName, String className) {
+        if(Strings.isNullOrEmpty(packageName))
+            return className;
+        if(Strings.isNullOrEmpty(className))
+            return packageName;
+        return packageName + "." + className;
     }
 
     /**

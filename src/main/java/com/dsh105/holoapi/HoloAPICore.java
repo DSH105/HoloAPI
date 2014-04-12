@@ -61,6 +61,8 @@ import java.util.logging.Level;
 
 public class HoloAPICore extends JavaPlugin {
 
+    protected static HoloAPICore INSTANCE;
+
     protected static CommandManager COMMAND_MANAGER;
     protected static SimpleHoloManager MANAGER;
     protected static SimpleImageLoader IMAGE_LOADER;
@@ -68,7 +70,8 @@ public class HoloAPICore extends JavaPlugin {
     protected static TagFormatter TAG_FORMATTER;
     protected static VisibilityMatcher VISIBILITY_MATCHER;
     protected ConfigOptions OPTIONS;
-    protected InjectionManager INJECTION_MANAGER;
+
+    protected static InjectionManager INJECTION_MANAGER;
 
     protected YAMLConfigManager configManager;
     protected YAMLConfig config;
@@ -98,6 +101,7 @@ public class HoloAPICore extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        INSTANCE = this;
         HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
         this.loadConfiguration();
@@ -309,6 +313,18 @@ public class HoloAPICore extends JavaPlugin {
         if(SERVER == null)
             throw new RuntimeException("SERVER is NULL!");
         return SERVER;
+    }
+
+    public static HoloAPICore getInstance() {
+       if(INSTANCE == null)
+           throw new RuntimeException("Instance is NULL!");
+        return INSTANCE;
+    }
+
+    public static InjectionManager getInjectionManager() {
+        if(INJECTION_MANAGER == null)
+            throw new RuntimeException("InjectionManager is NULL!");
+        return INJECTION_MANAGER;
     }
 
     @Override
