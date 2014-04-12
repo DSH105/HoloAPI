@@ -22,7 +22,7 @@ public class HoloDebugCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if(!sender.hasPermission("holo.debug")) {
-            sender.sendMessage(ChatColor.RED + "Stop bugging me...");
+            sender.sendMessage(ChatColor.RED + "Stop (de)bugging me...");
             return false;
         }
 
