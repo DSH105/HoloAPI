@@ -17,7 +17,7 @@ public class HoloDebugCommand implements CommandExecutor {
             "Stop spamming", "Goodmorning America!", "DSH105 is sexy!", "PressHearthToContinue",
             "Stay away from my budder!", "Wot", "If HoloAPI works then DSH105 and CaptainBern wrote it, else I have no idea who wrote that crap"};
 
-    private static Random generator = new Random(messages.length);
+    private static Random generator = new Random();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
@@ -29,7 +29,7 @@ public class HoloDebugCommand implements CommandExecutor {
         sender.sendMessage("Debug results: ");
         sender.sendMessage("---------------------------[HoloAPI Stuff]---------------------------");
         sender.sendMessage("HoloAPI-Version: " + HoloAPI.getCore().getDescription().getVersion());
-        sender.sendMessage("Message of the day: " + messages[generator.nextInt()]);
+        sender.sendMessage("Message of the day: " + messages[generator.nextInt(messages.length)]);
         sender.sendMessage("---------------------------[CraftBukkit Stuff]---------------------------");
         sender.sendMessage("Version tag: " + CommonReflection.getVersionTag());
         sender.sendMessage("NMS-package: " + CommonReflection.getMinecraftPackage());
