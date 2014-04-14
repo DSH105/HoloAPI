@@ -29,7 +29,7 @@ public class RemappedClassHandler extends ClassHandler {
             throw new IllegalStateException("Remapper is NULL!");
 
         Class<?> remapperClass = this.remapper.getClass();
-
+        System.out.print("REMAPPER: " + this.remapper.getClass().getCanonicalName());
         this.map = ClassTemplate.create(remapperClass).getMethod("map", String.class);
         return this;
     }
