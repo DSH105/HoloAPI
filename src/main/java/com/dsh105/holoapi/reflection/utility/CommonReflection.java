@@ -1,7 +1,7 @@
 package com.dsh105.holoapi.reflection.utility;
 
 import com.dsh105.holoapi.reflection.*;
-import net.minecraft.util.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
