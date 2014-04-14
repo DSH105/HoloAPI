@@ -1,9 +1,8 @@
 package com.dsh105.holoapi.reflection.utility;
 
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.reflection.ClassTemplate;
 import com.dsh105.holoapi.reflection.MethodAccessor;
-import com.dsh105.holoapi.server.ServerBrand;
+import org.bukkit.Bukkit;
 
 public class RemappedClassHandler extends ClassHandler {
 
@@ -20,8 +19,9 @@ public class RemappedClassHandler extends ClassHandler {
     }
 
     protected RemappedClassHandler initialize() throws UnsupportedOperationException, IllegalStateException {
-        if(HoloAPICore.getHoloServer().getServerBrand() != ServerBrand.MCPC_PLUS)
-            throw new UnsupportedOperationException("The current brand doesn't support Remmapers!");
+        if (Bukkit.getServer() == null || !Bukkit.getServer().getVersion().contains("MCPC-Plus")) {
+            throw new UnsupportedOperationException("Remapper not available!");
+        }
 
         this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper").get(null);
 
