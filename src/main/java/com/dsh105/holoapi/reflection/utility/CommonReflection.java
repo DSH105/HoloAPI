@@ -154,7 +154,6 @@ public class CommonReflection {
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             } catch (UnsupportedOperationException e) {
-                e.printStackTrace();
                 DEFAULT_HANDLER = ClassHandler.fromClassLoader();
             }
         }
