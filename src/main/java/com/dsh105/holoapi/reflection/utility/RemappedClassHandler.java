@@ -23,7 +23,7 @@ public class RemappedClassHandler extends ClassHandler {
             throw new UnsupportedOperationException("Remapper not available!");
         }
 
-        this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper").get(null);
+        this.remapper = ClassTemplate.create(this.classLoader.getClass()).getField("remapper").get(getClass().getClassLoader());
 
         if(this.remapper == null)
             throw new IllegalStateException("Remapper is NULL!");
