@@ -105,7 +105,7 @@ public class CommonReflection {
                 // We're dealing with a Forge server.
                 // Credits to ProtocolLib for this method
                 if(MINECARFT_PACKAGE.equals(FORGE_ENTITY_PACKAGE)) {
-                    MINECARFT_PACKAGE = combine(MINECARFT_PACKAGE, VERSION_TAG);
+                    MINECARFT_PACKAGE = combine(MINECARFT_PACKAGE_PREFIX, VERSION_TAG);
                 } else {
                     MINECARFT_PACKAGE_PREFIX = MINECARFT_PACKAGE;
                 }
