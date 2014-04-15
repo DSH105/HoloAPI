@@ -132,10 +132,12 @@ public class CommonReflection {
                     try {
                         if (VERSION_TAG == null || VERSION_TAG == "") {
                             if (getClass("PluginClassLoader") != null) {
+                                System.out.print("Detected PluginClassLoader");
                                 ClassTemplate pluginClassLoader = ClassTemplate.create(getClass("PluginClassLoader"));
                                 MethodAccessor<String> getNativeVersion = pluginClassLoader.getMethod("getNativeVersion");
                                 if (getNativeVersion != null) {
                                     VERSION_TAG = getNativeVersion.invoke(null);
+                                    System.out.print("Detected version: "+ VERSION_TAG);
                                 }
                             }
                         }
