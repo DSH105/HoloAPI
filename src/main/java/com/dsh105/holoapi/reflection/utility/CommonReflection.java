@@ -131,9 +131,9 @@ public class CommonReflection {
                     // Hack for MCPC+ for 1.7.x
                     try {
                         if (VERSION_TAG == null || VERSION_TAG == "") {
-                            if (getClass("PluginClassLoader") != null) {
+                            if (getClass("org.bukkit.plugin.java.PluginClassLoader") != null) {
                                 System.out.print("Detected PluginClassLoader");
-                                ClassTemplate pluginClassLoader = ClassTemplate.create(getClass("PluginClassLoader"));
+                                ClassTemplate pluginClassLoader = ClassTemplate.create(getClass("org.bukkit.plugin/java.PluginClassLoader"));
                                 MethodAccessor<String> getNativeVersion = pluginClassLoader.getMethod("getNativeVersion");
                                 if (getNativeVersion != null) {
                                     VERSION_TAG = getNativeVersion.invoke(null);
