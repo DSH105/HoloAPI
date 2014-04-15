@@ -63,5 +63,4 @@ final class MessagePart {
             return json;
         }
     }
-
 }
