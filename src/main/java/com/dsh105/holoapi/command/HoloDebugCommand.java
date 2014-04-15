@@ -38,8 +38,8 @@ public class HoloDebugCommand implements CommandExecutor {
         sender.sendMessage("---------------------------[Minecraft Server Stuff]---------------------------");
         sender.sendMessage("Using Netty: " + CommonReflection.isUsingNetty());
         sender.sendMessage("MinecraftServer: " + CommonReflection.getMinecraftClass("MinecraftServer").getCanonicalName());
-        sender.sendMessage("Entity: " + CommonReflection.getMinecraftClass("Entity"));
-        sender.sendMessage("Is (forge) Modded: " + (CommonReflection.getMinecraftClass("Entity").getCanonicalName().startsWith("net.minecraft.entity") ? "Definitely" : "Probably not"));
+        //sender.sendMessage("Entity: " + CommonReflection.getMinecraftClass("Entity"));
+        //sender.sendMessage("Is (forge) Modded: " + (CommonReflection.getMinecraftClass("Entity").getCanonicalName().startsWith("net.minecraft.entity") ? "Definitely" : "Probably not"));
         sender.sendMessage("Injection strategy: " + HoloAPICore.getInjectionManager().getStrategy().name());
 
         return true;

@@ -33,6 +33,7 @@ public class ClassPackageMapper {
 
             return clazz;
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to find class: " + this.packageName + "." + className);
         }
     }

@@ -29,7 +29,6 @@ public class RemappedClassHandler extends ClassHandler {
             throw new IllegalStateException("Remapper is NULL!");
 
         Class<?> remapperClass = this.remapper.getClass();
-        System.out.print("REMAPPER: " + this.remapper.getClass().getCanonicalName());
         this.map = ClassTemplate.create(remapperClass).getMethod("map", String.class);
         return this;
     }
@@ -43,7 +42,7 @@ public class RemappedClassHandler extends ClassHandler {
         try {
             return this.classLoader.loadClass(getRemappedName(className));
         } catch (ClassNotFoundException e) {
-            throw new ClassNotFoundException("Failed to find class: " + className + " (Remapped name: " + getRemappedName(className) + ")");
+            throw new ClassNotFoundException("Failed to find class: " + className + " (Remapped class-name: " + getRemappedName(className) + ")");
         }
     }
 }
