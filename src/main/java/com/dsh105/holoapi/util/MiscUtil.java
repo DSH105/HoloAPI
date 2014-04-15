@@ -18,10 +18,8 @@
 package com.dsh105.holoapi.util;
 
 import com.google.common.collect.BiMap;
-import net.minecraft.util.org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;

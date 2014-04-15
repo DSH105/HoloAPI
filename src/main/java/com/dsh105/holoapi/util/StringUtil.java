@@ -17,8 +17,6 @@
 
 package com.dsh105.holoapi.util;
 
-import org.bukkit.ChatColor;
-
 import java.util.Random;
 
 public class StringUtil {

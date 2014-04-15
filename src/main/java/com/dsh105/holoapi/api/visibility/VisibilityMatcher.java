@@ -33,7 +33,8 @@ public class VisibilityMatcher {
 
     /**
      * Registers a visibility under a certain key
-     * @param key key to register the visibility under
+     *
+     * @param key        key to register the visibility under
      * @param visibility visibility to register
      */
     public void add(String key, Visibility visibility) {

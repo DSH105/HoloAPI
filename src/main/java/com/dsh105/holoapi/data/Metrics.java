@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.dsh105.holoapi.data;
 
 import org.bukkit.Bukkit;

@@ -277,7 +277,7 @@ public class YAMLConfigManager {
                 } else {
 
 					/*
-					 * Last line = 0 - Comment Last line = 1 - Normal path
+                     * Last line = 0 - Comment Last line = 1 - Normal path
 					 */
 
                     String normalComment;

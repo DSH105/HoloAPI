@@ -1,3 +1,20 @@
+/*
+ * This file is part of HoloAPI.
+ *
+ * HoloAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * HoloAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dsh105.holoapi.protocol;
 
 import com.dsh105.holoapi.HoloAPI;
@@ -26,7 +43,7 @@ public class InjectionManager {
 
     /**
      * A "Cache" system for the injectors. (Eg: A reload will go slightly faster etc)
-     *
+     * <p/>
      * Don't worry about concurrency, we use weak-keys so the GC'ing will go fine...
      */
     protected ConcurrentMap<Player, PlayerInjector> injectors = new MapMaker().weakKeys().makeMap();
@@ -35,7 +52,7 @@ public class InjectionManager {
     /**
      * The default constructor. The InjectionStrategy is the method that will
      * be used to inject our custom ProtocolHandler in the player obejct.
-     *
+     * <p/>
      * (Used to detect packet IO)
      *
      * @param strategy
@@ -69,6 +86,7 @@ public class InjectionManager {
 
     /**
      * Injects a specific player
+     *
      * @param player
      */
     public void inject(Player player) {
@@ -87,6 +105,7 @@ public class InjectionManager {
 
     /**
      * Un-injects a specific player
+     *
      * @param player
      */
     public void unInject(Player player) {
@@ -113,6 +132,7 @@ public class InjectionManager {
 
     /**
      * Returns whether or not this InjectionManager is closed
+     *
      * @return
      */
     public boolean isClosed() {
@@ -121,6 +141,7 @@ public class InjectionManager {
 
     /**
      * Changes the "closed" state of this InjectionManager
+     *
      * @param closed
      */
     public void setClosed(boolean closed) {

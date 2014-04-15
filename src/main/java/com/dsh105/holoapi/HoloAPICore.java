@@ -307,13 +307,13 @@ public class HoloAPICore extends JavaPlugin {
     }
 
     public static Server getHoloServer() {
-        if(SERVER == null)
+        if (SERVER == null)
             throw new RuntimeException("SERVER is NULL!");
         return SERVER;
     }
 
     public static InjectionManager getInjectionManager() {
-        if(INJECTION_MANAGER == null)
+        if (INJECTION_MANAGER == null)
             throw new RuntimeException("InjectionManager is NULL!");
         return INJECTION_MANAGER;
     }
