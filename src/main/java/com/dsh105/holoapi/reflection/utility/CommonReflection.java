@@ -1,3 +1,20 @@
+/*
+ * This file is part of HoloAPI.
+ *
+ * HoloAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * HoloAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dsh105.holoapi.reflection.utility;
 
 import com.dsh105.holoapi.reflection.*;
@@ -47,43 +64,47 @@ public class CommonReflection {
 
     /**
      * Returns the version-tag
+     *
      * @return
      */
     public static String getVersionTag() {
-        if(VERSION_TAG == null)
+        if (VERSION_TAG == null)
             initializePackageNames();
         return VERSION_TAG;
     }
 
     /**
      * Returns the Minecraft package
+     *
      * @return
      */
     public static String getMinecraftPackage() {
-        if(MINECARFT_PACKAGE == null)
+        if (MINECARFT_PACKAGE == null)
             initializePackageNames();
         return MINECARFT_PACKAGE;
     }
 
     /**
      * Returns the Craftbukkit package
+     *
      * @return
      */
     public static String getCraftBukkitPackage() {
-        if(CRAFTBUKKIT_PACKAGE == null)
+        if (CRAFTBUKKIT_PACKAGE == null)
             initializePackageNames();
         return CRAFTBUKKIT_PACKAGE;
     }
 
     /**
      * Initializes the package names.
+     *
      * @return
      */
     protected static void initializePackageNames() {
 
         Server bukkitServer = Bukkit.getServer();
 
-        if(bukkitServer != null) {
+        if (bukkitServer != null) {
 
             // Handle CraftBukkit package
             Class<?> craftServerClass = bukkitServer.getClass();
@@ -91,7 +112,7 @@ public class CommonReflection {
 
             Matcher matcher = PACKAGE_VERSION_MATCHER.matcher(CRAFTBUKKIT_PACKAGE);
 
-            if(matcher.matches()) {
+            if (matcher.matches()) {
                 VERSION_TAG = matcher.group(1);
             }
 
@@ -100,11 +121,11 @@ public class CommonReflection {
             MethodAccessor<Object> getHandle = ClassTemplate.create(craftEntityClass).getMethod("getHandle");
             MINECARFT_PACKAGE = trimPackageName(getHandle.getReturnType().getCanonicalName());
 
-            if(!MINECARFT_PACKAGE.startsWith(MINECARFT_PACKAGE_PREFIX)) {
+            if (!MINECARFT_PACKAGE.startsWith(MINECARFT_PACKAGE_PREFIX)) {
 
                 // We're dealing with a Forge server.
                 // Credits to ProtocolLib for this method
-                if(MINECARFT_PACKAGE.equals(FORGE_ENTITY_PACKAGE)) {
+                if (MINECARFT_PACKAGE.equals(FORGE_ENTITY_PACKAGE)) {
                     MINECARFT_PACKAGE = combine(MINECARFT_PACKAGE_PREFIX, VERSION_TAG);
                 } else {
                     MINECARFT_PACKAGE_PREFIX = MINECARFT_PACKAGE;
@@ -118,13 +139,14 @@ public class CommonReflection {
 
     /**
      * "Fixes" the given package name. (used to parse the version-tag)
+     *
      * @param packageName
      * @return
      */
     private static String trimPackageName(String packageName) {
         int index = packageName.lastIndexOf('.');
 
-        if(index > 0) {
+        if (index > 0) {
             return packageName.substring(0, index);
         } else {
             return "<unknown>";
@@ -132,23 +154,23 @@ public class CommonReflection {
     }
 
     private static String combine(String packageName, String className) {
-        if(Strings.isNullOrEmpty(packageName))
+        if (Strings.isNullOrEmpty(packageName))
             return className;
-        if(Strings.isNullOrEmpty(className))
+        if (Strings.isNullOrEmpty(className))
             return packageName;
         return packageName + "." + className;
     }
 
     /**
      * Returns the Default ClassHandler.
-     *
+     * <p/>
      * The ClassHandler is a utility class which allows us to easily access MCPC+ classes.
      * (Because they are remapped)
      *
      * @return
      */
     private static ClassHandler getDefaultClassHandler() {
-        if(DEFAULT_HANDLER == null) {
+        if (DEFAULT_HANDLER == null) {
             try {
                 return DEFAULT_HANDLER = new RemappedClassHandler().initialize();
             } catch (IllegalStateException e) {
@@ -163,6 +185,7 @@ public class CommonReflection {
 
     /**
      * Returns a class with the given name
+     *
      * @param className
      * @return
      */
@@ -176,11 +199,12 @@ public class CommonReflection {
 
     /**
      * Returns an NMS class with the given name
+     *
      * @param className
      * @return
      */
     public static Class<?> getMinecraftClass(String className) {
-        if(NMS_HANDLER == null)
+        if (NMS_HANDLER == null)
             NMS_HANDLER = new ClassPackageMapper(getMinecraftPackage(), getDefaultClassHandler());
 
         return NMS_HANDLER.getClass(className);
@@ -188,11 +212,12 @@ public class CommonReflection {
 
     /**
      * Returns a CraftBukkit class with the given name
+     *
      * @param className
      * @return
      */
     public static Class<?> getCraftBukkitClass(String className) {
-        if(CRAFTBUKKIT_HANDLER == null)
+        if (CRAFTBUKKIT_HANDLER == null)
             CRAFTBUKKIT_HANDLER = new ClassPackageMapper(getCraftBukkitPackage(), getDefaultClassHandler());
 
         return CRAFTBUKKIT_HANDLER.getClass(className);
@@ -202,7 +227,7 @@ public class CommonReflection {
         try {
             Class<?> enumProtocol = getMinecraftClass("EnumProtocol");
 
-            if(enumProtocol != null) {   // Better be safe then sorry...
+            if (enumProtocol != null) {   // Better be safe then sorry...
                 return true;
             }
 
@@ -216,6 +241,7 @@ public class CommonReflection {
 
     /**
      * Returns the CraftServer class
+     *
      * @return
      */
     public static Class<?> getCraftServerClass() {
@@ -224,6 +250,7 @@ public class CommonReflection {
 
     /**
      * Returns the CraftEntity class
+     *
      * @return
      */
     public static Class<?> getCraftEntityClass() {
@@ -232,6 +259,7 @@ public class CommonReflection {
 
     /**
      * Returns the CraftPlayer class
+     *
      * @return
      */
     public static Class<?> getCraftPlayerClass() {

@@ -38,7 +38,7 @@ public class CraftBukkitServer implements Server {
 
         Class<?> craftServer = Bukkit.getServer().getClass();
 
-        if(craftServer != null) {
+        if (craftServer != null) {
 
             MC_VERSION = trimPackageName(craftServer.getCanonicalName());
 
@@ -65,7 +65,7 @@ public class CraftBukkitServer implements Server {
     private static String trimPackageName(String packageName) {
         int index = packageName.lastIndexOf('.');
 
-        if(index > 0) {
+        if (index > 0) {
             return packageName.substring(0, index);
         } else {
             return "<unknown>";

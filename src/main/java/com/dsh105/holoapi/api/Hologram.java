@@ -182,7 +182,7 @@ public class Hologram {
      * Refreshes the display of the hologram to a certain player
      *
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
-     * @param observer player to refresh the hologram for
+     * @param observer       player to refresh the hologram for
      */
     public void refreshDisplay(final boolean obeyVisibility, final Player observer) {
         if (observer != null) {
@@ -329,7 +329,7 @@ public class Hologram {
      * <p/>
      * Hologram coordinates will remain the same if the world is changed
      *
-     * @param worldName name of of the destination world
+     * @param worldName      name of of the destination world
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
      */
     public void changeWorld(String worldName, boolean obeyVisibility) {
@@ -405,8 +405,8 @@ public class Hologram {
     /**
      * Sets the content of a line of the hologram for a certain player
      *
-     * @param index index of the line to set
-     * @param content new content for the hologram line
+     * @param index    index of the line to set
+     * @param content  new content for the hologram line
      * @param observer player to show the changes to
      */
     public void updateLine(int index, String content, Player observer) {
