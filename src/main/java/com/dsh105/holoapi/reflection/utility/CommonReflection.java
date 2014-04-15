@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.reflection.utility;
 
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.reflection.*;
 import com.google.common.base.Strings;
 import org.bukkit.Bukkit;
@@ -126,6 +127,23 @@ public class CommonReflection {
                 // We're dealing with a Forge server.
                 // Credits to ProtocolLib for this method
                 if (MINECARFT_PACKAGE.equals(FORGE_ENTITY_PACKAGE)) {
+
+                    // Hack for MCPC+ for 1.7.x
+                    try {
+                        if (VERSION_TAG == null || VERSION_TAG == "") {
+                            if (getClass("PluginClassLoader") != null) {
+                                ClassTemplate pluginClassLoader = ClassTemplate.create(getClass("PluginClassLoader"));
+                                MethodAccessor<String> getNativeVersion = pluginClassLoader.getMethod("getNativeVersion");
+                                if (getNativeVersion != null) {
+                                    VERSION_TAG = getNativeVersion.invoke(null);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        if(VERSION_TAG == null)
+                            HoloAPICore.LOGGER_REFLECTION.warning("Version tag is null and it appears the server is modded but does not contain the expected method(s)! HoloAPI may not work correctly!");
+                    }
+
                     MINECARFT_PACKAGE = combine(MINECARFT_PACKAGE_PREFIX, VERSION_TAG);
                 } else {
                     MINECARFT_PACKAGE_PREFIX = MINECARFT_PACKAGE;
