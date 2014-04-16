@@ -1,6 +1,7 @@
 ![HoloAPI](https://dev.bukkit.org/media/images/70/44/Banner_PNG.png "HoloAPI")
 ## [HoloAPI](https://dev.bukkit.org/bukkit-plugins/holoapi/) adds Holograms to your Bukkit server!
 ### [Download Now](https://github.com/DSH105/HoloAPI/releases)
+Latest build: [![Build Status](https://travis-ci.org/DSH105/HoloAPI.png)](https://travis-ci.org/DSH105/HoloAPI)
 ----
 
 #### Authors: ![DSH105](https://minotar.net/avatar/_DSH105_/15)[ DSH105](https://github.com/DSH105), ![CaptainBern](https://minotar.net/helm/CaptainBern/15)[ CaptainBern](https://github.com/CaptainBern)
