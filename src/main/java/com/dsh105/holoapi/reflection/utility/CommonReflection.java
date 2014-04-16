@@ -299,6 +299,19 @@ public class CommonReflection {
         }
     }
 
+    public static Class<?> getEntityPlayerClass() {
+        try {
+            return getMinecraftClass("EntityPlayer");
+        } catch (Exception e) {
+            Class<?> craftPlayer = getCraftPlayerClass();
+            MethodAccessor<Object> getHandle = new SafeMethod<Object>(craftPlayer, "getHandle");
+
+            Class<?> entityPlayer = getHandle.getReturnType();
+
+            return entityPlayer;
+        }
+    }
+
     public static Class<?> getDataWatcherClasss() {
         try {
             return getMinecraftClass("DataWatcher");
@@ -307,6 +320,32 @@ public class CommonReflection {
 
             FieldAccessor<Object> dataWatcherField = new SafeField<Object>(entityClass, "dataWatcher");
             return dataWatcherField.getField().getType();
+        }
+    }
+
+    public static Class<?> getPlayerConnectionClass() {
+        try {
+            return getMinecraftClass("PlayerConnection");
+        } catch (Exception e) {
+            Class<?> entityPlayer = getEntityPlayerClass();
+            FieldAccessor<Object> playerConnectionField = new SafeField<Object>(entityPlayer, "playerConnection");
+
+            Class<?> playerConnection = playerConnectionField.getField().getType();
+
+            return playerConnection;
+        }
+    }
+
+    public static Class<?> getNetworkManagerClass() {
+        try {
+            return getMinecraftClass("NetworkManager");
+        } catch (Exception e) {
+            Class<?> playerConnection = getPlayerConnectionClass();
+            FieldAccessor<Object> networkManagerField = new SafeField<Object>(playerConnection, "networkManager");
+
+            Class<?> networkManager = networkManagerField.getField().getType();
+
+            return networkManager;
         }
     }
 }

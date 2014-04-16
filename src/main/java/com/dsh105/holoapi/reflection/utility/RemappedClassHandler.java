@@ -15,6 +15,21 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Used to provide functionality with MCPC+, as MCPC+ remaps the classes in order to
+ * let Mods and Plugins work together in harmony. This is however a downside for Plugins
+ * since the Plugins will be remapped and the mods remain untouched.
+ *
+ * For more info/details about this:
+ *
+ *     The PluginClassLoader:
+ *     https://github.com/MinecraftPortCentral/MCPC-Plus/blob/master/patches/org/bukkit/plugin/java/PluginClassLoader.java.patch
+ *
+ *     The Remapper is one provided by md_5, it's part of his "SpecialSource" project.
+ *     It uses some basic ASM to remap the classed of a jar. Fortunately for us, this remapper is easy reachable
+ *     and easy to use since we can get the remapped-classnames fairly easy
+ *     ( https://github.com/llbit/ow2-asm/blob/master/src/org/objectweb/asm/commons/Remapper.java#L220 )
+ */
 package com.dsh105.holoapi.reflection.utility;
 
 import com.dsh105.holoapi.reflection.ClassTemplate;

@@ -26,12 +26,12 @@ import java.lang.reflect.Method;
 
 public class PlayerUtil {
 
-    public static final Method getHandle = ReflectionUtil.getMethod(ReflectionUtil.getCBCClass("entity.CraftEntity"), "getHandle");
-    public static final Field playerConnection = ReflectionUtil.getField(ReflectionUtil.getNMSClass("EntityPlayer"), "playerConnection");
-    public static final Method sendPacket = ReflectionUtil.getMethod(ReflectionUtil.getNMSClass("PlayerConnection"), "sendPacket", ReflectionUtil.getNMSClass("Packet"));
-    public static final Field networkManager = ReflectionUtil.getField(ReflectionUtil.getNMSClass("PlayerConnection"), "networkManager");
-    public static final Field channelField = ReflectionUtil.getField(ReflectionUtil.getNMSClass("NetworkManager"), CommonReflection.isUsingNetty() ? "m" : "k");
-    public static final Field protocolPhase = ReflectionUtil.getField(ReflectionUtil.getNMSClass("NetworkManager"), CommonReflection.isUsingNetty() ? "p" : "n");
+    public static final Method getHandle = ReflectionUtil.getMethod(CommonReflection.getCraftEntityClass(), "getHandle");
+    public static final Field playerConnection = ReflectionUtil.getField(CommonReflection.getMinecraftClass("EntityPlayer"), "playerConnection");
+    public static final Method sendPacket = ReflectionUtil.getMethod(CommonReflection.getMinecraftClass("PlayerConnection"), "sendPacket", CommonReflection.getMinecraftClass("Packet"));
+    public static final Field networkManager = ReflectionUtil.getField(CommonReflection.getMinecraftClass("PlayerConnection"), "networkManager");
+    public static final Field channelField = ReflectionUtil.getField(CommonReflection.getMinecraftClass("NetworkManager"), CommonReflection.isUsingNetty() ? "m" : "k");
+    public static final Field protocolPhase = ReflectionUtil.getField(CommonReflection.getMinecraftClass("NetworkManager"), CommonReflection.isUsingNetty() ? "p" : "n");
 
     public static Object toNMS(Player player) {
         return ReflectionUtil.invokeMethod(getHandle, player);
