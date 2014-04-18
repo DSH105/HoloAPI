@@ -250,7 +250,7 @@ public class CommonReflection {
                 return true;
             }
 
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return false;
         }
         return false;
