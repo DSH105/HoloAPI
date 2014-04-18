@@ -221,14 +221,8 @@ public class HoloAPICore extends JavaPlugin {
                 "See the HoloAPI Wiki before editing this file",
                 "(https://github.com/DSH105/HoloAPI/wiki)"
         };
-        try {
-            config = this.configManager.getNewConfig("config.yml", header);
-            OPTIONS = new ConfigOptions(config);
-        } catch (Exception e) {
-            LOGGER.severe("Failed to generate Configuration File (config.yml).");
-            e.printStackTrace();
-        }
-
+        config = this.configManager.getNewConfig("config.yml", header);
+        OPTIONS = new ConfigOptions(config);
         config.reloadConfig();
 
         ChatColor colour1 = ChatColor.getByChar(config.getString("primaryChatColour", "3"));
@@ -242,12 +236,8 @@ public class HoloAPICore extends JavaPlugin {
 
         LINE_SPACING = config.getDouble("verticalLineSpacing", 0.25D);
 
-        try {
-            dataConfig = this.configManager.getNewConfig("data.yml");
-        } catch (Exception e) {
-            LOGGER.severe("Failed to generate Configuration File (data.yml).");
-            e.printStackTrace();
-        }
+
+        dataConfig = this.configManager.getNewConfig("data.yml");
         dataConfig.reloadConfig();
 
         String[] langHeader = {
@@ -255,26 +245,15 @@ public class HoloAPICore extends JavaPlugin {
                 "---------------------",
                 "Language Configuration File"
         };
-        try {
-            langConfig = this.configManager.getNewConfig("language.yml", langHeader);
-            try {
-                for (Lang l : Lang.values()) {
-                    String[] desc = l.getDescription();
-                    langConfig.set(l.getPath(), langConfig.getString(l.getPath(), l.getRaw()
-                            .replace("&3", "&" + this.primaryColour.getChar())
-                            .replace("&b", "&" + this.secondaryColour.getChar())),
-                            desc);
-                }
-                langConfig.saveConfig();
-            } catch (Exception e) {
-                LOGGER.severe("Failed to generate Configuration File (language.yml).");
-                e.printStackTrace();
-            }
-
-        } catch (Exception e) {
-            LOGGER.severe("Failed to generate Configuration File (language.yml).");
-            e.printStackTrace();
+        langConfig = this.configManager.getNewConfig("language.yml", langHeader);
+        for (Lang l : Lang.values()) {
+            String[] desc = l.getDescription();
+            langConfig.set(l.getPath(), langConfig.getString(l.getPath(), l.getRaw()
+                    .replace("&3", "&" + this.primaryColour.getChar())
+                    .replace("&b", "&" + this.secondaryColour.getChar())),
+                    desc);
         }
+        langConfig.saveConfig();
         langConfig.reloadConfig();
         //this.prefix = Lang.PREFIX.getValue();
     }
