@@ -45,9 +45,7 @@ public abstract class ClassHandler {
         };
     }
 
-    public Class<?> loadClass(String className) throws ClassNotFoundException {
-        return this.classLoader.loadClass(className);
-    }
+    public abstract Class<?> loadClass(String className) throws ClassNotFoundException;
 
     public static ClassHandler fromPackage(final String packageName) {
         return new ClassHandler() {
