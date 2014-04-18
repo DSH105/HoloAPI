@@ -423,7 +423,7 @@ public class Hologram {
      *
      * @param content new content for the hologram
      */
-    public void updateLines(String[] content) {
+    public void updateLines(String... content) {
         if (content.length <= 0) {
             throw new IllegalArgumentException("New hologram content cannot be empty!");
         }
@@ -444,10 +444,10 @@ public class Hologram {
     /**
      * Sets the entire content of the hologram for a certain player
      *
-     * @param content new content for the hologram
      * @param observer player to show the changes to
+     * @param content new content for the hologram
      */
-    public void updateLines(String[] content, Player observer) {
+    public void updateLines(Player observer, String... content) {
         if (content.length <= 0) {
             throw new IllegalArgumentException("New hologram content cannot be empty!");
         }
