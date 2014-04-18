@@ -419,6 +419,46 @@ public class Hologram {
     }
 
     /**
+     * Sets the entire content of the hologram
+     *
+     * @param content new content for the hologram
+     */
+    public void updateLines(String[] content) {
+        if (content.length <= 0) {
+            throw new IllegalArgumentException("New hologram content cannot be empty!");
+        }
+        this.tags = content;
+        for (UUID uuid : this.playerToLocationMap.keySet()) {
+            Player p = Bukkit.getPlayer(uuid);
+            if (p != null) {
+                for (int index = 0; index < this.tags.length; index++) {
+                    this.updateNametag(p, this.tags[index], index);
+                }
+            }
+        }
+        if (!this.isSimple()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
+    }
+
+    /**
+     * Sets the entire content of the hologram for a certain player
+     *
+     * @param content new content for the hologram
+     * @param observer player to show the changes to
+     */
+    public void updateLines(String[] content, Player observer) {
+        if (content.length <= 0) {
+            throw new IllegalArgumentException("New hologram content cannot be empty!");
+        }
+        if (observer != null) {
+            for (int index = 0; index < content.length; index++) {
+                this.updateNametag(observer, content[index], index);
+            }
+        }
+    }
+
+    /**
      * Adds an action for when the hologram is touched
      *
      * @param action action to perform when the hologram is touched
