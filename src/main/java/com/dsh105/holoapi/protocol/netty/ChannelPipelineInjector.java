@@ -20,7 +20,6 @@ package com.dsh105.holoapi.protocol.netty;
 import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.protocol.PlayerInjector;
 import com.dsh105.holoapi.protocol.PlayerUtil;
-import com.dsh105.holoapi.util.wrapper.protocol.Protocol;
 import com.google.common.base.Preconditions;
 import net.minecraft.util.io.netty.channel.Channel;
 import net.minecraft.util.io.netty.channel.ChannelDuplexHandler;
@@ -158,10 +157,6 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler implements Pla
 
     public void setExempted(boolean bool) {
         this.exempted = bool;
-    }
-
-    public Protocol getProtocolPhase() {
-        return Protocol.fromVanilla(PlayerUtil.getProtocolPhase(this.player));
     }
 
     private InjectionManager getInjectionManager() {

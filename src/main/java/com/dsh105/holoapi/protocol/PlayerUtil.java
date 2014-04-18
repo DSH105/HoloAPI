@@ -33,8 +33,6 @@ public class PlayerUtil {
     public static final Field playerConnection = ReflectionUtil.getField(CommonReflection.getMinecraftClass("EntityPlayer"), "playerConnection");
     public static final Method sendPacket = ReflectionUtil.getMethod(CommonReflection.getMinecraftClass("PlayerConnection"), "sendPacket", CommonReflection.getMinecraftClass("Packet"));
     public static final Field networkManager = ReflectionUtil.getField(CommonReflection.getMinecraftClass("PlayerConnection"), "networkManager");
-    public static final Field channelField = ReflectionUtil.getField(CommonReflection.getMinecraftClass("NetworkManager"), CommonReflection.isUsingNetty() ? "m" : "k");
-    public static final Field protocolPhase = ReflectionUtil.getField(CommonReflection.getMinecraftClass("NetworkManager"), CommonReflection.isUsingNetty() ? "p" : "n");
 
     public static Object toNMS(Player player) {
         return ReflectionUtil.invokeMethod(getHandle, player);
@@ -60,9 +58,5 @@ public class PlayerUtil {
             HoloAPICore.LOGGER_REFLECTION.warning("Failed to find the Channel field!");
         }
         return null;
-    }
-
-    public static Enum getProtocolPhase(Object networkManager) {
-        return ReflectionUtil.getField(protocolPhase, networkManager);
     }
 }

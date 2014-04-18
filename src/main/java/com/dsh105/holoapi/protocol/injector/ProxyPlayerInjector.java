@@ -34,7 +34,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     // Fields
     // The Object lock
-    private final FieldAccessor<Object> h_lock = new SafeField<Object>(ReflectionUtil.getNMSClass("NetworkManager"), "h");
+    private final FieldAccessor<Object> h_lock = new SafeField<Object>(ReflectionUtil.getNMSClass("NetworkManager"), "h");  // Those fields haven't changed in 50 years!
     // The inboundQueue field
     private final FieldAccessor<Queue> inboundQueue = new SafeField<Queue>(ReflectionUtil.getNMSClass("NetworkManager"), "inboundQueue");
 
