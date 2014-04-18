@@ -642,7 +642,7 @@ public class HoloCommand implements CommandExecutor {
                 Lang.sendTo(sender, Lang.HOLOGRAM_UPDATE_LINE.getValue().replace("%index%", index + "").replace("%input%", ChatColor.translateAlternateColorCodes('&', content)));
                 return true;
             }
-        } else if (args.length >= 5 && args[0].equalsIgnoreCase("touch") && args[1].equalsIgnoreCase("add")) {
+        }/* else if (args.length >= 5 && args[0].equalsIgnoreCase("touch") && args[1].equalsIgnoreCase("add")) {
             if (Perm.TOUCH_ADD.hasPerm(sender, true, true)) {
                 final Hologram hologram = HoloAPI.getManager().getHologram(args[2]);
                 if (hologram == null) {
@@ -654,7 +654,7 @@ public class HoloCommand implements CommandExecutor {
                 Lang.sendTo(sender, Lang.COMMAND_TOUCH_ACTION_ADDED.getValue().replace("%command%", "/" + command).replace("%id%", hologram.getSaveId()));
             } else return true;
             return true;
-        } else if (args.length >= 4 && args[0].equalsIgnoreCase("touch")) {
+        }*/ else if (args.length >= 4 && args[0].equalsIgnoreCase("touch")) {
             final Hologram hologram = HoloAPI.getManager().getHologram(args[2]);
             if (hologram == null) {
                 Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[2]));
