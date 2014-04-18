@@ -278,7 +278,7 @@ public class HoloAPICore extends JavaPlugin {
             return;
         } else {
             if (!SERVER.isCompatible()) {
-                LOGGER.warning("This Server version may not be compatible with EntityAPI!");
+                LOGGER.warning("This Server version may not be compatible with HoloAPI!");
             }
             // LOGGER.info("Identified server brand: " + SERVER.getName());
             // LOGGER.info("MC Version: " + SERVER.getMCVersion());
