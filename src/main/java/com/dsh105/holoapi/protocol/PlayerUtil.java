@@ -17,8 +17,11 @@
 
 package com.dsh105.holoapi.protocol;
 
+import com.dsh105.holoapi.HoloAPICore;
+import com.dsh105.holoapi.reflection.FieldVisitor;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ReflectionUtil;
+import net.minecraft.util.io.netty.channel.Channel;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -50,7 +53,13 @@ public class PlayerUtil {
     }
 
     public static Object getChannel(Object networkManager) {
-        return ReflectionUtil.getField(channelField, networkManager);
+        FieldVisitor visitor = new FieldVisitor(networkManager).withType(Channel.class);
+        if(visitor.getFields().size() > 0) {
+            return visitor.getAsFieldAccessor(0).get(networkManager);
+        } else {
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find the Channel field!");
+        }
+        return null;
     }
 
     public static Enum getProtocolPhase(Object networkManager) {

@@ -33,5 +33,5 @@ public interface FieldAccessor<T> {
 
     boolean isReadOnly();
 
-    void setReadOnly(Object target, boolean value);
+    void setReadOnly(boolean readOnly);
 }

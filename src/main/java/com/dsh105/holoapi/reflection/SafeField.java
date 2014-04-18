@@ -135,11 +135,14 @@ public class SafeField<T> implements FieldAccessor<T> {
     }
 
     @Override
-    public void setReadOnly(Object target, boolean value) {
-        if (value)
-            set(target, "modifiers", field.getModifiers() | Modifier.FINAL);
-        else
-            set(target, "modifiers", field.getModifiers() & ~Modifier.FINAL);
+    public void setReadOnly(boolean readOnly) {
+        FieldAccessor<Integer> modifierField = new SafeField<Integer>(Field.class, "modifiers");
+
+        if(readOnly) {
+            modifierField.set(getField(), getField().getModifiers() | Modifier.FINAL);
+        } else {
+            modifierField.set(getField(), getField().getModifiers() & ~Modifier.FINAL);
+        }
     }
 
     public static <T> T get(Class<?> clazz, String fieldname) {

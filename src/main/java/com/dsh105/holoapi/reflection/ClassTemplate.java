@@ -31,8 +31,7 @@ public class ClassTemplate<T> {
     private Class<T> type;
     private List<SafeField<?>> fields;
 
-    public ClassTemplate() {
-    }
+    public ClassTemplate() {}
 
     public ClassTemplate(Class<T> clazz) {
         setClass(clazz);
