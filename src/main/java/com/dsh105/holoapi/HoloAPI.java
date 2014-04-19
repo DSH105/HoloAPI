@@ -119,6 +119,14 @@ public class HoloAPI {
         return getCore().TAG_ENTITY_MULTIPLIER;
     }
 
+    public static String getTransparencyWithBorder() {
+        return getCore().TRANSPARENCY_WITH_BORDER;
+    }
+
+    public static String getTransparencyWithoutBorder() {
+        return getCore().TRANSPARENCY_NO_BORDER;
+    }
+
     public static String getCommandLabel() {
         return getCore().OPTIONS.getConfig().getString("command", "holo");
     }

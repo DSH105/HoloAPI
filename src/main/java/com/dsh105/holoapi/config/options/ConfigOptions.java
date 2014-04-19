@@ -38,6 +38,8 @@ public class ConfigOptions extends Options {
         set("checkForUpdates", true);
 
         set("verticalLineSpacing", HoloAPI.getHologramLineSpacing());
+        set("transparency.withBorder", HoloAPI.getTransparencyWithBorder());
+        set("transparency.noBorder", HoloAPI.getTransparencyWithoutBorder());
         set("timezone.offset", 0);
         set("timezone.showZoneMarker", true);
 
@@ -61,6 +63,7 @@ public class ConfigOptions extends Options {
         set("specialCharacters.[:(]", "2639");
         set("specialCharacters.[s]", "2600");
         set("specialCharacters.[*]", "2605");
+        set("specialCharacters.[|]", "23B9");
 
         set("indicators.damage.enable", false);
         set("indicators.damage.yOffset", 2);

@@ -89,6 +89,8 @@ public class HoloAPICore extends JavaPlugin {
 
     protected static double LINE_SPACING = 0.25D;
     protected static int TAG_ENTITY_MULTIPLIER = 4;
+    protected static String TRANSPARENCY_NO_BORDER = " ";
+    protected static String TRANSPARENCY_WITH_BORDER = "&r &7\u23B9 &r";
 
     private ChatColor primaryColour = ChatColor.DARK_AQUA;
     private ChatColor secondaryColour = ChatColor.AQUA;
@@ -235,7 +237,8 @@ public class HoloAPICore extends JavaPlugin {
         }
 
         LINE_SPACING = config.getDouble("verticalLineSpacing", 0.25D);
-
+        TRANSPARENCY_WITH_BORDER= config.getString("transparency.withBorder", TRANSPARENCY_WITH_BORDER);
+        TRANSPARENCY_NO_BORDER = config.getString("transparency.noBorder", TRANSPARENCY_NO_BORDER);
 
         dataConfig = this.configManager.getNewConfig("data.yml");
         dataConfig.reloadConfig();

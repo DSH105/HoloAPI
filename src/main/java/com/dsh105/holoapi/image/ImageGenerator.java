@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.image;
 
+import com.dsh105.holoapi.HoloAPI;
 import org.bukkit.ChatColor;
 
 import javax.imageio.ImageIO;
@@ -36,10 +37,6 @@ import java.net.URI;
  */
 
 public class ImageGenerator implements Generator {
-
-    private final static char TRANSPARENT_CHAR_NOBORDER = ' ';
-    private final static String TRANSPARENT_CHAR_BORDER = "  ";
-    //private final static char TRANSPARENT_CHAR_BORDER = ImageChar.LIGHT_SHADE.getImageChar();
 
     private String lines[];
 
@@ -177,7 +174,7 @@ public class ImageGenerator implements Generator {
             for (ChatColor[] color : colors) {
                 ChatColor colour = color[y];
                 if (colour == null) {
-                    line += border ? TRANSPARENT_CHAR_BORDER : TRANSPARENT_CHAR_NOBORDER;
+                    line += border ? HoloAPI.getTransparencyWithBorder() : HoloAPI.getTransparencyWithoutBorder();
                 } else {
                     line += colour.toString() + imgchar + ChatColor.RESET;
                 }
