@@ -90,7 +90,7 @@ public class HoloAPICore extends JavaPlugin {
     protected static double LINE_SPACING = 0.25D;
     protected static int TAG_ENTITY_MULTIPLIER = 4;
     protected static String TRANSPARENCY_NO_BORDER = " ";
-    protected static String TRANSPARENCY_WITH_BORDER = "&r &7\u23B9 &r";
+    protected static String TRANSPARENCY_WITH_BORDER = "&r &7[|] &r";
 
     private ChatColor primaryColour = ChatColor.DARK_AQUA;
     private ChatColor secondaryColour = ChatColor.AQUA;
@@ -213,7 +213,7 @@ public class HoloAPICore extends JavaPlugin {
         }.runTaskTimer(this, 20 * 5, 20 * 10);
     }
 
-    private void loadConfiguration() {
+    public void loadConfiguration() {
         this.configManager = new YAMLConfigManager(this);
         String[] header = {
                 "HoloAPI",
