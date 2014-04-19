@@ -63,7 +63,7 @@ public class HoloCommand implements CommandExecutor {
         for (HelpEntry entry : HelpEntry.values()) {
             help.add(entry.getDefaultLine());
         }
-        this.helpPages = new Paginator(help, 5);
+        this.helpPages = new Paginator(help, 6);
     }
 
     private FancyPaginator getHelp(CommandSender sender) {
@@ -71,7 +71,7 @@ public class HoloCommand implements CommandExecutor {
         for (HelpEntry he : HelpEntry.values()) {
             helpMessages.add(he.getFancyMessage(sender));
         }
-        return new FancyPaginator(helpMessages, 5);
+        return new FancyPaginator(helpMessages, 6);
     }
 
     @Override
