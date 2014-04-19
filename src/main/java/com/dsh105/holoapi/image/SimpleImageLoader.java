@@ -51,7 +51,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
                 int imageHeight = config.getInt(path + "height", 10);
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
-                boolean requiresBorder = config.getBoolean(path + "requiresBorder", false);
+                boolean requiresBorder = config.getBoolean(path + "requiresBorder", true);
                 if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
                     HoloAPICore.LOGGER.log(Level.INFO, "Failed to load image: " + key + ". Invalid image type.");
                     continue;
