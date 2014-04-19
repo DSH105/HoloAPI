@@ -24,6 +24,7 @@ import com.dsh105.holoapi.api.visibility.VisibilityAll;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.reflection.SafeMethod;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
+import com.dsh105.holoapi.util.PlayerIdent;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
@@ -44,7 +45,7 @@ import java.util.*;
 public class Hologram {
 
     protected int firstTagId;
-    protected HashMap<UUID, Vector> playerToLocationMap = new HashMap<UUID, Vector>();
+    protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
     protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
 
@@ -158,8 +159,8 @@ public class Hologram {
      *
      * @return player name to {@link org.bukkit.util.Vector} map of all viewed positions
      */
-    public HashMap<UUID, Vector> getPlayerViews() {
-        HashMap<UUID, Vector> map = new HashMap<UUID, Vector>();
+    public HashMap<String, Vector> getPlayerViews() {
+        HashMap<String, Vector> map = new HashMap<String, Vector>();
         map.putAll(this.playerToLocationMap);
         return map;
     }
@@ -170,8 +171,8 @@ public class Hologram {
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
      */
     public void refreshDisplay(final boolean obeyVisibility) {
-        for (Map.Entry<UUID, Vector> entry : this.getPlayerViews().entrySet()) {
-            final Player p = Bukkit.getPlayer(entry.getKey());
+        for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
+            final Player p = PlayerIdent.getPlayerOf(entry.getKey());
             if (p != null) {
                 this.refreshDisplay(obeyVisibility, p);
             }
@@ -360,9 +361,9 @@ public class Hologram {
      * Clears all views of the hologram, making it invisible to all players who could previously see it
      */
     public void clearAllPlayerViews() {
-        Iterator<UUID> i = this.playerToLocationMap.keySet().iterator();
+        Iterator<String> i = this.playerToLocationMap.keySet().iterator();
         while (i.hasNext()) {
-            Player p = Bukkit.getPlayer(i.next());
+            Player p = PlayerIdent.getPlayerOf(i.next());
             if (p != null) {
                 this.clearTags(p, this.getAllEntityIds());
             }
@@ -377,7 +378,7 @@ public class Hologram {
      * @return {@link org.bukkit.util.Vector} representing a player's viewpoint of the hologram
      */
     public Vector getLocationFor(Player player) {
-        return this.playerToLocationMap.get(player.getUniqueId());
+        return this.playerToLocationMap.get(PlayerIdent.getIdentificationForAsString(player));
     }
 
     /**
@@ -391,8 +392,8 @@ public class Hologram {
             throw new IllegalArgumentException("Tag index doesn't exist!");
         }
         this.tags[index] = content;
-        for (UUID uuid : this.playerToLocationMap.keySet()) {
-            Player p = Bukkit.getPlayer(uuid);
+        for (String ident : this.playerToLocationMap.keySet()) {
+            Player p = PlayerIdent.getPlayerOf(ident);
             if (p != null) {
                 this.updateNametag(p, this.tags[index], index);
             }
@@ -428,8 +429,8 @@ public class Hologram {
             throw new IllegalArgumentException("New hologram content cannot be empty!");
         }
         this.tags = content;
-        for (UUID uuid : this.playerToLocationMap.keySet()) {
-            Player p = Bukkit.getPlayer(uuid);
+        for (String ident : this.playerToLocationMap.keySet()) {
+            Player p = PlayerIdent.getPlayerOf(ident);
             if (p != null) {
                 for (int index = 0; index < this.tags.length; index++) {
                     this.updateNametag(p, this.tags[index], index);
@@ -470,8 +471,8 @@ public class Hologram {
         }
         if (!this.hasRegisteredTouchActions) {
             // So that the entities aren't cleared before they're created
-            for (Map.Entry<UUID, Vector> entry : this.getPlayerViews().entrySet()) {
-                final Player p = Bukkit.getPlayer(entry.getKey());
+            for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
+                final Player p = PlayerIdent.getPlayerOf(entry.getKey());
                 if (p != null) {
                     clearTags(p, this.getAllEntityIds());
                 }
@@ -566,7 +567,7 @@ public class Hologram {
             for (int index = 0; index < this.getTagCount(); index++) {
                 this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
             }
-            this.playerToLocationMap.put(observer.getUniqueId(), new Vector(x, y, z));
+            this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), new Vector(x, y, z));
         }
     }
 
@@ -610,8 +611,8 @@ public class Hologram {
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
-        for (UUID uuid : this.getPlayerViews().keySet()) {
-            Player p = Bukkit.getPlayer(uuid);
+        for (String ident : this.getPlayerViews().keySet()) {
+            Player p = PlayerIdent.getPlayerOf(ident);
             if (p != null) {
                 this.move(p, to);
             }
@@ -624,7 +625,7 @@ public class Hologram {
             this.moveTag(observer, index, loc);
             loc.setY(loc.getY() - HoloAPI.getHologramLineSpacing());
         }
-        this.playerToLocationMap.put(observer.getUniqueId(), to);
+        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), to);
     }
 
     /**
@@ -634,7 +635,7 @@ public class Hologram {
      */
     public void clear(Player observer) {
         clearTags(observer, this.getAllEntityIds());
-        this.playerToLocationMap.remove(observer.getUniqueId());
+        this.playerToLocationMap.remove(PlayerIdent.getIdentificationForAsString(observer));
     }
 
     protected void clearTags(Player observer, int... entityIds) {

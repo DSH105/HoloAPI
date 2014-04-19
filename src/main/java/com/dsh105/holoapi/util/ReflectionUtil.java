@@ -24,8 +24,29 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReflectionUtil {
+
+    public static int MC_VERSION_NUMERIC = Integer.valueOf(getServerVersion().replaceAll("[^0-9]", ""));
+    public static int BUKKIT_VERSION_NUMERIC = Integer.valueOf(getBukkitVersion().replaceAll("[^0-9]", ""));
+
+    public static String getServerVersion() {
+        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+    }
+
+    // Thanks ProtocolLib <3
+    public static String getBukkitVersion() {
+        Pattern versionPattern = Pattern.compile(".*\\(.*MC.\\s*([a-zA-z0-9\\-\\.]+)\\s*\\)");
+        Matcher version = versionPattern.matcher(Bukkit.getServer().getVersion());
+
+        if (version.matches() && version.group(1) != null) {
+            return version.group(1);
+        } else {
+            return "";
+        }
+    }
 
     public static String getNMSPackageName() {
         return "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];

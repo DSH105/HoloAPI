@@ -591,7 +591,7 @@ public class HoloCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (hologram.getPlayerViews().keySet().contains(target.getUniqueId())) {
+                    if (hologram.getPlayerViews().keySet().contains(PlayerIdent.getIdentificationForAsString(target))) {
                         Lang.sendTo(sender, Lang.HOLOGRAM_ALREADY_SEE.getValue().replace("%id%", args[1]).replace("%player%", args[1]));
                         return true;
                     }
@@ -612,7 +612,7 @@ public class HoloCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!hologram.getPlayerViews().keySet().contains(target.getUniqueId())) {
+                    if (!hologram.getPlayerViews().keySet().contains(PlayerIdent.getIdentificationForAsString(target))) {
                         Lang.sendTo(sender, Lang.HOLOGRAM_ALREADY_NOT_SEE.getValue().replace("%id%", args[1]).replace("%player%", args[1]));
                         return true;
                     }

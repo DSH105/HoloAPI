@@ -21,6 +21,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
+import com.dsh105.holoapi.util.PlayerIdent;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,7 +32,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Represents an AnimatedHologram that consists of either image or text frames displayed in a constant sequence
@@ -151,8 +151,8 @@ public class AnimatedHologram extends Hologram {
     }
 
     private void runAnimation() {
-        for (Map.Entry<UUID, Vector> entry : getPlayerViews().entrySet()) {
-            final Player p = Bukkit.getPlayer(entry.getKey());
+        for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
+            final Player p = PlayerIdent.getPlayerOf(entry.getKey());
             if (p != null) {
                 currentFrame = getNext();
                 updateAnimation(p, currentFrame.getLines());
@@ -243,7 +243,7 @@ public class AnimatedHologram extends Hologram {
         for (int index = 0; index < lines.length; index++) {
             this.generate(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
-        this.playerToLocationMap.put(observer.getUniqueId(), new Vector(x, y, z));
+        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), new Vector(x, y, z));
     }
 
     @Override
