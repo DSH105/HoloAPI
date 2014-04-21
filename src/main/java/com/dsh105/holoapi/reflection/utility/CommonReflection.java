@@ -137,12 +137,12 @@ public class CommonReflection {
                                 MethodAccessor<String> getNativeVersion = pluginClassLoader.getMethod("getNativeVersion");
                                 if (getNativeVersion != null) {
                                     VERSION_TAG = getNativeVersion.invoke(null);
-                                    System.out.print("Detected version: "+ VERSION_TAG);
+                                    System.out.print("Detected version: " + VERSION_TAG);
                                 }
                             }
                         }
                     } catch (Exception e) {
-                        if(VERSION_TAG == null)
+                        if (VERSION_TAG == null)
                             HoloAPICore.LOGGER_REFLECTION.warning("Version tag is null and it appears the server is modded but does not contain the expected method(s)! HoloAPI may not work correctly!");
                     }
 

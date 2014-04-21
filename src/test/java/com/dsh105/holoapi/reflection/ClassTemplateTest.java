@@ -19,7 +19,7 @@ public class ClassTemplateTest {
         this.visitor = new FieldVisitor(this);
         this.visitor = this.visitor.withType(String.class);
 
-        for(Object accessor : this.visitor.withType(String.class).getFields()) {
+        for (Object accessor : this.visitor.withType(String.class).getFields()) {
             System.out.println(((FieldAccessor) accessor).getField().getName());
         }
     }

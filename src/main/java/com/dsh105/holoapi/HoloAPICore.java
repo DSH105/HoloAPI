@@ -237,7 +237,7 @@ public class HoloAPICore extends JavaPlugin {
         }
 
         LINE_SPACING = config.getDouble("verticalLineSpacing", 0.25D);
-        TRANSPARENCY_WITH_BORDER= config.getString("transparency.withBorder", TRANSPARENCY_WITH_BORDER);
+        TRANSPARENCY_WITH_BORDER = config.getString("transparency.withBorder", TRANSPARENCY_WITH_BORDER);
         TRANSPARENCY_NO_BORDER = config.getString("transparency.noBorder", TRANSPARENCY_NO_BORDER);
 
         dataConfig = this.configManager.getNewConfig("data.yml");

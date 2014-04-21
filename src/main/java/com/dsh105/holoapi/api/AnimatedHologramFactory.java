@@ -58,10 +58,11 @@ public class AnimatedHologramFactory {
      * Constructs an AnimatedHologramFactory
      *
      * @param owningPlugin plugin to register constructed holograms under
+     * @throws java.lang.IllegalArgumentException if the owning plugin is null
      */
     public AnimatedHologramFactory(Plugin owningPlugin) {
         if (owningPlugin == null) {
-            throw new NullPointerException("Plugin cannot be null");
+            throw new IllegalArgumentException("Plugin cannot be null");
         }
         this.owningPlugin = owningPlugin;
     }
@@ -179,6 +180,7 @@ public class AnimatedHologramFactory {
      * Constructs an {@link com.dsh105.holoapi.api.AnimatedHologram} based on the settings stored in the factory
      *
      * @return The constructed AnimatedHologram
+     * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the animation is empty or the location is not initialised
      */
     public AnimatedHologram build() {
         if ((this.imageGenerated && this.animatedImage == null) || (!this.imageGenerated && this.textGenerator == null)) {

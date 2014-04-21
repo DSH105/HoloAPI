@@ -259,6 +259,7 @@ public class Hologram {
      * Any existing save data will be cleared and overwritten with the new assigned id
      *
      * @param saveId save id to be assigned to this hologram
+     * @throws com.dsh105.holoapi.exceptions.DuplicateSaveIdException if the save ID is already registered
      */
     public void setSaveId(String saveId) {
         if (HoloAPI.getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
@@ -386,6 +387,7 @@ public class Hologram {
      *
      * @param index   index of the line to set
      * @param content new content for the hologram line
+     * @throws java.lang.IllegalArgumentException if the index is greater than the number of tags in the hologram
      */
     public void updateLine(int index, String content) {
         if (index >= this.tags.length) {
@@ -409,6 +411,7 @@ public class Hologram {
      * @param index    index of the line to set
      * @param content  new content for the hologram line
      * @param observer player to show the changes to
+     * @throws java.lang.IllegalArgumentException if the index is greater than the number of tags in the hologram
      */
     public void updateLine(int index, String content, Player observer) {
         if (index >= this.tags.length) {
@@ -423,6 +426,7 @@ public class Hologram {
      * Sets the entire content of the hologram
      *
      * @param content new content for the hologram
+     * @throws java.lang.IllegalArgumentException if the new content is empty
      */
     public void updateLines(String... content) {
         if (content.length <= 0) {
@@ -446,7 +450,8 @@ public class Hologram {
      * Sets the entire content of the hologram for a certain player
      *
      * @param observer player to show the changes to
-     * @param content new content for the hologram
+     * @param content  new content for the hologram
+     * @throws java.lang.IllegalArgumentException if the new content is empty
      */
     public void updateLines(Player observer, String... content) {
         if (content.length <= 0) {

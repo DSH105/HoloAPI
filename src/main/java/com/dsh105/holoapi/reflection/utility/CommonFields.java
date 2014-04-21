@@ -34,10 +34,10 @@ public class CommonFields {
     public static Object getNetworkManager(Player player) {
         Object vanillaPlayer = CommonMethods.getVanillaObject(player);
 
-        if(NETWORK_ACCESSOR == null) {
-           NETWORK_ACCESSOR = new SafeField<Object>(CommonReflection.getPlayerConnectionClass(), "networkManager");
+        if (NETWORK_ACCESSOR == null) {
+            NETWORK_ACCESSOR = new SafeField<Object>(CommonReflection.getPlayerConnectionClass(), "networkManager");
 
-            if(!NETWORK_ACCESSOR.getField().getType().equals(CommonReflection.getNetworkManagerClass())) {
+            if (!NETWORK_ACCESSOR.getField().getType().equals(CommonReflection.getNetworkManagerClass())) {
                 HoloAPICore.LOGGER_REFLECTION.warning("Failed to retrieve a valid NetworkManager!");
                 NETWORK_ACCESSOR = null;
                 return null;
@@ -49,10 +49,10 @@ public class CommonFields {
     public static Object getPlayerConnection(Player player) {
         Object vanillaPlayer = CommonMethods.getVanillaObject(player);
 
-        if(CONNECTION_ACCESSOR == null) {
+        if (CONNECTION_ACCESSOR == null) {
             CONNECTION_ACCESSOR = new SafeField<Object>(CommonReflection.getEntityPlayerClass(), "playerConnection");
 
-            if(!CONNECTION_ACCESSOR.getField().getType().equals(CommonReflection.getPlayerConnectionClass())) {
+            if (!CONNECTION_ACCESSOR.getField().getType().equals(CommonReflection.getPlayerConnectionClass())) {
                 HoloAPICore.LOGGER_REFLECTION.warning("Failed to retrieve a valid PlayerConnection!");
                 CONNECTION_ACCESSOR = null;
                 return null;

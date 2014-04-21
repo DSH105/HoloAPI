@@ -52,7 +52,7 @@ public class PlayerUtil {
 
     public static Object getChannel(Object networkManager) {
         FieldVisitor visitor = new FieldVisitor(networkManager).withType(Channel.class);
-        if(visitor.getFields().size() > 0) {
+        if (visitor.getFields().size() > 0) {
             return visitor.getAsFieldAccessor(0).get(networkManager);
         } else {
             HoloAPICore.LOGGER_REFLECTION.warning("Failed to find the Channel field!");

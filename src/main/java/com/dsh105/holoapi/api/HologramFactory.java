@@ -65,10 +65,11 @@ public class HologramFactory {
      * Constructs a HologramFactory
      *
      * @param owningPlugin plugin to register constructed holograms under
+     * @throws java.lang.IllegalArgumentException if the owning plugin is null
      */
     public HologramFactory(Plugin owningPlugin) {
         if (owningPlugin == null) {
-            throw new NullPointerException("Plugin cannot be null");
+            throw new IllegalArgumentException("Plugin cannot be null");
         }
         this.owningPlugin = owningPlugin;
     }
@@ -156,6 +157,7 @@ public class HologramFactory {
      *
      * @param imageGenerator image generator used to prepare Holograms
      * @return This object
+     * @throws java.lang.IllegalArgumentException if the generator is null
      * @see com.dsh105.holoapi.image.ImageGenerator
      */
     public HologramFactory withImage(ImageGenerator imageGenerator) {
@@ -206,6 +208,7 @@ public class HologramFactory {
      * Constructs an {@link com.dsh105.holoapi.api.Hologram} based on the settings stored in the factory
      *
      * @return The constructed Hologram
+     * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the lines are empty or the location is not initialised
      */
     public Hologram build() {
         if (this.isEmpty()) {

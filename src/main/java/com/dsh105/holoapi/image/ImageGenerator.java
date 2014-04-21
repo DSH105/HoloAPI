@@ -120,6 +120,7 @@ public class ImageGenerator implements Generator {
      * @param height         height of the display
      * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
+     * @throws java.lang.RuntimeException if the image cannot be read
      */
     public ImageGenerator(String imageKey, File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {
         this.imageHeight = height;
@@ -140,12 +141,18 @@ public class ImageGenerator implements Generator {
         return imageKey;
     }
 
+    /**
+     * Loads the stored URL data to form a generated image
+     *
+     * @throws java.lang.IllegalArgumentException if the URL is not initiated
+     * @throws java.lang.RuntimeException         if the image cannot be read
+     */
     public void loadUrlImage() {
         if (this.hasLoaded) {
             return;
         }
         if (this.imageUrl == null) {
-            throw new NullPointerException("URL not initiated for ImageGenerator.");
+            throw new IllegalArgumentException("URL not initiated for ImageGenerator.");
         }
         URI uri = URI.create(this.imageUrl);
         BufferedImage image;

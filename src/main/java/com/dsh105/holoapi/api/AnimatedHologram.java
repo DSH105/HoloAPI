@@ -23,7 +23,6 @@ import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.PlayerIdent;
 import com.dsh105.holoapi.util.TagIdGenerator;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -111,6 +110,7 @@ public class AnimatedHologram extends Hologram {
      *
      * @param index index of the frame to get
      * @return frame of the animated hologram by its index
+     * @throws java.lang.IndexOutOfBoundsException if the frame of the specified index doesn't exist
      */
     public Frame getFrame(int index) {
         if (index >= this.frames.size()) {
