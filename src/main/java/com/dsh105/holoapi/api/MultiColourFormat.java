@@ -22,7 +22,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
+
 public class MultiColourFormat extends TagFormat {
+
+    public static ArrayList<Hologram> CACHE = new ArrayList<Hologram>();
 
     private String[] colours = null;
     
@@ -42,6 +46,10 @@ public class MultiColourFormat extends TagFormat {
             public void run() {
                 if (++index >= colours.length) {
                     index = 0;
+                }
+
+                for (Hologram h : CACHE) {
+                    h.updateDisplay();
                 }
             }
         }.runTaskTimer(HoloAPI.getCore(), 0, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("multicolorFormat.delay", 10));

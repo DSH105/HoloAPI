@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityAll;
@@ -393,7 +394,12 @@ public class Hologram {
         if (index >= this.tags.length) {
             throw new IllegalArgumentException("Tag index doesn't exist!");
         }
-        this.tags[index] = content;
+        HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], content, index);
+        Bukkit.getServer().getPluginManager().callEvent(lineUpdateEvent);
+        if (lineUpdateEvent.isCancelled()) {
+            return;
+        }
+        this.tags[index] = lineUpdateEvent.getNewLineContent();
         for (String ident : this.playerToLocationMap.keySet()) {
             Player p = PlayerIdent.getPlayerOf(ident);
             if (p != null) {
@@ -432,11 +438,18 @@ public class Hologram {
         if (content.length <= 0) {
             throw new IllegalArgumentException("New hologram content cannot be empty!");
         }
-        this.tags = content;
+
+        //this.tags = content;
         for (String ident : this.playerToLocationMap.keySet()) {
             Player p = PlayerIdent.getPlayerOf(ident);
             if (p != null) {
-                for (int index = 0; index < this.tags.length; index++) {
+                for (int index = 0; index < content.length; index++) {
+                    HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], content[index], index);
+                    Bukkit.getServer().getPluginManager().callEvent(lineUpdateEvent);
+                    if (lineUpdateEvent.isCancelled()) {
+                        continue;
+                    }
+                    this.tags[index] = lineUpdateEvent.getNewLineContent();
                     this.updateNametag(p, this.tags[index], index);
                 }
             }

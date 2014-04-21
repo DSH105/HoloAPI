@@ -122,6 +122,12 @@ public class SimpleHoloManager implements HoloManager {
             ((AnimatedHologram) hologram).animate();
         }
         HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloCreateEvent(hologram));
+
+        for (String s : hologram.getLines()) {
+            if (s.contains(HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.character", "&s"))) {
+                MultiColourFormat.CACHE.add(hologram);
+            }
+        }
     }
 
     @Override
@@ -133,6 +139,10 @@ public class SimpleHoloManager implements HoloManager {
         }
         HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloDeleteEvent(hologram));
         //this.clearFromFile(hologram);
+
+        if (MultiColourFormat.CACHE.contains(hologram)) {
+            MultiColourFormat.CACHE.remove(hologram);
+        }
     }
 
     @Override
