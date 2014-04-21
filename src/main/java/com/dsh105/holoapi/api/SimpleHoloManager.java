@@ -46,11 +46,12 @@ import java.util.logging.Level;
 public class SimpleHoloManager implements HoloManager {
 
     YAMLConfig config;
-    //private UpdateDisplayTask updateDisplayTask;
+    private UpdateDisplayTask updateDisplayTask;
     private HashMap<Hologram, Plugin> holograms = new HashMap<Hologram, Plugin>();
 
     public SimpleHoloManager() {
         this.config = HoloAPI.getConfig(HoloAPI.ConfigType.DATA);
+        this.updateDisplayTask = new UpdateDisplayTask();
     }
 
     @Override
@@ -114,9 +115,6 @@ public class SimpleHoloManager implements HoloManager {
     @Override
     public void track(Hologram hologram, Plugin owningPlugin) {
         this.holograms.put(hologram, owningPlugin);
-        /*if (this.updateDisplayTask == null) {
-            this.updateDisplayTask = new UpdateDisplayTask();
-        }*/
         if (!hologram.isSimple() && this.config.getConfigurationSection("holograms." + hologram.getSaveId()) == null) {
             this.saveToFile(hologram);
         }
@@ -130,10 +128,6 @@ public class SimpleHoloManager implements HoloManager {
     public void stopTracking(Hologram hologram) {
         hologram.clearAllPlayerViews();
         this.holograms.remove(hologram);
-        /*if (this.holograms.isEmpty() && this.updateDisplayTask != null) {
-            this.updateDisplayTask.cancel();
-            this.updateDisplayTask = null;
-        }*/
         if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).cancelAnimation();
         }
@@ -476,25 +470,22 @@ public class SimpleHoloManager implements HoloManager {
                 t.cancel();
             }
             stopTracking(hologram);
-            /*for (Hologram h : getAllHolograms().keySet()) {
-                if (h.isSimple()) {
-                    //h.refreshDisplay();
-                }
-            }*/
         }
     }
 
     class UpdateDisplayTask extends BukkitRunnable {
 
         public UpdateDisplayTask() {
-            //this.runTaskTimer(HoloAPI.getCore(), 0L, 20 * 60);
+            this.runTaskTimer(HoloAPI.getCore(), 0L, 20 * 60);
         }
 
         @Override
         public void run() {
-            Iterator<Hologram> i = getAllHolograms().keySet().iterator();
-            while (i.hasNext()) {
-                i.next().refreshDisplay(true);
+            if (!getAllHolograms().isEmpty()) {
+                Iterator<Hologram> i = getAllHolograms().keySet().iterator();
+                while (i.hasNext()) {
+                    i.next().updateDisplay();
+                }
             }
         }
     }
