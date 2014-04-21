@@ -460,6 +460,33 @@ public class Hologram {
     }
 
     /**
+     * Updates the current display of the hologram
+     * <p/>
+     * This method simply sends the existing display to the specified player. It is most appropriate for updating new tag formats that have been recently applied using the TagFormatter API (see {@link com.dsh105.holoapi.api.TagFormatter}
+     *
+     * @param observer player to update the display for
+     */
+    public void updateDisplay(Player observer) {
+        for (int index = 0; index < this.tags.length; index++) {
+            this.updateNametag(observer, this.tags[index], index);
+        }
+    }
+
+    /**
+     * Updates the current display of the hologram
+     * <p/>
+     * This method simply sends the existing display to all players that can currently see the hologram. It is most appropriate for updating new tag formats that have been recently applied using the TagFormatter API (see {@link com.dsh105.holoapi.api.TagFormatter}
+     */
+    public void updateDisplay() {
+        for (String ident : this.getPlayerViews().keySet()) {
+            Player player = PlayerIdent.getPlayerOf(ident);
+            if (player != null) {
+                this.updateDisplay(player);
+            }
+        }
+    }
+
+    /**
      * Adds an action for when the hologram is touched
      *
      * @param action action to perform when the hologram is touched
