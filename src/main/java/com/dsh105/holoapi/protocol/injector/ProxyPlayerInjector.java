@@ -20,6 +20,7 @@ package com.dsh105.holoapi.protocol.injector;
 import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.protocol.PlayerInjector;
 import com.dsh105.holoapi.protocol.PlayerUtil;
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.ReflectionUtil;
@@ -34,9 +35,9 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
 
     // Fields
     // The Object lock
-    private final FieldAccessor<Object> h_lock = new SafeField<Object>(ReflectionUtil.getNMSClass("NetworkManager"), "h");  // Those fields haven't changed in 50 years!
+    private final FieldAccessor<Object> h_lock = new SafeField<Object>(ReflectionUtil.getNMSClass("NetworkManager"), Constants.NETWORK_FIELD_LOCK.getName());  // Those fields haven't changed in 50 years!
     // The inboundQueue field
-    private final FieldAccessor<Queue> inboundQueue = new SafeField<Queue>(ReflectionUtil.getNMSClass("NetworkManager"), "inboundQueue");
+    private final FieldAccessor<Queue> inboundQueue = new SafeField<Queue>(ReflectionUtil.getNMSClass("NetworkManager"), Constants.NETWORK_FIELD_INBOUNDQUEUE.getName());
 
     private Player player;
 

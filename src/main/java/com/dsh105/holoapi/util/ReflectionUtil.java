@@ -33,7 +33,7 @@ public class ReflectionUtil {
     public static int BUKKIT_VERSION_NUMERIC = Integer.valueOf(getBukkitVersion().replaceAll("[^0-9]", ""));
 
     public static String getServerVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        return CommonReflection.getVersionTag();
     }
 
     // Thanks ProtocolLib <3
@@ -49,11 +49,15 @@ public class ReflectionUtil {
     }
 
     public static String getNMSPackageName() {
-        return "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        return "net.minecraft.server." + getServerVersion();
     }
 
     public static String getCBCPackageName() {
-        return "org.bukkit.craftbukkit." + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        return "org.bukkit.craftbukkit." + getServerVersion();
+    }
+
+    public static boolean isServerMCPC() {
+        return Bukkit.getVersion().contains("MCPC-Plus");
     }
 
     /**

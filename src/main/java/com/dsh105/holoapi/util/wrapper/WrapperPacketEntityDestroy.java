@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.util.wrapper;
 
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 
@@ -30,10 +31,10 @@ public class WrapperPacketEntityDestroy extends Packet {
     }
 
     public void setEntities(int[] value) {
-        this.write("a", value);
+        this.write(Constants.PACKET_ENTITYDESTROY_FIELD_IDS.getName(), value);
     }
 
     public List<Integer> getEntities() {
-        return Arrays.asList((Integer[]) this.read("a"));
+        return Arrays.asList((Integer[]) this.read(Constants.PACKET_ENTITYDESTROY_FIELD_IDS.getName()));
     }
 }

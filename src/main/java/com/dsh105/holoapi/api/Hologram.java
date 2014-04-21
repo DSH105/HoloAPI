@@ -745,9 +745,9 @@ public class Hologram {
             horse.setZ(z);
 
             WrappedDataWatcher dw = new WrappedDataWatcher();
-            dw.watch(10, content);
-            dw.watch(11, Byte.valueOf((byte) 1));
-            dw.watch(12, Integer.valueOf(-1700000));
+            dw.initiate(10, content);
+            dw.initiate(11, Byte.valueOf((byte) 1));
+            dw.initiate(12, Integer.valueOf(-1700000));
             horse.setMetadata(dw);
 
             WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
@@ -796,9 +796,9 @@ public class Hologram {
         touchSlime.setZ(z);
 
         WrappedDataWatcher touchDw = new WrappedDataWatcher();
-        touchDw.watch(0, Byte.valueOf((byte) 32));
+        touchDw.initiate(0, Byte.valueOf((byte) 32));
         //int size = (this.calculateMaxLineLength() / (this.getForPartOfImage(index) != null ? 20 : 6));
-        touchDw.watch(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
+        touchDw.initiate(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
         touchSlime.setMetadata(touchDw);
 
         WrapperPacketSpawnEntity touchSkull = new WrapperPacketSpawnEntity();
@@ -828,7 +828,7 @@ public class Hologram {
         item.setData(1);
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.watch(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(itemId), 1)));
+        dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(itemId), 1)));
         new SafeMethod(CommonReflection.getDataWatcherClasss(), "h", int.class).invoke(dw.getHandle(), 10);
 
         WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
@@ -857,12 +857,12 @@ public class Hologram {
 
         int matchItem = HoloAPI.getTagFormatter().matchItem(content);
         if (matchItem >= 0) {
-            dw.watch(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
+            dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
             new SafeMethod(CommonReflection.getDataWatcherClasss(), "h", int.class).invoke(dw.getHandle(), 10);
         } else {
-            dw.watch(10, content);
-            dw.watch(11, Byte.valueOf((byte) 1));
-            dw.watch(12, Integer.valueOf(-1700000));
+            dw.initiate(10, content);
+            dw.initiate(11, Byte.valueOf((byte) 1));
+            dw.initiate(12, Integer.valueOf(-1700000));
         }
 
         WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();

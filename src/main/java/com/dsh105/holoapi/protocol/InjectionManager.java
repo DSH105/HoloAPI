@@ -22,6 +22,8 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.events.HoloTouchEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.protocol.netty.ChannelPipelineInjector;
+import com.dsh105.holoapi.reflection.Constants;
+import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 import com.google.common.collect.MapMaker;
@@ -158,7 +160,8 @@ public class InjectionManager {
                 // The entity id of the hologram that got interacted with.
                 int id = (Integer) packet.read("a");
                 // The action is whether or not it was a right or left click.
-                Action action = readAction(packet.read("action"));
+                Object rawAction = packet.read("action");
+                Action action = Action.getFromId((Integer) (rawAction instanceof Integer ? rawAction : readAction(rawAction)));
 
                 for (Hologram hologram : HoloAPI.getManager().getAllHolograms().keySet()) {
                     for (int entityId : hologram.getAllEntityIds()) {
@@ -178,7 +181,8 @@ public class InjectionManager {
     }
 
     private Action readAction(Object enumAction) {
-        //return Action.getFromId((Integer) ReflectionUtil.invokeMethod(READ_ACTION, null, enumAction));
-        return Action.getFromId((Integer) ReflectionUtil.getField(ReflectionUtil.getNMSClass("EnumEntityUseAction"), "d", enumAction));
+        Class<?> packetClass = HoloAPI.getCore().isUsingNetty ? ReflectionUtil.getNMSClass("EnumEntityUseAction") : new Packet(PacketFactory.PacketType.USE_ENTITY).getPacketClass();
+        String field = HoloAPI.getCore().isUsingNetty ? Constants.ENUM_USEENTITY_FIELD_GETACTIONID.getName() : Constants.PACKET_USEENTITY_FIELD_GETACTIONID.getName();
+        return Action.getFromId((Integer) ReflectionUtil.getField(packetClass, field, enumAction));
     }
 }

@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.protocol;
 
 import com.dsh105.holoapi.HoloAPICore;
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.FieldVisitor;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ReflectionUtil;
@@ -30,9 +31,9 @@ import java.lang.reflect.Method;
 public class PlayerUtil {
 
     public static final Method getHandle = ReflectionUtil.getMethod(CommonReflection.getCraftEntityClass(), "getHandle");
-    public static final Field playerConnection = ReflectionUtil.getField(CommonReflection.getMinecraftClass("EntityPlayer"), "playerConnection");
-    public static final Method sendPacket = ReflectionUtil.getMethod(CommonReflection.getMinecraftClass("PlayerConnection"), "sendPacket", CommonReflection.getMinecraftClass("Packet"));
-    public static final Field networkManager = ReflectionUtil.getField(CommonReflection.getMinecraftClass("PlayerConnection"), "networkManager");
+    public static final Field playerConnection = ReflectionUtil.getField(CommonReflection.getMinecraftClass("EntityPlayer"), Constants.PLAYER_FIELD_CONNECTION.getName());
+    public static final Method sendPacket = ReflectionUtil.getMethod(CommonReflection.getMinecraftClass("PlayerConnection"), Constants.PLAYERCONNECTION_FUNC_SENDPACKET.getName(), CommonReflection.getMinecraftClass("Packet"));
+    public static final Field networkManager = ReflectionUtil.getField(CommonReflection.getMinecraftClass("PlayerConnection"), Constants.PLAYERCONNECTION_FIELD_NETWORKMANAGER.getName());
 
     public static Object toNMS(Player player) {
         return ReflectionUtil.invokeMethod(getHandle, player);
@@ -40,6 +41,10 @@ public class PlayerUtil {
 
     public static Object getPlayerConnection(Object nmsPlayer) {
         return ReflectionUtil.getField(playerConnection, nmsPlayer);
+    }
+
+    public static void sendPacket(Player player, Object packet) {
+        sendPacket(getPlayerConnection(toNMS(player)), packet);
     }
 
     public static void sendPacket(Object playerConnection, Object packet) {

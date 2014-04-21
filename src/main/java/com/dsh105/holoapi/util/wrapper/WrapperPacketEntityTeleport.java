@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.util.wrapper;
 
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
 
@@ -27,50 +28,50 @@ public class WrapperPacketEntityTeleport extends Packet {
     }
 
     public void setEntityId(int value) {
-        this.write("a", value);
+        this.write(Constants.PACKET_ENTITYTELEPORT_FIELD_ID.getName(), value);
     }
 
     public int getEntityId() {
-        return (Integer) this.read("a");
+        return (Integer) this.read(Constants.PACKET_ENTITYTELEPORT_FIELD_ID.getName());
     }
 
     public void setX(double value) {
-        this.write("b", (int) Math.floor(value * 32.0D));
+        this.write(Constants.PACKET_ENTITYTELEPORT_FIELD_X.getName(), (int) Math.floor(value * 32.0D));
     }
 
     public double getX() {
-        return (((Integer) this.read("b")) / 32.0D);
+        return (((Integer) this.read(Constants.PACKET_ENTITYTELEPORT_FIELD_X.getName())) / 32.0D);
     }
 
     public void setY(double value) {
-        this.write("c", (int) Math.floor(value * 32.0D));
+        this.write(Constants.PACKET_ENTITYTELEPORT_FIELD_Y.getName(), (int) Math.floor(value * 32.0D));
     }
 
     public double getY() {
-        return (((Integer) this.read("c")) / 32.0D);
+        return (((Integer) this.read(Constants.PACKET_ENTITYTELEPORT_FIELD_Y.getName())) / 32.0D);
     }
 
     public void setZ(double value) {
-        this.write("d", (int) Math.floor(value * 32.0D));
+        this.write(Constants.PACKET_ENTITYTELEPORT_FIELD_Z.getName(), (int) Math.floor(value * 32.0D));
     }
 
     public double getZ() {
-        return (((Integer) this.read("d")) / 32.0D);
+        return (((Integer) this.read(Constants.PACKET_ENTITYTELEPORT_FIELD_Z.getName())) / 32.0D);
     }
 
     public void setYaw(float value) {
-        this.write("e", (byte) (value * 256.0F / 360.0F));
+        this.write(Constants.PACKET_ENTITYTELEPORT_FIELD_YAW.getName(), (byte) (value * 256.0F / 360.0F));
     }
 
     public float getYaw() {
-        return (((Byte) this.read("e")) * 360.0F / 256.0F);
+        return (((Byte) this.read(Constants.PACKET_ENTITYTELEPORT_FIELD_YAW.getName())) * 360.0F / 256.0F);
     }
 
     public void setPitch(float value) {
-        this.write("f", (byte) (value * 256.0F / 360.0F));
+        this.write(Constants.PACKET_ENTITYTELEPORT_FIELD_PITCH.getName(), (byte) (value * 256.0F / 360.0F));
     }
 
     public float getPitch() {
-        return (((Byte) this.read("f")) * 360.0F / 256.0F);
+        return (((Byte) this.read(Constants.PACKET_ENTITYTELEPORT_FIELD_PITCH.getName())) * 360.0F / 256.0F);
     }
 }

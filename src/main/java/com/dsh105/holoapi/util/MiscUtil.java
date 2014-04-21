@@ -39,9 +39,6 @@ public class MiscUtil {
                 list.add(line);
             }
             return list.toArray(new String[list.size()]);
-            /*String encoding = con.getContentEncoding();
-            encoding = encoding == null ? "UTF-8" : encoding;
-            return IOUtils.toString(in, encoding);*/
         } catch (Exception e) {
             e.printStackTrace();
         }

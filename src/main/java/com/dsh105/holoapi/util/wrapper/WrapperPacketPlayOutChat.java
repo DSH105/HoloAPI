@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.util.wrapper;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.SafeMethod;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.ReflectionUtil;
@@ -30,17 +31,18 @@ public class WrapperPacketPlayOutChat extends Packet {
     }
 
     public void setMessage(String chatComponent) {
-        if (!HoloAPI.getCore().isUsingNetty) {
-            this.write("message", chatComponent);
-            return;
+        if (HoloAPI.getCore().isUsingNetty) {
+            this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), Constants.PACKET_CHAT_FUNC_SETCOMPONENT.getName(), String.class).invoke(null, chatComponent));
+        } else {
+            this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), chatComponent);
         }
-        this.write("a", new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), "a", String.class).invoke(null, chatComponent));
     }
 
     public String getMessage() {
-        if (!HoloAPI.getCore().isUsingNetty) {
-            return (String) this.read("message");
+        Object value = this.read(Constants.PACKET_CHAT_FIELD_MESSAGE.getName());
+        if (value instanceof String) {
+            return (String) value;
         }
-        return (String) new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), "a", ReflectionUtil.getNMSClass("IChatBaseComponent")).invoke(null, this.read("a"));
+        return (String) new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), Constants.PACKET_CHAT_FUNC_GETMESSAGE.getName(), ReflectionUtil.getNMSClass("IChatBaseComponent")).invoke(null, value);
     }
 }

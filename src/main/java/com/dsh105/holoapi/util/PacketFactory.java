@@ -29,7 +29,8 @@ public class PacketFactory {
         ENTITY_TELEPORT(Protocol.PLAY, Sender.SERVER, 0x18, 0x22),
         ENTITY_ATTACH(Protocol.PLAY, Sender.SERVER, 0x1B, 0x27),
         ENTITY_METADATA(Protocol.PLAY, Sender.SERVER, 0x1C, 0x28),
-        CHAT(Protocol.PLAY, Sender.SERVER, 0x02, 0x03);
+        CHAT(Protocol.PLAY, Sender.SERVER, 0x02, 0x03),
+        USE_ENTITY(Protocol.PLAY, Sender.CLIENT, 0x02, 0x07);
 
         private Protocol protocol;
         private Sender sender;

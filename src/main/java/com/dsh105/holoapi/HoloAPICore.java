@@ -90,7 +90,7 @@ public class HoloAPICore extends JavaPlugin {
     protected static double LINE_SPACING = 0.25D;
     protected static int TAG_ENTITY_MULTIPLIER = 4;
     protected static String TRANSPARENCY_NO_BORDER = " ";
-    protected static String TRANSPARENCY_WITH_BORDER = "&r &7[|] &r";
+    protected static String TRANSPARENCY_WITH_BORDER = " &r ";
 
     private ChatColor primaryColour = ChatColor.DARK_AQUA;
     private ChatColor secondaryColour = ChatColor.AQUA;
@@ -112,6 +112,7 @@ public class HoloAPICore extends JavaPlugin {
         // Needs a much better method since this is not really reliable
         // TODO: Improve this
         INJECTION_MANAGER = new ProtocolInjectionBuilder().withStrategy(isUsingNetty ? InjectionStrategy.NETTY : InjectionStrategy.PROXY).build();
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         TAG_FORMATTER = new TagFormatter();
         VISIBILITY_MATCHER = new VisibilityMatcher();

@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.util.wrapper;
 
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.SafeMethod;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
@@ -28,15 +29,19 @@ public class WrapperPacketEntityMetadata extends Packet {
     }
 
     public void setEntityId(int value) {
-        this.write("a", value);
+        this.write(Constants.PACKET_ENTITYMETADATA_FIELD_ID.getName(), value);
     }
 
     public int getEntityId() {
-        return (Integer) this.read("a");
+        return (Integer) this.read(Constants.PACKET_ENTITYMETADATA_FIELD_ID.getName());
     }
 
     public void setMetadata(WrappedDataWatcher metadata) {
         Object handle = metadata.getHandle();
-        this.write("b", new SafeMethod<Void>(handle.getClass(), "c").invoke(handle));
+        this.write(Constants.PACKET_ENTITYMETADATA_FIELD_META.getName(), new SafeMethod<Void>(handle.getClass(), Constants.PACKET_ENTITYMETADATA_FUNC_PREPARE.getName()).invoke(handle));
+    }
+
+    public Object getMetadata() {
+        return this.read(Constants.PACKET_ENTITYMETADATA_FIELD_META.getName());
     }
 }

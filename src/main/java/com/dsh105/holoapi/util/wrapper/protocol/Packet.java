@@ -18,11 +18,12 @@
 package com.dsh105.holoapi.util.wrapper.protocol;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.protocol.PlayerUtil;
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
 import com.dsh105.holoapi.util.MiscUtil;
 import com.dsh105.holoapi.util.PacketFactory;
-import com.dsh105.holoapi.util.PlayerUtil;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import org.bukkit.entity.Player;
 
@@ -52,7 +53,7 @@ public class Packet {
                 e.printStackTrace();
             }
         } else {
-            FieldAccessor<Map> mapField = new SafeField<Map>(ReflectionUtil.getNMSClass("Packet"), "a");
+            FieldAccessor<Map> mapField = new SafeField<Map>(ReflectionUtil.getNMSClass("Packet"), Constants.PROTOCOL_FIELD_PACKETMAP.getName());
             Map map = mapField.get(null);
             this.packetClass = (Class) MiscUtil.getKeyAtValue(map, legacyId);
             try {
