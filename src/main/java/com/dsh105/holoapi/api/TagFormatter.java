@@ -120,6 +120,15 @@ public class TagFormatter {
             }
         });
 
+        this.addFormat(Pattern.compile("\\%serveronline:(.+?)\\%"), new DynamicTagFormat() {
+            @Override
+            public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
+                String serverName = matcher.group(1);
+                // get how many online here
+                return "";
+            }
+        });
+
         this.addFormat(HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.character", "&s"), new MultiColourFormat());
     }
 
