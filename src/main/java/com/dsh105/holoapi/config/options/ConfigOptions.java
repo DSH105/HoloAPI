@@ -42,6 +42,9 @@ public class ConfigOptions extends Options {
         set("transparency.noBorder", HoloAPI.getTransparencyWithoutBorder());
         set("timezone.offset", 0);
         set("timezone.showZoneMarker", true);
+        set("multicolorFormat.character", "&s");
+        set("multicolorFormat.colours", "&d,&5,&1,&9,&b,&a,&e,&6,&c,&3");
+        set("multicolorFormat.delay", 10);
 
         set("chatBubbles.show", false);
         set("chatBubbles.rise", true);

@@ -32,7 +32,7 @@ public interface ITagFormat {
     public String getValue(Player observer);
 
     /**
-     * Gets the value to use in the hologram instead of the registered key
+     * Gets the value to use in the hologram instead of the registered key. If not overridden, this will return {@link com.dsh105.holoapi.api.ITagFormat#getValue(org.bukkit.entity.Player)}
      *
      * @param hologram hologram using this function
      * @param observer player viewing the hologram

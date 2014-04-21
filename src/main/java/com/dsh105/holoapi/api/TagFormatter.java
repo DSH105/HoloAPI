@@ -119,6 +119,8 @@ public class TagFormatter {
                 return lineContent.replace(matcher.group(), format.format(calendar.getTime()));
             }
         });
+
+        this.addFormat(HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.character", "&s"), new MultiColourFormat());
     }
 
     /**
