@@ -29,6 +29,7 @@ import com.dsh105.holoapi.config.YAMLConfigManager;
 import com.dsh105.holoapi.config.options.ConfigOptions;
 import com.dsh105.holoapi.data.Metrics;
 import com.dsh105.holoapi.data.Updater;
+import com.dsh105.holoapi.hook.BungeeProvider;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
 import com.dsh105.holoapi.image.SimpleAnimationLoader;
@@ -78,6 +79,7 @@ public class HoloAPICore extends JavaPlugin {
 
     protected VaultProvider vaultProvider;
     protected VanishProvider vanishProvider;
+    protected BungeeProvider bungeeProvider;
 
     // Update Checker stuff
     public boolean updateAvailable = false;
@@ -138,6 +140,9 @@ public class HoloAPICore extends JavaPlugin {
 
         // VanishNoPacket Hook
         this.vanishProvider = new VanishProvider(this);
+
+        // BungeeCord Hook
+        this.bungeeProvider = new BungeeProvider(this);
 
 
         this.loadHolograms();

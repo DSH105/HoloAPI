@@ -123,9 +123,7 @@ public class TagFormatter {
         this.addFormat(Pattern.compile("\\%serveronline:(.+?)\\%"), new DynamicTagFormat() {
             @Override
             public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
-                String serverName = matcher.group(1);
-                // get how many online here
-                return "";
+                return String.valueOf(HoloAPI.getBungeeProvider().getPlayerCount(matcher.group(1)));
             }
         });
 
