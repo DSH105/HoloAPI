@@ -19,8 +19,12 @@ package com.dsh105.holoapi.api.touch;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.protocol.Action;
+import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.entity.Player;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 /**
@@ -64,6 +68,20 @@ public class CommandTouchAction implements TouchAction {
     public void onTouch(Player who, Action action) {
         String command = this.command.replace("%name%", who.getName());
         command = command.replace("%world%", who.getWorld().getName());
+
+        if (command.startsWith("server ")) {
+            String serverName = StringUtil.combineSplit(1, command.split(" "), " ");
+            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+            DataOutputStream out = new DataOutputStream(byteOutput);
+            try {
+                out.writeUTF("Connect");
+                out.writeUTF(serverName);
+                who.sendPluginMessage(HoloAPI.getCore(), "BungeeCord", byteOutput.toByteArray());
+                return;
+            } catch (IOException e) {
+            }
+        }
+
         if (this.shouldPerformAsConsole()) {
             HoloAPI.getCore().getServer().dispatchCommand(HoloAPI.getCore().getServer().getConsoleSender(), command);
         } else {
