@@ -18,11 +18,13 @@
 package com.dsh105.holoapi.util;
 
 import com.google.common.collect.BiMap;
+import net.minecraft.util.io.netty.buffer.ByteBuf;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -55,5 +57,19 @@ public class MiscUtil {
             }
         }
         return null;
+    }
+
+    public static String readPrefixedString(ByteBuf buf) {
+        int length = buf.readShort();
+        byte[] bytes = new byte[length];
+        buf.readBytes(bytes);
+
+        return new String(bytes, Charset.forName("UTF8"));
+    }
+
+    public static void writePrefixedString(ByteBuf buf, String str) {
+        byte[] bytes = str.getBytes(Charset.forName("UTF8"));
+        buf.writeShort(bytes.length);
+        buf.writeBytes(bytes);
     }
 }

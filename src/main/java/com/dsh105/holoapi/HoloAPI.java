@@ -21,6 +21,7 @@ import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
 import com.dsh105.holoapi.config.YAMLConfig;
+import com.dsh105.holoapi.hook.BungeeProvider;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
@@ -154,6 +155,10 @@ public class HoloAPI {
             throw new RuntimeException("VanishProvider is NULL!");
         }
         return getCore().vanishProvider;
+    }
+
+    public static BungeeProvider getBungeeProvider() {
+        return getCore().bungeeProvider;
     }
 
     public enum ConfigType {
