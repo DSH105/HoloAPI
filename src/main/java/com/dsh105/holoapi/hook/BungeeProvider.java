@@ -13,9 +13,15 @@ import java.util.Map;
 public class BungeeProvider implements PluginMessageListener, Runnable {
     private final Plugin plugin;
     private final Map<String, Integer> playerCounts = new HashMap<String, Integer>();
+    private boolean disabled = false;
 
     public BungeeProvider(Plugin plugin) {
         this.plugin = plugin;
+
+        if (!plugin.getConfig().getBoolean("bungeecord", false)) {
+            disabled = true;
+            return; // BungeeCord is disabled
+        }
 
         // Register BungeeCord channels
         plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "BungeeCord", this);
@@ -80,6 +86,10 @@ public class BungeeProvider implements PluginMessageListener, Runnable {
     }
 
     public int getPlayerCount(String server) {
+        if (disabled) {
+            return 0;
+        }
+
         if (server.equalsIgnoreCase("all")) { // Special case for all servers
             int total = 0;
             for (int num : playerCounts.values()) {

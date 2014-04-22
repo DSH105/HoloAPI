@@ -31,6 +31,8 @@ public class ConfigOptions extends Options {
     public void setDefaults() {
         set("command", "holo");
 
+        set("bungeecord", false);
+
         set("primaryChatColour", "3");
         set("secondaryChatColour", "b");
 
