@@ -130,7 +130,8 @@ public class HoloAPI {
     }
 
     public static CommandModuleManager getCommandManager() {
-        return getCore().COMMAND_MODULE_MANAGER;
+        return null;
+        //return getCore().COMMAND_MODULE_MANAGER;
     }
 
     public static String getCommandLabel() {
