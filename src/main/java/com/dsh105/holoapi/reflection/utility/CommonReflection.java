@@ -244,7 +244,7 @@ public class CommonReflection {
         try {
             Class<?> enumProtocol = getMinecraftClass("EnumProtocol");
 
-            if (enumProtocol != null) {   // Better be safe then sorry...
+            if (enumProtocol != null) {   // Better be safe than sorry...
                 return true;
             }
 
