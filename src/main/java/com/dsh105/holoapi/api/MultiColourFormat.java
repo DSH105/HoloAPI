@@ -29,18 +29,18 @@ public class MultiColourFormat extends TagFormat {
     public static ArrayList<Hologram> CACHE = new ArrayList<Hologram>();
 
     private String[] colours = null;
-    
+
     private BukkitTask task;
     private int index;
-    
+
     public MultiColourFormat() {
         String configColours = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.colours", "&d,&5,&1,&9,&b,&a,&e,&6,&c,&3");
         if (configColours.contains(",")) {
             this.colours = configColours.split(",");
         } else {
-            this.colours = new String[] {configColours};
+            this.colours = new String[]{configColours};
         }
-        
+
         this.task = new BukkitRunnable() {
             @Override
             public void run() {
