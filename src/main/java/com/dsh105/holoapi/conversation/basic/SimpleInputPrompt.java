@@ -24,9 +24,15 @@ import org.bukkit.conversations.ValidatingPrompt;
 public class SimpleInputPrompt extends ValidatingPrompt {
 
     private SimpleInputFunction function;
+    private SimpleInputSuccessPrompt successPrompt;
 
     public SimpleInputPrompt(SimpleInputFunction function) {
         this.function = function;
+    }
+
+    public SimpleInputPrompt(SimpleInputFunction function, SimpleInputSuccessPrompt successPrompt) {
+        this.function = function;
+        this.successPrompt = successPrompt;
     }
 
     @Override
@@ -37,7 +43,7 @@ public class SimpleInputPrompt extends ValidatingPrompt {
     @Override
     protected Prompt acceptValidatedInput(ConversationContext context, String input) {
         this.function.function(context, input);
-        return new SimpleInputSuccessPrompt(this.function.getSuccessMessage(context, input));
+        return this.successPrompt != null ? this.successPrompt : new SimpleInputSuccessPrompt(this.function.getSuccessMessage(context, input));
     }
 
     @Override

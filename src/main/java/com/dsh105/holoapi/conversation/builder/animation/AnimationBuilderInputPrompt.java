@@ -17,13 +17,22 @@
 
 package com.dsh105.holoapi.conversation.builder.animation;
 
+import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.AnimatedHologram;
+import com.dsh105.holoapi.api.AnimatedHologramFactory;
+import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.conversation.basic.LocationFunction;
+import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
+import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
@@ -63,10 +72,36 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
     }
 
     @Override
-    protected Prompt acceptValidatedInput(ConversationContext conversationContext, String s) {
-        if ((Boolean) conversationContext.getSessionData("askingForDelay")) {
+    protected Prompt acceptValidatedInput(final ConversationContext context, final String s) {
+        if ((Boolean) context.getSessionData("askingForDelay")) {
             if (StringUtil.isInt(s)) {
-                return new AnimationBuilderInputSuccessPrompt(this.frames, Integer.parseInt(s));
+                if (context.getForWhom() instanceof Player) {
+                    return new AnimationBuilderInputSuccessPrompt(this.frames, Integer.parseInt(s));
+                }else {
+                    new SimpleInputPrompt(new LocationFunction() {
+                        AnimatedHologram h;
+                        @Override
+                        public void onFunction(ConversationContext context, String input) {
+                            context.setSessionData("location", this.getLocation());
+
+                            ArrayList<Frame> frames = new ArrayList<Frame>();
+                            for (Frame f : frames) {
+                                frames.add(new Frame(Integer.parseInt(s), f.getLines()));
+                            }
+                            try {
+                                h = new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(this.getLocation()).build();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public String getSuccessMessage(ConversationContext context, String input) {
+                            return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
+                        }
+                    });
+                }
+                return END_OF_CONVERSATION;
             }
         }
         if (s.equalsIgnoreCase("DONE")) {
@@ -74,7 +109,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
                 this.frames.add(new Frame(5, this.lines.toArray(new String[this.lines.size()])));
                 this.lines.clear();
             }
-            conversationContext.setSessionData("askingForDelay", true);
+            context.setSessionData("askingForDelay", true);
             return new AnimationBuilderInputPrompt(this.lines, this.frames);
         }
         if (s.equalsIgnoreCase("NEXT")) {
@@ -83,10 +118,10 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
             }
             this.frames.add(new Frame(5, this.lines.toArray(new String[this.lines.size()])));
             this.lines.clear();
-            conversationContext.setSessionData("nextFrame", true);
+            context.setSessionData("nextFrame", true);
             return new AnimationBuilderInputPrompt(this.lines, this.frames);
         }
-        conversationContext.setSessionData("lastAdded", s);
+        context.setSessionData("lastAdded", s);
         this.lines.add(s);
         return new AnimationBuilderInputPrompt(this.lines, this.frames);
     }
