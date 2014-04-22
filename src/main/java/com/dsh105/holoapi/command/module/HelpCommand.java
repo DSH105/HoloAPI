@@ -44,7 +44,7 @@ public class HelpCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[] {
-                new CommandHelp(this, "Retrieve help for all HoloAPI commands")
+                new CommandHelp("help", null, "Retrieve help for all HoloAPI commands")
         };
     }
 

@@ -36,7 +36,9 @@ public class CommandHelp {
 
     public CommandHelp(String commandArguments, Perm perm, String... description) {
         this.commandArguments = commandArguments;
-        this.permission = perm.getPermission();
+        if (perm != null) {
+            this.permission = perm.getPermission();
+        }
         this.description = description;
 
         this.command = HoloAPI.getCommandLabel() + " " + this.getCommandArguments();
