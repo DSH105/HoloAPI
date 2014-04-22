@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.util;
 
+import com.dsh105.holoapi.ModuleLogger;
 import com.google.common.collect.BiMap;
-import org.entityapi.api.plugin.ModuleLogger;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
