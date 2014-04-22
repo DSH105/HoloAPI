@@ -80,15 +80,23 @@ public enum HelpEntry {
     }
 
     public FancyMessage getFancyMessage(CommandSender sender) {
+        String cmd = "/" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments();
+
         ArrayList<String> description = new ArrayList<String>();
         description.add(ChatColor.AQUA + "" + ChatColor.BOLD + "Usage for /" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments() + ":");
+
         for (String part : this.getDescription()) {
             description.add("• " + ChatColor.DARK_AQUA + part);
         }
+
         if (sender != null) {
-            description.add(sender.hasPermission(this.getPermission()) ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command");
+            boolean hasPermission = sender.hasPermission(this.getPermission());
+            description.add(hasPermission ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command");
+            if (!hasPermission) {
+                return new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + cmd).itemTooltip(ItemUtil.getItem(description.toArray(new String[description.size()])));
+            }
         }
-        String cmd = "/" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments();
+
         return new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + cmd).itemTooltip(ItemUtil.getItem(description.toArray(new String[description.size()]))).suggest(cmd);
     }
 
