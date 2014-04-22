@@ -20,6 +20,7 @@ package com.dsh105.holoapi;
 import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
+import com.dsh105.holoapi.command.module.CommandModuleManager;
 import com.dsh105.holoapi.config.YAMLConfig;
 import com.dsh105.holoapi.hook.BungeeProvider;
 import com.dsh105.holoapi.hook.VanishProvider;
@@ -126,6 +127,10 @@ public class HoloAPI {
 
     public static String getTransparencyWithoutBorder() {
         return getCore().TRANSPARENCY_NO_BORDER;
+    }
+
+    public static CommandModuleManager getCommandManager() {
+        return getCore().COMMAND_MODULE_MANAGER;
     }
 
     public static String getCommandLabel() {

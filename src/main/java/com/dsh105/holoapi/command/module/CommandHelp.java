@@ -19,6 +19,7 @@ package com.dsh105.holoapi.command.module;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.ItemUtil;
+import com.dsh105.holoapi.util.Perm;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -33,13 +34,9 @@ public class CommandHelp {
     private String command;
     private String[] fullDescription;
 
-    public CommandHelp(String commandArguments, String permission, String... description) {
-        this(commandArguments, description);
-        this.permission = permission;
-    }
-
-    public CommandHelp(String commandArguments, String... description) {
+    public CommandHelp(String commandArguments, Perm perm, String... description) {
         this.commandArguments = commandArguments;
+        this.permission = perm.getPermission();
         this.description = description;
 
         this.command = HoloAPI.getCommandLabel() + " " + this.getCommandArguments();

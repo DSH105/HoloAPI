@@ -33,12 +33,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandManager implements CommandExecutor {
+public class CommandModuleManager implements CommandExecutor {
 
     private HashMap<String, CommandModule> modules = new HashMap<String, CommandModule>();
 
     private Paginator helpPages;
     private FancyPaginator fancyHelpPages;
+
+    public void registerDefaults() {
+        this.register("help", new HelpCommand());
+    }
 
     public void register(String commandArguments, CommandModule module) {
         this.modules.put(commandArguments, module);
@@ -49,12 +53,22 @@ public class CommandManager implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
             Lang.sendTo(sender, Lang.PLUGIN_INFORMATION.getValue().replace("%version%", HoloAPI.getCore().getDescription().getVersion()));
             return true;
         }
-        return false;
+
+        String moduleArgs = args[0];
+
+        CommandModule module = this.getModuleFor(moduleArgs);
+
+        if (module != null) {
+            return module.onCommand(sender, args);
+        }
+
+        Lang.sendTo(sender, Lang.COMMAND_DOESNOT_EXIST.getValue().replace("%cmd%", "/" + cmd.getLabel() + (args.length == 0 ? "" : " " + StringUtil.combineSplit(0, args, " "))));
+        return true;
     }
 
     public void sendHelpTo(CommandSender sender) {
@@ -66,14 +80,22 @@ public class CommandManager implements CommandExecutor {
             if (fancyHelpPages == null) {
                 ArrayList<FancyMessage> list = new ArrayList<FancyMessage>();
                 for (String key : modules.keySet()) {
-                    Object raw = modules.get(key).getHelp().getHelpFor(sender);
-                    if (!(raw instanceof FancyMessage)) {
-                        continue;
+                    for (CommandHelp commandHelp : modules.get(key).getHelp()) {
+                        Object raw = commandHelp.getHelpFor(sender);
+                        if (!(raw instanceof FancyMessage)) {
+                            continue;
+                        }
+                        list.add((FancyMessage) raw);
                     }
-                    list.add((FancyMessage) raw);
                 }
                 fancyHelpPages = new FancyPaginator(list, 6);
             }
+
+            if (fancyHelpPages.getPage(page) == null) {
+                sender.sendMessage(ChatColor.DARK_AQUA + "Help page " + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " is invalid.");
+                return;
+            }
+
             for (FancyMessage message : fancyHelpPages.getPage(page)) {
                 message.send((Player) sender);
             }
@@ -81,17 +103,25 @@ public class CommandManager implements CommandExecutor {
             if (helpPages == null) {
                 ArrayList<String> list = new ArrayList<String>();
                 for (String key : modules.keySet()) {
-                    Object raw = modules.get(key).getHelp().getHelpFor(sender);
-                    if (raw instanceof FancyMessage) {
-                        continue;
-                    } else if (raw instanceof String[]) {
-                        for (String part : (String[]) raw) {
-                            list.add(part);
+                    for (CommandHelp commandHelp : modules.get(key).getHelp()) {
+                        Object raw = commandHelp.getHelpFor(sender);
+                        if (raw instanceof FancyMessage) {
+                            continue;
+                        } else if (raw instanceof String[]) {
+                            for (String part : (String[]) raw) {
+                                list.add(part);
+                            }
                         }
                     }
                 }
                 helpPages = new Paginator(list, 6);
             }
+
+            if (helpPages.getPage(page) == null) {
+                sender.sendMessage(ChatColor.DARK_AQUA + "Help page " + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " is invalid.");
+                return;
+            }
+
             for (String message : helpPages.getPage(page)) {
                 sender.sendMessage(message);
             }

@@ -19,11 +19,21 @@ package com.dsh105.holoapi.command.module;
 
 import org.bukkit.command.CommandSender;
 
-public interface CommandModule {
+public abstract class CommandModule {
 
-    public boolean onCommand(CommandSender sender, String[] args);
+    private String commandArguments;
 
-    public CommandHelp getHelp();
+    public String getCommandArguments() {
+        return commandArguments;
+    }
 
-    public String getPermission();
+    public void setCommandArguments(String commandArguments) {
+        this.commandArguments = commandArguments;
+    }
+
+    public abstract boolean onCommand(CommandSender sender, String[] args);
+
+    public abstract CommandHelp[] getHelp();
+
+    public abstract String getPermission();
 }

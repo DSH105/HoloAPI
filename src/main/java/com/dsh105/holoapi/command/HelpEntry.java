@@ -63,7 +63,7 @@ public enum HelpEntry {
     HelpEntry(String commandArguments, String permission, String... description) {
         this.commandArguments = commandArguments;
         this.description = description;
-        this.defaultLine = ChatColor.AQUA + "/" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments() + ChatColor.WHITE + "  •••  " + ChatColor.DARK_AQUA + description;
+        this.defaultLine = ChatColor.AQUA + "/" + HoloAPI.getCommandLabel() + " " + this.getCommandArguments() + ChatColor.WHITE + "  •••  " + ChatColor.DARK_AQUA + description[0];
         this.permission = permission;
     }
 

@@ -30,6 +30,8 @@ public enum Lang {
     UPDATE_NOT_AVAILABLE("update_not_available", "&3An update is not available."),
     NO_PERMISSION("no_permission", "&3You are not permitted to do that."),
     COMMAND_ERROR("cmd_error", "&3Error for input string: &b%cmd%&3. Use &b/" + HoloAPI.getCommandLabel() + " help &3for help."),
+    COMMAND_DOESNOT_EXIST("cmd_doesnotexist", "&3Command does not exist: &b%cmd%&3. Use &b/" + HoloAPI.getCommandLabel() + " help &3for help."),
+    COMMAND_HELP("cmd_help", "&3Use &b/" + HoloAPI.getCommandLabel() + " help &3for help."),
     HELP_INDEX_TOO_BIG("help_index_too_big", "&3Page &b%index% &3does not exist."),
     IN_GAME_ONLY("in_game_only", "&3Please log in to do that."),
     STRING_ERROR("string_error", "&3Error parsing &b%string%&3. Please revise command arguments."),
