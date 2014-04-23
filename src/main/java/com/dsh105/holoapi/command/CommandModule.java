@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command.module;
+package com.dsh105.holoapi.command;
 
 import com.dsh105.holoapi.util.Permission;
 import org.bukkit.command.CommandSender;

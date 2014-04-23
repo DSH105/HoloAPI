@@ -21,6 +21,8 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.StoredTag;
+import com.dsh105.holoapi.command.CommandHelp;
+import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;

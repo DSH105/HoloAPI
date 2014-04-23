@@ -20,10 +20,7 @@ package com.dsh105.holoapi;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
-import com.dsh105.holoapi.command.CommandManager;
-import com.dsh105.holoapi.command.DynamicPluginCommand;
-import com.dsh105.holoapi.command.HoloCommand;
-import com.dsh105.holoapi.command.HoloDebugCommand;
+import com.dsh105.holoapi.command.*;
 import com.dsh105.holoapi.config.YAMLConfig;
 import com.dsh105.holoapi.config.YAMLConfigManager;
 import com.dsh105.holoapi.config.options.ConfigOptions;
@@ -45,7 +42,6 @@ import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.server.*;
 import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.Perm;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -63,6 +59,7 @@ import java.util.logging.Level;
 public class HoloAPICore extends JavaPlugin {
 
     protected static CommandManager COMMAND_MANAGER;
+    protected static CommandModuleManager COMMAND_MODULE_MANAGER;
     protected static SimpleHoloManager MANAGER;
     protected static SimpleImageLoader IMAGE_LOADER;
     protected static SimpleAnimationLoader ANIMATION_LOADER;
@@ -124,7 +121,9 @@ public class HoloAPICore extends JavaPlugin {
         ANIMATION_LOADER = new SimpleAnimationLoader();
 
         COMMAND_MANAGER = new CommandManager(this);
-        DynamicPluginCommand holoCommand = new DynamicPluginCommand(HoloAPI.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getCommandLabel() + " help &3for help.", new HoloCommand(), this);
+        COMMAND_MODULE_MANAGER = new CommandModuleManager();
+        COMMAND_MODULE_MANAGER.registerDefaults();
+        DynamicPluginCommand holoCommand = new DynamicPluginCommand(HoloAPI.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getCommandLabel() + " help &3for help.", COMMAND_MODULE_MANAGER, this);
         DynamicPluginCommand debugCommand = new DynamicPluginCommand("holodebug", new String[0], "Smashing bugs and coloring books", "You shouldn't be using this", new HoloDebugCommand(), this);
         holoCommand.setPermission("holoapi.holo");
         debugCommand.setPermission("holoapi.debug");
