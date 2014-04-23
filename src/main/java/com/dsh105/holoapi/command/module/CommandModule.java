@@ -17,23 +17,24 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.holoapi.util.Permission;
 import org.bukkit.command.CommandSender;
 
 public abstract class CommandModule {
 
-    private String commandArguments;
+    private String subCommand;
 
-    public String getCommandArguments() {
-        return commandArguments;
+    public String getSubCommand() {
+        return subCommand;
     }
 
-    public void setCommandArguments(String commandArguments) {
-        this.commandArguments = commandArguments;
+    public void setSubCommand(String subCommand) {
+        this.subCommand = subCommand;
     }
 
     public abstract boolean onCommand(CommandSender sender, String[] args);
 
     public abstract CommandHelp[] getHelp();
 
-    public abstract String getPermission();
+    public abstract Permission getPermission();
 }

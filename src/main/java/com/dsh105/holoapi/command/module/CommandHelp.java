@@ -19,7 +19,7 @@ package com.dsh105.holoapi.command.module;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.ItemUtil;
-import com.dsh105.holoapi.util.Perm;
+import com.dsh105.holoapi.util.Permission;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -28,17 +28,32 @@ import org.bukkit.entity.Player;
 public class CommandHelp {
 
     private String commandArguments;
-    private String permission;
+    private Permission permission;
     private String[] description;
 
     private String command;
     private String[] fullDescription;
 
-    public CommandHelp(String commandArguments, Perm perm, String... description) {
-        this.commandArguments = commandArguments;
-        if (perm != null) {
-            this.permission = perm.getPermission();
+    public CommandHelp(CommandModule module, String... description) {
+        this(module, module.getPermission(), description);
+    }
+
+    public CommandHelp(CommandModule module, Permission permission, String... description) {
+        this(module.getSubCommand(), description);
+        if (permission != null) {
+            this.permission = permission;
         }
+    }
+
+    public CommandHelp(CommandModule module, String commandArguments, Permission permission, String... description) {
+        this(module.getSubCommand() + " " + commandArguments, description);
+        if (permission != null) {
+            this.permission = permission;
+        }
+    }
+
+    private CommandHelp(String commandArguments, String... description) {
+        this.commandArguments = commandArguments;
         this.description = description;
 
         this.command = HoloAPI.getCommandLabel() + " " + this.getCommandArguments();
@@ -54,7 +69,7 @@ public class CommandHelp {
         return commandArguments;
     }
 
-    public String getPermission() {
+    public Permission getPermission() {
         return permission;
     }
 
@@ -72,7 +87,7 @@ public class CommandHelp {
 
     public Object getHelpFor(CommandSender sender, boolean shorten) {
         if (HoloAPI.getCore().isUsingNetty && sender instanceof Player) {
-            return new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + this.getCommand()).itemTooltip(ItemUtil.getItem(this.getPermission() != null ? this.generateDescription(sender) : fullDescription)).suggest(this.getCommand());
+            return new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + this.getCommand()).itemTooltip(ItemUtil.getItem(this.generateDescription(sender))).suggest(this.getCommand());
         } else {
             if (shorten) {
                 return ChatColor.AQUA + "/" + this.getCommand() + ChatColor.WHITE + "  •••  " + ChatColor.DARK_AQUA + description[0];
@@ -97,14 +112,14 @@ public class CommandHelp {
     }
 
     private String[] generateDescription(CommandSender sender) {
-        if (sender == null) {
+        if (sender == null || this.getPermission() == null) {
             return fullDescription;
         }
         String[] str = new String[fullDescription.length + 1];
         for (int i = 1; i < fullDescription.length; i++) {
             str[i] = fullDescription[i];
         }
-        str[str.length - 1] = sender.hasPermission(this.getPermission()) ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command.";
+        str[str.length - 1] = this.getPermission().hasPerm(sender, false, true) ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command.";
         return str;
     }
 }

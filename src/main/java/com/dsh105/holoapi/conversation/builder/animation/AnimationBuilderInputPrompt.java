@@ -77,7 +77,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
             if (StringUtil.isInt(s)) {
                 if (context.getForWhom() instanceof Player) {
                     return new AnimationBuilderInputSuccessPrompt(this.frames, Integer.parseInt(s));
-                }else {
+                } else {
                     new SimpleInputPrompt(new LocationFunction() {
                         AnimatedHologram h;
                         @Override

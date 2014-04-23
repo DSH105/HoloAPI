@@ -18,26 +18,27 @@
 package com.dsh105.holoapi.command.module;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class HelpCommand extends CommandModule {
+public class TeleportCommand extends CommandModule {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-            HoloAPI.getCommandManager().sendHelpTo(sender);
-            return true;
-        } else if (args.length == 2) {
-            if (StringUtil.isInt(args[1])) {
-                HoloAPI.getCommandManager().sendHelpTo(sender, Integer.parseInt(args[1]));
+        if (args.length == 2) {
+            if (this.getPermission().hasPerm(sender, true, false)) {
+                Hologram h = HoloAPI.getManager().getHologram(args[1]);
+                if (h == null) {
+                    Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
+                    return true;
+                }
+                ((Player) sender).teleport(h.getDefaultLocation());
+                Lang.sendTo(sender, Lang.HOLOGRAM_TELEPORT_TO.getValue().replace("%id%", h.getSaveId()));
                 return true;
-            } else {
-                Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
-                return true;
-            }
+            } else return true;
         }
         return false;
     }
@@ -45,12 +46,12 @@ public class HelpCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, "Retrieve help for all HoloAPI commands.")
+                new CommandHelp(this, "<id>", this.getPermission(), "Teleport to a specific hologram.")
         };
     }
 
     @Override
     public Permission getPermission() {
-        return null;
+        return new Permission("holoapi.holo.teleport");
     }
 }

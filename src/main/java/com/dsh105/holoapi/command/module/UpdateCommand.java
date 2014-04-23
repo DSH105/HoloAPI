@@ -18,39 +18,32 @@
 package com.dsh105.holoapi.command.module;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.data.Updater;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
 
-public class HelpCommand extends CommandModule {
+public class UpdateCommand extends CommandModule {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-            HoloAPI.getCommandManager().sendHelpTo(sender);
-            return true;
-        } else if (args.length == 2) {
-            if (StringUtil.isInt(args[1])) {
-                HoloAPI.getCommandManager().sendHelpTo(sender, Integer.parseInt(args[1]));
-                return true;
-            } else {
-                Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
-                return true;
-            }
+        if (HoloAPI.getCore().updateChecked) {
+            new Updater(HoloAPI.getCore(), 74914, HoloAPI.getCore().file, Updater.UpdateType.NO_VERSION_CHECK, true);
+        } else {
+            Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.getValue());
         }
-        return false;
+        return true;
     }
 
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, "Retrieve help for all HoloAPI commands.")
+                new CommandHelp(this, "Update the plugin if a new release is available.")
         };
     }
 
     @Override
     public Permission getPermission() {
-        return null;
+        return new Permission("holoapi.update");
     }
 }

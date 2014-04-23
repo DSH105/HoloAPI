@@ -18,10 +18,21 @@
 package com.dsh105.holoapi.conversation.builder;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.AnimatedHologram;
+import com.dsh105.holoapi.api.AnimatedHologramFactory;
+import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.conversation.basic.LocationFunction;
+import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
+import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputSuccessPrompt;
+import com.dsh105.holoapi.image.AnimatedTextGenerator;
+import com.dsh105.holoapi.image.Frame;
+import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
@@ -59,10 +70,50 @@ public class BuilderInputPrompt extends ValidatingPrompt {
     }
 
     @Override
-    protected Prompt acceptValidatedInput(ConversationContext conversationContext, String s) {
+    protected Prompt acceptValidatedInput(ConversationContext context, String s) {
         if (s.equalsIgnoreCase("DONE")) {
-            conversationContext.setSessionData("builders", this.builders);
-            return new BuilderInputSuccessPrompt();
+            context.setSessionData("builders", this.builders);
+
+            if (context.getForWhom() instanceof Player) {
+                return new BuilderInputSuccessPrompt();
+            } else {
+                new SimpleInputPrompt(new LocationFunction() {
+                    Hologram h;
+                    boolean success;
+                    @Override
+                    public void onFunction(ConversationContext context, String input) {
+                        ArrayList<HoloInputBuilder> builders = (ArrayList<HoloInputBuilder>) context.getSessionData("builders");
+                        //ArrayList<String> lines = new ArrayList<String>();
+                        HologramFactory hf = new HologramFactory(HoloAPI.getCore()).withLocation(this.getLocation());
+                        for (HoloInputBuilder b : builders) {
+                            if (b.getType() == null || b.getLineData() == null) {
+                                continue;
+                            }
+                            if (b.getType().equalsIgnoreCase("IMAGE")) {
+                                ImageGenerator gen = HoloAPI.getImageLoader().getGenerator(b.getLineData());
+                                if (gen == null) {
+                                    continue;
+                                }
+                                hf.withImage(gen);
+                            } else {
+                                hf.withText(b.getLineData());
+                            }
+                        }
+                        if (hf.isEmpty()) {
+                            success = false;
+                            return;
+                        }
+                        h = hf.build();
+                        success = true;
+                    }
+
+                    @Override
+                    public String getSuccessMessage(ConversationContext context, String input) {
+                        return success ? Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()) : Lang.BUILDER_EMPTY_LINES.getValue();
+                    }
+                });
+            }
+            return END_OF_CONVERSATION;
         }
         if (currentBuilder == null) {
             String type = s.toUpperCase();

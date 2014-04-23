@@ -42,10 +42,29 @@ public class CommandModuleManager implements CommandExecutor {
 
     public void registerDefaults() {
         this.register("help", new HelpCommand());
+        this.register("info", new InfoCommand());
+        this.register("nearby", new NearbyCommand());
+        this.register("create", new CreateCommand());
+        this.register("remove", new RemoveCommand());
+        this.register("edit", new EditCommand());
+        this.register("addline", new AddLineCommand());
+        this.register("visibility", new VisibilityCommand());
+        this.register("move", new MoveCommand());
+        this.register("teleport", new TeleportCommand());
+        this.register("copy", new CopyCommand());
+        this.register("build", new BuildCommand());
+        this.register("show", new ShowCommand());
+        this.register("hide", new HideCommand());
+        this.register("readtxt", new ReadTxtCommand());
+        this.register("touch", new TouchCommand());
+        this.register("refresh", new RefreshCommand());
+        this.register("reload", new ReloadCommand());
+        this.register("update", new UpdateCommand());
     }
 
-    public void register(String commandArguments, CommandModule module) {
-        this.modules.put(commandArguments, module);
+    public void register(String subCommand, CommandModule module) {
+        this.modules.put(subCommand, module);
+        module.setSubCommand(subCommand);
     }
 
     public CommandModule getModuleFor(String commandArguments) {
@@ -54,7 +73,7 @@ public class CommandModuleManager implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length == 0) {
+        if (args.length <= 0) {
             Lang.sendTo(sender, Lang.PLUGIN_INFORMATION.getValue().replace("%version%", HoloAPI.getCore().getDescription().getVersion()));
             return true;
         }
@@ -64,10 +83,35 @@ public class CommandModuleManager implements CommandExecutor {
         CommandModule module = this.getModuleFor(moduleArgs);
 
         if (module != null) {
-            return module.onCommand(sender, args);
+            // Reject if they don't have permission
+            if (module.getPermission() != null && !module.getPermission().hasPerm(sender, true, true)) {
+                return true;
+            }
+
+            // Perform under the correct module
+            if (module.onCommand(sender, args)) {
+                return true;
+            } else {
+                if (args.length == 1) {
+                    this.sendHelpTo(sender, moduleArgs);
+                } else {
+                    sender.sendMessage(ChatColor.DARK_AQUA + "Sub command not found for: " + ChatColor.AQUA + "/holo " + moduleArgs);
+                }
+            }
         }
 
         Lang.sendTo(sender, Lang.COMMAND_DOESNOT_EXIST.getValue().replace("%cmd%", "/" + cmd.getLabel() + (args.length == 0 ? "" : " " + StringUtil.combineSplit(0, args, " "))));
+
+        ArrayList<String> suggestions = new ArrayList<String>();
+        for (Map.Entry<String, CommandModule> entry : modules.entrySet()) {
+            if (entry.getKey().toLowerCase().startsWith(moduleArgs.toLowerCase())) {
+                suggestions.add(entry.getKey());
+            }
+        }
+        if (!suggestions.isEmpty()) {
+            String suggest = StringUtil.join(suggestions, ", ");
+            sender.sendMessage(ChatColor.DARK_AQUA + "Did you mean: " + ChatColor.AQUA + "" + ChatColor.ITALIC + suggest);
+        }
         return true;
     }
 
@@ -96,6 +140,7 @@ public class CommandModuleManager implements CommandExecutor {
                 return;
             }
 
+            sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + page + "/" + this.helpPages.getIndex() + " " + ChatColor.DARK_AQUA + "----------------");
             for (FancyMessage message : fancyHelpPages.getPage(page)) {
                 message.send((Player) sender);
             }
@@ -122,6 +167,7 @@ public class CommandModuleManager implements CommandExecutor {
                 return;
             }
 
+            sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + page + "/" + this.helpPages.getIndex() + " " + ChatColor.DARK_AQUA + "----------------");
             for (String message : helpPages.getPage(page)) {
                 sender.sendMessage(message);
             }
@@ -129,18 +175,27 @@ public class CommandModuleManager implements CommandExecutor {
     }
 
     public void sendHelpTo(CommandSender sender, String command) {
+        this.sendHelpTo(sender, command, false);
+    }
+
+    public void sendHelpTo(CommandSender sender, String command, boolean shorten) {
         ArrayList<String> suggestions = new ArrayList<String>();
         for (Map.Entry<String, CommandModule> entry : modules.entrySet()) {
             if (command.equalsIgnoreCase(entry.getKey())) {
-
+                sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help for " + "/holo " + command + ChatColor.DARK_AQUA + "----------------");
+                for (CommandHelp help : entry.getValue().getHelp()) {
+                    help.sendHelpTo(sender, shorten);
+                }
                 return;
             } else if (entry.getKey().toLowerCase().startsWith(command.toLowerCase())) {
                 suggestions.add(entry.getKey());
             }
         }
 
-        String suggest = StringUtil.join(suggestions, ", ");
         sender.sendMessage(ChatColor.DARK_AQUA + "Help not found for: " + ChatColor.AQUA + "/holo " + command);
-        sender.sendMessage(ChatColor.DARK_AQUA + "Did you mean: " + ChatColor.AQUA + "" + ChatColor.ITALIC + suggest);
+        if (!suggestions.isEmpty()) {
+            String suggest = StringUtil.join(suggestions, ", ");
+            sender.sendMessage(ChatColor.DARK_AQUA + "Did you mean: " + ChatColor.AQUA + "" + ChatColor.ITALIC + suggest);
+        }
     }
 }

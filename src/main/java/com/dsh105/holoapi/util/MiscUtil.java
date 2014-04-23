@@ -19,6 +19,9 @@ package com.dsh105.holoapi.util;
 
 import com.google.common.collect.BiMap;
 import net.minecraft.util.io.netty.buffer.ByteBuf;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -71,5 +74,19 @@ public class MiscUtil {
         byte[] bytes = str.getBytes(Charset.forName("UTF8"));
         buf.writeShort(bytes.length);
         buf.writeBytes(bytes);
+    }
+
+    // Purely for convenience. Used in commands
+    public static Location getLocationFrom(String[] args, int startIndex) {
+        World w = Bukkit.getWorld(args[startIndex]);
+        int[] coords = new int[3];
+        int index = 0;
+        for (int i = startIndex + 1; i < startIndex + 4; i++) {
+            if (!StringUtil.isInt(args[i])) {
+                return null;
+            }
+            coords[index] = Integer.parseInt(args[i]);
+        }
+        return new Location(w, coords[0], coords[1], coords[2]);
     }
 }

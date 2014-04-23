@@ -20,24 +20,27 @@ package com.dsh105.holoapi.command.module;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
 
-public class HelpCommand extends CommandModule {
+public class ReloadCommand extends CommandModule {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            HoloAPI.getCommandManager().sendHelpTo(sender);
+            // Reload config files
+            HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).reloadConfig();
+            HoloAPI.getConfig(HoloAPI.ConfigType.DATA).reloadConfig();
+            HoloAPI.getConfig(HoloAPI.ConfigType.LANG).reloadConfig();
+
+            // Reload all configuration values
+            HoloAPI.getCore().loadConfiguration();
+
+            // Load all holograms
+            HoloAPI.getCore().loadHolograms();
+
+            Lang.sendTo(sender, Lang.CONFIGS_RELOADED.getValue());
+            Lang.sendTo(sender, Lang.HOLOGRAM_RELOAD.getValue());
             return true;
-        } else if (args.length == 2) {
-            if (StringUtil.isInt(args[1])) {
-                HoloAPI.getCommandManager().sendHelpTo(sender, Integer.parseInt(args[1]));
-                return true;
-            } else {
-                Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
-                return true;
-            }
         }
         return false;
     }
@@ -45,12 +48,12 @@ public class HelpCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, "Retrieve help for all HoloAPI commands.")
+                new CommandHelp(this, "Reload all HoloAPI configuration files and holograms.")
         };
     }
 
     @Override
     public Permission getPermission() {
-        return null;
+        return new Permission("holoapi.holo.reload");
     }
 }

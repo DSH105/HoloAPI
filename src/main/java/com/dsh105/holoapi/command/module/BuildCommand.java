@@ -17,27 +17,24 @@
 
 package com.dsh105.holoapi.command.module;
 
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.conversation.InputFactory;
+import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.Conversable;
 
-public class HelpCommand extends CommandModule {
+public class BuildCommand extends CommandModule {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            HoloAPI.getCommandManager().sendHelpTo(sender);
-            return true;
-        } else if (args.length == 2) {
-            if (StringUtil.isInt(args[1])) {
-                HoloAPI.getCommandManager().sendHelpTo(sender, Integer.parseInt(args[1]));
-                return true;
-            } else {
-                Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
+            if (!(sender instanceof Conversable)) {
+                Lang.sendTo(sender, Lang.NOT_CONVERSABLE.getValue());
                 return true;
             }
+            InputFactory.buildBasicConversation().withFirstPrompt(new BuilderInputPrompt()).buildConversation((Conversable) sender).begin(); //TODO
+            return true;
         }
         return false;
     }
@@ -45,12 +42,12 @@ public class HelpCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, "Retrieve help for all HoloAPI commands.")
+                new CommandHelp(this, "Dynamically build a combined hologram of both text and images.")
         };
     }
 
     @Override
     public Permission getPermission() {
-        return null;
+        return new Permission("holoapi.holo.build");
     }
 }

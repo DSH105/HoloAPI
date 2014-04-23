@@ -34,6 +34,8 @@ public enum Lang {
     COMMAND_HELP("cmd_help", "&3Use &b/" + HoloAPI.getCommandLabel() + " help &3for help."),
     HELP_INDEX_TOO_BIG("help_index_too_big", "&3Page &b%index% &3does not exist."),
     IN_GAME_ONLY("in_game_only", "&3Please log in to do that."),
+    NOT_CONVERSABLE("not_conversable", "&3Command Sender cannot be conversed with. Please use an alternate command with more arguments."),
+    NOT_LOCATION("not_location", "&3Could not create Location. Please revise command arguments."),
     STRING_ERROR("string_error", "&3Error parsing &b%string%&3. Please revise command arguments."),
     NULL_PLAYER("null_player", "&b%player% &3is not online. Please try a different Player."),
     INT_ONLY("int_only", "&b%string% &3must to be an integer."),
@@ -61,7 +63,7 @@ public enum Lang {
     TOUCH_ACTION_NOT_FOUND("touch_action_not_found", "&3Touch Action of ID &b%touchid% &3not found."),
 
     FAILED_IMAGE_LOAD("failed_image_load", "&3Failed to load custom image. Make sure that it is correctly configured in &bconfig.yml&3."),
-    IMAGE_NOT_FOUND("image_not_found", "&3Image &3not found. Use &b/" + HoloAPI.getCommandLabel() + " build image &3to create a new image configuration."),
+    IMAGE_NOT_FOUND("image_not_found", "&3Image generator &3not found."),
     HOLOGRAM_NOT_FOUND("hologram_not_found", "&3Hologram of ID &b%id% &3not found."),
     NO_ACTIVE_HOLOGRAMS("no_active_holograms", "&3There are currently no active holographic displays."),
     HOLOGRAM_CREATED("hologram_created", "&3Hologram of ID &b%id% &3created."),
@@ -102,6 +104,7 @@ public enum Lang {
     PROMPT_INPUT_FAIL_INT("prompt_input_fail_int", "&3X, Y and Z coordinates must be integers."),
     PROMPT_INPUT_FAIL_WORLD("prompt_input_fail_world", "&b%world% &3world doesn't exist. Please re-enter the location."),
     PROMPT_INPUT_FAIL_FORMAT("prompt_input_fail_format", "&3Please use the following format: &bworld x y z&3."),
+    PROMPT_ENTER_NEW_LINE("prompt_enter_new_line", "&3Enter the new line for the hologram."),
 
     BUILDER_EMPTY_LINES("hologram_not_created", "&3The hologram was not created as it was empty."),
     BUILDER_INPUT_FAIL_TEXT_IMAGE("builder_input_fail_text_image", "&3Enter a valid line type (&bText &3or &bImage&3)."),

@@ -85,6 +85,7 @@ public class HoloAPICore extends JavaPlugin {
     public boolean updateAvailable = false;
     public String updateName = "";
     public boolean updateChecked = false;
+    public File file;
 
     public static Server SERVER;
     public static boolean isUsingNetty;
@@ -172,7 +173,7 @@ public class HoloAPICore extends JavaPlugin {
 
     protected void checkUpdates() {
         if (config.getBoolean("checkForUpdates", true)) {
-            final File file = this.getFile();
+            file = this.getFile();
             final Updater.UpdateType updateType = config.getBoolean("autoUpdate", false) ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
@@ -182,7 +183,7 @@ public class HoloAPICore extends JavaPlugin {
                     if (updateAvailable) {
                         updateName = updater.getLatestName();
                         ConsoleLogger.sendMessage(ChatColor.DARK_AQUA + "An update is available: " + updateName);
-                        ConsoleLogger.sendMessage(ChatColor.DARK_AQUA + "Type /holoupdate to update.");
+                        ConsoleLogger.sendMessage(ChatColor.DARK_AQUA + "Type /holo update to update.");
                         if (!updateChecked) {
                             updateChecked = true;
                         }
@@ -304,21 +305,5 @@ public class HoloAPICore extends JavaPlugin {
         if (INJECTION_MANAGER == null)
             throw new RuntimeException("InjectionManager is NULL!");
         return INJECTION_MANAGER;
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (commandLabel.equalsIgnoreCase("holoupdate")) {
-            if (Perm.UPDATE.hasPerm(sender, true, true)) {
-                if (updateChecked) {
-                    new Updater(this, 74914, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
-                    return true;
-                } else {
-                    Lang.sendTo(sender, Lang.UPDATE_NOT_AVAILABLE.getValue());
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
