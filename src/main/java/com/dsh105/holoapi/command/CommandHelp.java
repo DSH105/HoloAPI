@@ -87,7 +87,17 @@ public class CommandHelp {
 
     public Object getHelpFor(CommandSender sender, boolean shorten) {
         if (HoloAPI.getCore().isUsingNetty && sender instanceof Player) {
-            return new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + this.getCommand()).itemTooltip(ItemUtil.getItem(this.generateDescription(sender))).suggest(this.getCommand());
+            boolean hasPerm = false;
+            boolean suggest = true;
+            if (this.getPermission() != null) {
+                hasPerm = this.getPermission().hasPerm(sender, false, true);
+                suggest = hasPerm;
+            }
+            FancyMessage msg = new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + this.getCommand()).itemTooltip(ItemUtil.getItem(this.generateDescription(sender)));
+            if (suggest || hasPerm) {
+                msg.suggest(this.getCommand());
+            }
+            return msg;
         } else {
             if (shorten) {
                 return ChatColor.AQUA + "/" + this.getCommand() + ChatColor.WHITE + "  •••  " + ChatColor.DARK_AQUA + description[0];
