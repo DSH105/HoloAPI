@@ -126,10 +126,10 @@ public class CommandHelp {
             return fullDescription;
         }
         String[] str = new String[fullDescription.length + 1];
-        for (int i = 1; i < fullDescription.length; i++) {
+        for (int i = 0; i < fullDescription.length; i++) {
             str[i] = fullDescription[i];
         }
-        str[str.length - 1] = this.getPermission().hasPerm(sender, false, true) ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command.";
+        str[str.length - 1] = "• " + (this.getPermission().hasPerm(sender, false, true) ? ChatColor.GREEN + "" + ChatColor.ITALIC + "You may use this command" : ChatColor.RED + "" + ChatColor.ITALIC + "You do not have permission to use this command.");
         return str;
     }
 }
