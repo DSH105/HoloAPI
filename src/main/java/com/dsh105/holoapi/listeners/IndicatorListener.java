@@ -62,31 +62,37 @@ public class IndicatorListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
         if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
-            if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false)
+            if ((event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false))
                     || config.getBoolean("indicators.damage.showForMobs", false)) {
-                if (!(event instanceof EntityDamageByEntityEvent)) {
-                    String colours = config.getString("indicators.damage.format.default", "&c");
-
-                    if (event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
-                        colours = config.getString("indicators.damage.format.drowning", "&b");
-                    } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
-                        colours = config.getString("indicators.damage.format.fire", "&4");
-                    } else if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
-                        colours = config.getString("indicators.damage.format.magic", "&5");
-                    } else if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
-                        colours = config.getString("indicators.damage.format.poison", "&2");
-                    } else if (event.getCause() == EntityDamageEvent.DamageCause.STARVATION) {
-                        colours = config.getString("indicators.damage.format.starvation", "&6");
-                    } else if (event.getCause() == EntityDamageEvent.DamageCause.THORNS) {
-                        colours = config.getString("indicators.damage.format.thorns", "&e");
-                    } else if (event.getCause() == EntityDamageEvent.DamageCause.WITHER) {
-                        colours = config.getString("indicators.damage.format.wither", "&8");
+                if (event.getEntity() instanceof LivingEntity) {
+                    LivingEntity livingEntity = (LivingEntity) event.getEntity();
+                    if (livingEntity.getNoDamageTicks() > livingEntity.getMaximumNoDamageTicks() / 2.0F) {
+                        return;
                     }
+                    if (!(event instanceof EntityDamageByEntityEvent)) {
+                        String colours = config.getString("indicators.damage.format.default", "&c");
 
-                    String text = colours + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
-                    Location l = event.getEntity().getLocation().clone();
-                    l.setY(l.getY() + config.getInt("indicators.damage.yOffset", 2));
-                    HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), true, text);
+                        if (event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
+                            colours = config.getString("indicators.damage.format.drowning", "&b");
+                        } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+                            colours = config.getString("indicators.damage.format.fire", "&4");
+                        } else if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
+                            colours = config.getString("indicators.damage.format.magic", "&5");
+                        } else if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
+                            colours = config.getString("indicators.damage.format.poison", "&2");
+                        } else if (event.getCause() == EntityDamageEvent.DamageCause.STARVATION) {
+                            colours = config.getString("indicators.damage.format.starvation", "&6");
+                        } else if (event.getCause() == EntityDamageEvent.DamageCause.THORNS) {
+                            colours = config.getString("indicators.damage.format.thorns", "&e");
+                        } else if (event.getCause() == EntityDamageEvent.DamageCause.WITHER) {
+                            colours = config.getString("indicators.damage.format.wither", "&8");
+                        }
+
+                        String text = colours + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
+                        Location l = event.getEntity().getLocation().clone();
+                        l.setY(l.getY() + config.getInt("indicators.damage.yOffset", 2));
+                        HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), true, text);
+                    }
                 }
             }
         }
