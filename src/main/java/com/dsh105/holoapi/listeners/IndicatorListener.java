@@ -44,14 +44,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 public class IndicatorListener implements Listener {
 
     private static char HEART_CHARACTER = '\u2764';
     private static HashMap<String, ArrayList<String>> CHAT_BUBBLES = new HashMap<String, ArrayList<String>>();
+    private static List<EntityDamageEvent.DamageCause> SUPPORTED_DAMAGE_TYPES = Arrays.asList(new EntityDamageEvent.DamageCause[] {EntityDamageEvent.DamageCause.DROWNING, EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.MAGIC, EntityDamageEvent.DamageCause.POISON, EntityDamageEvent.DamageCause.THORNS, EntityDamageEvent.DamageCause.WITHER});
 
     private YAMLConfig config;
 
@@ -72,20 +71,11 @@ public class IndicatorListener implements Listener {
                     if (!(event instanceof EntityDamageByEntityEvent)) {
                         String colours = config.getString("indicators.damage.format.default", "&c");
 
-                        if (event.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
-                            colours = config.getString("indicators.damage.format.drowning", "&b");
-                        } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA || event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
-                            colours = config.getString("indicators.damage.format.fire", "&4");
-                        } else if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
-                            colours = config.getString("indicators.damage.format.magic", "&5");
-                        } else if (event.getCause() == EntityDamageEvent.DamageCause.POISON) {
-                            colours = config.getString("indicators.damage.format.poison", "&2");
-                        } else if (event.getCause() == EntityDamageEvent.DamageCause.STARVATION) {
-                            colours = config.getString("indicators.damage.format.starvation", "&6");
-                        } else if (event.getCause() == EntityDamageEvent.DamageCause.THORNS) {
-                            colours = config.getString("indicators.damage.format.thorns", "&e");
-                        } else if (event.getCause() == EntityDamageEvent.DamageCause.WITHER) {
-                            colours = config.getString("indicators.damage.format.wither", "&8");
+                        if (SUPPORTED_DAMAGE_TYPES.contains(event.getCause())) {
+                            colours = config.getString("indicators.damage.format." + event.getCause().toString().toLowerCase());
+                            if (!config.getBoolean("indicators.damage.enableType." + event.getCause().toString().toLowerCase(), true)) {
+                                return;
+                            }
                         }
 
                         String text = colours + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;

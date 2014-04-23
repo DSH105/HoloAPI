@@ -71,6 +71,13 @@ public class ConfigOptions extends Options {
         set("specialCharacters.[|]", "23B9");
 
         set("indicators.damage.enable", false);
+        set("indicators.damage.enableType.drowning", true);
+        set("indicators.damage.enableType.fire", true);
+        set("indicators.damage.enableType.magic", true);
+        set("indicators.damage.enableType.poison", true);
+        set("indicators.damage.enableType.starvation", true);
+        set("indicators.damage.enableType.thorns", true);
+        set("indicators.damage.enableType.wither", true);
         set("indicators.damage.yOffset", 2);
         set("indicators.damage.format.default", "&c&l");
         set("indicators.damage.format.drowning", "&b&l");
