@@ -72,8 +72,12 @@ public class IndicatorListener implements Listener {
                         String colours = config.getString("indicators.damage.format.default", "&c");
 
                         if (SUPPORTED_DAMAGE_TYPES.contains(event.getCause())) {
-                            colours = config.getString("indicators.damage.format." + event.getCause().toString().toLowerCase());
-                            if (!config.getBoolean("indicators.damage.enableType." + event.getCause().toString().toLowerCase(), true)) {
+                            String type = event.getCause().toString().toLowerCase();
+                            if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
+                                type = "fire";
+                            }
+                            colours = config.getString("indicators.damage.format." + type);
+                            if (!config.getBoolean("indicators.damage.enableType." + type, true)) {
                                 return;
                             }
                         }
