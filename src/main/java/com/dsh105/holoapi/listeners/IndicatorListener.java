@@ -50,7 +50,7 @@ public class IndicatorListener implements Listener {
 
     private static char HEART_CHARACTER = '\u2764';
     private static HashMap<String, ArrayList<String>> CHAT_BUBBLES = new HashMap<String, ArrayList<String>>();
-    private static List<EntityDamageEvent.DamageCause> SUPPORTED_DAMAGE_TYPES = Arrays.asList(new EntityDamageEvent.DamageCause[] {EntityDamageEvent.DamageCause.DROWNING, EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.MAGIC, EntityDamageEvent.DamageCause.POISON, EntityDamageEvent.DamageCause.THORNS, EntityDamageEvent.DamageCause.WITHER});
+    private static List<EntityDamageEvent.DamageCause> SUPPORTED_DAMAGE_TYPES = Arrays.asList(new EntityDamageEvent.DamageCause[]{EntityDamageEvent.DamageCause.DROWNING, EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.MAGIC, EntityDamageEvent.DamageCause.POISON, EntityDamageEvent.DamageCause.THORNS, EntityDamageEvent.DamageCause.WITHER});
 
     private YAMLConfig config;
 

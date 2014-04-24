@@ -30,15 +30,15 @@ public class NMSClassTemplate extends ClassTemplate {
         setNMSClass(className);
     }
 
+    public static NMSClassTemplate create(String className) {
+        return new NMSClassTemplate(className);
+    }
+
     protected void setNMSClass(String name) {
         Class clazz = CommonReflection.getMinecraftClass(name);
         if (clazz == null) {
             HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + name);
         }
         setClass(clazz);
-    }
-
-    public static NMSClassTemplate create(String className) {
-        return new NMSClassTemplate(className);
     }
 }

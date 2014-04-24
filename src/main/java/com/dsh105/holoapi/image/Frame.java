@@ -23,9 +23,8 @@ package com.dsh105.holoapi.image;
 
 public class Frame {
 
-    private String[] lines;
-
     protected int delay;
+    private String[] lines;
 
     /**
      * Constructs a new Frame

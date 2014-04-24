@@ -54,7 +54,7 @@ public class IdCommand extends CommandModule {
 
     @Override
     public CommandHelp[] getHelp() {
-        return new CommandHelp[] {
+        return new CommandHelp[]{
                 new CommandHelp(this, "set <old_id> <new_id>", this.getPermission(), "Set the save ID of an existing hologram.", "Save IDs are used to identify holograms and are used in the HoloAPI save files")
         };
     }

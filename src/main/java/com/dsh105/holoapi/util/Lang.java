@@ -125,18 +125,6 @@ public enum Lang {
         this.desc = desc;
     }
 
-    public String[] getDescription() {
-        return this.desc;
-    }
-
-    public String getPath() {
-        return this.path;
-    }
-
-    public String getDefault() {
-        return def;
-    }
-
     public static void sendTo(CommandSender sender, String msg) {
         if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !msg.equalsIgnoreCase("none")) {
             if (sender instanceof ConsoleCommandSender) {
@@ -151,6 +139,18 @@ public enum Lang {
         if (msg != null && !msg.equalsIgnoreCase("") && !msg.equalsIgnoreCase(" ") && !(msg.equalsIgnoreCase("none"))) {
             p.sendMessage(HoloAPI.getPrefix() + msg);
         }
+    }
+
+    public String[] getDescription() {
+        return this.desc;
+    }
+
+    public String getPath() {
+        return this.path;
+    }
+
+    public String getDefault() {
+        return def;
     }
 
     public String getValue() {

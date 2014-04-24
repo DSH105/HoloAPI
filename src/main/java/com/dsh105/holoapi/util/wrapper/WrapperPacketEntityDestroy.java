@@ -30,11 +30,11 @@ public class WrapperPacketEntityDestroy extends Packet {
         super(PacketFactory.PacketType.ENTITY_DESTROY);
     }
 
-    public void setEntities(int[] value) {
-        this.write(Constants.PACKET_ENTITYDESTROY_FIELD_IDS.getName(), value);
-    }
-
     public List<Integer> getEntities() {
         return Arrays.asList((Integer[]) this.read(Constants.PACKET_ENTITYDESTROY_FIELD_IDS.getName()));
+    }
+
+    public void setEntities(int[] value) {
+        this.write(Constants.PACKET_ENTITYDESTROY_FIELD_IDS.getName(), value);
     }
 }

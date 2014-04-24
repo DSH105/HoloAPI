@@ -46,16 +46,6 @@ public class ModuleLogger extends Logger {
         this.prefix = builder.toString();
     }
 
-    public ModuleLogger getModule(String... path) {
-        return new ModuleLogger(this.getParent(), appendArray(this.modulePath, path));
-    }
-
-    @Override
-    public void log(LogRecord logRecord) {
-        logRecord.setMessage(this.prefix + logRecord.getMessage());
-        super.log(logRecord);
-    }
-
     protected static boolean nullOrEmpty(Object[] array) {
         return array == null || array.length != 0;
     }
@@ -79,5 +69,15 @@ public class ModuleLogger extends Logger {
         System.arraycopy(array, 0, rval, 0, array.length);
         System.arraycopy(values, 0, rval, array.length, values.length);
         return rval;
+    }
+
+    public ModuleLogger getModule(String... path) {
+        return new ModuleLogger(this.getParent(), appendArray(this.modulePath, path));
+    }
+
+    @Override
+    public void log(LogRecord logRecord) {
+        logRecord.setMessage(this.prefix + logRecord.getMessage());
+        super.log(logRecord);
     }
 }

@@ -27,27 +27,27 @@ public class WrapperPacketAttachEntity extends Packet {
         super(PacketFactory.PacketType.ENTITY_ATTACH);
     }
 
-    public void setLeashed(boolean flag) {
-        this.write(Constants.PACKET_ATTACHENTITY_FIELD_LEASHED.getName(), flag ? 1 : 0);
-    }
-
     public boolean getLeashed() {
         return (Integer) this.read(Constants.PACKET_ATTACHENTITY_FIELD_LEASHED.getName()) != 0;
     }
 
-    public void setEntityId(int value) {
-        this.write(Constants.PACKET_ATTACHENTITY_FIELD_ENTITYID.getName(), value);
+    public void setLeashed(boolean flag) {
+        this.write(Constants.PACKET_ATTACHENTITY_FIELD_LEASHED.getName(), flag ? 1 : 0);
     }
 
     public int getEntityId() {
         return (Integer) this.read(Constants.PACKET_ATTACHENTITY_FIELD_ENTITYID.getName());
     }
 
-    public void setVehicleId(int value) {
-        this.write(Constants.PACKET_ATTACHENTITY_FIELD_VEHICLEID.getName(), value);
+    public void setEntityId(int value) {
+        this.write(Constants.PACKET_ATTACHENTITY_FIELD_ENTITYID.getName(), value);
     }
 
     public int getVehicleId() {
         return (Integer) this.read(Constants.PACKET_ATTACHENTITY_FIELD_VEHICLEID.getName());
+    }
+
+    public void setVehicleId(int value) {
+        this.write(Constants.PACKET_ATTACHENTITY_FIELD_VEHICLEID.getName(), value);
     }
 }

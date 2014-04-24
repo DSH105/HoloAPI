@@ -20,7 +20,6 @@ package com.dsh105.holoapi.conversation.builder.animation;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
-import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
@@ -28,7 +27,6 @@ import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
@@ -80,6 +78,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
                 } else {
                     new SimpleInputPrompt(new LocationFunction() {
                         AnimatedHologram h;
+
                         @Override
                         public void onFunction(ConversationContext context, String input) {
                             context.setSessionData("location", this.getLocation());

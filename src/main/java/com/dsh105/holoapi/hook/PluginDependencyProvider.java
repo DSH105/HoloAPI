@@ -31,8 +31,8 @@ import org.bukkit.plugin.Plugin;
 public abstract class PluginDependencyProvider<T extends Plugin> {
 
     protected PluginDependencyProvider<T> instance;
-    private T dependency;
     protected boolean hooked;
+    private T dependency;
     private Plugin myPluginInstance;
     private String dependencyName;
 

@@ -44,8 +44,8 @@ import java.util.logging.Level;
 
 public class HologramFactory {
 
+    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
     private Plugin owningPlugin;
-
     private String worldName;
     private double locX;
     private double locY;
@@ -55,9 +55,7 @@ public class HologramFactory {
     private boolean simple = false;
     private boolean preparedId = false;
     private boolean prepared = false;
-
     private ArrayList<String> tags = new ArrayList<String>();
-    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
     private int tagId;
     private boolean withTagId;
 

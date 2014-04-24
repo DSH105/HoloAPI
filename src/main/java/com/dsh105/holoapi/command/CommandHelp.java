@@ -89,7 +89,7 @@ public class CommandHelp {
                 hasPerm = this.getPermission().hasPerm(sender, false, true);
                 suggest = hasPerm;
             }
-            FancyMessage msg = new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + this.getCommand()).itemTooltip(ItemUtil.getItem(this.generateDescription(sender)));
+            FancyMessage msg = new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + "/" + this.getCommand()).itemTooltip(ItemUtil.getItem(this.generateDescription(sender)));
             if (suggest || hasPerm) {
                 msg.suggest(this.getCommand());
             }

@@ -33,15 +33,15 @@ public class HoloAPI {
 
     private static HoloAPICore CORE;
 
+    public static HoloAPICore getCore() {
+        return CORE;
+    }
+
     public static void setCore(HoloAPICore plugin) {
         if (CORE != null) {
             return;
         }
         CORE = plugin;
-    }
-
-    public static HoloAPICore getCore() {
-        return CORE;
     }
 
     public static String getPrefix() {

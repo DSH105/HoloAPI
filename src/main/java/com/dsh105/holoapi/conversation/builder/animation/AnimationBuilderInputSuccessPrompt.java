@@ -27,7 +27,6 @@ import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 

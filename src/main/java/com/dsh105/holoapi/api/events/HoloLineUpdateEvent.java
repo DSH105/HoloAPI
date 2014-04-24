@@ -57,21 +57,21 @@ public class HoloLineUpdateEvent extends HoloEvent implements Cancellable {
     }
 
     /**
-     * Gets the old content of the hologram line being updated
-     *
-     * @return old line content of the hologram
-     */
-    public String getOldLineContent() {
-        return oldLineContent;
-    }
-
-    /**
      * Sets the content to be applied to the hologram line
      *
      * @param content content to be applied
      */
     public void setNewLineContent(String content) {
         this.newLineContent = content;
+    }
+
+    /**
+     * Gets the old content of the hologram line being updated
+     *
+     * @return old line content of the hologram
+     */
+    public String getOldLineContent() {
+        return oldLineContent;
     }
 
     @Override

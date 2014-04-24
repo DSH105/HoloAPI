@@ -24,6 +24,7 @@ import java.util.Random;
 
 public class StringUtil {
 
+    private final static String EMPTY = "";
     private static Random r;
 
     public static Random r() {
@@ -73,8 +74,6 @@ public class StringUtil {
             return builder.toString();
         }
     }
-
-    private final static String EMPTY = "";
 
     /**
      * Join

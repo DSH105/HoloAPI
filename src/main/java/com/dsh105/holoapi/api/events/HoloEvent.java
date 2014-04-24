@@ -28,12 +28,15 @@ import org.bukkit.event.HandlerList;
 public class HoloEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled = false;
-
     private final Hologram hologram;
+    private boolean cancelled = false;
 
     public HoloEvent(Hologram hologram) {
         this.hologram = hologram;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -66,10 +69,6 @@ public class HoloEvent extends Event implements Cancellable {
     @Override
     public HandlerList getHandlers() {
         return this.handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
 }

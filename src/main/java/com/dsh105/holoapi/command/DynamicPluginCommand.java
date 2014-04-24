@@ -46,15 +46,15 @@ public class DynamicPluginCommand extends Command implements PluginIdentifiableC
         return owner;
     }
 
+    public String[] getPermissions() {
+        return permissions;
+    }
+
     public void setPermissions(String[] permissions) {
         this.permissions = permissions;
         if (permissions != null) {
             super.setPermission(StringUtils.join(permissions, ";"));
         }
-    }
-
-    public String[] getPermissions() {
-        return permissions;
     }
 
     @Override

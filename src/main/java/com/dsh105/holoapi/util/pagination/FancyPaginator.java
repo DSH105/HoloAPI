@@ -43,12 +43,12 @@ public class FancyPaginator {
         }
     }
 
-    public void setRaw(ArrayList<FancyMessage> newRaw) {
-        this.raw = newRaw;
-    }
-
     public ArrayList<FancyMessage> getRaw() {
         return this.raw;
+    }
+
+    public void setRaw(ArrayList<FancyMessage> newRaw) {
+        this.raw = newRaw;
     }
 
     public int getIndex() {

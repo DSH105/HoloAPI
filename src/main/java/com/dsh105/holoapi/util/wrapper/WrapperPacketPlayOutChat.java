@@ -30,19 +30,19 @@ public class WrapperPacketPlayOutChat extends Packet {
         super(PacketFactory.PacketType.CHAT);
     }
 
-    public void setMessage(String chatComponent) {
-        if (HoloAPI.getCore().isUsingNetty) {
-            this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), Constants.PACKET_CHAT_FUNC_SETCOMPONENT.getName(), String.class).invoke(null, chatComponent));
-        } else {
-            this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), chatComponent);
-        }
-    }
-
     public String getMessage() {
         Object value = this.read(Constants.PACKET_CHAT_FIELD_MESSAGE.getName());
         if (value instanceof String) {
             return (String) value;
         }
         return (String) new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), Constants.PACKET_CHAT_FUNC_GETMESSAGE.getName(), ReflectionUtil.getNMSClass("IChatBaseComponent")).invoke(null, value);
+    }
+
+    public void setMessage(String chatComponent) {
+        if (HoloAPI.getCore().isUsingNetty) {
+            this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), Constants.PACKET_CHAT_FUNC_SETCOMPONENT.getName(), String.class).invoke(null, chatComponent));
+        } else {
+            this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), chatComponent);
+        }
     }
 }

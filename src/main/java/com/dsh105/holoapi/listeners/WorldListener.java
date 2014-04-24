@@ -32,6 +32,10 @@ public class WorldListener implements Listener {
 
     private static HashMap<String, String> UNLOADED_HOLOGRAMS = new HashMap<String, String>();
 
+    public static void store(String hologramId, String worldName) {
+        UNLOADED_HOLOGRAMS.put(hologramId, worldName);
+    }
+
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         for (Map.Entry<String, String> entry : UNLOADED_HOLOGRAMS.entrySet()) {
@@ -42,9 +46,5 @@ public class WorldListener implements Listener {
                 }
             }
         }
-    }
-
-    public static void store(String hologramId, String worldName) {
-        UNLOADED_HOLOGRAMS.put(hologramId, worldName);
     }
 }
