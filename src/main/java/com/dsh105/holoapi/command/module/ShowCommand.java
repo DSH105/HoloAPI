@@ -40,16 +40,16 @@ public class ShowCommand extends CommandModule {
             }
             Player target = Bukkit.getPlayer(args[2]);
             if (target == null) {
-                Lang.sendTo(sender, Lang.NULL_PLAYER.getValue().replace("%player%", args[1]));
+                Lang.sendTo(sender, Lang.NULL_PLAYER.getValue().replace("%player%", args[2]));
                 return true;
             }
 
             if (hologram.getPlayerViews().keySet().contains(PlayerIdent.getIdentificationForAsString(target))) {
-                Lang.sendTo(sender, Lang.HOLOGRAM_ALREADY_SEE.getValue().replace("%id%", args[1]).replace("%player%", args[1]));
+                Lang.sendTo(sender, Lang.HOLOGRAM_ALREADY_SEE.getValue().replace("%id%", args[1]).replace("%player%", args[2]));
                 return true;
             }
             hologram.show(target);
-            Lang.sendTo(sender, Lang.HOLOGRAM_SHOW.getValue().replace("%id%", args[1]).replace("%player%", args[1]));
+            Lang.sendTo(sender, Lang.HOLOGRAM_SHOW.getValue().replace("%id%", args[1]).replace("%player%", args[2]));
             return true;
         }
         return false;
