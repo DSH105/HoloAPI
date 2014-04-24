@@ -44,15 +44,15 @@ public class HoloDebugCommand implements CommandExecutor {
         }
 
         sender.sendMessage("Debug results: ");
-        sender.sendMessage("---------------------------[HoloAPI Stuff]---------------------------");
+        sender.sendMessage("--------------[HoloAPI Stuff]--------------");
         sender.sendMessage("HoloAPI-Version: " + HoloAPI.getCore().getDescription().getVersion());
         sender.sendMessage("Message of the day: " + messages[generator.nextInt(messages.length)]);
-        sender.sendMessage("---------------------------[CraftBukkit Stuff]---------------------------");
+        sender.sendMessage("--------------[CraftBukkit Stuff]--------------");
         sender.sendMessage("Version tag: " + CommonReflection.getVersionTag());
         sender.sendMessage("NMS-package: " + CommonReflection.getMinecraftPackage());
         sender.sendMessage("CB-package: " + CommonReflection.getCraftBukkitPackage());
         sender.sendMessage("Bukkit version: " + Bukkit.getBukkitVersion());
-        sender.sendMessage("---------------------------[Minecraft Server Stuff]---------------------------");
+        sender.sendMessage("--------------[Minecraft Server Stuff]--------------");
         sender.sendMessage("Using Netty: " + CommonReflection.isUsingNetty());
         sender.sendMessage("MinecraftServer: " + CommonReflection.getMinecraftClass("MinecraftServer").getCanonicalName());
         sender.sendMessage("Entity: " + CommonReflection.getMinecraftClass("Entity"));
