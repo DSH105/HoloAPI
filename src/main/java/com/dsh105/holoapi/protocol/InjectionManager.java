@@ -160,7 +160,7 @@ public class InjectionManager {
                 int id = (Integer) packet.read("a");
                 // The action is whether or not it was a right or left click.
                 Object rawAction = packet.read("action");
-                Action action = rawAction instanceof Integer ? Action.getFromId((Integer) rawAction) : readAction(rawAction);
+                Action action = rawAction instanceof Integer ? Action.getFromId(Integer.valueOf(String.valueOf(rawAction))) : readAction(rawAction);
 
                 for (Hologram hologram : HoloAPI.getManager().getAllHolograms().keySet()) {
                     for (int entityId : hologram.getAllEntityIds()) {
