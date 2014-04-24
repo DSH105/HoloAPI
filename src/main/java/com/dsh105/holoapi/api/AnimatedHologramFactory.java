@@ -201,13 +201,13 @@ public class AnimatedHologramFactory {
         }
         animatedHologram.setVisibility(this.visibility);
         animatedHologram.setSimplicity(this.simple);
-        if (!animatedHologram.isSimple()) {
+        /*if (!animatedHologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
                 if (!h.isSimple()) {
                     h.refreshDisplay(true);
                 }
             }
-        }
+        }*/
         for (Entity e : animatedHologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 animatedHologram.show((Player) e, true);

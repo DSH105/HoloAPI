@@ -240,13 +240,13 @@ public class HologramFactory {
         hologram.setImageTagMap(this.imageIdMap);
         hologram.setVisibility(this.visibility);
         hologram.setSimplicity(this.simple);
-        if (!hologram.isSimple()) {
+        /*if (!hologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
                 if (!h.isSimple()) {
                     h.refreshDisplay(true);
                 }
             }
-        }
+        }*/
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
                 hologram.show((Player) e, true);

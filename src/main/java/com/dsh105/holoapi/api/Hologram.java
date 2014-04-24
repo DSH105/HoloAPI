@@ -608,12 +608,13 @@ public class Hologram {
     }
 
     public void show(Player observer, double x, double y, double z, boolean obeyVisibility) {
-        if (!obeyVisibility || this.getVisibility().isVisibleTo(observer, this.getSaveId())) {
-            for (int index = 0; index < this.getTagCount(); index++) {
-                this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
-            }
-            this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), new Vector(x, y, z));
+        if (obeyVisibility && !this.getVisibility().isVisibleTo(observer, this.getSaveId())) {
+            return;
         }
+        for (int index = 0; index < this.getTagCount(); index++) {
+            this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
+        }
+        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), new Vector(x, y, z));
     }
 
     /**

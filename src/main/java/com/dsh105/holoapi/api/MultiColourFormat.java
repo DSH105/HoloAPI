@@ -52,7 +52,7 @@ public class MultiColourFormat extends TagFormat {
                     h.updateDisplay();
                 }
             }
-        }.runTaskTimer(HoloAPI.getCore(), 0, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("multicolorFormat.delay", 10));
+        }.runTaskTimer(HoloAPI.getCore(), 0, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("multicolorFormat.delay", 5));
     }
 
     @Override
