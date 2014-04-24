@@ -20,6 +20,8 @@ package com.dsh105.holoapi.api.visibility;
 import com.dsh105.holoapi.util.Permission;
 import org.bukkit.entity.Player;
 
+import java.util.LinkedHashMap;
+
 /**
  * Represents a visibility in which only players with a certain permission can see the hologram
  */
@@ -42,5 +44,17 @@ public class VisibilityPermission implements Visibility {
     @Override
     public boolean isVisibleTo(Player player, String hologramId) {
         return this.permission == null ? (new Permission("holoapi.holo.see." + hologramId).hasPerm(player, false) || new Permission("holoapi.holo.see.all").hasPerm(player, false)) : new Permission(this.permission).hasPerm(player, false);
+    }
+
+    @Override
+    public String getSaveKey() {
+        return "perm";
+    }
+
+    @Override
+    public LinkedHashMap<String, Object> getDataToSave() {
+        LinkedHashMap<String, Object> dataMap = new LinkedHashMap<String, Object>();
+        dataMap.put("permission", this.getPermission() == null ? "unidentified" : this.getPermission());
+        return dataMap;
     }
 }

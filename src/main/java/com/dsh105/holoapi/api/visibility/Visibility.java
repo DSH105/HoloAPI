@@ -19,6 +19,8 @@ package com.dsh105.holoapi.api.visibility;
 
 import org.bukkit.entity.Player;
 
+import java.util.LinkedHashMap;
+
 /**
  * Represents the visibility of the hologram
  */
@@ -32,4 +34,20 @@ public interface Visibility {
      * @return true if hologram can be shown to the player, false if it should be kept hidden
      */
     public boolean isVisibleTo(Player player, String hologramId);
+
+    /**
+     * Gets the String the represents the Visibility. The save key is used in hologram information lists and data files within HoloAPI
+     *
+     * @return string that represents the Visibility
+     */
+    public String getSaveKey();
+
+    /**
+     * Gets a map of the Visibility data to save to file.
+     * <p/>
+     * HoloAPI uses this data for saving Hologram Visibility data to file so that it can be loaded again when the hologram is recreated from the save file. See {@link com.dsh105.holoapi.api.events.HoloVisibilityLoadEvent} for information on how to load TouchAction data back into holograms
+     *
+     * @return a map of all data to save to file. See {@link com.dsh105.holoapi.api.touch.CommandTouchAction} for a working example of this
+     */
+    public LinkedHashMap<String, Object> getDataToSave();
 }

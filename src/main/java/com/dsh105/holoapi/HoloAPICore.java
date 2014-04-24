@@ -31,7 +31,7 @@ import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
 import com.dsh105.holoapi.image.SimpleAnimationLoader;
 import com.dsh105.holoapi.image.SimpleImageLoader;
-import com.dsh105.holoapi.listeners.CommandTouchActionListener;
+import com.dsh105.holoapi.listeners.HoloDataLoadListener;
 import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
@@ -44,8 +44,6 @@ import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -133,7 +131,7 @@ public class HoloAPICore extends JavaPlugin {
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new WorldListener(), this);
         manager.registerEvents(new IndicatorListener(), this);
-        manager.registerEvents(new CommandTouchActionListener(), this);
+        manager.registerEvents(new HoloDataLoadListener(), this);
 
         // Vault Hook
         this.vaultProvider = new VaultProvider(this);

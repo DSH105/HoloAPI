@@ -22,23 +22,36 @@ import com.dsh105.holoapi.api.Hologram;
 import java.util.Map;
 
 /**
- * Called when TouchAction data is loaded from file.
+ * Called when data is loaded from file. The event can be used to recreate TouchActions or a certain Visibility and add them to
+ * loaded holograms. See {@link com.dsh105.holoapi.listeners.HoloDataLoadListener} for an example of this
  */
-public class HoloTouchActionLoadEvent extends HoloDataLoadEvent {
+public class HoloDataLoadEvent extends HoloEvent {
 
-    public HoloTouchActionLoadEvent(Hologram hologram, String saveKey, Map<String, Object> configMap) {
-        super(hologram, saveKey, configMap);
+    private final String saveKey;
+    private final Map<String, Object> configMap;
+
+    public HoloDataLoadEvent(Hologram hologram, String saveKey, Map<String, Object> configMap) {
+        super(hologram);
+        this.saveKey = saveKey;
+        this.configMap = configMap;
     }
 
     /**
      * Gets the save key of the saved data
      *
      * @return key of the saved data
-     * @deprecated use {@link HoloDataLoadEvent#getSaveKey()}
      */
-    @Deprecated
-    public String getLoadedTouchActionKey() {
-        return getSaveKey();
+    public String getSaveKey() {
+        return saveKey;
+    }
+
+    /**
+     * A map of all saved data for the appropriate key
+     *
+     * @return map of all saved data for the TouchAction
+     */
+    public Map<String, Object> getConfigMap() {
+        return configMap;
     }
 
 }
