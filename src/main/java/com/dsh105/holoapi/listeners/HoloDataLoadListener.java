@@ -19,18 +19,21 @@ package com.dsh105.holoapi.listeners;
 
 import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent;
+import com.dsh105.holoapi.api.events.HoloVisibilityLoadEvent;
 import com.dsh105.holoapi.api.touch.CommandTouchAction;
+import com.dsh105.holoapi.api.visibility.VisibilityAll;
+import com.dsh105.holoapi.api.visibility.VisibilityPermission;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.logging.Level;
 
-public class CommandTouchActionListener implements Listener {
+public class HoloDataLoadListener implements Listener {
 
     @EventHandler
     public void onTouchActionLoad(HoloTouchActionLoadEvent event) {
         // Make sure it's what we're looking for
-        if (event.getLoadedTouchActionKey().startsWith("command_")) {
+        if (event.getSaveKey().startsWith("command_")) {
             // Just in-case (for some reason) the command data didn't actually save
             if (event.getConfigMap().get("command") != null) {
                 try {
@@ -39,6 +42,21 @@ public class CommandTouchActionListener implements Listener {
                 } catch (ClassCastException e) {
                     HoloAPICore.LOGGER.log(Level.SEVERE, "Failed to load command touch action data for hologram (" + event.getHologram().getSaveId() + "). Maybe the save data was edited?");
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onVisibilityLoad(HoloVisibilityLoadEvent event) {
+        if (event.getSaveKey().equalsIgnoreCase("all")) {
+            if (event.getConfigMap().get("enable") != null) {
+                event.getHologram().setVisibility(new VisibilityAll());
+            }
+        } else if (event.getSaveKey().equalsIgnoreCase("perm")) {
+            Object o = event.getConfigMap().get("permission");
+            if (o != null && o instanceof String) {
+                String perm = (String) o;
+                event.getHologram().setVisibility(new VisibilityPermission(perm.equalsIgnoreCase("unidentified") ? null : perm));
             }
         }
     }

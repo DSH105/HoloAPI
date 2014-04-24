@@ -22,23 +22,11 @@ import com.dsh105.holoapi.api.Hologram;
 import java.util.Map;
 
 /**
- * Called when TouchAction data is loaded from file.
+ * Called when Visibility data is loaded from a HoloAPI data file
  */
-public class HoloTouchActionLoadEvent extends HoloDataLoadEvent {
+public class HoloVisibilityLoadEvent extends HoloDataLoadEvent {
 
-    public HoloTouchActionLoadEvent(Hologram hologram, String saveKey, Map<String, Object> configMap) {
+    public HoloVisibilityLoadEvent(Hologram hologram, String saveKey, Map<String, Object> configMap) {
         super(hologram, saveKey, configMap);
     }
-
-    /**
-     * Gets the save key of the saved data
-     *
-     * @return key of the saved data
-     * @deprecated use {@link HoloDataLoadEvent#getSaveKey()}
-     */
-    @Deprecated
-    public String getLoadedTouchActionKey() {
-        return getSaveKey();
-    }
-
 }
