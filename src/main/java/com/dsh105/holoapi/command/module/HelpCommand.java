@@ -37,7 +37,7 @@ public class HelpCommand extends CommandModule {
                 HoloAPI.getCommandManager().sendHelpTo(sender, Integer.parseInt(args[1]));
                 return true;
             } else {
-                Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
+                HoloAPI.getCommandManager().sendHelpTo(sender, args[1]);
                 return true;
             }
         }
@@ -47,7 +47,9 @@ public class HelpCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, "Retrieve help for all HoloAPI commands.")
+                new CommandHelp(this, "Retrieve help for all HoloAPI commands."),
+                new CommandHelp(this, "<page>", (Permission) null, "See the help page of a certain number."),
+                new CommandHelp(this, "<command>", (Permission) null, "Retrieve help for a certain command.")
         };
     }
 

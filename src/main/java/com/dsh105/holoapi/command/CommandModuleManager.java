@@ -126,7 +126,7 @@ public class CommandModuleManager implements CommandExecutor {
                 ArrayList<FancyMessage> list = new ArrayList<FancyMessage>();
                 for (String key : modules.keySet()) {
                     for (CommandHelp commandHelp : modules.get(key).getHelp()) {
-                        Object raw = commandHelp.getHelpFor(sender);
+                        Object raw = commandHelp.getHelpFor(sender, true);
                         if (!(raw instanceof FancyMessage)) {
                             continue;
                         }
@@ -150,7 +150,7 @@ public class CommandModuleManager implements CommandExecutor {
                 ArrayList<String> list = new ArrayList<String>();
                 for (String key : modules.keySet()) {
                     for (CommandHelp commandHelp : modules.get(key).getHelp()) {
-                        Object raw = commandHelp.getHelpFor(sender);
+                        Object raw = commandHelp.getHelpFor(sender, true);
                         if (raw instanceof FancyMessage) {
                             continue;
                         } else if (raw instanceof String[]) {

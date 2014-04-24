@@ -40,16 +40,12 @@ public class CommandHelp {
 
     public CommandHelp(CommandModule module, Permission permission, String... description) {
         this(module.getSubCommand(), description);
-        if (permission != null) {
-            this.permission = permission;
-        }
+        this.permission = permission;
     }
 
     public CommandHelp(CommandModule module, String commandArguments, Permission permission, String... description) {
         this(module.getSubCommand() + " " + commandArguments, description);
-        if (permission != null) {
-            this.permission = permission;
-        }
+        this.permission = permission;
     }
 
     private CommandHelp(String commandArguments, String... description) {
