@@ -21,7 +21,6 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.events.HoloTouchEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
-import com.dsh105.holoapi.protocol.netty.ChannelPipelineInjector;
 import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.ReflectionUtil;
@@ -150,7 +149,7 @@ public class InjectionManager {
         this.closed = closed;
     }
 
-    public void handleIncomingPacket(ChannelPipelineInjector injector, final Player player, final Object msg) {
+    public void handleIncomingPacket(PlayerInjector injector, final Player player, final Object msg) {
         if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
             return;
         Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new Runnable() {
