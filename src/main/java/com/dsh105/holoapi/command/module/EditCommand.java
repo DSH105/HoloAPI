@@ -88,7 +88,7 @@ public class EditCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, "<id> <line>", this.getPermission(), "Edit a line of an existing hologram."),
+                new CommandHelp(this, "<id> <line>", this.getPermission(), "Edit a line of an existing hologram.", "You will be prompted for the content after the command is entered."),
                 new CommandHelp(this, "<id> <line> <content>", this.getPermission(), "Edit a line of an existing hologram.", "The content can be more than one word")
         };
     }

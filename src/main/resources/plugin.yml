@@ -34,7 +34,7 @@ permissions:
     holoapi.holo.addline:
         default: op
     holoapi.holo.touch:
-            default: op
+        default: op
     holoapi.holo.touch.add:
         default: op
     holoapi.holo.touch.remove:

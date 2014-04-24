@@ -52,10 +52,10 @@ public class CommandModuleManager implements CommandExecutor {
         this.register("move", new MoveCommand());
         this.register("teleport", new TeleportCommand());
         this.register("copy", new CopyCommand());
-        this.register("touch", new TouchCommand());
         this.register("id", new IdCommand());
         this.register("show", new ShowCommand());
         this.register("hide", new HideCommand());
+        this.register("touch", new TouchCommand());
         this.register("visibility", new VisibilityCommand());
         this.register("build", new BuildCommand());
         this.register("readtxt", new ReadTxtCommand());
