@@ -32,27 +32,28 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CommandModuleManager implements CommandExecutor {
 
-    private HashMap<String, CommandModule> modules = new HashMap<String, CommandModule>();
+    private LinkedHashMap<String, CommandModule> modules = new LinkedHashMap<String, CommandModule>();
 
     private Paginator helpPages;
     private FancyPaginator fancyHelpPages;
 
     public void registerDefaults() {
         this.register("help", new HelpCommand());
-        this.register("info", new InfoCommand());
-        this.register("nearby", new NearbyCommand());
         this.register("create", new CreateCommand());
         this.register("remove", new RemoveCommand());
-        this.register("edit", new EditCommand());
         this.register("addline", new AddLineCommand());
-        this.register("visibility", new VisibilityCommand());
+        this.register("edit", new EditCommand());
+        this.register("info", new InfoCommand());
+        this.register("nearby", new NearbyCommand());
         this.register("move", new MoveCommand());
         this.register("teleport", new TeleportCommand());
         this.register("copy", new CopyCommand());
+        this.register("visibility", new VisibilityCommand());
         this.register("build", new BuildCommand());
         this.register("show", new ShowCommand());
         this.register("hide", new HideCommand());
@@ -90,15 +91,14 @@ public class CommandModuleManager implements CommandExecutor {
             }
 
             // Perform under the correct module
-            if (module.onCommand(sender, args)) {
-                return true;
-            } else {
+            if (!module.onCommand(sender, args)) {
                 if (args.length == 1) {
                     this.sendHelpTo(sender, moduleArgs);
                 } else {
                     sender.sendMessage(ChatColor.DARK_AQUA + "Sub command not found for: " + ChatColor.AQUA + "/holo " + moduleArgs);
                 }
             }
+            return true;
         }
 
         Lang.sendTo(sender, Lang.COMMAND_DOESNOT_EXIST.getValue().replace("%cmd%", "/" + cmd.getLabel() + (args.length == 0 ? "" : " " + StringUtil.combineSplit(0, args, " "))));
@@ -141,7 +141,7 @@ public class CommandModuleManager implements CommandExecutor {
                 return;
             }
 
-            sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + page + "/" + this.helpPages.getIndex() + " " + ChatColor.DARK_AQUA + "----------------");
+            sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help " + page + "/" + this.fancyHelpPages.getIndex() + " " + ChatColor.DARK_AQUA + "----------------");
             for (FancyMessage message : fancyHelpPages.getPage(page)) {
                 message.send((Player) sender);
             }
@@ -157,6 +157,8 @@ public class CommandModuleManager implements CommandExecutor {
                             for (String part : (String[]) raw) {
                                 list.add(part);
                             }
+                        } else if (raw instanceof String) {
+                            list.add((String) raw);
                         }
                     }
                 }
@@ -183,7 +185,7 @@ public class CommandModuleManager implements CommandExecutor {
         ArrayList<String> suggestions = new ArrayList<String>();
         for (Map.Entry<String, CommandModule> entry : modules.entrySet()) {
             if (command.equalsIgnoreCase(entry.getKey())) {
-                sender.sendMessage(ChatColor.DARK_AQUA + "----------------" + ChatColor.AQUA + " HoloAPI Help for " + "/holo " + command + ChatColor.DARK_AQUA + "----------------");
+                sender.sendMessage(ChatColor.DARK_AQUA + "-------------" + ChatColor.AQUA + " HoloAPI Help Suggestions " + ChatColor.DARK_AQUA + "-------------");
                 for (CommandHelp help : entry.getValue().getHelp()) {
                     help.sendHelpTo(sender, shorten);
                 }
