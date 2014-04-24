@@ -86,6 +86,8 @@ public enum Lang {
     HOLOGRAM_ALREADY_NOT_SEE("hologram_already_not_see", "&3Hologram &b%id% &3is already hidden for &b%player%&3."),
     HOLOGRAM_SHOW("hologram_show", "&b%player% &3can now see Hologram &b%id%&3."),
     HOLOGRAM_HIDE("hologram_hide", "&3Hologram &b%id% &3hidden for &b%player%&3."),
+    HOLOGRAM_DUPLICATE_ID("hologram_duplicate_id", "&3Hologram save IDs must be unique. A hologram of ID &b%id% &3already exists in the HoloAPI data files!"),
+    HOLOGRAM_SET_ID("hologram_set_id", "&3Save ID of hologram &b%oldid% &3set to &b%newid%&3."),
     NO_NEARBY_HOLOGRAMS("no_nearby_holograms", "&3There are no holograms within a radius of &b%radius%&3."),
 
     YES_NO_INPUT_INVALID("yes_no_input_invalid", "&3Please enter either &bYes &3or &bNo&3."),

@@ -69,7 +69,7 @@ public class VisibilityCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, this.basePerm, "View the visibility of a particular hologram."),
+                new CommandHelp(this, "<id>", this.basePerm, "View the visibility of a particular hologram."),
                 new CommandHelp(this, "<id> <type>", new Permission(this.basePerm, "set"), "Set the visibility of a particular hologram.", "Valid types for HoloAPI are: all, permission.", "Visibility types dynamically registered using the API may be defined using this command.")
         };
     }

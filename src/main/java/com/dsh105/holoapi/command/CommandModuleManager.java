@@ -31,7 +31,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -53,12 +52,13 @@ public class CommandModuleManager implements CommandExecutor {
         this.register("move", new MoveCommand());
         this.register("teleport", new TeleportCommand());
         this.register("copy", new CopyCommand());
-        this.register("visibility", new VisibilityCommand());
-        this.register("build", new BuildCommand());
+        this.register("touch", new TouchCommand());
+        this.register("id", new IdCommand());
         this.register("show", new ShowCommand());
         this.register("hide", new HideCommand());
+        this.register("visibility", new VisibilityCommand());
+        this.register("build", new BuildCommand());
         this.register("readtxt", new ReadTxtCommand());
-        this.register("touch", new TouchCommand());
         this.register("refresh", new RefreshCommand());
         this.register("reload", new ReloadCommand());
         this.register("update", new UpdateCommand());

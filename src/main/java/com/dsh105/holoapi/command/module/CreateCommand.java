@@ -182,7 +182,7 @@ public class CreateCommand extends CommandModule {
     @Override
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
-                new CommandHelp(this, "Create a holographic display fro text.", "Lines can be entered after each other.", "Once the command is entered, you will be prompted to enter the line content."),
+                new CommandHelp(this, "Create a holographic display from text.", "Lines can be entered after each other.", "Once the command is entered, you will be prompted to enter the line content."),
                 new CommandHelp(this, "<world> <x> <y> <z> <content>", this.getPermission(), "Create a holographic display.", "<content> defines the first line of the new hologram.", "Extra lines can be added using the /holo addline <id> <content> command"),
                 new CommandHelp(this, "image <image_id>", this.getPermission(), "Create a holographic display with the specified images.", "Images can be defined in the config.yml."),
                 new CommandHelp(this, "image <image_id> <world> <x> <y> <z>", this.getPermission(), "Create a holographic display with the specified images at a location.", "Images can be defined in the config.yml."),
