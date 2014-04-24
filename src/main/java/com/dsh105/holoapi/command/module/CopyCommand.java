@@ -89,7 +89,7 @@ public class CopyCommand extends CommandModule {
     public CommandHelp[] getHelp() {
         return new CommandHelp[]{
                 new CommandHelp(this, "<id>", this.getPermission(), "Copy a hologram to your current position."),
-                new CommandHelp(this, "<id> <world> <x> <y> <z>", this.getPermission(), "Copy a hologram to the specified permission.")
+                new CommandHelp(this, "<id> <world> <x> <y> <z>", this.getPermission(), "Copy a hologram to a new position.")
         };
     }
 
