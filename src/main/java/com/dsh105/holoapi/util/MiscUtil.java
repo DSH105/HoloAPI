@@ -85,7 +85,7 @@ public class MiscUtil {
             if (!StringUtil.isInt(args[i])) {
                 return null;
             }
-            coords[index] = Integer.parseInt(args[i]);
+            coords[index++] = Integer.parseInt(args[i]);
         }
         return new Location(w, coords[0], coords[1], coords[2]);
     }
