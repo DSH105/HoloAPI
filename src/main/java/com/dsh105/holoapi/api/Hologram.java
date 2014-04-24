@@ -264,7 +264,7 @@ public class Hologram {
      */
     public void setSaveId(String saveId) {
         if (HoloAPI.getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
-            throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID" + saveId + " already exists in the HoloAPI data files!");
+            throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID " + saveId + " already exists in the HoloAPI data files!");
         }
 
         if (!this.isSimple()) {
