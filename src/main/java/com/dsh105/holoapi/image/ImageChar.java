@@ -48,6 +48,21 @@ public enum ImageChar {
     }
 
     /**
+     * Gets the appropriate ImageChar from its friendly name
+     *
+     * @param humanName friendly name used to search for
+     * @return ImageChar if found, null if it doesn't exist
+     */
+    public static ImageChar fromHumanName(String humanName) {
+        for (ImageChar c : ImageChar.values()) {
+            if (c.getHumanName().equalsIgnoreCase(humanName)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Gets the character of the ImageChar
      *
      * @return character of the ImageChar
@@ -63,20 +78,5 @@ public enum ImageChar {
      */
     public String getHumanName() {
         return humanName;
-    }
-
-    /**
-     * Gets the appropriate ImageChar from its friendly name
-     *
-     * @param humanName friendly name used to search for
-     * @return ImageChar if found, null if it doesn't exist
-     */
-    public static ImageChar fromHumanName(String humanName) {
-        for (ImageChar c : ImageChar.values()) {
-            if (c.getHumanName().equalsIgnoreCase(humanName)) {
-                return c;
-            }
-        }
-        return null;
     }
 }

@@ -20,7 +20,10 @@ package com.dsh105.holoapi;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
-import com.dsh105.holoapi.command.*;
+import com.dsh105.holoapi.command.CommandManager;
+import com.dsh105.holoapi.command.CommandModuleManager;
+import com.dsh105.holoapi.command.DynamicPluginCommand;
+import com.dsh105.holoapi.command.HoloDebugCommand;
 import com.dsh105.holoapi.config.YAMLConfig;
 import com.dsh105.holoapi.config.YAMLConfigManager;
 import com.dsh105.holoapi.config.options.ConfigOptions;
@@ -44,8 +47,6 @@ import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -58,6 +59,10 @@ import java.util.logging.Level;
 
 public class HoloAPICore extends JavaPlugin {
 
+    public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
+    public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
+    public static Server SERVER;
+    public static boolean isUsingNetty;
     protected static CommandManager COMMAND_MANAGER;
     protected static CommandModuleManager COMMAND_MODULE_MANAGER;
     protected static SimpleHoloManager MANAGER;
@@ -65,39 +70,39 @@ public class HoloAPICore extends JavaPlugin {
     protected static SimpleAnimationLoader ANIMATION_LOADER;
     protected static TagFormatter TAG_FORMATTER;
     protected static VisibilityMatcher VISIBILITY_MATCHER;
-    protected ConfigOptions OPTIONS;
-
     protected static InjectionManager INJECTION_MANAGER;
-
-    protected YAMLConfigManager configManager;
-    protected YAMLConfig config;
-    protected YAMLConfig dataConfig;
-    protected YAMLConfig langConfig;
-
-    protected VaultProvider vaultProvider;
-    protected VanishProvider vanishProvider;
-    protected BungeeProvider bungeeProvider;
-
+    protected static double LINE_SPACING = 0.25D;
+    protected static int TAG_ENTITY_MULTIPLIER = 4;
+    protected static String TRANSPARENCY_NO_BORDER = " ";
+    protected static String TRANSPARENCY_WITH_BORDER = " &r ";
     // Update Checker stuff
     public boolean updateAvailable = false;
     public String updateName = "";
     public boolean updateChecked = false;
     public File file;
-
-    public static Server SERVER;
-    public static boolean isUsingNetty;
-
-    protected static double LINE_SPACING = 0.25D;
-    protected static int TAG_ENTITY_MULTIPLIER = 4;
-    protected static String TRANSPARENCY_NO_BORDER = " ";
-    protected static String TRANSPARENCY_WITH_BORDER = " &r ";
-
+    protected ConfigOptions OPTIONS;
+    protected YAMLConfigManager configManager;
+    protected YAMLConfig config;
+    protected YAMLConfig dataConfig;
+    protected YAMLConfig langConfig;
+    protected VaultProvider vaultProvider;
+    protected VanishProvider vanishProvider;
+    protected BungeeProvider bungeeProvider;
+    protected String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
     private ChatColor primaryColour = ChatColor.DARK_AQUA;
     private ChatColor secondaryColour = ChatColor.AQUA;
-    protected String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
 
-    public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
-    public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
+    public static Server getHoloServer() {
+        if (SERVER == null)
+            throw new RuntimeException("SERVER is NULL!");
+        return SERVER;
+    }
+
+    public static InjectionManager getInjectionManager() {
+        if (INJECTION_MANAGER == null)
+            throw new RuntimeException("InjectionManager is NULL!");
+        return INJECTION_MANAGER;
+    }
 
     @Override
     public void onEnable() {
@@ -258,9 +263,10 @@ public class HoloAPICore extends JavaPlugin {
         for (Lang l : Lang.values()) {
             String[] desc = l.getDescription();
             langConfig.set(l.getPath(), langConfig.getString(l.getPath(), l.getRaw()
-                    .replace("&3", "&" + this.primaryColour.getChar())
-                    .replace("&b", "&" + this.secondaryColour.getChar())),
-                    desc);
+                            .replace("&3", "&" + this.primaryColour.getChar())
+                            .replace("&b", "&" + this.secondaryColour.getChar())),
+                    desc
+            );
         }
         langConfig.saveConfig();
         langConfig.reloadConfig();
@@ -292,17 +298,5 @@ public class HoloAPICore extends JavaPlugin {
             // LOGGER.info("Identified server brand: " + SERVER.getName());
             // LOGGER.info("MC Version: " + SERVER.getMCVersion());
         }
-    }
-
-    public static Server getHoloServer() {
-        if (SERVER == null)
-            throw new RuntimeException("SERVER is NULL!");
-        return SERVER;
-    }
-
-    public static InjectionManager getInjectionManager() {
-        if (INJECTION_MANAGER == null)
-            throw new RuntimeException("InjectionManager is NULL!");
-        return INJECTION_MANAGER;
     }
 }

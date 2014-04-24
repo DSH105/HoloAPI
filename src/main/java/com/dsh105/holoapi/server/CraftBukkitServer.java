@@ -28,6 +28,16 @@ public class CraftBukkitServer implements Server {
 
     public String MINECRAFT_VERSIONED;
 
+    private static String trimPackageName(String packageName) {
+        int index = packageName.lastIndexOf('.');
+
+        if (index > 0) {
+            return packageName.substring(0, index);
+        } else {
+            return "<unknown>";
+        }
+    }
+
     @Override
     public boolean init() {
         String serverPath = Bukkit.getServer().getClass().getName();
@@ -60,16 +70,6 @@ public class CraftBukkitServer implements Server {
     @Override
     public boolean postInit() {
         return false;
-    }
-
-    private static String trimPackageName(String packageName) {
-        int index = packageName.lastIndexOf('.');
-
-        if (index > 0) {
-            return packageName.substring(0, index);
-        } else {
-            return "<unknown>";
-        }
     }
 
     @Override

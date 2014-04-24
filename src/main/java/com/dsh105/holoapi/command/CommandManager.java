@@ -35,10 +35,8 @@ public class CommandManager {
 
     protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new SafeField<CommandMap>(Bukkit.getServer().getPluginManager().getClass(), "commandMap");
     protected static final FieldAccessor<Map<String, Command>> KNOWN_COMMANDS = new SafeField<Map<String, org.bukkit.command.Command>>(SimpleCommandMap.class, "knownCommands");
-
-    private CommandMap fallback;
-
     private final Plugin plugin;
+    private CommandMap fallback;
 
     public CommandManager(Plugin plugin) {
         this.plugin = plugin;

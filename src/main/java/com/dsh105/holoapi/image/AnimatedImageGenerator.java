@@ -41,8 +41,8 @@ public class AnimatedImageGenerator implements Generator {
 
     // https://github.com/aadnk/DisplayFloatingImages/blob/master/DisplayFloatingImage/src/main/java/com/comphenix/example/nametags/GifImageMessage.java
 
-    private String key;
     protected ImmutableList<GIFFrame> frames;
+    private String key;
     private int maxHeight;
     private GIFFrame largestFrame;
 

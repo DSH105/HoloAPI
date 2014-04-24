@@ -24,15 +24,15 @@ public class AbstractWrapper {
     public AbstractWrapper() {
     }
 
+    public Object getHandle() {
+        return this.handle;
+    }
+
     protected void setHandle(Object handle) {
         if (this.handle == null) {
             this.handle = handle;
             return;
         }
         throw new RuntimeException("Handle already set!");
-    }
-
-    public Object getHandle() {
-        return this.handle;
     }
 }

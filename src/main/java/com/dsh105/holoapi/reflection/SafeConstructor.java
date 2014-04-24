@@ -40,16 +40,16 @@ public class SafeConstructor<T> {
         }
     }
 
+    public Constructor getConstructor() {
+        return this.constructor;
+    }
+
     protected void setConstructor(Constructor constructor) {
         if (constructor == null) {
             throw new UnsupportedOperationException("Cannot create a new constructor!");
         }
         this.constructor = constructor;
         this.params = constructor.getParameterTypes();
-    }
-
-    public Constructor getConstructor() {
-        return this.constructor;
     }
 
     public T newInstance(Object... params) {

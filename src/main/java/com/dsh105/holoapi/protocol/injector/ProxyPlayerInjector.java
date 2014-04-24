@@ -38,26 +38,17 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
     private final FieldAccessor<Object> h_lock = new SafeField<Object>(ReflectionUtil.getNMSClass("NetworkManager"), Constants.NETWORK_FIELD_LOCK.getName());  // Those fields haven't changed in 50 years!
     // The inboundQueue field
     private final FieldAccessor<Queue> inboundQueue = new SafeField<Queue>(ReflectionUtil.getNMSClass("NetworkManager"), Constants.NETWORK_FIELD_INBOUNDQUEUE.getName());
-
-    private Player player;
-
-    private InjectionManager injectionManager;
-
-    private boolean injected;
-
-    private boolean closed;
-
-    private boolean exempted;
-
-    private Object nmsHandle;
-
-    private Object playerConnection;
-    private Object networkManager;
-
     protected Queue oldQueue;
     protected Queue delegate;
-
     protected Object lock;
+    private Player player;
+    private InjectionManager injectionManager;
+    private boolean injected;
+    private boolean closed;
+    private boolean exempted;
+    private Object nmsHandle;
+    private Object playerConnection;
+    private Object networkManager;
 
     public ProxyPlayerInjector(final Player player, final InjectionManager injectionManager) {
         Preconditions.checkNotNull(player, "Player can't be NULL!");

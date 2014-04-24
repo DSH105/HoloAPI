@@ -41,6 +41,27 @@ public class SafeField<T> implements FieldAccessor<T> {
         }
     }
 
+    public static <T> T get(Class<?> clazz, String fieldname) {
+        return new SafeField<T>(clazz, fieldname).get(null);
+    }
+
+    public static <T> T get(Object instance, String fieldName) {
+        return new SafeField<T>(instance.getClass(), fieldName).get(instance);
+    }
+
+    public static <T> void set(Object instance, String fieldName, T value) {
+        new SafeField<T>(instance.getClass(), fieldName).set(instance, value);
+    }
+
+    public static <T> void setStatic(Class<?> clazz, String fieldname, T value) {
+        new SafeField<T>(clazz, fieldname).set(null, value);
+    }
+
+    @Override
+    public Field getField() {
+        return this.field;
+    }
+
     protected void setField(Field field) {
         if (!field.isAccessible()) {
             try {
@@ -52,11 +73,6 @@ public class SafeField<T> implements FieldAccessor<T> {
         }
         this.field = field;
         this.isStatic = Modifier.isStatic(field.getModifiers());
-    }
-
-    @Override
-    public Field getField() {
-        return this.field;
     }
 
     @Override
@@ -143,21 +159,5 @@ public class SafeField<T> implements FieldAccessor<T> {
         } else {
             modifierField.set(getField(), getField().getModifiers() & ~Modifier.FINAL);
         }
-    }
-
-    public static <T> T get(Class<?> clazz, String fieldname) {
-        return new SafeField<T>(clazz, fieldname).get(null);
-    }
-
-    public static <T> T get(Object instance, String fieldName) {
-        return new SafeField<T>(instance.getClass(), fieldName).get(instance);
-    }
-
-    public static <T> void set(Object instance, String fieldName, T value) {
-        new SafeField<T>(instance.getClass(), fieldName).set(instance, value);
-    }
-
-    public static <T> void setStatic(Class<?> clazz, String fieldname, T value) {
-        new SafeField<T>(clazz, fieldname).set(null, value);
     }
 }

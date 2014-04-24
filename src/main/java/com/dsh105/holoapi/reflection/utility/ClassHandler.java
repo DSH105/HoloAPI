@@ -45,8 +45,6 @@ public abstract class ClassHandler {
         };
     }
 
-    public abstract Class<?> loadClass(String className) throws ClassNotFoundException;
-
     public static ClassHandler fromPackage(final String packageName) {
         return new ClassHandler() {
             @Override
@@ -55,4 +53,6 @@ public abstract class ClassHandler {
             }
         };
     }
+
+    public abstract Class<?> loadClass(String className) throws ClassNotFoundException;
 }

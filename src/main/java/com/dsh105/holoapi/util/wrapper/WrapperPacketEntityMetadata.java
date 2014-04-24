@@ -28,20 +28,20 @@ public class WrapperPacketEntityMetadata extends Packet {
         super(PacketFactory.PacketType.ENTITY_METADATA);
     }
 
+    public int getEntityId() {
+        return (Integer) this.read(Constants.PACKET_ENTITYMETADATA_FIELD_ID.getName());
+    }
+
     public void setEntityId(int value) {
         this.write(Constants.PACKET_ENTITYMETADATA_FIELD_ID.getName(), value);
     }
 
-    public int getEntityId() {
-        return (Integer) this.read(Constants.PACKET_ENTITYMETADATA_FIELD_ID.getName());
+    public Object getMetadata() {
+        return this.read(Constants.PACKET_ENTITYMETADATA_FIELD_META.getName());
     }
 
     public void setMetadata(WrappedDataWatcher metadata) {
         Object handle = metadata.getHandle();
         this.write(Constants.PACKET_ENTITYMETADATA_FIELD_META.getName(), new SafeMethod<Void>(handle.getClass(), Constants.PACKET_ENTITYMETADATA_FUNC_PREPARE.getName()).invoke(handle));
-    }
-
-    public Object getMetadata() {
-        return this.read(Constants.PACKET_ENTITYMETADATA_FIELD_META.getName());
     }
 }

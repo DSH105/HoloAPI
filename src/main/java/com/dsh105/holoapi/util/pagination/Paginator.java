@@ -41,12 +41,12 @@ public class Paginator {
         }
     }
 
-    public void setRaw(ArrayList<String> newRaw) {
-        this.raw = newRaw;
-    }
-
     public ArrayList<String> getRaw() {
         return this.raw;
+    }
+
+    public void setRaw(ArrayList<String> newRaw) {
+        this.raw = newRaw;
     }
 
     public int getIndex() {

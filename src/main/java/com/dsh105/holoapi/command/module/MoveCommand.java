@@ -19,7 +19,6 @@ package com.dsh105.holoapi.command.module;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.conversation.InputFactory;

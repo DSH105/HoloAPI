@@ -38,20 +38,6 @@ public class ClassTemplate<T> {
         setClass(clazz);
     }
 
-    protected void setClass(Class<T> clazz) {
-        this.type = clazz;
-    }
-
-    public List<SafeField<?>> getFields() {
-        if (type == null) {
-            return Collections.emptyList();
-        }
-        if (fields == null) {
-            fields = populateFieldList(new ArrayList<SafeField<?>>(), type);
-        }
-        return Collections.unmodifiableList(fields);
-    }
-
     private static List<SafeField<?>> populateFieldList(List<SafeField<?>> fields, Class<?> clazz) {
         if (clazz == null) {
             return fields;
@@ -65,6 +51,38 @@ public class ClassTemplate<T> {
         }
         fields.addAll(0, newFields);
         return populateFieldList(fields, clazz.getSuperclass());
+    }
+
+    public static ClassTemplate<?> create(Class<?> type) {
+        if (type == null) {
+            HoloAPICore.LOGGER_REFLECTION.warning("Cannot create a ClassTemplate with a null type!");
+            return null;
+        }
+        return new ClassTemplate(type);
+    }
+
+    public static ClassTemplate<?> create(String className) {
+        Class clazz = CommonReflection.getClass(className);
+
+        if (clazz == null) {
+            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + className);
+            return null;
+        }
+        return new ClassTemplate<Object>(clazz);
+    }
+
+    protected void setClass(Class<T> clazz) {
+        this.type = clazz;
+    }
+
+    public List<SafeField<?>> getFields() {
+        if (type == null) {
+            return Collections.emptyList();
+        }
+        if (fields == null) {
+            fields = populateFieldList(new ArrayList<SafeField<?>>(), type);
+        }
+        return Collections.unmodifiableList(fields);
     }
 
     public T newInstance() {
@@ -84,24 +102,6 @@ public class ClassTemplate<T> {
 
     public Class<T> getType() {
         return this.type;
-    }
-
-    public static ClassTemplate<?> create(Class<?> type) {
-        if (type == null) {
-            HoloAPICore.LOGGER_REFLECTION.warning("Cannot create a ClassTemplate with a null type!");
-            return null;
-        }
-        return new ClassTemplate(type);
-    }
-
-    public static ClassTemplate<?> create(String className) {
-        Class clazz = CommonReflection.getClass(className);
-
-        if (clazz == null) {
-            HoloAPICore.LOGGER_REFLECTION.warning("Failed to find a matching class with name: " + className);
-            return null;
-        }
-        return new ClassTemplate<Object>(clazz);
     }
 
     public void transfer(Object from, Object to) {
