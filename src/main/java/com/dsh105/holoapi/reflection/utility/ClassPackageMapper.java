@@ -39,7 +39,6 @@ public class ClassPackageMapper {
 
             if (clazz == null) {
 
-
                 clazz = this.classHandler.loadClass(this.packageName + "." + className);
 
                 if (clazz == null)
