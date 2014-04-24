@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.protocol.injector;
+package com.dsh105.holoapi.protocol.proxy;
 
 import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.protocol.PlayerInjector;

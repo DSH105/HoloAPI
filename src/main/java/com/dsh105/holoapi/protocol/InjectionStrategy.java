@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.protocol;
 
-import com.dsh105.holoapi.protocol.injector.ProxyPlayerInjector;
+import com.dsh105.holoapi.protocol.proxy.ProxyPlayerInjector;
 import com.dsh105.holoapi.protocol.netty.ChannelPipelineInjector;
 import com.dsh105.holoapi.protocol.netty.mcpc.MCPCChannelPipelineInjector;
 import com.dsh105.holoapi.util.ReflectionUtil;
