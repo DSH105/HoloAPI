@@ -21,7 +21,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
-import com.dsh105.holoapi.api.visibility.VisibilityAll;
+import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.reflection.SafeMethod;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
@@ -30,10 +30,10 @@ import com.dsh105.holoapi.util.TagIdGenerator;
 import com.dsh105.holoapi.util.wrapper.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -59,7 +59,7 @@ public class Hologram {
 
     private boolean simple = false;
     private boolean hasRegisteredTouchActions;
-    private Visibility visibility = new VisibilityAll();
+    private Visibility visibility = new VisibilityDefault();
 
     protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
         this(worldName, x, y, z);
@@ -241,6 +241,9 @@ public class Hologram {
      */
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
+        if (!this.isSimple()) {
+            HoloAPI.getManager().saveToFile(this);
+        }
     }
 
     /**
@@ -732,9 +735,9 @@ public class Hologram {
 
     protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
         String content = HoloAPI.getTagFormatter().format(this, observer, message);
-        int matchItem = HoloAPI.getTagFormatter().matchItem(content);
-        if (matchItem >= 0) {
-            this.generateFloatingItem(observer, matchItem, index, diffY, x, y, z);
+        ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
+        if (itemMatch != null) {
+            this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
         } else {
             WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
 
@@ -817,7 +820,7 @@ public class Hologram {
         attachTouch.send(observer);
     }
 
-    protected void generateFloatingItem(Player observer, int itemId, int index, double diffY, double x, double y, double z) {
+    protected void generateFloatingItem(Player observer, ItemStack stack, int index, double diffY, double x, double y, double z) {
         WrapperPacketAttachEntity attachItem = new WrapperPacketAttachEntity();
 
         WrapperPacketSpawnEntity item = new WrapperPacketSpawnEntity();
@@ -829,7 +832,7 @@ public class Hologram {
         item.setData(1);
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(itemId), 1)));
+        dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, stack));
         new SafeMethod(CommonReflection.getDataWatcherClasss(), "h", int.class).invoke(dw.getHandle(), 10);
 
         WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
@@ -856,9 +859,9 @@ public class Hologram {
         WrappedDataWatcher dw = new WrappedDataWatcher();
         String content = HoloAPI.getTagFormatter().format(this, observer, message);
 
-        int matchItem = HoloAPI.getTagFormatter().matchItem(content);
-        if (matchItem >= 0) {
-            dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, new org.bukkit.inventory.ItemStack(Material.getMaterial(matchItem), 1)));
+        ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
+        if (itemMatch != null) {
+            dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, itemMatch));
             new SafeMethod(CommonReflection.getDataWatcherClasss(), "h", int.class).invoke(dw.getHandle(), 10);
         } else {
             dw.initiate(10, content);

@@ -85,7 +85,9 @@ public class SimpleHoloManager implements HoloManager {
     public void clearAll() {
         Iterator<Hologram> i = holograms.keySet().iterator();
         while (i.hasNext()) {
-            i.next().clearAllPlayerViews();
+            Hologram h = i.next();
+            this.saveToFile(h);
+            h.clearAllPlayerViews();
             i.remove();
         }
     }
@@ -206,9 +208,10 @@ public class SimpleHoloManager implements HoloManager {
                 }
             }
             Visibility visibility = hologram.getVisibility();
-            if (visibility.getSaveKey() != null) {
+            if (visibility != null && visibility.getSaveKey() != null) {
                 Map<String, Object> map = visibility.getDataToSave();
                 if (map != null && !map.isEmpty()) {
+                    this.config.set(path + "visibility", null);
                     for (Map.Entry<String, Object> entry : map.entrySet()) {
                         // Let the developer implementing the API handle how data is saved and loaded to and from holograms
                         this.config.set(path + "visibility." + visibility.getSaveKey() + "." + entry.getKey(), entry.getValue());
@@ -359,7 +362,6 @@ public class SimpleHoloManager implements HoloManager {
                         }
                     }
                     this.callDataLoadEvent(sectionKey, hologram, objKey, configMap);
-                    HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloTouchActionLoadEvent(hologram, objKey, configMap));
                 }
             }
         }

@@ -22,7 +22,9 @@ import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -109,7 +111,7 @@ public class TagFormatter {
             }
         });
 
-        this.addFormat(Pattern.compile("\\%date:(.+?)\\%"), new DynamicTagFormat() {
+        this.addFormat(Pattern.compile("%date:(.+?)%"), new DynamicTagFormat() {
             @Override
             public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
                 SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
@@ -120,7 +122,7 @@ public class TagFormatter {
             }
         });
 
-        this.addFormat(Pattern.compile("\\%serveronline:(.+?)\\%"), new DynamicTagFormat() {
+        this.addFormat(Pattern.compile("%serveronline:(.+?)%"), new DynamicTagFormat() {
             @Override
             public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
                 return String.valueOf(HoloAPI.getBungeeProvider().getPlayerCount(matcher.group(1)));
@@ -213,16 +215,28 @@ public class TagFormatter {
         return content;
     }
 
-    protected int matchItem(String content) {
-        Pattern itemPattern = Pattern.compile("\\%item:([0-9]+?)\\%");
-        Matcher matcher = itemPattern.matcher(content);
+    protected ItemStack matchItem(String content) {
+        Matcher matcher = Pattern.compile("%item:([0-9]+?)(,(([0-9]+?))%|%)").matcher(content);
         while (matcher.find()) {
             try {
-                return Integer.parseInt(matcher.group(1));
+                int id = Integer.parseInt(matcher.group(1));
+                int durability = 0;
+                try {
+                    durability = Integer.parseInt(matcher.group(4));
+                } catch (IndexOutOfBoundsException e) {
+                }
+                return new ItemStack(id, 1, (short) durability);
             } catch (NumberFormatException e) {
                 continue;
             }
         }
-        return -1;
+        Matcher matcherStr = Pattern.compile("%item:(.+?)%").matcher(content);
+        while (matcherStr.find()) {
+            Material m = Material.matchMaterial(matcherStr.group(1));
+            if (m != null) {
+                return new ItemStack(m);
+            }
+        }
+        return null;
     }
 }

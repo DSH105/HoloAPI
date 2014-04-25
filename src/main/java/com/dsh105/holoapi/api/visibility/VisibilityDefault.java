@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
  * Represents a visibility in which all players can see the hologram
  */
 
-public class VisibilityAll implements Visibility {
+public class VisibilityDefault implements Visibility {
 
     @Override
     public boolean isVisibleTo(Player player, String hologramId) {
@@ -34,13 +34,11 @@ public class VisibilityAll implements Visibility {
 
     @Override
     public String getSaveKey() {
-        return "all";
+        return null;
     }
 
     @Override
     public LinkedHashMap<String, Object> getDataToSave() {
-        LinkedHashMap<String, Object> dataMap = new LinkedHashMap<String, Object>();
-        dataMap.put("enable", true);
-        return dataMap;
+        return null;
     }
 }

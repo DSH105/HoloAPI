@@ -24,6 +24,7 @@ import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
+import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
 
 public class VisibilityCommand extends CommandModule {
@@ -56,6 +57,7 @@ public class VisibilityCommand extends CommandModule {
                 Visibility visibility = HoloAPI.getVisibilityMatcher().get(args[2].toLowerCase());
                 if (visibility == null) {
                     Lang.sendTo(sender, Lang.INVALID_VISIBILITY.getValue().replace("%visibility%", args[2].toLowerCase()));
+                    Lang.sendTo(sender, Lang.VALID_VISIBILITIES.getValue().replace("%vis%", StringUtil.join(HoloAPI.getVisibilityMatcher().getValidVisibilities().keySet(), ", ")));
                     return true;
                 }
                 hologram.setVisibility(visibility);

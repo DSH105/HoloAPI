@@ -52,6 +52,7 @@ public enum Lang {
     ACTIVE_DISPLAYS("active_displays", "&3Active Holographic Displays:"),
     IMAGES_NOT_LOADED("images_not_loaded", "&3Images are not loaded yet. Try again later."),
     INVALID_VISIBILITY("invalid_invisibility", "&b%visibility% &3is not a registered visibility type."),
+    VALID_VISIBILITIES("valid_invisibilities", "&3Valid visibilities are: &b%vis%&3."),
     READING_TXT("reading_txt", "&3Reading text from &b%url%&3..."),
 
     TOUCH_ACTIONS("touch_actions", "&3Touch actions for hologram of ID &b%id%&3:"),

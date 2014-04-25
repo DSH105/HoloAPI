@@ -19,7 +19,7 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.visibility.Visibility;
-import com.dsh105.holoapi.api.visibility.VisibilityAll;
+import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
@@ -47,7 +47,7 @@ public class AnimatedHologramFactory {
     private double locY;
     private double locZ;
     private String saveId;
-    private Visibility visibility = new VisibilityAll();
+    private Visibility visibility = new VisibilityDefault();
 
     private boolean simple = false;
     private boolean preparedId = false;
