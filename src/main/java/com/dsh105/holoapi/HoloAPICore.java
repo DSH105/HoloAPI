@@ -20,10 +20,14 @@ package com.dsh105.holoapi;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
-import com.dsh105.holoapi.command.*;
+import com.dsh105.holoapi.command.CommandManager;
+import com.dsh105.holoapi.command.CommandModuleManager;
+import com.dsh105.holoapi.command.DynamicPluginCommand;
+import com.dsh105.holoapi.command.HoloDebugCommand;
 import com.dsh105.holoapi.config.YAMLConfig;
 import com.dsh105.holoapi.config.YAMLConfigManager;
 import com.dsh105.holoapi.config.options.ConfigOptions;
+import com.dsh105.holoapi.data.DependencyGraphUtil;
 import com.dsh105.holoapi.data.Metrics;
 import com.dsh105.holoapi.data.Updater;
 import com.dsh105.holoapi.hook.BungeeProvider;
@@ -44,6 +48,7 @@ import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -145,9 +150,36 @@ public class HoloAPICore extends JavaPlugin {
 
         this.loadHolograms();
 
+        /**
+         * All metrics
+         */
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
+
+            /**
+             * Dependencies (hard ones, those can't live without us)
+             */
+
+            Metrics.Graph dependingPlugins = metrics.createGraph("Depending Plugins");
+            synchronized (Bukkit.getPluginManager()) {
+                for (final Plugin otherPlugin : DependencyGraphUtil.getPluginsUnsafe()) {
+                    if (!otherPlugin.isEnabled()) {
+                        continue;
+                    }
+                    if (!DependencyGraphUtil.isDepending(otherPlugin, this) && !DependencyGraphUtil.isSoftDepending(otherPlugin, this)) {
+                        continue;
+                    }
+                    dependingPlugins.addPlotter(new Metrics.Plotter(otherPlugin.getName()) {
+                        @Override
+                        public int getValue() {
+                            return 1;
+                        }
+                    });
+                }
+            }
+
+            metrics.addGraph(dependingPlugins);
         } catch (IOException e) {
             LOGGER.warning("Plugin Metrics (MCStats) has failed to start.");
             e.printStackTrace();
