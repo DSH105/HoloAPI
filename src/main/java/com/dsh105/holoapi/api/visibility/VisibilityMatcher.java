@@ -25,10 +25,16 @@ public class VisibilityMatcher {
     private HashMap<String, Visibility> visibilities = new HashMap<String, Visibility>();
 
     public VisibilityMatcher() {
-        this.visibilities.put("all", new VisibilityAll());
+        Visibility def = new VisibilityDefault();
+        this.visibilities.put("all", def);
+        this.visibilities.put("default", def);
         Visibility perm = new VisibilityPermission();
         this.visibilities.put("perm", perm);
         this.visibilities.put("permission", perm);
+    }
+
+    public HashMap<String, Visibility> getValidVisibilities() {
+        return new HashMap<String, Visibility>(this.visibilities);
     }
 
     /**
