@@ -35,7 +35,7 @@ public class AnimatedTextGenerator {
      *
      * @param frames frames used to construct the generator with
      */
-    public AnimatedTextGenerator(Frame[] frames) {
+    public AnimatedTextGenerator(Frame... frames) {
         this.largestFrame = frames[0];
         Collections.addAll(this.frames, frames);
         this.calculateMaxHeight();
