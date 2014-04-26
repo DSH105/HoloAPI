@@ -48,13 +48,6 @@ public class ImageGenerator implements Generator {
     private boolean requiresBorder;
     private boolean hasLoaded;
 
-    protected ImageGenerator(BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
-        this.imageHeight = height;
-        this.imageChar = imgChar;
-        this.requiresBorder = requiresBorder;
-        this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
-    }
-
     protected ImageGenerator(BufferedImage image, int height, ImageChar imgChar) {
         this.imageHeight = height;
         this.imageChar = imgChar;
@@ -64,14 +57,12 @@ public class ImageGenerator implements Generator {
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
      * @param image          {@link java.awt.image.BufferedImage} used to generate the image
      * @param height         height of the display
      * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      */
-    public ImageGenerator(String imageKey, BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
-        this.imageKey = imageKey;
+    public ImageGenerator(BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
         this.imageHeight = height;
         this.imageChar = imgChar;
         this.requiresBorder = requiresBorder;
@@ -81,28 +72,25 @@ public class ImageGenerator implements Generator {
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
      * @param imageUrl       URL to search the image for
      * @param height         height of the display
      * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      */
-    public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean requiresBorder) {
-        this(imageKey, imageUrl, height, imgChar, true, requiresBorder);
+    public ImageGenerator(String imageUrl, int height, ImageChar imgChar, boolean requiresBorder) {
+        this(imageUrl, height, imgChar, true, requiresBorder);
     }
 
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
      * @param imageUrl       URL to search the image for
      * @param height         height of the display
      * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param loadUrl        whether to automatically load the image from the specified URL
      * @param requiresBorder whether the display requires a border
      */
-    public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean loadUrl, boolean requiresBorder) {
-        this.imageKey = imageKey;
+    public ImageGenerator(String imageUrl, int height, ImageChar imgChar, boolean loadUrl, boolean requiresBorder) {
         this.imageUrl = imageUrl;
         this.imageHeight = height;
         this.imageChar = imgChar;
@@ -115,14 +103,13 @@ public class ImageGenerator implements Generator {
     /**
      * Constructs an ImageGenerator for use in a Hologram
      *
-     * @param imageKey       key to store the generator under. This MAY cause some issues with saving if the generator settings are not stored in a HoloAPI configuration file
      * @param imageFile      file used to generate the image
      * @param height         height of the display
      * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
      * @param requiresBorder whether the display requires a border
      * @throws java.lang.RuntimeException if the image cannot be read
      */
-    public ImageGenerator(String imageKey, File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {
+    public ImageGenerator(File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {
         this.imageHeight = height;
         this.imageChar = imgChar;
         this.requiresBorder = requiresBorder;
@@ -132,8 +119,64 @@ public class ImageGenerator implements Generator {
         } catch (IOException e) {
             throw new RuntimeException("Cannot read image " + imageFile.getPath(), e);
         }
-        this.imageKey = imageKey;
         this.lines = this.generate(generateColours(image, height), imgChar.getImageChar(), requiresBorder);
+    }
+
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey       key to store the generator under. Only used for recognition of stored image generators
+     * @param image          {@link java.awt.image.BufferedImage} used to generate the image
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     */
+    public ImageGenerator(String imageKey, BufferedImage image, int height, ImageChar imgChar, boolean requiresBorder) {
+        this(image, height, imgChar, requiresBorder);
+        this.imageKey = imageKey;
+    }
+
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey       key to store the generator under. Only used for recognition of stored image generators
+     * @param imageUrl       URL to search the image for
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     */
+    public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean requiresBorder) {
+        this(imageKey, imageUrl, height, imgChar, true, requiresBorder);
+    }
+
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey       key to store the generator under. Only used for recognition of stored image generators
+     * @param imageUrl       URL to search the image for
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param loadUrl        whether to automatically load the image from the specified URL
+     * @param requiresBorder whether the display requires a border
+     */
+    public ImageGenerator(String imageKey, String imageUrl, int height, ImageChar imgChar, boolean loadUrl, boolean requiresBorder) {
+        this(imageUrl, height, imgChar, loadUrl, requiresBorder);
+        this.imageKey = imageKey;
+    }
+
+    /**
+     * Constructs an ImageGenerator for use in a Hologram
+     *
+     * @param imageKey       key to store the generator under. Only used for recognition of stored image generators
+     * @param imageFile      file used to generate the image
+     * @param height         height of the display
+     * @param imgChar        {@link com.dsh105.holoapi.image.ImageChar} of the display
+     * @param requiresBorder whether the display requires a border
+     * @throws java.lang.RuntimeException if the image cannot be read
+     */
+    public ImageGenerator(String imageKey, File imageFile, int height, ImageChar imgChar, boolean requiresBorder) {
+        this(imageFile, height, imgChar, requiresBorder);
+        this.imageKey = imageKey;
     }
 
     @Override
