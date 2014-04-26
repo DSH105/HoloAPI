@@ -58,7 +58,7 @@ public class Hologram {
     private String[] tags;
 
     private boolean simple = false;
-    private boolean hasRegisteredTouchActions;
+    private boolean touchEnabled;
     private Visibility visibility = new VisibilityDefault();
 
     protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
@@ -284,6 +284,14 @@ public class Hologram {
             // And save the data back to the file again under the new id
             HoloAPI.getManager().saveToFile(this);
         }
+    }
+
+    public boolean isTouchEnabled() {
+        return touchEnabled;
+    }
+
+    public void setTouchEnabled(boolean touchEnabled) {
+        this.touchEnabled = touchEnabled;
     }
 
     protected void setImageTagMap(HashMap<TagSize, String> map) {
@@ -517,7 +525,7 @@ public class Hologram {
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
-        if (!this.hasRegisteredTouchActions) {
+        if (!this.isTouchEnabled()) {
             // So that the entities aren't cleared before they're created
             for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
                 final Player p = PlayerIdent.getPlayerOf(entry.getKey());
@@ -525,7 +533,7 @@ public class Hologram {
                     clearTags(p, this.getAllEntityIds());
                 }
             }
-            this.hasRegisteredTouchActions = true;
+            this.setTouchEnabled(true);
             this.refreshDisplay(true);
         }
     }
@@ -711,7 +719,7 @@ public class Hologram {
         teleportHorse.send(observer);
         teleportSkull.send(observer);
 
-        if (this.hasRegisteredTouchActions) {
+        if (this.isTouchEnabled()) {
             this.teleportTouchSlime(observer, index, to);
         }
     }
@@ -769,7 +777,7 @@ public class Hologram {
             attach.send(observer);
         }
 
-        if (this.hasRegisteredTouchActions) {
+        if (this.isTouchEnabled()) {
             this.prepareTouchScreen(observer, index, diffY, x, y, z);
         }
     }
