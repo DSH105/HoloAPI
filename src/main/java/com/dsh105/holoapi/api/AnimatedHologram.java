@@ -99,6 +99,10 @@ public class AnimatedHologram extends Hologram {
      * @return the next frame of the animated hologram
      */
     public Frame getNext() {
+        return this.getFrame((this.index + 1) >= this.frames.size() ? 0 : this.index + 1);
+    }
+
+    private Frame next() {
         if (++this.index >= this.frames.size()) {
             this.index = 0;
         }
@@ -154,7 +158,7 @@ public class AnimatedHologram extends Hologram {
         for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
             final Player p = PlayerIdent.getPlayerOf(entry.getKey());
             if (p != null) {
-                currentFrame = getNext();
+                currentFrame = next();
                 updateAnimation(p, currentFrame.getLines());
             }
         }
