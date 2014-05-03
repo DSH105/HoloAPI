@@ -281,7 +281,7 @@ public class IndicatorListener implements Listener {
                     }
                 }
 
-                new FollowPlayer().runTaskTimer(HoloAPI.getCore(), 1L, 1L);
+                new FollowPlayer().runTaskTimer(HoloAPI.getCore(), 10L, 10L);
             }
         }
     }
