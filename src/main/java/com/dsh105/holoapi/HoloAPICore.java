@@ -43,7 +43,6 @@ import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.protocol.InjectionStrategy;
 import com.dsh105.holoapi.protocol.ProtocolInjectionBuilder;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
-import com.dsh105.holoapi.server.*;
 import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
@@ -56,7 +55,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 public class HoloAPICore extends JavaPlugin {
@@ -87,7 +85,6 @@ public class HoloAPICore extends JavaPlugin {
     public boolean updateChecked = false;
     public File file;
 
-    public static Server SERVER;
     public static boolean isUsingNetty;
 
     protected static double LINE_SPACING = 0.25D;
@@ -107,8 +104,6 @@ public class HoloAPICore extends JavaPlugin {
         HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
         this.loadConfiguration();
-
-        this.initServer();
 
         isUsingNetty = CommonReflection.isUsingNetty();
 
@@ -295,39 +290,6 @@ public class HoloAPICore extends JavaPlugin {
         langConfig.saveConfig();
         langConfig.reloadConfig();
         //this.prefix = Lang.PREFIX.getValue();
-    }
-
-    protected void initServer() {
-        List<Server> servers = new ArrayList<Server>();
-        servers.add(new MCPCPlusServer());
-        servers.add(new SpigotServer());
-        servers.add(new CraftBukkitServer());
-        servers.add(new UnknownServer());
-
-        for (Server server : servers) {
-            if (server.init()) {   //the first server type that returns true on init is a valid server brand.
-                SERVER = server;
-                break;
-            }
-        }
-
-        if (SERVER == null) {
-            LOGGER.warning("Failed to identify the server brand! The API will not run correctly -> disabling");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        } else {
-            if (!SERVER.isCompatible()) {
-                LOGGER.warning("This Server version may not be compatible with HoloAPI!");
-            }
-            // LOGGER.info("Identified server brand: " + SERVER.getName());
-            // LOGGER.info("MC Version: " + SERVER.getMCVersion());
-        }
-    }
-
-    public static Server getHoloServer() {
-        if (SERVER == null)
-            throw new RuntimeException("SERVER is NULL!");
-        return SERVER;
     }
 
     public static InjectionManager getInjectionManager() {

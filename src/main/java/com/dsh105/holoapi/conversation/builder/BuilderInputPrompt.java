@@ -18,15 +18,10 @@
 package com.dsh105.holoapi.conversation.builder;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.AnimatedHologram;
-import com.dsh105.holoapi.api.AnimatedHologramFactory;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
-import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputSuccessPrompt;
-import com.dsh105.holoapi.image.AnimatedTextGenerator;
-import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.conversations.ConversationContext;

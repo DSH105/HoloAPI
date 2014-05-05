@@ -167,6 +167,6 @@ public class HoloAPI {
     }
 
     public enum ConfigType {
-        MAIN, DATA, LANG;
+        MAIN, DATA, LANG
     }
 }

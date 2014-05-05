@@ -21,7 +21,6 @@ import com.google.common.collect.ImmutableList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import sun.net.www.content.image.gif;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
