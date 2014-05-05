@@ -150,8 +150,6 @@ public class InjectionManager {
     }
 
     public void handleIncomingPacket(PlayerInjector injector, final Player player, final Object msg) {
-        if (!"PacketPlayInUseEntity".equals(msg.getClass().getSimpleName()))
-            return;
         Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new Runnable() {
             @Override
             public void run() {
