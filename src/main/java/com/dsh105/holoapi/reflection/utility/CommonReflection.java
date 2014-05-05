@@ -342,4 +342,12 @@ public class CommonReflection {
             return networkManager;
         }
     }
+
+    public static Class<?> getEntityUsePacket() {
+        try {
+            return getMinecraftClass("PacketPlayInUseEntity");
+        } catch (Exception e) {
+            return getMinecraftClass("Packet7UseEntity");
+        }
+    }
 }
