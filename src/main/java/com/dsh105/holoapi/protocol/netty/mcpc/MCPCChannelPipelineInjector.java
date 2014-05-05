@@ -20,6 +20,7 @@ package com.dsh105.holoapi.protocol.netty.mcpc;
 import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.protocol.PlayerInjector;
 import com.dsh105.holoapi.protocol.PlayerUtil;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -172,7 +173,11 @@ public class MCPCChannelPipelineInjector extends ChannelDuplexHandler implements
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        this.injectionManager.handleIncomingPacket(this, this.player, msg);
+        if(isExempted())
+            super.channelRead(ctx, msg);
+        if(msg.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
+            this.injectionManager.handleIncomingPacket(this, this.player, msg);
+        }
         super.channelRead(ctx, msg);
     }
 

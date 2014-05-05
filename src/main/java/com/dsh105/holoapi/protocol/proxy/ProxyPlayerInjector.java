@@ -23,6 +23,7 @@ import com.dsh105.holoapi.protocol.PlayerUtil;
 import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ForwardingQueue;
@@ -175,7 +176,9 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
     public boolean add(Object packet) {
         if (isExempted())
             return delegate().add(packet);
-        //Handle packet add here
+        if(packet.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
+            //Handle packet add here
+        }
         return delegate().add(packet);
     }
 }
