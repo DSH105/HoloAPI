@@ -17,6 +17,8 @@
 
 package com.dsh105.holoapi.reflection.utility;
 
+import java.util.Map;
+
 /**
  * Handles the loading/finding of specific classes. This is mainly to be compatible with third and fourth party mods like MCPC+
  */
@@ -52,6 +54,15 @@ public abstract class ClassHandler {
             @Override
             public Class<?> loadClass(String className) throws ClassNotFoundException {
                 return this.classLoader.loadClass(packageName + "." + className);
+            }
+        };
+    }
+
+    public static ClassHandler fromMap(final Map<String, Class<?>> map) {
+        return new ClassHandler() {
+            @Override
+            public Class<?> loadClass(String className) throws ClassNotFoundException {
+                return map.get(className);
             }
         };
     }

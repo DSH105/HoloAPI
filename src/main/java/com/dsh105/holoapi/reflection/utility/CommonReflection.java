@@ -31,9 +31,9 @@ import java.util.regex.Pattern;
  */
 public class CommonReflection {
 
-    private static ClassHandler DEFAULT_HANDLER;
-    private static ClassPackageMapper NMS_HANDLER;
-    private static ClassPackageMapper CRAFTBUKKIT_HANDLER;
+    static ClassHandler DEFAULT_HANDLER;
+    static ClassPackageMapper NMS_HANDLER;
+    static ClassPackageMapper CRAFTBUKKIT_HANDLER;
 
     /**
      * The Minecraft package
@@ -85,6 +85,10 @@ public class CommonReflection {
         return MINECARFT_PACKAGE;
     }
 
+    public static void setMinecraftPackage(String packageName) {
+        MINECARFT_PACKAGE = packageName;
+    }
+
     /**
      * Returns the Craftbukkit package
      *
@@ -94,6 +98,10 @@ public class CommonReflection {
         if (CRAFTBUKKIT_PACKAGE == null)
             initializePackageNames();
         return CRAFTBUKKIT_PACKAGE;
+    }
+
+    public static void setCraftBukkitPackage(String packageName) {
+        CRAFTBUKKIT_PACKAGE = packageName;
     }
 
     /**
@@ -306,7 +314,7 @@ public class CommonReflection {
         }
     }
 
-    public static Class<?> getDataWatcherClasss() {
+    public static Class<?> getDataWatcherClass() {
         try {
             return getMinecraftClass("DataWatcher");
         } catch (RuntimeException e) {
@@ -347,6 +355,9 @@ public class CommonReflection {
         try {
             return getMinecraftClass("PacketPlayInUseEntity");
         } catch (Exception e) {
+            /**
+             * Pre 1.7
+             */
             return getMinecraftClass("Packet7UseEntity");
         }
     }
