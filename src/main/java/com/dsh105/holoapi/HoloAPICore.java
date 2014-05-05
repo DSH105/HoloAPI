@@ -85,8 +85,6 @@ public class HoloAPICore extends JavaPlugin {
     public boolean updateChecked = false;
     public File file;
 
-    public static boolean isUsingNetty;
-
     protected static double LINE_SPACING = 0.25D;
     protected static int TAG_ENTITY_MULTIPLIER = 4;
     protected static String TRANSPARENCY_NO_BORDER = " ";
@@ -105,11 +103,9 @@ public class HoloAPICore extends JavaPlugin {
         PluginManager manager = getServer().getPluginManager();
         this.loadConfiguration();
 
-        isUsingNetty = CommonReflection.isUsingNetty();
-
         // Needs a much better method since this is not really reliable
         // TODO: Improve this
-        INJECTION_MANAGER = new ProtocolInjectionBuilder().withStrategy(isUsingNetty ? InjectionStrategy.NETTY : InjectionStrategy.PROXY).build();
+        INJECTION_MANAGER = new ProtocolInjectionBuilder().withStrategy(CommonReflection.isUsingNetty() ? InjectionStrategy.NETTY : InjectionStrategy.PROXY).build();
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         TAG_FORMATTER = new TagFormatter();
@@ -153,7 +149,7 @@ public class HoloAPICore extends JavaPlugin {
             metrics.start();
 
             /**
-             * Dependencies (hard ones, those can't live without us)
+             * Dependencies
              */
 
             Metrics.Graph dependingPlugins = metrics.createGraph("Depending Plugins");

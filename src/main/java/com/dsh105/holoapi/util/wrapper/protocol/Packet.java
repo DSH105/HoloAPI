@@ -17,11 +17,11 @@
 
 package com.dsh105.holoapi.util.wrapper.protocol;
 
-import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.protocol.PlayerUtil;
 import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.FieldAccessor;
 import com.dsh105.holoapi.reflection.SafeField;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.MiscUtil;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.ReflectionUtil;
@@ -42,7 +42,7 @@ public class Packet {
 
     public Packet(Protocol protocol, Sender sender, int id, int legacyId) {
 
-        if (HoloAPI.getCore().isUsingNetty) {
+        if (CommonReflection.isUsingNetty()) {
 
             this.packetClass = PacketUtil.getPacket(protocol, sender, id);
             try {

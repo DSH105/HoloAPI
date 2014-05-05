@@ -23,6 +23,7 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.StoredTag;
 import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
@@ -79,7 +80,7 @@ public class InfoCommand extends CommandModule {
                         }
                     }
                     if (list.size() > 1) {
-                        if (sender instanceof Player && HoloAPI.getCore().isUsingNetty) {
+                        if (sender instanceof Player && CommonReflection.isUsingNetty()) {
                             ItemStack i;
                             i = ItemUtil.getItem(list.toArray(new String[list.size()]));
                             new FancyMessage("•• " + ChatColor.AQUA + h.getSaveId() + ChatColor.DARK_AQUA + " at " + (int) h.getDefaultX() + ", " + (int) h.getDefaultY() + ", " + (int) h.getDefaultZ() + ", " + h.getWorldName()).itemTooltip(i).suggest("/holo teleport " + h.getSaveId()).send(((Player) sender));
@@ -88,7 +89,7 @@ public class InfoCommand extends CommandModule {
                         }
                     }
                 }
-                if (HoloAPI.getCore().isUsingNetty && sender instanceof Player) {
+                if (CommonReflection.isUsingNetty() && sender instanceof Player) {
                     sender.sendMessage(Lang.TIP_HOVER_PREVIEW.getValue());
                 }
             }

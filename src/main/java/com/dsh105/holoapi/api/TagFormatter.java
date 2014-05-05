@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
@@ -172,7 +173,7 @@ public class TagFormatter {
 
     public String formatForOldClient(String content) {
         int limit = 64;
-        if (content.length() > limit && !HoloAPI.getCore().isUsingNetty) {
+        if (content.length() > limit && !CommonReflection.isUsingNetty()) {
             // 1.6.x client crashes if a name tag is longer than 64 characters
             // Unfortunate, but it must be accounted for
             content = content.substring(limit / 4, limit - (limit / 4));

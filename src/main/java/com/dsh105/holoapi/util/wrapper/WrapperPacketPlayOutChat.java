@@ -17,9 +17,9 @@
 
 package com.dsh105.holoapi.util.wrapper;
 
-import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.SafeMethod;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
@@ -31,7 +31,7 @@ public class WrapperPacketPlayOutChat extends Packet {
     }
 
     public void setMessage(String chatComponent) {
-        if (HoloAPI.getCore().isUsingNetty) {
+        if (CommonReflection.isUsingNetty()) {
             this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), new SafeMethod(ReflectionUtil.getNMSClass("ChatSerializer"), Constants.PACKET_CHAT_FUNC_SETCOMPONENT.getName(), String.class).invoke(null, chatComponent));
         } else {
             this.write(Constants.PACKET_CHAT_FIELD_MESSAGE.getName(), chatComponent);

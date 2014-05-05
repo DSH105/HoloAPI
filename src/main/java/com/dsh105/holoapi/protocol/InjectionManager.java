@@ -22,6 +22,7 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.events.HoloTouchEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.reflection.Constants;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.PacketFactory;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import com.dsh105.holoapi.util.wrapper.protocol.Packet;
@@ -178,8 +179,8 @@ public class InjectionManager {
     }
 
     private Action readAction(Object enumAction) {
-        Class<?> packetClass = HoloAPI.getCore().isUsingNetty ? ReflectionUtil.getNMSClass("EnumEntityUseAction") : new Packet(PacketFactory.PacketType.USE_ENTITY).getPacketClass();
-        String field = HoloAPI.getCore().isUsingNetty ? Constants.ENUM_USEENTITY_FIELD_GETACTIONID.getName() : Constants.PACKET_USEENTITY_FIELD_GETACTIONID.getName();
+        Class<?> packetClass = CommonReflection.isUsingNetty() ? ReflectionUtil.getNMSClass("EnumEntityUseAction") : new Packet(PacketFactory.PacketType.USE_ENTITY).getPacketClass();
+        String field = CommonReflection.isUsingNetty() ? Constants.ENUM_USEENTITY_FIELD_GETACTIONID.getName() : Constants.PACKET_USEENTITY_FIELD_GETACTIONID.getName();
         return Action.getFromId((Integer) ReflectionUtil.getField(packetClass, field, enumAction));
     }
 }

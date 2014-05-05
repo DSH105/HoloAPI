@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.util.wrapper;
 
-import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.reflection.Constants;
+import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ReflectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +27,7 @@ public class WrappedDataWatcher extends AbstractWrapper {
 
     public WrappedDataWatcher() {
         try {
-            if (HoloAPI.getCore().isUsingNetty) {
+            if (CommonReflection.isUsingNetty()) {
                 super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").getConstructor(ReflectionUtil.getNMSClass("Entity")).newInstance(new Object[]{null}));
             } else {
                 super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").newInstance());
@@ -45,7 +45,7 @@ public class WrappedDataWatcher extends AbstractWrapper {
 
     public WrappedDataWatcher(Object entity) {
         try {
-            if (HoloAPI.getCore().isUsingNetty) {
+            if (CommonReflection.isUsingNetty()) {
                 super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").getConstructor(ReflectionUtil.getNMSClass("Entity")).newInstance(entity));
             } else {
                 super.setHandle(ReflectionUtil.getNMSClass("DataWatcher").newInstance());
