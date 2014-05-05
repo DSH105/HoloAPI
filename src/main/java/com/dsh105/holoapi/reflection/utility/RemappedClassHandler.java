@@ -24,6 +24,7 @@
  *
  *     The PluginClassLoader:
  *     https://github.com/MinecraftPortCentral/MCPC-Plus/blob/master/patches/org/bukkit/plugin/java/PluginClassLoader.java.patch
+ *     https://github.com/md-5/SpecialSource/blob/master/src/main/java/net/md_5/specialsource/JarRemapper.java
  *
  *     The Remapper is one provided by md_5, it's part of his "SpecialSource" project.
  *     It uses some basic ASM to remap the classed of a jar. Fortunately for us, this remapper is easy reachable
