@@ -73,7 +73,7 @@ public class HoloListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         for (final Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            if (!h.isSimple()) {
+            if (!h.isSimple() || h.showOnJoin()) {
                 if (player.getLocation().getWorld().getName().equals(h.getWorldName()) && h.getVisibility().isVisibleTo(player, h.getSaveId())) {
                     new BukkitRunnable() {
                         @Override
