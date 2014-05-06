@@ -52,6 +52,7 @@ public class HologramFactory {
     private double locZ;
     private String saveId;
     private Visibility visibility = new VisibilityDefault();
+    private boolean showOnJoin = false;
     private boolean simple = false;
     private boolean preparedId = false;
     private boolean prepared = false;
@@ -195,6 +196,11 @@ public class HologramFactory {
      */
     public HologramFactory withSimplicity(boolean simple) {
         this.simple = simple;
+        return this;
+    }
+
+    public HologramFactory withShowOnJoin(boolean showOnJoin) {
+        this.showOnJoin = showOnJoin;
         return this;
     }
 
