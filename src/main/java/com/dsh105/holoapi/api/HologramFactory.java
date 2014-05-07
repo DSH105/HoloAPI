@@ -246,6 +246,7 @@ public class HologramFactory {
         hologram.setImageTagMap(this.imageIdMap);
         hologram.setVisibility(this.visibility);
         hologram.setSimplicity(this.simple);
+        hologram.setShowOnJoin(this.showOnJoin);
         /*if (!hologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
                 if (!h.isSimple()) {
