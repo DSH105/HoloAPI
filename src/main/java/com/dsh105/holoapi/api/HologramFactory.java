@@ -244,8 +244,8 @@ public class HologramFactory {
             hologram = new Hologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
         }
         hologram.setImageTagMap(this.imageIdMap);
-        hologram.setVisibility(this.visibility);
         hologram.setSimplicity(this.simple);
+        hologram.setVisibility(this.visibility);
         hologram.setShowOnJoin(this.showOnJoin);
         /*if (!hologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
