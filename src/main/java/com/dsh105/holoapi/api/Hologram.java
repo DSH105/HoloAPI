@@ -109,7 +109,7 @@ public class Hologram {
         return this.showOnJoin;
     }
 
-    protected void setShowOnJoin(boolean flag) {
+    public void setShowOnJoin(boolean flag) {
         this.showOnJoin = flag;
     }
 
