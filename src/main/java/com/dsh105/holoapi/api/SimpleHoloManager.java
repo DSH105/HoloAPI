@@ -86,7 +86,8 @@ public class SimpleHoloManager implements HoloManager {
         Iterator<Hologram> i = holograms.keySet().iterator();
         while (i.hasNext()) {
             Hologram h = i.next();
-            this.saveToFile(h);
+            if(!h.isSimple())
+                this.saveToFile(h);
             h.clearAllPlayerViews();
             i.remove();
         }

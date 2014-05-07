@@ -35,7 +35,7 @@ public class HoloAPI {
 
     public static void setCore(HoloAPICore plugin) {
         if (CORE != null) {
-            return;
+            throw new RuntimeException("Core already set!");
         }
         CORE = plugin;
     }
