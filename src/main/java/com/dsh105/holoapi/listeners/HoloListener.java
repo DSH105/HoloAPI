@@ -73,18 +73,16 @@ public class HoloListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         for (final Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            if (!h.isSimple() || h.showOnJoin()) {
-                if (player.getLocation().getWorld().getName().equals(h.getWorldName()) && h.getVisibility().isVisibleTo(player, h.getSaveId())) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
-                                ((AnimatedHologram) h).animate();
-                            }
-                            h.show(player, true);
+            if (player.getLocation().getWorld().getName().equals(h.getWorldName()) && h.getVisibility().isVisibleTo(player, h.getSaveId())) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (h instanceof AnimatedHologram && !((AnimatedHologram) h).isAnimating()) {
+                            ((AnimatedHologram) h).animate();
                         }
-                    }.runTaskLater(HoloAPI.getCore(), 40L);
-                }
+                        h.show(player, true);
+                    }
+                }.runTaskLater(HoloAPI.getCore(), 40L);
             }
         }
     }

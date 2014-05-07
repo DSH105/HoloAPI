@@ -52,7 +52,6 @@ public class HologramFactory {
     private double locZ;
     private String saveId;
     private Visibility visibility = new VisibilityDefault();
-    private boolean showOnJoin = false;
     private boolean simple = false;
     private boolean preparedId = false;
     private boolean prepared = false;
@@ -199,11 +198,6 @@ public class HologramFactory {
         return this;
     }
 
-    public HologramFactory withShowOnJoin(boolean showOnJoin) {
-        this.showOnJoin = showOnJoin;
-        return this;
-    }
-
     protected HologramFactory withFirstTagId(int tagId) {
         this.tagId = tagId;
         this.withTagId = true;
@@ -246,7 +240,6 @@ public class HologramFactory {
         hologram.setImageTagMap(this.imageIdMap);
         hologram.setSimplicity(this.simple);
         hologram.setVisibility(this.visibility);
-        hologram.setShowOnJoin(this.showOnJoin);
         /*if (!hologram.isSimple()) {
             for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
                 if (!h.isSimple()) {

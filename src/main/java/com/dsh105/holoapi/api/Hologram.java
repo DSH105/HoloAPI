@@ -58,7 +58,6 @@ public class Hologram {
     private String[] tags;
 
     private boolean simple = false;
-    private boolean showOnJoin = false;
     private boolean touchEnabled;
     private Visibility visibility = new VisibilityDefault();
 
@@ -98,19 +97,6 @@ public class Hologram {
 
     protected void setSimplicity(boolean flag) {
         this.simple = flag;
-    }
-
-    /**
-     * Returns whether or not this hologram should be shown when a player joins.
-     *
-     * @return If the hologram should be shown on join or not.
-     */
-    public boolean showOnJoin() {
-        return this.showOnJoin;
-    }
-
-    public void setShowOnJoin(boolean flag) {
-        this.showOnJoin = flag;
     }
 
     /**
