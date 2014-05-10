@@ -27,6 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
@@ -51,13 +52,8 @@ public class AnimationBuilderInputSuccessPrompt extends MessagePrompt {
         for (Frame f : this.frames) {
             frames.add(new Frame(delay, f.getLines()));
         }
-        try {
-            Location location = (Location) conversationContext.getSessionData("location");
-            AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(location).build();
-            return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        // If we're here it should be a player
+        AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
+        return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
     }
 }
