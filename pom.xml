@@ -58,13 +58,6 @@
 
         <!-- Vault -->
         <dependency>
-            <groupId>net.daboross.vault</groupId>
-            <artifactId>vault-api</artifactId>
-            <version>1.2.27</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
             <version>1.2.32</version>
