@@ -22,16 +22,17 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.config.YAMLConfig;
 import com.dsh105.holoapi.util.RomanNumeral;
 import com.dsh105.holoapi.util.StringUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -48,9 +49,10 @@ import java.util.*;
 
 public class IndicatorListener implements Listener {
 
-    private static char HEART_CHARACTER = '\u2764';
-    private static HashMap<String, ArrayList<String>> CHAT_BUBBLES = new HashMap<String, ArrayList<String>>();
-    private static List<EntityDamageEvent.DamageCause> SUPPORTED_DAMAGE_TYPES = Arrays.asList(new EntityDamageEvent.DamageCause[] {EntityDamageEvent.DamageCause.DROWNING, EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.MAGIC, EntityDamageEvent.DamageCause.POISON, EntityDamageEvent.DamageCause.THORNS, EntityDamageEvent.DamageCause.WITHER});
+    private static final char HEART_CHARACTER = '\u2764';
+    private static final DecimalFormat DAMAGE_FORMAT = new DecimalFormat("#.0");
+    private static final HashMap<String, ArrayList<String>> CHAT_BUBBLES = new HashMap<String, ArrayList<String>>();
+    private static final List<EntityDamageEvent.DamageCause> SUPPORTED_DAMAGE_TYPES = Arrays.asList(EntityDamageEvent.DamageCause.DROWNING, EntityDamageEvent.DamageCause.LAVA, EntityDamageEvent.DamageCause.MAGIC, EntityDamageEvent.DamageCause.POISON, EntityDamageEvent.DamageCause.THORNS, EntityDamageEvent.DamageCause.WITHER);
 
     private YAMLConfig config;
 
@@ -60,56 +62,60 @@ public class IndicatorListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
-        if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
-            if ((event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", false))
-                    || config.getBoolean("indicators.damage.showForMobs", false)) {
-                if (event.getEntity() instanceof LivingEntity) {
-                    LivingEntity livingEntity = (LivingEntity) event.getEntity();
-                    if (livingEntity.getNoDamageTicks() > livingEntity.getMaximumNoDamageTicks() / 2.0F) {
-                        return;
-                    }
-                    if (!(event instanceof EntityDamageByEntityEvent)) {
-                        String colours = config.getString("indicators.damage.format.default", "&c");
 
-                        if (SUPPORTED_DAMAGE_TYPES.contains(event.getCause())) {
-                            String type = event.getCause().toString().toLowerCase();
-                            if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
-                                type = "fire";
-                            }
-                            colours = config.getString("indicators.damage.format." + type);
-                            if (!config.getBoolean("indicators.damage.enableType." + type, true)) {
-                                return;
-                            }
-                        }
-
-                        String text = colours + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER;
-                        Location l = event.getEntity().getLocation().clone();
-                        l.setY(l.getY() + config.getInt("indicators.damage.yOffset", 2));
-                        HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), true, text);
-                    }
-                }
-            }
+        // Check if damage indicators are enabled
+        if (!config.getBoolean("indicators.damage.enable")) {
+            return;
         }
-    }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity) event.getEntity();
-            if (livingEntity.getNoDamageTicks() > livingEntity.getMaximumNoDamageTicks() / 2.0F) {
+        // Don't show damage indicators for void damage
+        if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+            return;
+        }
+
+        // Make sure that indicators are enabled for this entity type
+        if (event.getEntity().getType() == EntityType.PLAYER) {
+            if (!config.getBoolean("indicators.damage.showForPlayers", false)) {
                 return;
             }
-            if (event.getCause() != EntityDamageEvent.DamageCause.VOID && config.getBoolean("indicators.damage.enable", false)) {
-                if (event.getEntity() instanceof Player && config.getBoolean("indicators.damage.showForPlayers", true)
-                        || config.getBoolean("indicators.damage.showForMobs", true)) {
-                    //Vector v = event.getDamager().getLocation().toVector().subtract(event.getEntity().getLocation().toVector()).normalize().multiply((-0.012F) * event.getDamage());
-                    //v.setY(v.getY() + 0.05D);
-                    Location l = event.getEntity().getLocation().clone();
-                    l.setY(l.getY() + config.getInt("indicators.damage.yOffset", 2));
-                    HoloAPI.getManager().createSimpleHologram(l, config.getInt("indicators.damage.timeVisible", 4), true, config.getString("indicators.damage.format.default", "&c") + "-" + new DecimalFormat("#.0").format(event.getDamage()) + " " + HEART_CHARACTER);
-                }
+        } else if (event.getEntity() instanceof LivingEntity) {
+            if (!config.getBoolean("indicators.damage.showForMobs", false)) {
+                return;
+            }
+        } else {
+            return; // We only show indicators for players and mobs.
+        }
+
+        final LivingEntity entity = (LivingEntity) event.getEntity();
+        if (entity.getNoDamageTicks() > entity.getMaximumNoDamageTicks() / 2.0F) {
+            return;
+        }
+
+
+        String damagePrefix = config.getString("indicators.damage.format.default", "&c");
+
+        // Get our DamageCause-specific damagePrefix, if any
+        if (SUPPORTED_DAMAGE_TYPES.contains(event.getCause())) {
+            String type = event.getCause().toString().toLowerCase();
+            if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
+                type = "fire";
+            }
+            damagePrefix = config.getString("indicators.damage.format." + type);
+            if (!config.getBoolean("indicators.damage.enableType." + type, true)) {
+                return; // This type of indicator is disabled
             }
         }
+
+
+        final String text = damagePrefix + "-" + event.getDamage() + " " + HEART_CHARACTER;
+        Bukkit.getScheduler().runTask(HoloAPI.getCore(), new Runnable() {
+            @Override
+            public void run() {
+                Location loc = entity.getLocation();
+                loc.setY(loc.getY() + config.getInt("indicators.damage.yOffset", 2));
+                HoloAPI.getManager().createSimpleHologram(loc, config.getInt("indicators.damage.timeVisible", 4), true, text);
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
