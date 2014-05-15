@@ -107,13 +107,24 @@ public class IndicatorListener implements Listener {
         }
 
 
-        final String text = damagePrefix + "-" + event.getDamage() + " " + HEART_CHARACTER;
+        // Build the message prefix and suffix (i.e. the portions without the damage)
+        final String indicatorPrefix = damagePrefix + "-";
+        final String indicatorSuffix = " " + HEART_CHARACTER;
+
+        final double healthBefore = entity.getHealth();
         Bukkit.getScheduler().runTask(HoloAPI.getCore(), new Runnable() {
             @Override
             public void run() {
-                Location loc = entity.getLocation();
-                loc.setY(loc.getY() + config.getInt("indicators.damage.yOffset", 2));
-                HoloAPI.getManager().createSimpleHologram(loc, config.getInt("indicators.damage.timeVisible", 4), true, text);
+                double damageTaken = healthBefore - entity.getHealth();
+                if (damageTaken > 0) {
+                    // Round to the nearest .5
+                    damageTaken = Math.round(damageTaken * 2.0D) / 2.0D;
+
+                    String text = indicatorPrefix + DAMAGE_FORMAT.format(damageTaken) + indicatorSuffix;
+                    Location loc = entity.getLocation();
+                    loc.setY(loc.getY() + config.getInt("indicators.damage.yOffset", 2));
+                    HoloAPI.getManager().createSimpleHologram(loc, config.getInt("indicators.damage.timeVisible", 4), true, text);
+                }
             }
         });
     }
