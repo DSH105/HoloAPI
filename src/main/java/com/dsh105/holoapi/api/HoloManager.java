@@ -132,11 +132,24 @@ public interface HoloManager {
     public Hologram copy(Hologram original, Location copyLocation);
 
     /**
+     * Sets the new line content for an existing hologram, accounting for new lines added.
+     * </p>
+     * This method is more expensive IF there are more lines in the new content then already present in the hologram
+     * </p>
+     * If the above condition is met, the original hologram will be copied and new lines added
+     *
+     * @param original Hologram to set the content of
+     * @param newContent new content to apply to the hologram
+     * @return Hologram to which lines were updated
+     */
+    public Hologram setLineContent(Hologram original, String... newContent);
+
+    /**
      * Copies a hologram from the provided original and adds lines
      *
      * @param original   original hologram
      * @param linesToAdd lines to copy to the copied hologram
-     * @return coped hologram
+     * @return copied hologram
      * @throws java.lang.IllegalArgumentException if the hologram is an {@link AnimatedHologram}. Lines cannot be dynamically added to animated holograms
      */
     public Hologram copyAndAddLineTo(Hologram original, String... linesToAdd);

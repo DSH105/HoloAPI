@@ -384,10 +384,38 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     @Override
+    public Hologram setLineContent(Hologram original, String... newContent) {
+        if (original.getLines().length >= newContent.length) {
+            original.updateLines(newContent);
+            return original;
+        }
+
+        if (original instanceof AnimatedHologram) {
+            throw new IllegalArgumentException("Lines cannot be added to AnimatedHolograms.");
+        }
+
+        // Make preparations
+
+        // Don't need this one anymore, we can delete it now
+        HoloAPI.getManager().stopTracking(original);
+        HoloAPI.getManager().clearFromFile(original);
+
+        // Oh look, a new hologram!
+        HologramFactory factory = this.buildCopy(original, original.getDefaultLocation()).withSaveId(original.getSaveId()).clearContent().withText(newContent);
+        Hologram copy = factory.build();
+        HoloAPI.getManager().saveToFile(copy);
+        return copy;
+    }
+
+    @Override
     public Hologram copyAndAddLineTo(Hologram original, String... linesToAdd) {
         if (original instanceof AnimatedHologram) {
             throw new IllegalArgumentException("Lines cannot be added to AnimatedHolograms.");
         }
+
+        HoloAPI.getManager().stopTracking(original);
+        HoloAPI.getManager().clearFromFile(original);
+
         HologramFactory factory = this.buildCopy(original, original.getDefaultLocation()).withSaveId(original.getSaveId());
         for (String line : linesToAdd) {
             factory.withText(line);

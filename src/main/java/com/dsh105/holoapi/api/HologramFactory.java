@@ -152,6 +152,16 @@ public class HologramFactory {
     }
 
     /**
+     * Clears existing content (text and images) from the factory
+     *
+     * @return This object
+     */
+    public HologramFactory clearContent() {
+        this.tags.clear();
+        return this;
+    }
+
+    /**
      * Adds an image to constructed Holograms
      * <p/>
      *

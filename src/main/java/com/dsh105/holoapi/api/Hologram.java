@@ -444,18 +444,28 @@ public class Hologram {
      *
      * @param content new content for the hologram
      * @throws java.lang.IllegalArgumentException if the new content is empty
+     *
+     * @deprecated This operation should not be accessed directly. See {@link com.dsh105.holoapi.api.HoloManager#setLineContent(Hologram, String...)}
      */
+    @Deprecated
     public void updateLines(String... content) {
         if (content.length <= 0) {
             throw new IllegalArgumentException("New hologram content cannot be empty!");
         }
 
-        //this.tags = content;
+        // Make sure it's not too long
+        String[] cont = content;
+        if (cont.length > this.tags.length) {
+            cont = new String[this.tags.length];
+            for (int i = 0; i < this.tags.length; i++) {
+                cont[i] = content[i];
+            }
+        }
         for (String ident : this.playerToLocationMap.keySet()) {
             Player p = PlayerIdent.getPlayerOf(ident);
             if (p != null) {
-                for (int index = 0; index < content.length; index++) {
-                    HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], content[index], index);
+                for (int index = 0; index < cont.length; index++) {
+                    HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], cont[index], index);
                     Bukkit.getServer().getPluginManager().callEvent(lineUpdateEvent);
                     if (lineUpdateEvent.isCancelled()) {
                         continue;
@@ -477,13 +487,23 @@ public class Hologram {
      * @param content  new content for the hologram
      * @throws java.lang.IllegalArgumentException if the new content is empty
      */
+    @Deprecated
     public void updateLines(Player observer, String... content) {
         if (content.length <= 0) {
             throw new IllegalArgumentException("New hologram content cannot be empty!");
         }
+
+        String[] cont = content;
+        if (cont.length > this.tags.length) {
+            cont = new String[this.tags.length];
+            for (int i = 0; i < 30; i++) {
+                cont[i] = content[i];
+            }
+        }
+
         if (observer != null) {
-            for (int index = 0; index < content.length; index++) {
-                this.updateNametag(observer, content[index], index);
+            for (int index = 0; index < cont.length; index++) {
+                this.updateNametag(observer, cont[index], index);
             }
         }
     }

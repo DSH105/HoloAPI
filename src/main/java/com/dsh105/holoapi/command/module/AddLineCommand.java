@@ -48,29 +48,19 @@ public class AddLineCommand extends CommandModule {
                 return true;
             }
 
-            // Prepare for some hax here... >:3
-
-            // Don't need this one anymore, we can delete it now
-            HoloAPI.getManager().stopTracking(hologram);
-            HoloAPI.getManager().clearFromFile(hologram);
-
             if (!(sender instanceof Conversable)) {
                 Lang.sendTo(sender, Lang.NOT_CONVERSABLE.getValue());
                 return true;
             }
 
             if (args.length >= 3) {
-                // Oh look, a new hologram with extra lines!
-                Hologram copy = HoloAPI.getManager().copyAndAddLineTo(hologram, StringUtil.combineSplit(2, args, " "));
-                // Save it to file and overwrite the original
-                HoloAPI.getManager().saveToFile(copy);
+                HoloAPI.getManager().copyAndAddLineTo(hologram, StringUtil.combineSplit(2, args, " "));
                 Lang.sendTo(sender, Lang.HOLOGRAM_ADDED_LINE.getValue().replace("%id%", args[1]));
             } else {
                 InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new SimpleInputFunction() {
                     @Override
                     public void onFunction(ConversationContext context, String input) {
-                        Hologram copy = HoloAPI.getManager().copyAndAddLineTo(hologram, input);
-                        HoloAPI.getManager().saveToFile(copy);
+                        HoloAPI.getManager().copyAndAddLineTo(hologram, input);
                         Lang.sendTo(sender, Lang.HOLOGRAM_ADDED_LINE.getValue().replace("%id%", input));
                     }
 
