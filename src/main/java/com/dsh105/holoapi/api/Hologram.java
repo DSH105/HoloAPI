@@ -23,6 +23,7 @@ import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
+import com.dsh105.holoapi.reflection.Constants;
 import com.dsh105.holoapi.reflection.SafeMethod;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.PlayerIdent;
@@ -861,7 +862,7 @@ public class Hologram {
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
         dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, stack));
-        new SafeMethod(CommonReflection.getDataWatcherClass(), "h", int.class).invoke(dw.getHandle(), 10);
+        new SafeMethod(CommonReflection.getDataWatcherClass(), Constants.DATAWATCHER_FUNC_ITEMSTACK.getName(), int.class).invoke(dw.getHandle(), 10);
 
         WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
         meta.setEntityId(item.getEntityId());
@@ -890,7 +891,7 @@ public class Hologram {
         ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
         if (itemMatch != null) {
             dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, itemMatch));
-            new SafeMethod(CommonReflection.getDataWatcherClass(), "h", int.class).invoke(dw.getHandle(), 10);
+            new SafeMethod(CommonReflection.getDataWatcherClass(), Constants.DATAWATCHER_FUNC_ITEMSTACK.getName(), int.class).invoke(dw.getHandle(), 10);
         } else {
             dw.initiate(10, content);
             dw.initiate(11, Byte.valueOf((byte) 1));

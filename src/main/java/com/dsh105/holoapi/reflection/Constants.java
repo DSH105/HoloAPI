@@ -69,6 +69,7 @@ public enum Constants {
 
     DATAWATCHER_FUNC_INITIATE(new String[]{"a"}, "func_75682_a", "func_75682_a"),
     DATAWATCHER_FUNC_WATCH(new String[]{"a"}, "func_75692_b", "func_75692_b"),
+    DATAWATCHER_FUNC_ITEMSTACK(new String[]{"h"}, "func_82708_h"),
 
     PLAYER_FIELD_CONNECTION(new String[]{"playerConnection"}, "field_71135_a", "field_71135_a"),
     PLAYERCONNECTION_FUNC_SENDPACKET(new String[]{"sendPacket"}, "func_72567_b", "func_147359_a"),
