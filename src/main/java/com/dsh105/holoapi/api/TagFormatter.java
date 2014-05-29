@@ -193,7 +193,12 @@ public class TagFormatter {
 
     public String formatTags(Hologram h, Player observer, String content) {
         for (Map.Entry<String, TagFormat> entry : this.tagFormats.entrySet()) {
-            content = content.replace(entry.getKey(), entry.getValue().getValue(h, observer));
+            if (entry.getKey() != null && entry.getValue() != null) {
+                String replacement = entry.getValue().getValue(h, observer);
+                if (replacement != null) {
+                    content = content.replace(entry.getKey(), replacement);
+                }
+            }
         }
 
         for (Map.Entry<Pattern, DynamicTagFormat> entry : this.dynamicTagFormats.entrySet()) {
