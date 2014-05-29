@@ -1,11 +1,12 @@
 name: ${project.name}
-version: ${project.version}
+version: ${project.version}-bjenkins-build-number
 author: [DSH105, CaptainBern]
 description: Advanced Hologram Management
 softdepend: [Vault, VanishNoPacket]
 website: ${project.url}
 main: com.dsh105.holoapi.HoloAPICore
 version: ${project.version}
+
 permissions:
     holoapi.holo:
         default: op

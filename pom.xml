@@ -213,6 +213,31 @@
                     </archive>
                 </configuration>
             </plugin>
+
+            <!-- Replacer -->
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.3.8</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>../../target/classes/plugin.yml</file>
+                    <replacements>
+                        <replacement>
+                            <token>jenkins-build-number</token>
+                            <value>${BUILD_NUMBER}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>
