@@ -32,11 +32,11 @@ public class ExampleMain extends JavaPlugin implements Listener {
         final Hologram hologram = new HologramFactory(this)
                 // This is where we want the hologram to be
                 .withLocation(who.getLocation())
-                // This hologram will have two lines of text
+                        // This hologram will have two lines of text
                 .withText("RIP " + who.getName(), "Better luck next time!")
-                // We don't want this hologram to save to file, so we can set it to a simple hologram
+                        // We don't want this hologram to save to file, so we can set it to a simple hologram
                 .withSimplicity(true)
-                // Build the hologram. Also shows to all nearby players
+                        // Build the hologram. Also shows to all nearby players
                 .build();
 
         this.getServer().getScheduler().runTaskLater(this, new Runnable() {

@@ -5,5 +5,4 @@ public abstract class AbstractMatcher<TType> implements Comparable<AbstractMatch
     public abstract boolean matches(TType value, Object parent);
 
 
-
 }

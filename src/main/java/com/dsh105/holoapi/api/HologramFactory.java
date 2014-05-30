@@ -37,9 +37,11 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 /**
- * A HologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.Hologram} which can be managed by HoloAPI
+ * A HologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.Hologram} which can be managed by
+ * HoloAPI
  * <p/>
- * The HologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to the constructor
+ * The HologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to the
+ * constructor
  */
 
 public class HologramFactory {
@@ -186,7 +188,8 @@ public class HologramFactory {
     /**
      * Adds image frames to constructed AnimatedHolograms
      *
-     * @param customImageKey key of the image generator to search for. If a generator is not found, the image will not be added
+     * @param customImageKey key of the image generator to search for. If a generator is not found, the image will not
+     *                       be added
      * @return This object
      */
     public HologramFactory withImage(String customImageKey) {
@@ -218,7 +221,8 @@ public class HologramFactory {
      * Constructs an {@link com.dsh105.holoapi.api.Hologram} based on the settings stored in the factory
      *
      * @return The constructed Hologram
-     * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the lines are empty or the location is not initialised
+     * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the lines are empty or the location is not
+     *                                                                    initialised
      */
     public Hologram build() {
         if (this.isEmpty()) {

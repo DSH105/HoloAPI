@@ -17,9 +17,9 @@
 
 package com.dsh105.holoapi.protocol;
 
-import com.dsh105.holoapi.protocol.proxy.ProxyPlayerInjector;
 import com.dsh105.holoapi.protocol.netty.ChannelPipelineInjector;
 import com.dsh105.holoapi.protocol.netty.mcpc.MCPCChannelPipelineInjector;
+import com.dsh105.holoapi.protocol.proxy.ProxyPlayerInjector;
 import com.dsh105.holoapi.util.ReflectionUtil;
 import org.bukkit.entity.Player;
 
@@ -34,7 +34,7 @@ public enum InjectionStrategy {
     NETTY {
         @Override
         public PlayerInjector inject(final Player player, final InjectionManager injectionManager) {
-            if(ReflectionUtil.isServerMCPC())
+            if (ReflectionUtil.isServerMCPC())
                 return new MCPCChannelPipelineInjector(player, injectionManager);
             return new ChannelPipelineInjector(player, injectionManager);
         }

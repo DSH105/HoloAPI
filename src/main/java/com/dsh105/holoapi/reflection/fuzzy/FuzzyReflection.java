@@ -26,13 +26,13 @@ public class FuzzyReflection {
     public Set<Method> getMethods(boolean forceAccess) {
         Set<Method> methods = new LinkedHashSet<Method>();
 
-        if(forceAccess) {
-            for(Method method : this.sourceClass.getDeclaredMethods()) {
+        if (forceAccess) {
+            for (Method method : this.sourceClass.getDeclaredMethods()) {
                 methods.add(method);
             }
         }
 
-        for(Method method : this.sourceClass.getMethods()) {
+        for (Method method : this.sourceClass.getMethods()) {
             methods.add(method);
         }
 
@@ -40,11 +40,11 @@ public class FuzzyReflection {
     }
 
     public Set<Method> getDeclaredMethods(Class<?> excludedSuperClass) {
-        if(forceAccess) {
+        if (forceAccess) {
             Set<Method> methods = new LinkedHashSet<Method>();
             Class<?> current = this.sourceClass;
 
-            while(current != null && current != excludedSuperClass) {
+            while (current != null && current != excludedSuperClass) {
                 methods.addAll(Arrays.asList(current.getDeclaredMethods()));
                 current = current.getSuperclass();
             }
@@ -68,13 +68,13 @@ public class FuzzyReflection {
     public Set<Field> getFields(boolean forceAccess) {
         Set<Field> fields = new LinkedHashSet<Field>();
 
-        if(forceAccess) {
-            for(Field field : this.sourceClass.getDeclaredFields()) {
+        if (forceAccess) {
+            for (Field field : this.sourceClass.getDeclaredFields()) {
                 fields.add(field);
             }
         }
 
-        for(Field field : this.sourceClass.getFields()) {
+        for (Field field : this.sourceClass.getFields()) {
             fields.add(field);
         }
 
@@ -82,11 +82,11 @@ public class FuzzyReflection {
     }
 
     public Set<Field> getDeclaredFields(Class<?> excludedSuperClass) {
-        if(this.forceAccess) {
+        if (this.forceAccess) {
             Set<Field> fields = new LinkedHashSet<Field>();
             Class<?> currentClass = this.sourceClass;
 
-            while(currentClass != null && currentClass != excludedSuperClass) {
+            while (currentClass != null && currentClass != excludedSuperClass) {
                 fields.addAll(Arrays.asList(currentClass.getDeclaredFields()));
                 currentClass = currentClass.getSuperclass();
             }
@@ -100,8 +100,8 @@ public class FuzzyReflection {
     public List<Field> getFieldListByType(Class<?> type) {
         List<Field> fields = new ArrayList<Field>();
 
-        for(Field field : getFields()) {
-            if(type.isAssignableFrom(field.getType()))
+        for (Field field : getFields()) {
+            if (type.isAssignableFrom(field.getType()))
                 fields.add(field);
         }
 
@@ -111,14 +111,14 @@ public class FuzzyReflection {
     public Field getFieldByType(String name, Class<?> type) {
         List<Field> fields = getFieldListByType(type);
 
-        if(fields.size() > 0) {
-            if(name == null)
+        if (fields.size() > 0) {
+            if (name == null)
                 return fields.get(0);
 
             Pattern pattern = Pattern.compile(name);
 
-            for(Field field : fields) {
-                if(pattern.matcher(field.getName()).matches()) {
+            for (Field field : fields) {
+                if (pattern.matcher(field.getName()).matches()) {
                     return field;
                 }
             }
@@ -131,9 +131,9 @@ public class FuzzyReflection {
     public Field getFieldByName(String name) {
         Pattern pattern = Pattern.compile(name);
 
-        for(Field field : getFields()) {
+        for (Field field : getFields()) {
 
-            if(pattern.matcher(field.getName()).matches()) {
+            if (pattern.matcher(field.getName()).matches()) {
                 return field;
             }
         }

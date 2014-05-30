@@ -31,9 +31,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 /**
- * An AnimatedHologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.AnimatedHologram} which can be managed by HoloAPI
+ * An AnimatedHologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.AnimatedHologram} which can
+ * be managed by HoloAPI
  * <p/>
- * The AnimatedHologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to the constructor
+ * The AnimatedHologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to the
+ * constructor
  */
 
 public class AnimatedHologramFactory {
@@ -101,7 +103,8 @@ public class AnimatedHologramFactory {
     /**
      * Sets the location for constructed AnimatedHolograms
      *
-     * @param vectorLocation a {@link org.bukkit.util.Vector} representing the coordinates of constructed AnimatedHolograms
+     * @param vectorLocation a {@link org.bukkit.util.Vector} representing the coordinates of constructed
+     *                       AnimatedHolograms
      * @param worldName      the world name to place constructed AnimatedHolograms in
      * @return This object
      */
@@ -154,7 +157,8 @@ public class AnimatedHologramFactory {
      * /**
      * Adds image frames to constructed AnimatedHolograms
      *
-     * @param animatedImageKey key of the animation generator to search for. If a generator is not found, the animation will not be added
+     * @param animatedImageKey key of the animation generator to search for. If a generator is not found, the animation
+     *                         will not be added
      * @return This object
      */
     public AnimatedHologramFactory withImage(String animatedImageKey) {
@@ -180,7 +184,8 @@ public class AnimatedHologramFactory {
      * Constructs an {@link com.dsh105.holoapi.api.AnimatedHologram} based on the settings stored in the factory
      *
      * @return The constructed AnimatedHologram
-     * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the animation is empty or the location is not initialised
+     * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the animation is empty or the location is
+     *                                                                    not initialised
      */
     public AnimatedHologram build() {
         if ((this.imageGenerated && this.animatedImage == null) || (!this.imageGenerated && this.textGenerator == null)) {

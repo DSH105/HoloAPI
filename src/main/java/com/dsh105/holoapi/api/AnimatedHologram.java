@@ -76,7 +76,8 @@ public class AnimatedHologram extends Hologram {
     /**
      * Gets the animation key of the hologram
      * <p/>
-     * If the hologram is image based, the animation will have an animation key, as defined by the {@link com.dsh105.holoapi.image.AnimatedImageGenerator} used to create it
+     * If the hologram is image based, the animation will have an animation key, as defined by the {@link
+     * com.dsh105.holoapi.image.AnimatedImageGenerator} used to create it
      *
      * @return key of the animation used to create the hologram. Returns null if the hologram is text-based
      */

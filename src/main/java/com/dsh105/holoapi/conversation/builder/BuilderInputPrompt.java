@@ -75,6 +75,7 @@ public class BuilderInputPrompt extends ValidatingPrompt {
                 new SimpleInputPrompt(new LocationFunction() {
                     Hologram h;
                     boolean success;
+
                     @Override
                     public void onFunction(ConversationContext context, String input) {
                         ArrayList<HoloInputBuilder> builders = (ArrayList<HoloInputBuilder>) context.getSessionData("builders");

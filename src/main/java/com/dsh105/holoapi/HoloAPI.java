@@ -55,7 +55,8 @@ public class HoloAPI {
     /**
      * Gets the HoloAPI Hologram Manager.
      * <p/>
-     * The Hologram Manager is used to register and manage the holograms created from both within and outside the HoloAPI plugin
+     * The Hologram Manager is used to register and manage the holograms created from both within and outside the
+     * HoloAPI plugin
      *
      * @return {@link com.dsh105.holoapi.api.HoloManager} that manages and controls registration of holograms
      */
@@ -77,7 +78,8 @@ public class HoloAPI {
     /**
      * Gets the HoloAPI Animation Loader
      * <p/>
-     * The Animated Loader stores and handles registration of all animations configured in the HoloAPI Configuration file
+     * The Animated Loader stores and handles registration of all animations configured in the HoloAPI Configuration
+     * file
      *
      * @return Animation Loader that controls and stores all pre-loaded animation generators
      */
@@ -99,7 +101,8 @@ public class HoloAPI {
     /**
      * Gets the HoloAPI VisibilityMatcher
      * <p/>
-     * The VisibilityMatcher stores all registrations of hologram visibilities for use in commands and other HoloAPI functions
+     * The VisibilityMatcher stores all registrations of hologram visibilities for use in commands and other HoloAPI
+     * functions
      *
      * @return VisibilityMatcher that stores all registrations of hologram visibilities
      */

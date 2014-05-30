@@ -78,6 +78,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
                 } else {
                     new SimpleInputPrompt(new LocationFunction() {
                         AnimatedHologram h;
+
                         @Override
                         public void onFunction(ConversationContext context, String input) {
                             context.setSessionData("location", this.getLocation());

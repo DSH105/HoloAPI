@@ -23,7 +23,6 @@ import com.dsh105.holoapi.api.AnimatedHologramFactory;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
-import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;

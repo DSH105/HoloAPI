@@ -39,7 +39,8 @@ public class CommandTouchAction implements TouchAction {
      * Constructs a new CommandTouchAction
      *
      * @param command          command to perform when the hologram is touched
-     * @param performAsConsole true if command is to be performed as the console, false if it is to be performed as the player that touched the hologram
+     * @param performAsConsole true if command is to be performed as the console, false if it is to be performed as the
+     *                         player that touched the hologram
      */
     public CommandTouchAction(String command, boolean performAsConsole) {
         this.command = command;
@@ -56,9 +57,11 @@ public class CommandTouchAction implements TouchAction {
     }
 
     /**
-     * Gets whether the command should be executed from the console or on behalf of the player that touched the hologram
+     * Gets whether the command should be executed from the console or on behalf of the player that touched the
+     * hologram
      *
-     * @return true if command is to be performed as the console, false if it is to be performed as the player that touched the hologram
+     * @return true if command is to be performed as the console, false if it is to be performed as the player that
+     * touched the hologram
      */
     public boolean shouldPerformAsConsole() {
         return performAsConsole;

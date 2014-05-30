@@ -169,9 +169,9 @@ public class ChannelPipelineInjector extends ChannelDuplexHandler implements Pla
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if(isExempted())
+        if (isExempted())
             super.channelRead(ctx, msg);
-        if(msg.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
+        if (msg.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
             this.injectionManager.handleIncomingPacket(this, this.player, msg);
         }
         super.channelRead(ctx, msg);

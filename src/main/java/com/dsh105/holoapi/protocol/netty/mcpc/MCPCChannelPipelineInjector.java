@@ -23,8 +23,8 @@ import com.dsh105.holoapi.protocol.PlayerUtil;
 import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelHandlerContext;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.Callable;
@@ -173,9 +173,9 @@ public class MCPCChannelPipelineInjector extends ChannelDuplexHandler implements
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if(isExempted())
+        if (isExempted())
             super.channelRead(ctx, msg);
-        if(msg.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
+        if (msg.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
             this.injectionManager.handleIncomingPacket(this, this.player, msg);
         }
         super.channelRead(ctx, msg);

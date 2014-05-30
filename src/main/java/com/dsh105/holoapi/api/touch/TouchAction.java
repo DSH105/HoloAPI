@@ -35,7 +35,8 @@ public interface TouchAction {
     public void onTouch(Player who, Action action);
 
     /**
-     * Gets the String the represents the TouchAction. The serialised key is used in hologram information lists within HoloAPI
+     * Gets the String the represents the TouchAction. The serialised key is used in hologram information lists within
+     * HoloAPI
      *
      * @return string that represents the TouchAction
      */
@@ -44,9 +45,12 @@ public interface TouchAction {
     /**
      * Gets a map of the TouchAction data to save to file.
      * <p/>
-     * HoloAPI uses this data for saving Hologram TouchAction data to file so that it can be loaded again when the hologram is recreated from the save file. See {@link com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent} for information on how to load TouchAction data back into holograms
+     * HoloAPI uses this data for saving Hologram TouchAction data to file so that it can be loaded again when the
+     * hologram is recreated from the save file. See {@link com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent} for
+     * information on how to load TouchAction data back into holograms
      *
-     * @return a map of all data to save to file. See {@link com.dsh105.holoapi.api.touch.CommandTouchAction} for a working example of this
+     * @return a map of all data to save to file. See {@link com.dsh105.holoapi.api.touch.CommandTouchAction} for a
+     * working example of this
      */
     public LinkedHashMap<String, Object> getDataToSave();
 }

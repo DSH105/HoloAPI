@@ -445,8 +445,8 @@ public class Hologram {
      *
      * @param content new content for the hologram
      * @throws java.lang.IllegalArgumentException if the new content is empty
-     *
-     * @deprecated This operation should not be accessed directly. See {@link com.dsh105.holoapi.api.HoloManager#setLineContent(Hologram, String...)}
+     * @deprecated This operation should not be accessed directly. See {@link com.dsh105.holoapi.api.HoloManager#setLineContent(Hologram,
+     * String...)}
      */
     @Deprecated
     public void updateLines(String... content) {
@@ -512,7 +512,9 @@ public class Hologram {
     /**
      * Updates the current display of the hologram
      * <p/>
-     * This method simply sends the existing display to the specified player. It is most appropriate for updating new tag formats that have been recently applied using the TagFormatter API (see {@link com.dsh105.holoapi.api.TagFormatter}
+     * This method simply sends the existing display to the specified player. It is most appropriate for updating new
+     * tag formats that have been recently applied using the TagFormatter API (see {@link
+     * com.dsh105.holoapi.api.TagFormatter}
      *
      * @param observer player to update the display for
      */
@@ -525,7 +527,9 @@ public class Hologram {
     /**
      * Updates the current display of the hologram
      * <p/>
-     * This method simply sends the existing display to all players that can currently see the hologram. It is most appropriate for updating new tag formats that have been recently applied using the TagFormatter API (see {@link com.dsh105.holoapi.api.TagFormatter}
+     * This method simply sends the existing display to all players that can currently see the hologram. It is most
+     * appropriate for updating new tag formats that have been recently applied using the TagFormatter API (see {@link
+     * com.dsh105.holoapi.api.TagFormatter}
      */
     public void updateDisplay() {
         for (String ident : this.getPlayerViews().keySet()) {

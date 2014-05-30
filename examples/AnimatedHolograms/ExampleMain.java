@@ -2,7 +2,8 @@ package com.dsh105.holoapi.example;
 
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
-import com.dsh105.holoapi.image.*;
+import com.dsh105.holoapi.image.AnimatedTextGenerator;
+import com.dsh105.holoapi.image.Frame;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

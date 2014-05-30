@@ -86,7 +86,7 @@ public class SimpleHoloManager implements HoloManager {
         Iterator<Hologram> i = holograms.keySet().iterator();
         while (i.hasNext()) {
             Hologram h = i.next();
-            if(!h.isSimple())
+            if (!h.isSimple())
                 this.saveToFile(h);
             h.clearAllPlayerViews();
             i.remove();
@@ -350,7 +350,7 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     private void loadExtraData(Hologram hologram, String hologramKey) {
-        String[] sections = new String[] {"touchactions", "visibility"};
+        String[] sections = new String[]{"touchactions", "visibility"};
         for (String sectionKey : sections) {
             ConfigurationSection section = this.config.getConfigurationSection("holograms." + hologramKey + "." + sectionKey);
             if (section != null) {

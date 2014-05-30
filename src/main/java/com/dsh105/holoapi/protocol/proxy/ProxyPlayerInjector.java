@@ -176,7 +176,7 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
     public boolean add(Object packet) {
         if (isExempted())
             return delegate().add(packet);
-        if(packet.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
+        if (packet.getClass().getSimpleName().equals(CommonReflection.getEntityUsePacket().getSimpleName())) {
             //Handle packet add here
         }
         return delegate().add(packet);

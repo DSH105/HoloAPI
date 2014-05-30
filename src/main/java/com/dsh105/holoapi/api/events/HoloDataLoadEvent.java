@@ -22,7 +22,8 @@ import com.dsh105.holoapi.api.Hologram;
 import java.util.Map;
 
 /**
- * Called when data is loaded from file. The event can be used to recreate TouchActions or a certain Visibility and add them to
+ * Called when data is loaded from file. The event can be used to recreate TouchActions or a certain Visibility and add
+ * them to
  * loaded holograms. See {@link com.dsh105.holoapi.listeners.HoloDataLoadListener} for an example of this
  */
 public class HoloDataLoadEvent extends HoloEvent {
