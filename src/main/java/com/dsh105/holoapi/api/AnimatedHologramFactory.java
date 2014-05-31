@@ -18,17 +18,22 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
+import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.util.SaveIdGenerator;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import java.util.logging.Level;
 
 /**
  * An AnimatedHologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.AnimatedHologram} which can
@@ -199,6 +204,14 @@ public class AnimatedHologramFactory {
             this.saveId = SaveIdGenerator.nextId() + "";
         }
         AnimatedHologram animatedHologram;
+
+        if (Bukkit.getWorld(this.worldName) == null) {
+            //HoloAPI.getManager().clearFromFile(this.saveId);
+            HoloAPICore.LOGGER.log(Level.SEVERE, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + "!");
+            WorldListener.store(this.saveId, this.worldName);
+            return null;
+        }
+
         if (this.imageGenerated) {
             animatedHologram = new AnimatedHologram(this.saveId, this.worldName, this.locX, this.locY, this.locZ, this.animatedImage);
         } else {

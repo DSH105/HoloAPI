@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class ItemUtil {
 
-    public static ItemStack getItem(String[] content) {
+    public static ItemStack getItem(String... content) {
         ItemStack i = new ItemStack(Material.SNOW, 1, (short) 0);
         ItemMeta meta = i.getItemMeta();
         if (meta != null) {
