@@ -79,13 +79,13 @@ public class MiscUtil {
     // Purely for convenience. Used in commands
     public static Location getLocationFrom(String[] args, int startIndex) {
         World w = Bukkit.getWorld(args[startIndex]);
-        int[] coords = new int[3];
+        double[] coords = new double[3];
         int index = 0;
         for (int i = startIndex + 1; i < startIndex + 4; i++) {
-            if (!StringUtil.isInt(args[i])) {
+            if (!StringUtil.isDouble(args[i])) {
                 return null;
             }
-            coords[index++] = Integer.parseInt(args[i]);
+            coords[index++] = Double.parseDouble(args[i]);
         }
         return new Location(w, coords[0], coords[1], coords[2]);
     }

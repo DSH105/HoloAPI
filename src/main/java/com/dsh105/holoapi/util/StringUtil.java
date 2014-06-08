@@ -42,6 +42,15 @@ public class StringUtil {
         return true;
     }
 
+    public static boolean isDouble(String string) {
+        try {
+            Double.parseDouble(string);
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
+    }
+
     public static String capitalise(String s) {
         String finalString = "";
         if (s.contains(" ")) {
