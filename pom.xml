@@ -41,6 +41,13 @@
     <!-- Dependencies -->
     <dependencies>
 
+        <!-- CaptainBern's Reflection -->
+        <dependency>
+            <groupId>com.captainbern</groupId>
+            <artifactId>Minecraft-Reflection</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- Bukkit -->
         <dependency>
             <groupId>org.bukkit</groupId>
