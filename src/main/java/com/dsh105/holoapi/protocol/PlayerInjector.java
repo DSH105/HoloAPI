@@ -35,6 +35,8 @@ public interface PlayerInjector {
 
     public void setPlayer(Player player);
 
+    public void sendPacket(Object packet);
+
     public boolean isInjected();
 
     public boolean isExempted();

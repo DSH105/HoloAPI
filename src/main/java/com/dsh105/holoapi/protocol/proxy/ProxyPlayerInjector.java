@@ -153,6 +153,11 @@ public class ProxyPlayerInjector extends ForwardingQueue implements PlayerInject
     }
 
     @Override
+    public void sendPacket(Object packet) {
+        // TODO: send packet here. I have no idea if it's even necessary as we will drop 1.6 support
+    }
+
+    @Override
     public boolean isInjected() {
         return this.injected;
     }

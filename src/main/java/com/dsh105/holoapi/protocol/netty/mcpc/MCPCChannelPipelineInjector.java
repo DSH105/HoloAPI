@@ -122,6 +122,11 @@ public class MCPCChannelPipelineInjector extends ChannelDuplexHandler implements
         this.channel = getChannel();
     }
 
+    @Override
+    public void sendPacket(Object packet) {
+        // TODO: send packet here
+    }
+
     public Object getNmsHandle() {
         if (this.nmsHandle == null)
             this.nmsHandle = PlayerUtil.toNMS(this.player);
