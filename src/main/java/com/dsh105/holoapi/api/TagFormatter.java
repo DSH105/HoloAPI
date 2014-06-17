@@ -119,7 +119,7 @@ public class TagFormatter {
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.HOUR_OF_DAY, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
-                return lineContent.replace(matcher.group(), format.format(calendar.getTime()));
+                return format.format(calendar.getTime());
             }
         });
 
@@ -204,7 +204,7 @@ public class TagFormatter {
         for (Map.Entry<Pattern, DynamicTagFormat> entry : this.dynamicTagFormats.entrySet()) {
             Matcher matcher = entry.getKey().matcher(content);
             while (matcher.find()) {
-                content = entry.getValue().match(matcher, content, h, observer);
+                content = content.replace(matcher.group(), entry.getValue().match(matcher, content, h, observer));
             }
         }
 
