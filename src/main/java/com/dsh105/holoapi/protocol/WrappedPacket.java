@@ -1,11 +1,14 @@
 package com.dsh105.holoapi.protocol;
 
+import com.captainbern.minecraft.conversion.BukkitConverters;
 import com.captainbern.minecraft.protocol.PacketType;
 import com.captainbern.minecraft.protocol.Protocol;
 import com.captainbern.minecraft.protocol.Sender;
+import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.captainbern.minecraft.reflection.utils.Accessor;
+import com.captainbern.minecraft.wrapper.WrappedDataWatcher;
 import com.captainbern.reflection.ClassTemplate;
 import com.captainbern.reflection.Reflection;
-import com.dsh105.holoapi.util.ClassModifier;
 
 public class WrappedPacket {
 
@@ -15,7 +18,7 @@ public class WrappedPacket {
 
     private PacketType packetType;
 
-    protected ClassModifier modifier;
+    protected Accessor modifier;
 
     public WrappedPacket(PacketType packetType) {
         this(packetType, new Reflection().reflect(packetType.getPacketClass()).newInstance());  // Assume that it worked
@@ -26,10 +29,10 @@ public class WrappedPacket {
     }
 
     public WrappedPacket(PacketType type, Object packetHandle, ClassTemplate classTemplate) {
-         this(type, packetHandle, classTemplate, new ClassModifier(packetHandle, classTemplate));
+         this(type, packetHandle, classTemplate, new Accessor(packetHandle, classTemplate));
     }
 
-    public WrappedPacket(PacketType packetType, Object packetHandle, ClassTemplate packetTemplate, ClassModifier classModifier) {
+    public WrappedPacket(PacketType packetType, Object packetHandle, ClassTemplate packetTemplate, Accessor classModifier) {
         if (packetType == null)
             throw new IllegalArgumentException("PacketType can't be NULL!");
         if (packetHandle == null)
@@ -96,58 +99,62 @@ public class WrappedPacket {
         return this.packetTemplate;
     }
 
-    public ClassModifier<Object> getModifier() {
+    public Accessor getAccessor() {
         if (this.modifier == null)
-            throw new RuntimeException("ClassModifier is NULL!");
+            throw new RuntimeException("Accessor is NULL!");
 
         return this.modifier;
     }
 
-    public <T> ClassModifier<T> getModifier(Class<T> type) {
+    public <T> Accessor<T> getAccessor(Class<T> type) {
         return this.modifier.withType(type);
     }
 
-    public ClassModifier<Byte> getBytes() {
-        return getModifier(byte.class);
+    public Accessor<Byte> getBytes() {
+        return getAccessor(byte.class);
     }
 
-    public ClassModifier<Integer> getIntegers() {
-        return getModifier(int.class);
+    public Accessor<Integer> getIntegers() {
+        return getAccessor(int.class);
     }
 
-    public ClassModifier<Double> getDoubles() {
-        return getModifier(double.class);
+    public Accessor<Double> getDoubles() {
+        return getAccessor(double.class);
     }
 
-    public ClassModifier<Long> getLongs() {
-        return getModifier(long.class);
+    public Accessor<Long> getLongs() {
+        return getAccessor(long.class);
     }
 
-    public ClassModifier<Short> getShorts() {
-        return getModifier(short.class);
+    public Accessor<Short> getShorts() {
+        return getAccessor(short.class);
     }
 
-    public ClassModifier<Float> getFloats() {
-        return getModifier(float.class);
+    public Accessor<Float> getFloats() {
+        return getAccessor(float.class);
     }
 
-    public ClassModifier<Boolean> getBooleans() {
-        return getModifier(boolean.class);
+    public Accessor<Boolean> getBooleans() {
+        return getAccessor(boolean.class);
     }
 
-    public ClassModifier<String> getStrings() {
-        return getModifier(String.class);
+    public Accessor<String> getStrings() {
+        return getAccessor(String.class);
     }
 
-    public ClassModifier<byte[]> getByteArrays() {
-        return getModifier(byte[].class);
+    public Accessor<byte[]> getByteArrays() {
+        return getAccessor(byte[].class);
     }
 
-    public ClassModifier<int[]> getIntegerArrays() {
-        return getModifier(int[].class);
+    public Accessor<int[]> getIntegerArrays() {
+        return getAccessor(int[].class);
     }
 
-    public ClassModifier<String[]> getStringArrays() {
-        return getModifier(String[].class);
+    public Accessor<String[]> getStringArrays() {
+        return getAccessor(String[].class);
+    }
+
+    public Accessor<WrappedDataWatcher> getDataWatchers() {
+        return this.modifier.withType(MinecraftReflection.getDataWatcherClass(), BukkitConverters.getDataWatcherConverter());
     }
 }
