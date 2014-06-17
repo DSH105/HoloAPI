@@ -126,6 +126,12 @@
             <id>kitteh-repo</id>
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
+        
+        <!--CaptainBern's Minecraft Reflection-->
+        <repository>
+            <id>captainbern</id>
+            <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+        </repository>
     </repositories>
 
     <!-- Build -->
