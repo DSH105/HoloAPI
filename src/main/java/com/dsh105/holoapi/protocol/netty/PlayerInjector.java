@@ -102,7 +102,7 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
     @Override
     public void recievePacket(Object packet) {
         if (this.isClosed())
-            throw new IllegalStateException("The PlayerInjector is NULL!");
+            throw new IllegalStateException("The PlayerInjector is closed!");
 
         this.getChannel().pipeline().context("encoder").fireChannelRead(packet);
     }
