@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.command;
 
+import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Permission;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
@@ -83,7 +83,7 @@ public class CommandHelp {
     }
 
     public Object getHelpFor(CommandSender sender, boolean shorten) {
-        if (CommonReflection.isUsingNetty() && sender instanceof Player) {
+        if (MinecraftReflection.isUsingNetty() && sender instanceof Player) {
             boolean hasPerm = false;
             boolean suggest = true;
             if (this.getPermission() != null) {
@@ -109,7 +109,7 @@ public class CommandHelp {
     }
 
     public void sendHelpTo(CommandSender sender, boolean shorten) {
-        if (CommonReflection.isUsingNetty() && sender instanceof Player) {
+        if (MinecraftReflection.isUsingNetty() && sender instanceof Player) {
             ((FancyMessage) this.getHelpFor(sender, shorten)).send((Player) sender);
         } else {
             for (String part : (String[]) getHelpFor(sender, shorten)) {

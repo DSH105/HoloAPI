@@ -17,9 +17,9 @@
 
 package com.dsh105.holoapi.command;
 
+import com.captainbern.reflection.Reflection;
+import com.captainbern.reflection.accessor.FieldAccessor;
 import com.dsh105.holoapi.HoloAPICore;
-import com.dsh105.holoapi.reflection.FieldAccessor;
-import com.dsh105.holoapi.reflection.SafeField;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -33,8 +33,8 @@ import java.util.Map;
 
 public class CommandManager {
 
-    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new SafeField<CommandMap>(Bukkit.getServer().getPluginManager().getClass(), "commandMap");
-    protected static final FieldAccessor<Map<String, Command>> KNOWN_COMMANDS = new SafeField<Map<String, org.bukkit.command.Command>>(SimpleCommandMap.class, "knownCommands");
+    protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new Reflection().reflect(Bukkit.getServer().getPluginManager().getClass()).getSafeFieldByNameAndType("commandMap", CommandMap.class).getAccessor();
+    protected static final FieldAccessor<Map> KNOWN_COMMANDS = new Reflection().reflect(Bukkit.getServer().getPluginManager().getClass()).getSafeFieldByNameAndType("knownCommands", Map.class).getAccessor();
 
     private CommandMap fallback;
 

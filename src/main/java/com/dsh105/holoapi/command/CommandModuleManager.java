@@ -17,9 +17,9 @@
 
 package com.dsh105.holoapi.command;
 
+import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.command.module.*;
-import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.StringUtil;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
@@ -122,7 +122,7 @@ public class CommandModuleManager implements CommandExecutor {
     }
 
     public void sendHelpTo(CommandSender sender, int page) {
-        if (CommonReflection.isUsingNetty() && sender instanceof Player) {
+        if (MinecraftReflection.isUsingNetty() && sender instanceof Player) {
             if (fancyHelpPages == null) {
                 ArrayList<FancyMessage> list = new ArrayList<FancyMessage>();
                 for (String key : modules.keySet()) {

@@ -17,142 +17,72 @@
 
 package com.dsh105.holoapi.api;
 
-import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
-import com.dsh105.holoapi.api.visibility.VisibilityDefault;
-import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
-import com.dsh105.holoapi.reflection.Constants;
-import com.dsh105.holoapi.reflection.SafeMethod;
-import com.dsh105.holoapi.reflection.utility.CommonReflection;
-import com.dsh105.holoapi.util.PlayerIdent;
-import com.dsh105.holoapi.util.TagIdGenerator;
-import com.dsh105.holoapi.util.wrapper.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents an Hologram that consists of either image or text
  */
 
-public class Hologram {
-
-    protected int firstTagId;
-    protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
-    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
-    protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
-
-    private String saveId;
-    private String worldName;
-    private double defX;
-    private double defY;
-    private double defZ;
-    private String[] tags;
-
-    private boolean simple = false;
-    private boolean touchEnabled;
-    private Visibility visibility = new VisibilityDefault();
-
-    protected Hologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
-        this(worldName, x, y, z);
-        this.saveId = saveId;
-        if (lines.length > 30) {
-            this.tags = new String[30];
-            for (int i = 0; i < 30; i++) {
-                this.tags[i] = lines[i];
-            }
-        } else {
-            this.tags = lines;
-        }
-        this.firstTagId = firstTagId;
-    }
-
-    protected Hologram(String saveId, String worldName, double x, double y, double z, String... lines) {
-        this(TagIdGenerator.nextId(lines.length > 30 ? 30 : lines.length), saveId, worldName, x, y, z, lines);
-    }
-
-    private Hologram(String worldName, double x, double y, double z) {
-        this.worldName = worldName;
-        this.defX = x;
-        this.defY = y;
-        this.defZ = z;
-    }
+public interface Hologram {
 
     /**
      * Gets whether the hologram is simple
      *
      * @return true if the hologram is simple
      */
-    public boolean isSimple() {
-        return simple;
-    }
+    public boolean isSimple();
 
-    protected void setSimplicity(boolean flag) {
-        this.simple = flag;
-    }
+    public void setSimplicity(boolean flag);
 
     /**
      * Gets the number of lines in the hologram
      *
      * @return number of lines in the hologram
      */
-    public int getTagCount() {
-        return this.tags.length;
-    }
+    public int getTagCount();
 
     /**
      * Gets the default X coordinate of the hologram
      *
      * @return default X coordinate
      */
-    public double getDefaultX() {
-        return defX;
-    }
+    public double getDefaultX();
 
     /**
      * Gets the default Y coordinate of the hologram
      *
      * @return default Y coordinate
      */
-    public double getDefaultY() {
-        return defY;
-    }
+    public double getDefaultY();
 
     /**
      * Gets the default Z coordinate of the hologram
      *
      * @return default Z coordinate
      */
-    public double getDefaultZ() {
-        return defZ;
-    }
+    public double getDefaultZ();
 
     /**
      * Gets the World name the hologram is visible in
      *
      * @return world name the hologram is in
      */
-    public String getWorldName() {
-        return worldName;
-    }
+    public String getWorldName();
 
     /**
      * Gets the default location of the hologram
      *
      * @return default location of the hologram
      */
-    public Location getDefaultLocation() {
-        return new Location(Bukkit.getWorld(this.getWorldName()), this.getDefaultX(), this.getDefaultY(), this.getDefaultZ());
-    }
+    public Location getDefaultLocation();
 
     /**
      * Gets a map of all players who are viewing the hologram
@@ -161,25 +91,14 @@ public class Hologram {
      *
      * @return player name to {@link org.bukkit.util.Vector} map of all viewed positions
      */
-    public HashMap<String, Vector> getPlayerViews() {
-        HashMap<String, Vector> map = new HashMap<String, Vector>();
-        map.putAll(this.playerToLocationMap);
-        return map;
-    }
+    public HashMap<String, Vector> getPlayerViews();
 
     /**
      * Refreshes the display of the hologram
      *
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
      */
-    public void refreshDisplay(final boolean obeyVisibility) {
-        for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
-            final Player p = PlayerIdent.getPlayerOf(entry.getKey());
-            if (p != null) {
-                this.refreshDisplay(obeyVisibility, p);
-            }
-        }
-    }
+    public void refreshDisplay(final boolean obeyVisibility);
 
     /**
      * Refreshes the display of the hologram to a certain player
@@ -187,33 +106,19 @@ public class Hologram {
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
      * @param observer       player to refresh the hologram for
      */
-    public void refreshDisplay(final boolean obeyVisibility, final Player observer) {
-        if (observer != null) {
-            this.clear(observer);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    show(observer, obeyVisibility);
-                }
-            }.runTaskLater(HoloAPI.getCore(), 1L);
-        }
-    }
+    public void refreshDisplay(final boolean obeyVisibility, final Player observer);
 
     /**
      * Refreshes the display of the hologram
      *
      * @param observer player to refresh the hologram for
      */
-    public void refreshDisplay(Player observer) {
-        this.refreshDisplay(false, observer);
-    }
+    public void refreshDisplay(Player observer);
 
     /**
      * Refreshes the display of the hologram
      */
-    public void refreshDisplay() {
-        this.refreshDisplay(false);
-    }
+    public void refreshDisplay();
 
     /**
      * Gets the lines that the hologram consists of
@@ -222,30 +127,21 @@ public class Hologram {
      *
      * @return lines of the hologram
      */
-    public String[] getLines() {
-        return tags;
-    }
+    public String[] getLines();
 
     /**
      * Gets the visibility of the hologram
      *
      * @return visibility of the hologram
      */
-    public Visibility getVisibility() {
-        return visibility;
-    }
+    public Visibility getVisibility();
 
     /**
      * Sets the visibility of the hologram
      *
      * @param visibility visibility of the hologram
      */
-    public void setVisibility(Visibility visibility) {
-        this.visibility = visibility;
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-    }
+    public void setVisibility(Visibility visibility);
 
     /**
      * Gets the save id of the hologram
@@ -254,9 +150,7 @@ public class Hologram {
      *
      * @return key the represents the hologram in save files
      */
-    public String getSaveId() {
-        return saveId;
-    }
+    public String getSaveId();
 
     /**
      * Sets the save id of the hologram
@@ -266,78 +160,23 @@ public class Hologram {
      * @param saveId save id to be assigned to this hologram
      * @throws com.dsh105.holoapi.exceptions.DuplicateSaveIdException if the save ID is already registered
      */
-    public void setSaveId(String saveId) {
-        if (HoloAPI.getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
-            throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID " + saveId + " already exists in the HoloAPI data files!");
-        }
+    public void setSaveId(String saveId);
 
-        if (!this.isSimple()) {
-            // Make sure all our changes are reflected by the file
-            HoloAPI.getManager().saveToFile(this);
-            // Clear any existing file data
-            HoloAPI.getManager().clearFromFile(this);
-        }
+    public boolean isTouchEnabled();
 
-        // Set the new save id
-        this.saveId = saveId;
+    public void setTouchEnabled(boolean touchEnabled);
 
-        if (!this.isSimple()) {
-            // And save the data back to the file again under the new id
-            HoloAPI.getManager().saveToFile(this);
-        }
-    }
-
-    public boolean isTouchEnabled() {
-        return touchEnabled;
-    }
-
-    public void setTouchEnabled(boolean touchEnabled) {
-        this.touchEnabled = touchEnabled;
-    }
-
-    protected void setImageTagMap(HashMap<TagSize, String> map) {
-        this.imageIdMap = map;
-    }
-
+    public void setImageTagMap(HashMap<TagSize, String> map);
     /**
      * Gets a serialised map of the hologram
      *
      * @return serialised map of the hologram
      */
-    public ArrayList<StoredTag> serialise() {
-        ArrayList<StoredTag> tagList = new ArrayList<StoredTag>();
-        ArrayList<String> tags = new ArrayList<String>();
-        tags.addAll(Arrays.asList(this.tags));
-        for (int index = 0; index < tags.size(); index++) {
-            String tag = tags.get(index);
-            Map.Entry<TagSize, String> entry = getImageIdOfIndex(index);
-            if (entry != null) {
-                index += entry.getKey().getLast() - entry.getKey().getFirst();
-                tagList.add(new StoredTag(entry.getValue(), true));
-            } else {
-                tagList.add(new StoredTag(tag, false));
-            }
-        }
-        return tagList;
-    }
+    public ArrayList<StoredTag> serialise();
 
-    protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
-        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
-            if (entry.getKey().getFirst() == index) {
-                return entry;
-            }
-        }
-        return null;
-    }
+    public Map.Entry<TagSize, String> getImageIdOfIndex(int index);
 
-    protected Map.Entry<TagSize, String> getForPartOfImage(int index) {
-        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
-            if (index >= entry.getKey().getFirst() && index <= entry.getKey().getLast()) {
-                return entry;
-            }
-        }
-        return null;
-    }
+    public Map.Entry<TagSize, String> getForPartOfImage(int index);
 
     /**
      * Changes the world the hologram is visible in
@@ -347,18 +186,7 @@ public class Hologram {
      * @param worldName      name of of the destination world
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
      */
-    public void changeWorld(String worldName, boolean obeyVisibility) {
-        this.clearAllPlayerViews();
-        this.worldName = worldName;
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-        for (Entity e : this.getDefaultLocation().getWorld().getEntities()) {
-            if (e instanceof Player) {
-                this.show((Player) e, obeyVisibility);
-            }
-        }
-    }
+    public void changeWorld(String worldName, boolean obeyVisibility);
 
     /**
      * Changes the world the hologram is visible in
@@ -367,23 +195,12 @@ public class Hologram {
      *
      * @param worldName name of of the destination world
      */
-    public void changeWorld(String worldName) {
-        this.changeWorld(worldName, false);
-    }
+    public void changeWorld(String worldName);
 
     /**
      * Clears all views of the hologram, making it invisible to all players who could previously see it
      */
-    public void clearAllPlayerViews() {
-        Iterator<String> i = this.playerToLocationMap.keySet().iterator();
-        while (i.hasNext()) {
-            Player p = PlayerIdent.getPlayerOf(i.next());
-            if (p != null) {
-                this.clearTags(p, this.getAllEntityIds());
-            }
-            i.remove();
-        }
-    }
+    public void clearAllPlayerViews();
 
     /**
      * Gets the viewpoint for a player
@@ -391,9 +208,7 @@ public class Hologram {
      * @param player player to retrieve the viewpoint for
      * @return {@link org.bukkit.util.Vector} representing a player's viewpoint of the hologram
      */
-    public Vector getLocationFor(Player player) {
-        return this.playerToLocationMap.get(PlayerIdent.getIdentificationForAsString(player));
-    }
+    public Vector getLocationFor(Player player);
 
     /**
      * Sets the content of a line of the hologram
@@ -402,26 +217,7 @@ public class Hologram {
      * @param content new content for the hologram line
      * @throws java.lang.IllegalArgumentException if the index is greater than the number of tags in the hologram
      */
-    public void updateLine(int index, String content) {
-        if (index >= this.tags.length) {
-            throw new IllegalArgumentException("Tag index doesn't exist!");
-        }
-        HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], content, index);
-        Bukkit.getServer().getPluginManager().callEvent(lineUpdateEvent);
-        if (lineUpdateEvent.isCancelled()) {
-            return;
-        }
-        this.tags[index] = lineUpdateEvent.getNewLineContent();
-        for (String ident : this.playerToLocationMap.keySet()) {
-            Player p = PlayerIdent.getPlayerOf(ident);
-            if (p != null) {
-                this.updateNametag(p, this.tags[index], index);
-            }
-        }
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-    }
+    public void updateLine(int index, String content);
 
     /**
      * Sets the content of a line of the hologram for a certain player
@@ -431,83 +227,7 @@ public class Hologram {
      * @param observer player to show the changes to
      * @throws java.lang.IllegalArgumentException if the index is greater than the number of tags in the hologram
      */
-    public void updateLine(int index, String content, Player observer) {
-        if (index >= this.tags.length) {
-            throw new IllegalArgumentException("Tag index doesn't exist!");
-        }
-        if (observer != null) {
-            this.updateNametag(observer, content, index);
-        }
-    }
-
-    /**
-     * Sets the entire content of the hologram
-     *
-     * @param content new content for the hologram
-     * @throws java.lang.IllegalArgumentException if the new content is empty
-     * @deprecated This operation should not be accessed directly. See {@link com.dsh105.holoapi.api.HoloManager#setLineContent(Hologram,
-     * String...)}
-     */
-    @Deprecated
-    public void updateLines(String... content) {
-        if (content.length <= 0) {
-            throw new IllegalArgumentException("New hologram content cannot be empty!");
-        }
-
-        // Make sure it's not too long
-        String[] cont = content;
-        if (cont.length > this.tags.length) {
-            cont = new String[this.tags.length];
-            for (int i = 0; i < this.tags.length; i++) {
-                cont[i] = content[i];
-            }
-        }
-        for (String ident : this.playerToLocationMap.keySet()) {
-            Player p = PlayerIdent.getPlayerOf(ident);
-            if (p != null) {
-                for (int index = 0; index < cont.length; index++) {
-                    HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], cont[index], index);
-                    Bukkit.getServer().getPluginManager().callEvent(lineUpdateEvent);
-                    if (lineUpdateEvent.isCancelled()) {
-                        continue;
-                    }
-                    this.tags[index] = lineUpdateEvent.getNewLineContent();
-                    this.updateNametag(p, this.tags[index], index);
-                }
-            }
-        }
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-    }
-
-    /**
-     * Sets the entire content of the hologram for a certain player
-     *
-     * @param observer player to show the changes to
-     * @param content  new content for the hologram
-     * @throws java.lang.IllegalArgumentException if the new content is empty
-     */
-    @Deprecated
-    public void updateLines(Player observer, String... content) {
-        if (content.length <= 0) {
-            throw new IllegalArgumentException("New hologram content cannot be empty!");
-        }
-
-        String[] cont = content;
-        if (cont.length > this.tags.length) {
-            cont = new String[this.tags.length];
-            for (int i = 0; i < 30; i++) {
-                cont[i] = content[i];
-            }
-        }
-
-        if (observer != null) {
-            for (int index = 0; index < cont.length; index++) {
-                this.updateNametag(observer, cont[index], index);
-            }
-        }
-    }
+    public void updateLine(int index, String content, Player observer);
 
     /**
      * Updates the current display of the hologram
@@ -518,11 +238,7 @@ public class Hologram {
      *
      * @param observer player to update the display for
      */
-    public void updateDisplay(Player observer) {
-        for (int index = 0; index < this.tags.length; index++) {
-            this.updateNametag(observer, this.tags[index], index);
-        }
-    }
+    public void updateDisplay(Player observer);
 
     /**
      * Updates the current display of the hologram
@@ -531,107 +247,72 @@ public class Hologram {
      * appropriate for updating new tag formats that have been recently applied using the TagFormatter API (see {@link
      * com.dsh105.holoapi.api.TagFormatter}
      */
-    public void updateDisplay() {
-        for (String ident : this.getPlayerViews().keySet()) {
-            Player player = PlayerIdent.getPlayerOf(ident);
-            if (player != null) {
-                this.updateDisplay(player);
-            }
-        }
-    }
+    public void updateDisplay();
+
+    /**
+     * Sets the entire content of the hologram
+     *
+     * @param content new content for the hologram
+     * @throws java.lang.IllegalArgumentException if the new content is empty
+     * @deprecated This operation should not be accessed directly. See {@link com.dsh105.holoapi.api.HoloManager#setLineContent(Hologram,
+     * String...)}
+     */
+    @Deprecated
+    public void updateLines(String... content);
+
+    /**
+     * Sets the entire content of the hologram for a certain player
+     *
+     * @param observer player to show the changes to
+     * @param content  new content for the hologram
+     * @throws java.lang.IllegalArgumentException if the new content is empty
+     */
+    @Deprecated
+    public void updateLines(Player observer, String... content);
 
     /**
      * Adds an action for when the hologram is touched
      *
      * @param action action to perform when the hologram is touched
      */
-    public void addTouchAction(TouchAction action) {
-        this.touchActions.add(action);
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-        if (!this.isTouchEnabled()) {
-            // So that the entities aren't cleared before they're created
-            for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
-                final Player p = PlayerIdent.getPlayerOf(entry.getKey());
-                if (p != null) {
-                    clearTags(p, this.getAllEntityIds());
-                }
-            }
-            this.setTouchEnabled(true);
-            this.refreshDisplay(true);
-        }
-    }
+    public void addTouchAction(TouchAction action);
 
     /**
      * Removes an action that is set to fire when the hologram is touched
      *
      * @param action action to remove
      */
-    public void removeTouchAction(TouchAction action) {
-        this.touchActions.remove(action);
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-    }
+    public void removeTouchAction(TouchAction action);
 
     /**
      * Clears all touch actions for this hologram
      */
-    public void clearAllTouchActions() {
-        this.touchActions.clear();
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-    }
+    public void clearAllTouchActions();
 
     /**
      * Gets a copy of all the touch actions for the hologram
      *
      * @return copy of all touch actions for the hologram
      */
-    public ArrayList<TouchAction> getAllTouchActions() {
-        return new ArrayList<TouchAction>(this.touchActions);
-    }
+    public ArrayList<TouchAction> getAllTouchActions();
 
     /**
      * Gets all the registered NMS entity IDs for the hologram
      *
      * @return all entity IDs used for the tags in the hologram
      */
-    public int[] getAllEntityIds() {
-        ArrayList<Integer> entityIdList = new ArrayList<Integer>();
-        for (int index = 0; index < this.getTagCount(); index++) {
-            for (int i = 0; i < HoloAPI.getTagEntityMultiplier(); i++) {
-                entityIdList.add(this.getHorseIndex(index) + i);
-            }
-        }
+    public int[] getAllEntityIds();
 
-        int[] ids = new int[entityIdList.size()];
-
-        for (int i = 0; i < ids.length; i++) {
-            ids[i] = entityIdList.get(i);
-        }
-
-        return ids;
-    }
-
-    public void show(Player observer, boolean obeyVisibility) {
-        this.show(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), obeyVisibility);
-    }
+    public void show(Player observer, boolean obeyVisibility);
 
     /**
      * Shows the hologram to a player at the default location
      *
      * @param observer player to show the hologram to
      */
-    public void show(Player observer) {
-        this.show(observer, false);
-    }
+    public void show(Player observer);
 
-    public void show(Player observer, Location location, boolean obeyVisibility) {
-        this.show(observer, location.getBlockX(), location.getBlockY(), location.getBlockZ(), obeyVisibility);
-    }
+    public void show(Player observer, Location location, boolean obeyVisibility);
 
     /**
      * Shows the hologram to a player at a location
@@ -639,19 +320,9 @@ public class Hologram {
      * @param observer player to show the hologram to
      * @param location location that the hologram is visible at
      */
-    public void show(Player observer, Location location) {
-        this.show(observer, location, false);
-    }
+    public void show(Player observer, Location location);
 
-    public void show(Player observer, double x, double y, double z, boolean obeyVisibility) {
-        if (obeyVisibility && !this.getVisibility().isVisibleTo(observer, this.getSaveId())) {
-            return;
-        }
-        for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
-        }
-        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), new Vector(x, y, z));
-    }
+    public void show(Player observer, double x, double y, double z, boolean obeyVisibility);
 
     /**
      * Shows the hologram to a player at a location
@@ -661,9 +332,7 @@ public class Hologram {
      * @param y        y coordinate of the location the hologram is visible at
      * @param z        z coordinate of the location the hologram is visible at
      */
-    public void show(Player observer, double x, double y, double z) {
-        this.show(observer, x, y, z, false);
-    }
+    public void show(Player observer, double x, double y, double z);
 
     /**
      * Moves the hologram to a new location
@@ -672,12 +341,7 @@ public class Hologram {
      *
      * @param to position to move to
      */
-    public void move(Location to) {
-        if (!this.worldName.equals(to.getWorld().getName())) {
-            this.changeWorld(to.getWorld().getName());
-        }
-        this.move(to.toVector());
-    }
+    public void move(Location to);
 
     /**
      * Moves the hologram to a new location
@@ -686,250 +350,14 @@ public class Hologram {
      *
      * @param to position to move to
      */
-    public void move(Vector to) {
-        this.defX = to.getX();
-        this.defY = to.getY();
-        this.defZ = to.getZ();
-        if (!this.isSimple()) {
-            HoloAPI.getManager().saveToFile(this);
-        }
-        for (String ident : this.getPlayerViews().keySet()) {
-            Player p = PlayerIdent.getPlayerOf(ident);
-            if (p != null) {
-                this.move(p, to);
-            }
-        }
-    }
+    public void move(Vector to);
 
-    protected void move(Player observer, Vector to) {
-        Vector loc = to.clone();
-        for (int index = 0; index < this.getTagCount(); index++) {
-            this.moveTag(observer, index, loc);
-            loc.setY(loc.getY() - HoloAPI.getHologramLineSpacing());
-        }
-        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), to);
-    }
+    public void move(Player observer, Vector to);
 
     /**
      * Clears the view of the hologram for a player
      *
      * @param observer player to clear the hologram display for
      */
-    public void clear(Player observer) {
-        clearTags(observer, this.getAllEntityIds());
-        this.playerToLocationMap.remove(PlayerIdent.getIdentificationForAsString(observer));
-    }
-
-    protected void clearTags(Player observer, int... entityIds) {
-        if (entityIds.length > 0) {
-            WrapperPacketEntityDestroy destroy = new WrapperPacketEntityDestroy();
-            destroy.setEntities(entityIds);
-            destroy.send(observer);
-        }
-    }
-
-    protected void moveTag(Player observer, int index, Vector to) {
-        WrapperPacketEntityTeleport teleportHorse = new WrapperPacketEntityTeleport();
-        teleportHorse.setEntityId(this.getHorseIndex(index));
-        teleportHorse.setX(to.getX());
-        teleportHorse.setY(to.getY() + 55);
-        teleportHorse.setZ(to.getZ());
-
-        WrapperPacketEntityTeleport teleportSkull = new WrapperPacketEntityTeleport();
-        teleportSkull.setEntityId(this.getSkullIndex(index));
-        teleportSkull.setX(to.getX());
-        teleportSkull.setY(to.getY() + 55);
-        teleportSkull.setZ(to.getZ());
-
-        teleportHorse.send(observer);
-        teleportSkull.send(observer);
-
-        if (this.isTouchEnabled()) {
-            this.teleportTouchSlime(observer, index, to);
-        }
-    }
-
-    protected void teleportTouchSlime(Player observer, int index, Vector to) {
-        WrapperPacketEntityTeleport teleportTouchSlime = new WrapperPacketEntityTeleport();
-        teleportTouchSlime.setEntityId(this.getTouchSlimeIndex(index));
-        teleportTouchSlime.setX(to.getX());
-        teleportTouchSlime.setY(to.getY());
-        teleportTouchSlime.setZ(to.getZ());
-
-        WrapperPacketEntityTeleport teleportTouchSkull = new WrapperPacketEntityTeleport();
-        teleportTouchSkull.setEntityId(this.getTouchSkullIndex(index));
-        teleportTouchSkull.setX(to.getX());
-        teleportTouchSkull.setY(to.getY());
-        teleportTouchSkull.setZ(to.getZ());
-
-        teleportTouchSlime.send(observer);
-        teleportTouchSkull.send(observer);
-    }
-
-    protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
-        String content = HoloAPI.getTagFormatter().format(this, observer, message);
-        ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
-        if (itemMatch != null) {
-            this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
-        } else {
-            WrapperPacketAttachEntity attach = new WrapperPacketAttachEntity();
-
-            WrapperPacketSpawnEntityLiving horse = new WrapperPacketSpawnEntityLiving();
-            horse.setEntityId(this.getHorseIndex(index));
-            horse.setEntityType(EntityType.HORSE.getTypeId());
-            horse.setX(x);
-            horse.setY(y + diffY + 55);
-            horse.setZ(z);
-
-            WrappedDataWatcher dw = new WrappedDataWatcher();
-            dw.initiate(10, content);
-            dw.initiate(11, Byte.valueOf((byte) 1));
-            dw.initiate(12, Integer.valueOf(-1700000));
-            horse.setMetadata(dw);
-
-            WrapperPacketSpawnEntity skull = new WrapperPacketSpawnEntity();
-            skull.setEntityId(this.getSkullIndex(index));
-            skull.setX(x);
-            skull.setY(y + diffY + 55);
-            skull.setZ(z);
-            skull.setEntityType(66);
-
-            attach.setEntityId(horse.getEntityId());
-            attach.setVehicleId(skull.getEntityId());
-
-            horse.send(observer);
-            skull.send(observer);
-            attach.send(observer);
-        }
-
-        if (this.isTouchEnabled()) {
-            this.prepareTouchScreen(observer, index, diffY, x, y, z);
-        }
-    }
-
-    protected void prepareTouchScreen(Player observer, int index, double diffY, double x, double y, double z) {
-        int size = (this.calculateMaxLineLength() / 2);
-        Map.Entry<TagSize, String> imagePart = this.getForPartOfImage(index);
-        if (imagePart != null) {
-            if (index == imagePart.getKey().getLast() || index == ((imagePart.getKey().getLast() - size / 4) + 1)) {
-                this.generateTouchScreen(size / 10, observer, index, diffY, x, y, z);
-            }
-        } else if (index % (size < 1 ? 1 : size) == 0 || index >= (this.tags.length - 1)) {
-            if (tags.length > 1 && index == 0) {
-                return;
-            }
-            this.generateTouchScreen(size / 3, observer, index, diffY, x, y, z);
-        }
-    }
-
-    protected void generateTouchScreen(int slimeSize, Player observer, int index, double diffY, double x, double y, double z) {
-        WrapperPacketAttachEntity attachTouch = new WrapperPacketAttachEntity();
-
-        WrapperPacketSpawnEntityLiving touchSlime = new WrapperPacketSpawnEntityLiving();
-        touchSlime.setEntityId(this.getTouchSlimeIndex(index));
-        touchSlime.setEntityType(EntityType.SLIME.getTypeId());
-        touchSlime.setX(x);
-        touchSlime.setY(y + diffY);
-        touchSlime.setZ(z);
-
-        WrappedDataWatcher touchDw = new WrappedDataWatcher();
-        touchDw.initiate(0, Byte.valueOf((byte) 32));
-        //int size = (this.calculateMaxLineLength() / (this.getForPartOfImage(index) != null ? 20 : 6));
-        touchDw.initiate(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
-        touchSlime.setMetadata(touchDw);
-
-        WrapperPacketSpawnEntity touchSkull = new WrapperPacketSpawnEntity();
-        touchSkull.setEntityId(this.getTouchSkullIndex(index));
-        touchSkull.setX(x);
-        touchSkull.setY(y + diffY);
-        touchSkull.setZ(z);
-        touchSkull.setEntityType(66);
-
-        attachTouch.setEntityId(touchSlime.getEntityId());
-        attachTouch.setVehicleId(touchSkull.getEntityId());
-
-        touchSlime.send(observer);
-        touchSkull.send(observer);
-        attachTouch.send(observer);
-    }
-
-    protected void generateFloatingItem(Player observer, ItemStack stack, int index, double diffY, double x, double y, double z) {
-        WrapperPacketAttachEntity attachItem = new WrapperPacketAttachEntity();
-
-        WrapperPacketSpawnEntity item = new WrapperPacketSpawnEntity();
-        item.setEntityId(this.getHorseIndex(index));
-        item.setX(x);
-        item.setY(y + diffY);
-        item.setZ(z);
-        item.setEntityType(2);
-        item.setData(1);
-
-        WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, stack));
-        new SafeMethod(CommonReflection.getDataWatcherClass(), Constants.DATAWATCHER_FUNC_ITEMSTACK.getName(), int.class).invoke(dw.getHandle(), 10);
-
-        WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
-        meta.setEntityId(item.getEntityId());
-        meta.setMetadata(dw);
-
-        WrapperPacketSpawnEntity itemSkull = new WrapperPacketSpawnEntity();
-        itemSkull.setEntityId(this.getSkullIndex(index));
-        itemSkull.setX(x);
-        itemSkull.setY(y + diffY);
-        itemSkull.setZ(z);
-        itemSkull.setEntityType(66);
-
-        attachItem.setEntityId(item.getEntityId());
-        attachItem.setVehicleId(itemSkull.getEntityId());
-
-        item.send(observer);
-        meta.send(observer);
-        itemSkull.send(observer);
-        attachItem.send(observer);
-    }
-
-    protected void updateNametag(Player observer, String message, int index) {
-        WrappedDataWatcher dw = new WrappedDataWatcher();
-        String content = HoloAPI.getTagFormatter().format(this, observer, message);
-
-        ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
-        if (itemMatch != null) {
-            dw.initiate(10, new SafeMethod(CommonReflection.getCraftBukkitClass("inventory.CraftItemStack"), "asNMSCopy", org.bukkit.inventory.ItemStack.class).invoke(null, itemMatch));
-            new SafeMethod(CommonReflection.getDataWatcherClass(), Constants.DATAWATCHER_FUNC_ITEMSTACK.getName(), int.class).invoke(dw.getHandle(), 10);
-        } else {
-            dw.initiate(10, content);
-            dw.initiate(11, Byte.valueOf((byte) 1));
-            dw.initiate(12, Integer.valueOf(-1700000));
-        }
-
-        WrapperPacketEntityMetadata metadata = new WrapperPacketEntityMetadata();
-        metadata.setEntityId(this.getHorseIndex(index));
-        metadata.setMetadata(dw);
-
-        metadata.send(observer);
-    }
-
-    protected int getHorseIndex(int index) {
-        return firstTagId + (index * HoloAPI.getTagEntityMultiplier());
-    }
-
-    protected int getSkullIndex(int index) {
-        return this.getHorseIndex(index) + 1;
-    }
-
-    protected int getTouchSlimeIndex(int index) {
-        return this.getHorseIndex(index) + 2;
-    }
-
-    protected int getTouchSkullIndex(int index) {
-        return this.getSkullIndex(index) + 2;
-    }
-
-    protected int calculateMaxLineLength() {
-        int max = 0;
-        for (String tag : this.tags) {
-            max = Math.max(tag.length(), max);
-        }
-        return max;
-    }
+    public void clear(Player observer);
 }

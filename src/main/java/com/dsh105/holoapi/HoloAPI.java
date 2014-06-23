@@ -61,7 +61,7 @@ public class HoloAPI {
      * @return {@link com.dsh105.holoapi.api.HoloManager} that manages and controls registration of holograms
      */
     public static HoloManager getManager() {
-        return getCore().MANAGER;
+        return getCore().holoManager;
     }
 
     /**
@@ -72,7 +72,7 @@ public class HoloAPI {
      * @return Image Loader that controls and stores all pre-loaded image generators
      */
     public static ImageLoader<ImageGenerator> getImageLoader() {
-        return getCore().IMAGE_LOADER;
+        return getCore().imageLoader;
     }
 
     /**
@@ -84,7 +84,7 @@ public class HoloAPI {
      * @return Animation Loader that controls and stores all pre-loaded animation generators
      */
     public static ImageLoader<AnimatedImageGenerator> getAnimationLoader() {
-        return getCore().ANIMATION_LOADER;
+        return getCore().animationLoader;
     }
 
     /**
@@ -95,7 +95,7 @@ public class HoloAPI {
      * @return TagFormatter that stores all valid replacements for hologram tags
      */
     public static TagFormatter getTagFormatter() {
-        return getCore().TAG_FORMATTER;
+        return getCore().tagFormatter;
     }
 
     /**
@@ -108,7 +108,7 @@ public class HoloAPI {
      */
 
     public static VisibilityMatcher getVisibilityMatcher() {
-        return getCore().VISIBILITY_MATCHER;
+        return getCore().visibilityMatcher;
     }
 
     /**
@@ -133,11 +133,11 @@ public class HoloAPI {
     }
 
     public static CommandModuleManager getCommandManager() {
-        return getCore().COMMAND_MODULE_MANAGER;
+        return getCore().commandModuleManager;
     }
 
     public static String getCommandLabel() {
-        return getCore().OPTIONS.getConfig().getString("command", "holo");
+        return getCore().options.getConfig().getString("command", "holo");
     }
 
     public static YAMLConfig getConfig(ConfigType type) {

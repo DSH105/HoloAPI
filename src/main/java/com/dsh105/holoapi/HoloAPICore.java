@@ -40,9 +40,6 @@ import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.protocol.InjectionManager;
-import com.dsh105.holoapi.protocol.InjectionStrategy;
-import com.dsh105.holoapi.protocol.ProtocolInjectionBuilder;
-import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
@@ -59,16 +56,16 @@ import java.util.logging.Level;
 
 public class HoloAPICore extends JavaPlugin {
 
-    protected static CommandManager COMMAND_MANAGER;
-    protected static CommandModuleManager COMMAND_MODULE_MANAGER;
-    protected static SimpleHoloManager MANAGER;
-    protected static SimpleImageLoader IMAGE_LOADER;
-    protected static SimpleAnimationLoader ANIMATION_LOADER;
-    protected static TagFormatter TAG_FORMATTER;
-    protected static VisibilityMatcher VISIBILITY_MATCHER;
-    protected ConfigOptions OPTIONS;
+    protected static CommandManager commandManager;
+    protected static CommandModuleManager commandModuleManager;
+    protected static SimpleHoloManager holoManager;
+    protected static SimpleImageLoader imageLoader;
+    protected static SimpleAnimationLoader animationLoader;
+    protected static TagFormatter tagFormatter;
+    protected static VisibilityMatcher visibilityMatcher;
+    protected ConfigOptions options;
 
-    protected static InjectionManager INJECTION_MANAGER;
+    protected static InjectionManager injectionManager;
 
     protected YAMLConfigManager configManager;
     protected YAMLConfig config;
@@ -98,31 +95,29 @@ public class HoloAPICore extends JavaPlugin {
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
         this.loadConfiguration();
 
-        // Needs a much better method since this is not really reliable
-        // TODO: Improve this
-        INJECTION_MANAGER = new ProtocolInjectionBuilder().withStrategy(CommonReflection.isUsingNetty() ? InjectionStrategy.NETTY : InjectionStrategy.PROXY).build();
+        injectionManager = new InjectionManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        TAG_FORMATTER = new TagFormatter();
-        VISIBILITY_MATCHER = new VisibilityMatcher();
-        MANAGER = new SimpleHoloManager();
-        IMAGE_LOADER = new SimpleImageLoader();
-        ANIMATION_LOADER = new SimpleAnimationLoader();
+        tagFormatter = new TagFormatter();
+        visibilityMatcher = new VisibilityMatcher();
+        holoManager = new SimpleHoloManager();
+        imageLoader = new SimpleImageLoader();
+        animationLoader = new SimpleAnimationLoader();
 
-        COMMAND_MANAGER = new CommandManager(this);
-        COMMAND_MODULE_MANAGER = new CommandModuleManager();
-        COMMAND_MODULE_MANAGER.registerDefaults();
-        DynamicPluginCommand holoCommand = new DynamicPluginCommand(HoloAPI.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getCommandLabel() + " help &3for help.", COMMAND_MODULE_MANAGER, this);
+        commandManager = new CommandManager(this);
+        commandModuleManager = new CommandModuleManager();
+        commandModuleManager.registerDefaults();
+        DynamicPluginCommand holoCommand = new DynamicPluginCommand(HoloAPI.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getCommandLabel() + " help &3for help.", commandModuleManager, this);
         DynamicPluginCommand debugCommand = new DynamicPluginCommand("holodebug", new String[0], "Smashing bugs and coloring books", "You shouldn't be using this", new HoloDebugCommand(), this);
         holoCommand.setPermission("holoapi.holo");
         debugCommand.setPermission("holoapi.debug");
-        COMMAND_MANAGER.register(holoCommand);
-        COMMAND_MANAGER.register(debugCommand);
+        commandManager.register(holoCommand);
+        commandManager.register(debugCommand);
 
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new WorldListener(), this);
@@ -140,7 +135,10 @@ public class HoloAPICore extends JavaPlugin {
 
 
         this.loadHolograms();
+    }
 
+    @Override
+    public void onEnable() {
         /**
          * All metrics
          */
@@ -182,11 +180,11 @@ public class HoloAPICore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        COMMAND_MANAGER.unregister(); // Unregister the commands
-        MANAGER.clearAll();
-        if (INJECTION_MANAGER != null) {
-            INJECTION_MANAGER.close();
-            INJECTION_MANAGER = null;
+        commandManager.unregister(); // Unregister the commands
+        holoManager.clearAll();
+        if (injectionManager != null) {
+            injectionManager.close();
+            injectionManager = null;
         }
         this.getServer().getScheduler().cancelTasks(this);
     }
@@ -214,24 +212,24 @@ public class HoloAPICore extends JavaPlugin {
     }
 
     public void loadHolograms() {
-        MANAGER.clearAll();
+        holoManager.clearAll();
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                IMAGE_LOADER.loadImageConfiguration(config);
-                ANIMATION_LOADER.loadAnimationConfiguration(config);
+                imageLoader.loadImageConfiguration(config);
+                animationLoader.loadAnimationConfiguration(config);
             }
         }.runTaskAsynchronously(this);
 
-        final ArrayList<String> unprepared = MANAGER.loadFileData();
+        final ArrayList<String> unprepared = holoManager.loadFileData();
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (HoloAPI.getImageLoader().isLoaded()) {
                     for (String s : unprepared) {
-                        MANAGER.loadFromFile(s);
+                        holoManager.loadFromFile(s);
                     }
                     LOGGER.log(Level.INFO, "Holograms loaded");
                     this.cancel();
@@ -251,7 +249,7 @@ public class HoloAPICore extends JavaPlugin {
                 "(https://github.com/DSH105/HoloAPI/wiki)"
         };
         config = this.configManager.getNewConfig("config.yml", header);
-        OPTIONS = new ConfigOptions(config);
+        options = new ConfigOptions(config);
         config.reloadConfig();
 
         ChatColor colour1 = ChatColor.getByChar(config.getString("primaryChatColour", "3"));
@@ -289,8 +287,8 @@ public class HoloAPICore extends JavaPlugin {
     }
 
     public static InjectionManager getInjectionManager() {
-        if (INJECTION_MANAGER == null)
+        if (injectionManager == null)
             throw new RuntimeException("InjectionManager is NULL!");
-        return INJECTION_MANAGER;
+        return injectionManager;
     }
 }

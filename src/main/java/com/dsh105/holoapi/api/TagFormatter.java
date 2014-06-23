@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.api;
 
+import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.reflection.utility.CommonReflection;
 import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
@@ -114,7 +114,7 @@ public class TagFormatter {
 
         this.addFormat(Pattern.compile("%date:(.+?)%"), new DynamicTagFormat() {
             @Override
-            public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
+            public String match(Matcher matcher, String lineContent, com.dsh105.holoapi.api.Hologram h, Player observer) {
                 SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
 
                 Calendar calendar = Calendar.getInstance();
@@ -125,7 +125,7 @@ public class TagFormatter {
 
         this.addFormat(Pattern.compile("%serveronline:(.+?)%"), new DynamicTagFormat() {
             @Override
-            public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
+            public String match(Matcher matcher, String lineContent, com.dsh105.holoapi.api.Hologram h, Player observer) {
                 return String.valueOf(HoloAPI.getBungeeProvider().getPlayerCount(matcher.group(1)));
             }
         });
@@ -173,7 +173,7 @@ public class TagFormatter {
 
     public String formatForOldClient(String content) {
         int limit = 64;
-        if (content.length() > limit && !CommonReflection.isUsingNetty()) {
+        if (content.length() > limit && !MinecraftReflection.isUsingNetty()) {
             // 1.6.x client crashes if a name tag is longer than 64 characters
             // Unfortunate, but it must be accounted for
             content = content.substring(limit / 4, limit - (limit / 4));
@@ -191,7 +191,7 @@ public class TagFormatter {
         return content;
     }
 
-    public String formatTags(Hologram h, Player observer, String content) {
+    public String formatTags(com.dsh105.holoapi.api.Hologram h, Player observer, String content) {
         for (Map.Entry<String, TagFormat> entry : this.tagFormats.entrySet()) {
             if (entry.getKey() != null && entry.getValue() != null) {
                 String replacement = entry.getValue().getValue(h, observer);
@@ -221,7 +221,7 @@ public class TagFormatter {
         return content;
     }
 
-    protected ItemStack matchItem(String content) {
+    public ItemStack matchItem(String content) {
         Matcher matcher = Pattern.compile("%item:([0-9]+?)(,(([0-9]+?))%|%)").matcher(content);
         while (matcher.find()) {
             try {

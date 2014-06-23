@@ -17,11 +17,8 @@
 
 package com.dsh105.holoapi.util.fanciful;
 
-import com.dsh105.holoapi.reflection.Constants;
-import com.dsh105.holoapi.reflection.SafeConstructor;
-import com.dsh105.holoapi.reflection.SafeField;
-import com.dsh105.holoapi.reflection.SafeMethod;
-import com.dsh105.holoapi.util.ReflectionUtil;
+import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.captainbern.reflection.Reflection;
 import com.dsh105.holoapi.util.wrapper.WrapperPacketPlayOutChat;
 import org.bukkit.Achievement;
 import org.bukkit.ChatColor;
@@ -37,6 +34,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: FINISH THIS CLASS
 public class FancyMessage {
 
     private final List<MessagePart> messageParts;
@@ -96,8 +94,9 @@ public class FancyMessage {
     }
 
     public FancyMessage achievementTooltip(final Achievement which) {
-        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getNMSAchievement", Achievement.class).invoke(null, which);
-        return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        Object achievement = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("CraftStatistic")).getSafeMethod("getNMSAchievement").getAccessor().invoke(null, which);
+        // return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        return null;
     }
 
     public FancyMessage statisticTooltip(final Statistic which) {
@@ -106,8 +105,9 @@ public class FancyMessage {
             throw new IllegalArgumentException("That statistic requires an additional " + type + " parameter!");
         }
 
-        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getNMSStatistic", Statistic.class).invoke(null, which);
-        return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        Object achievement = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("CraftStatistic")).getSafeMethod("getNMSAchievement").getAccessor().invoke(null, which);
+        //return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        return null;
     }
 
     public FancyMessage statisticTooltip(final Statistic which, Material item) {
@@ -119,8 +119,9 @@ public class FancyMessage {
             throw new IllegalArgumentException("Wrong parameter type for that statistic - needs " + type + "!");
         }
 
-        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getMaterialStatistic", Statistic.class, Material.class).invoke(null, which, item);
-        return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        Object achievement = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("CraftStatistic")).getSafeMethod("getMaterialStatistic").getAccessor().invoke(null, which, item);
+        // return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        return null;
     }
 
     public FancyMessage statisticTooltip(final Statistic which, EntityType entity) {
@@ -132,8 +133,9 @@ public class FancyMessage {
             throw new IllegalArgumentException("Wrong parameter type for that statistic - needs " + type + "!");
         }
 
-        Object achievement = new SafeMethod(ReflectionUtil.getCBCClass("CraftStatistic"), "getEntityStatistic", Statistic.class, EntityType.class).invoke(null, which, entity);
-        return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        Object achievement = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("CraftStatistic")).getSafeMethod("getEntityStatistic").getAccessor().invoke(null, which, entity);
+        //return achievementTooltip(new SafeField<String>(achievement.getClass(), Constants.ACHIEVEMENT_FIELD_NAME.getName()).get(achievement));
+        return null;
     }
 
     public FancyMessage itemTooltip(final String itemJSON) {
@@ -143,9 +145,10 @@ public class FancyMessage {
 
     public FancyMessage itemTooltip(final ItemStack itemStack) {
         Object nmsCopy;
-        nmsCopy = new SafeMethod(ReflectionUtil.getCBCClass("inventory.CraftItemStack"), "asNMSCopy", ItemStack.class).invoke(null, itemStack);
-        Object nbtData = new SafeMethod(nmsCopy.getClass(), Constants.ITEMSTACK_FUNC_SAVE.getName(), ReflectionUtil.getNMSClass("NBTTagCompound")).invoke(nmsCopy, new SafeConstructor(ReflectionUtil.getNMSClass("NBTTagCompound")).newInstance());
-        return itemTooltip(nbtData.toString());
+        nmsCopy = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack")).getSafeMethod("asNMSCopy").getAccessor().invoke(null, itemStack);
+        // Object nbtData = new SafeMethod(nmsCopy.getClass(), Constants.ITEMSTACK_FUNC_SAVE.getName(), ReflectionUtil.getNMSClass("NBTTagCompound")).invoke(nmsCopy, new SafeConstructor(ReflectionUtil.getNMSClass("NBTTagCompound")).newInstance());
+        // return itemTooltip(nbtData.toString());
+        return null;
     }
 
     public FancyMessage tooltip(final String text) {

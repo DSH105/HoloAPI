@@ -26,7 +26,7 @@ public interface ITagFormat {
      *
      * @param observer player viewing the hologram
      * @return
-     * @deprecated use {@link com.dsh105.holoapi.api.ITagFormat#getValue(Hologram, org.bukkit.entity.Player)}
+     * @deprecated use {@link com.dsh105.holoapi.api.ITagFormat#getValue(com.dsh105.holoapi.api.Hologram, org.bukkit.entity.Player)}
      */
     @Deprecated
     public String getValue(Player observer);

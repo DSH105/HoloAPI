@@ -1,4 +1,4 @@
-package com.dsh105.holoapi.protocol2;
+package com.dsh105.holoapi.protocol;
 
 import org.bukkit.entity.Player;
 

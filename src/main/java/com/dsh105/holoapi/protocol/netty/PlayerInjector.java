@@ -1,11 +1,11 @@
-package com.dsh105.holoapi.protocol2.netty;
+package com.dsh105.holoapi.protocol.netty;
 
 import com.captainbern.minecraft.conversion.BukkitUnwrapper;
 import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.captainbern.reflection.Reflection;
 import com.captainbern.reflection.accessor.FieldAccessor;
-import com.dsh105.holoapi.protocol2.InjectionManager;
-import com.dsh105.holoapi.protocol2.Injector;
+import com.dsh105.holoapi.protocol.InjectionManager;
+import com.dsh105.holoapi.protocol.Injector;
 import com.google.common.base.Preconditions;
 import net.minecraft.util.io.netty.channel.Channel;
 import net.minecraft.util.io.netty.channel.ChannelDuplexHandler;

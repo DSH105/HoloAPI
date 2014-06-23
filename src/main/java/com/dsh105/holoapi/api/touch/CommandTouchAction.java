@@ -18,7 +18,6 @@
 package com.dsh105.holoapi.api.touch;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.protocol.Action;
 import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.entity.Player;
 
