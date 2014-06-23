@@ -575,8 +575,6 @@ public class HologramImpl implements Hologram {
         if (itemMatch != null) {
             this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
         } else {
-            WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
-
             WrappedPacket horse = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
             horse.getIntegers().write(0, this.getHorseIndex(index));
             horse.getIntegers().write(1, (int) EntityType.HORSE.getTypeId());
@@ -598,8 +596,10 @@ public class HologramImpl implements Hologram {
             skull.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
             skull.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
-            attach.getIntegers().write(0, horse.getIntegers().read(0));
-            attach.getIntegers().write(1, skull.getIntegers().read(0));
+            WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
+            attach.getIntegers().write(0, 0);
+            attach.getIntegers().write(1, horse.getIntegers().read(0));
+            attach.getIntegers().write(2, skull.getIntegers().read(0));
 
             Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
             injector.sendPacket(horse.getHandle());
@@ -695,6 +695,15 @@ public class HologramImpl implements Hologram {
     }
 
     protected void updateNametag(Player observer, String message, int index) {
+        WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
+        String content = HoloAPI.getTagFormatter().format(this, observer, message);
+        ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
+
+        if (itemMatch != null) {
+
+        } else {
+
+        }
         /**  WrappedDataWatcher dw = new WrappedDataWatcher();
          String content = HoloAPI.getTagFormatter().format(this, observer, message);
 

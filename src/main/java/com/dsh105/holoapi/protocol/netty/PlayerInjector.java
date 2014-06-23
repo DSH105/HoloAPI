@@ -95,7 +95,6 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
     public void sendPacket(Object packet) {
         if (this.isClosed())
             throw new IllegalStateException("The PlayerInjector is closed!");
-        System.out.print("Sending packet: " + packet.getClass());
         this.getChannel().pipeline().writeAndFlush(packet);
     }
 
