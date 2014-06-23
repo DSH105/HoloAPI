@@ -20,6 +20,7 @@ package com.dsh105.holoapi.conversation.builder;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.api.impl.HologramFactoryImpl;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.conversations.ConversationContext;
@@ -40,7 +41,7 @@ public class BuilderInputSuccessPrompt extends MessagePrompt {
     public String getPromptText(ConversationContext conversationContext) {
         ArrayList<HoloInputBuilder> builders = (ArrayList<HoloInputBuilder>) conversationContext.getSessionData("builders");
         //ArrayList<String> lines = new ArrayList<String>();
-        HologramFactory hf = new HologramFactory(HoloAPI.getCore());
+        HologramFactory hf = new HologramFactoryImpl(HoloAPI.getCore());
         for (HoloInputBuilder b : builders) {
             if (b.getType() == null || b.getLineData() == null) {
                 continue;

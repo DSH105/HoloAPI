@@ -77,6 +77,7 @@
             <groupId>org.kitteh</groupId>
             <artifactId>VanishNoPacket</artifactId>
             <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Netty -->
@@ -265,14 +266,11 @@
                         <configuration>
                             <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <artifactSet>
-                                <includes>
-                                    <artifact>com.captainbern.minecraft:Minecraft-Reflection</artifact>
-                                </includes>
-                            </artifactSet>
-                            <relocations>
-                                <!-- None...For now... -->
-                            </relocations>
+                            <filters>
+                                <filter>
+                                    <artifact>com.captainbern:Minecraft-Reflection</artifact>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>

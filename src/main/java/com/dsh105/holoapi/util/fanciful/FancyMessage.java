@@ -19,7 +19,6 @@ package com.dsh105.holoapi.util.fanciful;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.captainbern.reflection.Reflection;
-import com.dsh105.holoapi.util.wrapper.WrapperPacketPlayOutChat;
 import org.bukkit.Achievement;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -200,9 +199,9 @@ public class FancyMessage {
     }
 
     public void send(Player player) {
-        WrapperPacketPlayOutChat chat = new WrapperPacketPlayOutChat();
-        chat.setMessage(toJSONString());
-        chat.send(player);
+    //    WrapperPacketPlayOutChat chat = new WrapperPacketPlayOutChat();
+    //    chat.setMessage(toJSONString());
+    //    chat.send(player);
     }
 
     public void send(final Iterable<Player> players) {

@@ -602,9 +602,9 @@ public class HologramImpl implements Hologram {
             attach.getIntegers().write(1, skull.getIntegers().read(0));
 
             Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
-            injector.sendPacket(attach.getHandle());
             injector.sendPacket(horse.getHandle());
             injector.sendPacket(skull.getHandle());
+            injector.sendPacket(attach.getHandle());
         }
 
         if (this.isTouchEnabled()) {

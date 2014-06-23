@@ -34,7 +34,6 @@ import java.util.Map;
 public class CommandManager {
 
     protected static final FieldAccessor<CommandMap> SERVER_COMMAND_MAP = new Reflection().reflect(Bukkit.getServer().getPluginManager().getClass()).getSafeFieldByNameAndType("commandMap", CommandMap.class).getAccessor();
-    protected static final FieldAccessor<Map> KNOWN_COMMANDS = new Reflection().reflect(Bukkit.getServer().getPluginManager().getClass()).getSafeFieldByNameAndType("knownCommands", Map.class).getAccessor();
 
     private CommandMap fallback;
 
@@ -46,31 +45,6 @@ public class CommandManager {
 
     public void register(DynamicPluginCommand command) {
         getCommandMap().register(this.plugin.getName(), command);
-    }
-
-    public boolean unregister() {
-        CommandMap commandMap = getCommandMap();
-        List<String> toRemove = new ArrayList<String>();
-        Map<String, org.bukkit.command.Command> knownCommands = KNOWN_COMMANDS.get(commandMap);
-        if (knownCommands == null) {
-            return false;
-        }
-        for (Iterator<Command> i = knownCommands.values().iterator(); i.hasNext(); ) {
-            org.bukkit.command.Command cmd = i.next();
-            if (cmd instanceof DynamicPluginCommand) {
-                i.remove();
-                for (String alias : cmd.getAliases()) {
-                    org.bukkit.command.Command aliasCmd = knownCommands.get(alias);
-                    if (cmd.equals(aliasCmd)) {
-                        toRemove.add(alias);
-                    }
-                }
-            }
-        }
-        for (String string : toRemove) {
-            knownCommands.remove(string);
-        }
-        return true;
     }
 
     public CommandMap getCommandMap() {

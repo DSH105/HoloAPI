@@ -20,6 +20,7 @@ package com.dsh105.holoapi.command.module;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.api.impl.HologramFactoryImpl;
 import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.conversation.InputFactory;
@@ -75,7 +76,7 @@ public class ReadTxtCommand extends CommandModule {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            Hologram h = new HologramFactory(HoloAPI.getCore()).withLocation(location).withText(lines).build();
+                            Hologram h = new HologramFactoryImpl(HoloAPI.getCore()).withLocation(location).withText(lines).build();
                             Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()));
                         }
                     }.runTask(HoloAPI.getCore());

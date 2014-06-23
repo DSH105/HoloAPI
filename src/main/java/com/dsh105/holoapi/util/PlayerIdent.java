@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.util;
 
+import com.captainbern.minecraft.reflection.MinecraftReflection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -34,7 +35,7 @@ public class PlayerIdent {
     }
 
     public static Object getIdentificationFor(Player player) {
-        if (ReflectionUtil.MC_VERSION_NUMERIC >= 172 && canReturnUUID()) {
+        if (MinecraftReflection.isUsingNetty() && canReturnUUID()) {
             return player.getUniqueId();
         } else {
             return player.getName();
@@ -42,7 +43,7 @@ public class PlayerIdent {
     }
 
     public static String getIdentificationForAsString(Player player) {
-        if (ReflectionUtil.MC_VERSION_NUMERIC >= 172 && canReturnUUID()) {
+        if (MinecraftReflection.isUsingNetty() && canReturnUUID()) {
             return player.getUniqueId().toString();
         } else {
             return player.getName();
@@ -50,7 +51,7 @@ public class PlayerIdent {
     }
 
     public static Player getPlayerOf(Object identification) {
-        if (ReflectionUtil.MC_VERSION_NUMERIC >= 172 && canReturnUUID()) {
+        if (MinecraftReflection.isUsingNetty() && canReturnUUID()) {
             if (identification instanceof UUID) {
                 return Bukkit.getPlayer((UUID) identification);
             } else if (identification instanceof String) {

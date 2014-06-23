@@ -95,7 +95,7 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
     public void sendPacket(Object packet) {
         if (this.isClosed())
             throw new IllegalStateException("The PlayerInjector is closed!");
-
+        System.out.print("Sending packet: " + packet.getClass());
         this.getChannel().pipeline().writeAndFlush(packet);
     }
 
@@ -133,7 +133,7 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
                     PLAYERCONNECTION_FIELD = (FieldAccessor<Object>) reflection.reflect(MinecraftReflection.getEntityPlayerClass()).getSafeFieldByType(type).getAccessor();
                 } catch (Exception e) {
                     // Oops, something went wrong. Well...
-                    throw new RuntimeException("Failed to get the PlayerConnection accessor!");
+                    throw new RuntimeException("Failed to get the PlayerConnection accessor!", e);
                 }
             }
 
@@ -142,10 +142,10 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
             if (NETWORKMANAGER_FIELD == null) {
                 try {
                     Class<?> type = MinecraftReflection.getNetworkManagerClass();
-                    NETWORKMANAGER_FIELD = (FieldAccessor<Object>) reflection.reflect(MinecraftReflection.getPlayerConnectionClass()).getSafeFieldByType(type);
+                    NETWORKMANAGER_FIELD = (FieldAccessor<Object>) reflection.reflect(MinecraftReflection.getPlayerConnectionClass()).getSafeFieldByType(type).getAccessor();
                 } catch (Exception e) {
                     // Oops
-                    throw new RuntimeException("Failed to get the NetworkManager accessor!");
+                    throw new RuntimeException("Failed to get the NetworkManager accessor!", e);
                 }
             }
 
@@ -156,7 +156,7 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
                     CHANNEL_FIELD = reflection.reflect(MinecraftReflection.getNetworkManagerClass()).getSafeFieldByType(Channel.class).getAccessor();
                 } catch (Exception e) {
                     // Oops
-                    throw new RuntimeException("Failed to get the Channel accessor!");
+                    throw new RuntimeException("Failed to get the Channel accessor!", e);
                 }
             }
 

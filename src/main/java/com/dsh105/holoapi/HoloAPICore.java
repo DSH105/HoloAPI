@@ -177,7 +177,6 @@ public class HoloAPICore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        commandManager.unregister(); // Unregister the commands
         holoManager.clearAll();
         if (injectionManager != null) {
             injectionManager.close();
