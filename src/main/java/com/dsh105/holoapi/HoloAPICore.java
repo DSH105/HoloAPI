@@ -95,7 +95,7 @@ public class HoloAPICore extends JavaPlugin {
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
 
     @Override
-    public void onLoad() {
+    public void onEnable() {
         HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
         this.loadConfiguration();
@@ -135,10 +135,7 @@ public class HoloAPICore extends JavaPlugin {
 
 
         this.loadHolograms();
-    }
 
-    @Override
-    public void onEnable() {
         /**
          * All metrics
          */
