@@ -15,7 +15,7 @@ public class InjectionManager {
 
     protected Plugin plugin;
 
-    // We're using weak-keys here so don't worry about player instances not being GC'ed
+    // We're using weak-keys here so don't worry about player instances not being GC'ed.
     protected static ConcurrentMap<Player, Injector> injections = new MapMaker().weakKeys().makeMap();
 
     private boolean isClosed = false;
