@@ -20,7 +20,6 @@ package com.dsh105.holoapi.conversation.builder.animation;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
-import com.dsh105.holoapi.api.impl.AnimatedHologramFactoryImpl;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
@@ -53,7 +52,7 @@ public class AnimationBuilderInputSuccessPrompt extends MessagePrompt {
             frames.add(new Frame(delay, f.getLines()));
         }
         // If we're here it should be a player
-        AnimatedHologram h = new AnimatedHologramFactoryImpl(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
+        AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
         return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
     }
 }

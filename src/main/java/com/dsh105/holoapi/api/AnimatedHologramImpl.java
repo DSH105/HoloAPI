@@ -1,7 +1,6 @@
-package com.dsh105.holoapi.api.impl;
+package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;

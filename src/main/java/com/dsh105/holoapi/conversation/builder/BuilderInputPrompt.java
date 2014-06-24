@@ -20,7 +20,6 @@ package com.dsh105.holoapi.conversation.builder;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
-import com.dsh105.holoapi.api.impl.HologramFactoryImpl;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.image.ImageGenerator;
@@ -81,7 +80,7 @@ public class BuilderInputPrompt extends ValidatingPrompt {
                     public void onFunction(ConversationContext context, String input) {
                         ArrayList<HoloInputBuilder> builders = (ArrayList<HoloInputBuilder>) context.getSessionData("builders");
                         //ArrayList<String> lines = new ArrayList<String>();
-                        HologramFactory hf = new HologramFactoryImpl(HoloAPI.getCore()).withLocation(this.getLocation());
+                        HologramFactory hf = new HologramFactory(HoloAPI.getCore()).withLocation(this.getLocation());
                         for (HoloInputBuilder b : builders) {
                             if (b.getType() == null || b.getLineData() == null) {
                                 continue;

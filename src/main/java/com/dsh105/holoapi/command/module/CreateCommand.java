@@ -22,8 +22,6 @@ import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
-import com.dsh105.holoapi.api.impl.AnimatedHologramFactoryImpl;
-import com.dsh105.holoapi.api.impl.HologramFactoryImpl;
 import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.conversation.InputFactory;
@@ -80,7 +78,7 @@ public class CreateCommand extends CommandModule {
                     return true;
                 }
                 if (sender instanceof Player) {
-                    Hologram h = new HologramFactoryImpl(HoloAPI.getCore()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                    Hologram h = new HologramFactory(HoloAPI.getCore()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
                     Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                 } else {
                     InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new LocationFunction() {
@@ -88,7 +86,7 @@ public class CreateCommand extends CommandModule {
 
                         @Override
                         public void onFunction(ConversationContext context, String input) {
-                            h = new HologramFactoryImpl(HoloAPI.getCore()).withImage(generator).withLocation(this.getLocation()).build();
+                            h = new HologramFactory(HoloAPI.getCore()).withImage(generator).withLocation(this.getLocation()).build();
                         }
 
                         @Override
@@ -112,7 +110,7 @@ public class CreateCommand extends CommandModule {
                     return true;
                 }
                 if (sender instanceof Player) {
-                    AnimatedHologram h = new AnimatedHologramFactoryImpl(HoloAPI.getCore()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
+                    AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getCore()).withImage(generator).withLocation(((Player) sender).getLocation()).build();
                     Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()));
                 } else {
                     InputFactory.buildBasicConversation().withFirstPrompt(new SimpleInputPrompt(new LocationFunction() {
@@ -120,7 +118,7 @@ public class CreateCommand extends CommandModule {
 
                         @Override
                         public void onFunction(ConversationContext context, String input) {
-                            h = new AnimatedHologramFactoryImpl(HoloAPI.getCore()).withImage(generator).withLocation(this.getLocation()).build();
+                            h = new AnimatedHologramFactory(HoloAPI.getCore()).withImage(generator).withLocation(this.getLocation()).build();
                         }
 
                         @Override
@@ -146,7 +144,7 @@ public class CreateCommand extends CommandModule {
                     Lang.sendTo(sender, Lang.NOT_LOCATION.getValue());
                     return true;
                 }
-                Hologram h = new HologramFactoryImpl(HoloAPI.getCore()).withImage(generator).withLocation(location).build();
+                Hologram h = new HologramFactory(HoloAPI.getCore()).withImage(generator).withLocation(location).build();
                 Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                 return true;
             } else if (args[1].equalsIgnoreCase("animation")) {
@@ -163,7 +161,7 @@ public class CreateCommand extends CommandModule {
                 if (generator == null) {
                     return true;
                 }
-                AnimatedHologram h = new AnimatedHologramFactoryImpl(HoloAPI.getCore()).withImage(generator).withLocation(location).build();
+                AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getCore()).withImage(generator).withLocation(location).build();
                 Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()));
                 return true;
             }
@@ -174,7 +172,7 @@ public class CreateCommand extends CommandModule {
                 return true;
             }
 
-            Hologram h = new HologramFactoryImpl(HoloAPI.getCore()).withText(StringUtil.combineSplit(5, args, " ")).withLocation(location).build();
+            Hologram h = new HologramFactory(HoloAPI.getCore()).withText(StringUtil.combineSplit(5, args, " ")).withLocation(location).build();
             Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
             return true;
         }

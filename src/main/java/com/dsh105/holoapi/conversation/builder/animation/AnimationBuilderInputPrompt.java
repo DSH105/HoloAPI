@@ -20,7 +20,6 @@ package com.dsh105.holoapi.conversation.builder.animation;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
-import com.dsh105.holoapi.api.impl.AnimatedHologramFactoryImpl;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
@@ -89,7 +88,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
                                 frames.add(new Frame(Integer.parseInt(s), f.getLines()));
                             }
                             try {
-                                h = new AnimatedHologramFactoryImpl(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(this.getLocation()).build();
+                                h = new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(this.getLocation()).build();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

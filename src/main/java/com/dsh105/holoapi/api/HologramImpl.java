@@ -1,16 +1,13 @@
-package com.dsh105.holoapi.api.impl;
+package com.dsh105.holoapi.api;
 
 import com.captainbern.minecraft.protocol.PacketType;
 import com.captainbern.minecraft.wrapper.WrappedDataWatcher;
 import com.captainbern.minecraft.wrapper.WrappedPacket;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.StoredTag;
 import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityDefault;
-import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.TagSize;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.protocol.Injector;
 import com.dsh105.holoapi.util.PlayerIdent;
@@ -591,7 +588,7 @@ public class HologramImpl implements Hologram {
 
             WrappedPacket skull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
             skull.getIntegers().write(0, this.getSkullIndex(index));
-            skull.getIntegers().write(1, 66);
+            skull.getIntegers().write(1, (int) EntityType.WITHER_SKULL.getTypeId());
             skull.getIntegers().write(2, (int) Math.floor(x * 32.0D));
             skull.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
             skull.getIntegers().write(4, (int) Math.floor(z * 32.0D));
@@ -695,33 +692,24 @@ public class HologramImpl implements Hologram {
     }
 
     protected void updateNametag(Player observer, String message, int index) {
-        WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
+        WrappedDataWatcher dw = new WrappedDataWatcher();
         String content = HoloAPI.getTagFormatter().format(this, observer, message);
+
         ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
-
         if (itemMatch != null) {
-
+            //  dw.setObject(10, new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack")).getSafeMethod("asNMSCopy").getAccessor().invoke(null, itemMatch));
+            //  new Reflection().reflect(MinecraftReflection.getDataWatcherClass()).getSafeMethods(withArguments(new Class[]{int.class}), withReturnType(Void.class)).get(0).getAccessor().invoke(dw.getHandle(), 10);
         } else {
-
+            dw.setObject(10, content);
+            dw.setObject(11, Byte.valueOf((byte) 1));
+            dw.setObject(12, Integer.valueOf(-1700000));
         }
-        /**  WrappedDataWatcher dw = new WrappedDataWatcher();
-         String content = HoloAPI.getTagFormatter().format(this, observer, message);
 
-         ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
-         if (itemMatch != null) {
-         dw.setObject(10, new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack")).getSafeMethod("asNMSCopy").getAccessor().invoke(null, itemMatch));
-         new Reflection().reflect(MinecraftReflection.getDataWatcherClass()).getSafeMethods(withArguments(new Class[]{int.class}), withReturnType(Void.class)).get(0).getAccessor().invoke(dw.getHandle(), 10);
-         } else {
-         dw.setObject(10, content);
-         dw.setObject(11, Byte.valueOf((byte) 1));
-         dw.setObject(12, Integer.valueOf(-1700000));
-         }
+        WrappedPacket metadata = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
+        metadata.getIntegers().write(0, this.getHorseIndex(index));
+        metadata.getWatchableObjectLists().write(0, dw.getWatchableObjects());
 
-         WrappedPacket metadata = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
-         metadata.getIntegers().write(0, this.getHorseIndex(index));
-         metadata.asClassTemplate().getSafeFieldByType(MinecraftReflection.getDataWatcherClass()).getAccessor().set(metadata.getHandle(), dw.getHandle());
-         */
-        // TODO: SEND DER PALDIZHDI
+        HoloAPI.getCore().getInjectionManager().getInjectorFor(observer).sendPacket(metadata.getHandle());
     }
 
     protected int getHorseIndex(int index) {
