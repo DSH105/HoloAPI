@@ -19,7 +19,6 @@ package com.dsh105.holoapi.command;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

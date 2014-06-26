@@ -17,13 +17,13 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.IdentUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.PlayerIdent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ public class ShowCommand extends CommandModule {
                 return true;
             }
 
-            if (hologram.getPlayerViews().keySet().contains(PlayerIdent.getIdentificationForAsString(target))) {
+            if (hologram.getPlayerViews().keySet().contains(IdentUtil.getIdentificationForAsString(target))) {
                 Lang.sendTo(sender, Lang.HOLOGRAM_ALREADY_SEE.getValue().replace("%id%", args[1]).replace("%player%", args[2]));
                 return true;
             }

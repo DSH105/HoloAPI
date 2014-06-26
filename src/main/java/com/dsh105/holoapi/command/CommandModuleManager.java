@@ -18,10 +18,10 @@
 package com.dsh105.holoapi.command;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.command.module.*;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.StringUtil;
 import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import com.dsh105.holoapi.util.pagination.FancyPaginator;
 import com.dsh105.holoapi.util.pagination.Paginator;
@@ -102,7 +102,7 @@ public class CommandModuleManager implements CommandExecutor {
             return true;
         }
 
-        Lang.sendTo(sender, Lang.COMMAND_DOESNOT_EXIST.getValue().replace("%cmd%", "/" + cmd.getLabel() + (args.length == 0 ? "" : " " + StringUtil.combineSplit(0, args, " "))));
+        Lang.sendTo(sender, Lang.COMMAND_DOESNOT_EXIST.getValue().replace("%cmd%", "/" + cmd.getLabel() + " " + StringUtil.combineSplit(0, args, " ")));
 
         ArrayList<String> suggestions = new ArrayList<String>();
         for (Map.Entry<String, CommandModule> entry : modules.entrySet()) {

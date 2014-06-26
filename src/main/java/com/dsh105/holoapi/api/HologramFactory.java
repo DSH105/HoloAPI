@@ -18,23 +18,14 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.visibility.Visibility;
-import com.dsh105.holoapi.api.visibility.VisibilityDefault;
-import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.listeners.WorldListener;
-import com.dsh105.holoapi.util.SaveIdGenerator;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 /**
  * A HologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.Hologram} which can be managed by
@@ -44,24 +35,10 @@ import java.util.logging.Level;
  * constructor
  */
 
-public class HologramFactory {
-
-    private Plugin owningPlugin;
-
-    private String worldName;
-    private double locX;
-    private double locY;
-    private double locZ;
-    private String saveId;
-    private Visibility visibility = new VisibilityDefault();
-    private boolean simple = false;
-    private boolean preparedId = false;
-    private boolean prepared = false;
+public class HologramFactory extends HoloFactory {
 
     private ArrayList<String> tags = new ArrayList<String>();
     protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
-    private int tagId;
-    private boolean withTagId;
 
     /**
      * Constructs a HologramFactory
@@ -70,54 +47,7 @@ public class HologramFactory {
      * @throws java.lang.IllegalArgumentException if the owning plugin is null
      */
     public HologramFactory(Plugin owningPlugin) {
-        if (owningPlugin == null) {
-            throw new IllegalArgumentException("Plugin cannot be null");
-        }
-        this.owningPlugin = owningPlugin;
-    }
-
-    protected HologramFactory withSaveId(String saveId) {
-        this.saveId = saveId;
-        this.preparedId = true;
-        return this;
-    }
-
-    private HologramFactory withCoords(double x, double y, double z) {
-        this.locX = x;
-        this.locY = y;
-        this.locZ = z;
-        this.prepared = true;
-        return this;
-    }
-
-    private HologramFactory withWorld(String worldName) {
-        this.worldName = worldName;
-        return this;
-    }
-
-    /**
-     * Sets the location for constructed Holograms
-     *
-     * @param location location for constructed Holograms
-     * @return This object
-     */
-    public HologramFactory withLocation(Location location) {
-        this.withCoords(location.getX(), location.getY(), location.getZ());
-        this.withWorld(location.getWorld().getName());
-        return this;
-    }
-
-    /**
-     * Sets the location for constructed Holograms
-     *
-     * @param vectorLocation a {@link org.bukkit.util.Vector} representing the coordinates of constructed Holograms
-     * @param worldName      the world name to place constructed Hologram in
-     * @return This object
-     */
-    public HologramFactory withLocation(Vector vectorLocation, String worldName) {
-        this.withCoords(vectorLocation.getX(), vectorLocation.getY(), vectorLocation.getZ());
-        this.withWorld(worldName);
-        return this;
+        super(owningPlugin);
     }
 
     /**
@@ -130,13 +60,12 @@ public class HologramFactory {
     }
 
     /**
-     * Sets the visibility of constructed Holograms
+     * Clears existing content (text and images) from the factory
      *
-     * @param visibility visibility of constructed Hologram
      * @return This object
      */
-    public HologramFactory withVisibility(Visibility visibility) {
-        this.visibility = visibility;
+    public HologramFactory clearContent() {
+        this.tags.clear();
         return this;
     }
 
@@ -150,16 +79,6 @@ public class HologramFactory {
         for (String tag : text) {
             this.tags.add(tag);
         }
-        return this;
-    }
-
-    /**
-     * Clears existing content (text and images) from the factory
-     *
-     * @return This object
-     */
-    public HologramFactory clearContent() {
-        this.tags.clear();
         return this;
     }
 
@@ -200,73 +119,51 @@ public class HologramFactory {
         return this;
     }
 
-    /**
-     * Sets the simplicity of constructed Holograms
-     *
-     * @param simple simplicity of constructed Holograms
-     * @return This object
-     */
-    public HologramFactory withSimplicity(boolean simple) {
-        this.simple = simple;
-        return this;
+    @Override
+    public boolean canBuild() {
+        return !this.isEmpty();
     }
 
-    protected HologramFactory withFirstTagId(int tagId) {
-        this.tagId = tagId;
-        this.withTagId = true;
-        return this;
-    }
-
-    /**
-     * Constructs an {@link com.dsh105.holoapi.api.Hologram} based on the settings stored in the factory
-     *
-     * @return The constructed Hologram
-     * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the lines are empty or the location is not
-     *                                                                    initialised
-     */
-    public Hologram build() {
-        if (this.isEmpty()) {
-            throw new HologramNotPreparedException("Hologram lines cannot be empty.");
-        }
-        if (!this.prepared) {
-            throw new HologramNotPreparedException("Hologram location cannot be null.");
-        }
-
-        String[] lines = this.tags.toArray(new String[this.tags.size()]);
-        if (!this.preparedId || this.saveId == null) {
-            //Map.Entry<TagSize, String> imageIndex = getImageIdOfIndex(0);
-            this.saveId = SaveIdGenerator.nextId() + "";
-        }
-
-        if (Bukkit.getWorld(this.worldName) == null) {
-            //HoloAPI.getManager().clearFromFile(this.saveId);
-            HoloAPICore.LOGGER.log(Level.SEVERE, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + "!");
-            WorldListener.store(this.saveId, this.worldName);
-            return null;
-        }
-
+    @Override
+    public Hologram prepareHologram() {
+        String[] content = this.tags.toArray(new String[this.tags.size()]);
         Hologram hologram;
         if (this.withTagId) {
-            hologram = new HologramImpl(this.tagId, this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
+            hologram = new HologramImpl(this.tagId, this.saveId, this.worldName, this.locX, this.locY, this.locZ, content);
         } else {
-            hologram = new HologramImpl(this.saveId, this.worldName, this.locX, this.locY, this.locZ, lines);
+            hologram = new HologramImpl(this.saveId, this.worldName, this.locX, this.locY, this.locZ, content);
         }
         hologram.setImageTagMap(this.imageIdMap);
-        hologram.setSimplicity(this.simple);
-        hologram.setVisibility(this.visibility);
-        /*if (!hologram.isSimple()) {
-            for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-                if (!h.isSimple()) {
-                    h.refreshDisplay(true);
-                }
-            }
-        }*/
-        for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
-            if (e instanceof Player) {
-                hologram.show((Player) e, true);
-            }
-        }
-        HoloAPI.getManager().track(hologram, this.owningPlugin);
         return hologram;
+    }
+
+    @Override
+    public HologramFactory withLocation(Location location) {
+        return (HologramFactory) super.withLocation(location);
+    }
+
+    @Override
+    public HologramFactory withLocation(Vector vectorLocation, String worldName) {
+        return (HologramFactory) super.withLocation(vectorLocation, worldName);
+    }
+
+    @Override
+    public HologramFactory withVisibility(Visibility visibility) {
+        return (HologramFactory) super.withVisibility(visibility);
+    }
+
+    @Override
+    public HologramFactory withSaveId(String saveId) {
+        return (HologramFactory) super.withSaveId(saveId);
+    }
+
+    @Override
+    public HologramFactory withSimplicity(boolean simple) {
+        return (HologramFactory) super.withSimplicity(simple);
+    }
+
+    @Override
+    protected HologramFactory withFirstTagId(int tagId) {
+        return (HologramFactory) super.withFirstTagId(tagId);
     }
 }

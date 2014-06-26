@@ -18,8 +18,8 @@
 package com.dsh105.holoapi.api;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.dsh105.commodus.TimeFormat;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.util.TimeFormat;
 import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -229,11 +229,10 @@ public class TagFormatter {
                 int durability = 0;
                 try {
                     durability = Integer.parseInt(matcher.group(4));
-                } catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException ignored) {
                 }
                 return new ItemStack(id, 1, (short) durability);
-            } catch (NumberFormatException e) {
-                continue;
+            } catch (NumberFormatException ignored) {
             }
         }
         Matcher matcherStr = Pattern.compile("%item:(.+?)%").matcher(content);

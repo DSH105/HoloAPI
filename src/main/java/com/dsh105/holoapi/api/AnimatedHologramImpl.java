@@ -1,10 +1,10 @@
 package com.dsh105.holoapi.api;
 
+import com.dsh105.commodus.IdentUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
-import com.dsh105.holoapi.util.PlayerIdent;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -107,7 +107,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     @Override
     public void runAnimation() {
         for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
-            final Player p = PlayerIdent.getPlayerOf(entry.getKey());
+            final Player p = IdentUtil.getPlayerOf(entry.getKey());
             if (p != null) {
                 currentFrame = next();
                 updateAnimation(p, currentFrame.getLines());
@@ -135,7 +135,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     }
 
     @Override
-    public void updateAnimation(Player observer, String[] lines) {
+    public void updateAnimation(Player observer, String... lines) {
         for (int index = 0; index < lines.length; index++) {
             this.updateNametag(observer, lines[index], index);
         }
@@ -157,12 +157,12 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     }
 
     @Override
-    public void showAnimation(Player observer, String[] lines) {
+    public void showAnimation(Player observer, String... lines) {
         this.showAnimation(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), lines);
     }
 
     @Override
-    public void showAnimation(Player observer, Vector v, String[] lines) {
+    public void showAnimation(Player observer, Vector v, String... lines) {
         this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), lines);
     }
 
@@ -170,7 +170,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
         for (int index = 0; index < lines.length; index++) {
             this.generate(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
-        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), new Vector(x, y, z));
+        this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), new Vector(x, y, z));
     }
 
     @Override

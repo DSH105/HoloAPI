@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.touch.CommandTouchAction;
@@ -28,7 +29,6 @@ import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.conversation.basic.YesNoFunction;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.apache.commons.lang.BooleanUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

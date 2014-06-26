@@ -3,14 +3,16 @@ package com.dsh105.holoapi.api;
 import com.captainbern.minecraft.protocol.PacketType;
 import com.captainbern.minecraft.wrapper.WrappedDataWatcher;
 import com.captainbern.minecraft.wrapper.WrappedPacket;
+import com.dsh105.commodus.GeometryUtil;
+import com.dsh105.commodus.IdentUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.protocol.Injector;
-import com.dsh105.holoapi.util.PlayerIdent;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -46,9 +48,7 @@ public class HologramImpl implements Hologram {
         this.saveId = saveId;
         if (lines.length > 30) {
             this.tags = new String[30];
-            for (int i = 0; i < 30; i++) {
-                this.tags[i] = lines[i];
-            }
+            System.arraycopy(lines, 0, this.tags, 0, 30);
         } else {
             this.tags = lines;
         }
@@ -116,7 +116,7 @@ public class HologramImpl implements Hologram {
     @Override
     public void refreshDisplay(boolean obeyVisibility) {
         for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
-            final Player p = PlayerIdent.getPlayerOf(entry.getKey());
+            final Player p = IdentUtil.getPlayerOf(entry.getKey());
             if (p != null) {
                 this.refreshDisplay(obeyVisibility, p);
             }
@@ -267,7 +267,7 @@ public class HologramImpl implements Hologram {
     public void clearAllPlayerViews() {
         Iterator<String> i = this.playerToLocationMap.keySet().iterator();
         while (i.hasNext()) {
-            Player p = PlayerIdent.getPlayerOf(i.next());
+            Player p = IdentUtil.getPlayerOf(i.next());
             if (p != null) {
                 this.clearTags(p, this.getAllEntityIds());
             }
@@ -277,7 +277,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public Vector getLocationFor(Player player) {
-        return this.playerToLocationMap.get(PlayerIdent.getIdentificationForAsString(player));
+        return this.playerToLocationMap.get(IdentUtil.getIdentificationForAsString(player));
     }
 
     @Override
@@ -292,7 +292,7 @@ public class HologramImpl implements Hologram {
         }
         this.tags[index] = lineUpdateEvent.getNewLineContent();
         for (String ident : this.playerToLocationMap.keySet()) {
-            Player p = PlayerIdent.getPlayerOf(ident);
+            Player p = IdentUtil.getPlayerOf(ident);
             if (p != null) {
                 this.updateNametag(p, this.tags[index], index);
             }
@@ -322,7 +322,7 @@ public class HologramImpl implements Hologram {
     @Override
     public void updateDisplay() {
         for (String ident : this.getPlayerViews().keySet()) {
-            Player player = PlayerIdent.getPlayerOf(ident);
+            Player player = IdentUtil.getPlayerOf(ident);
             if (player != null) {
                 this.updateDisplay(player);
             }
@@ -339,12 +339,10 @@ public class HologramImpl implements Hologram {
         String[] cont = content;
         if (cont.length > this.tags.length) {
             cont = new String[this.tags.length];
-            for (int i = 0; i < this.tags.length; i++) {
-                cont[i] = content[i];
-            }
+            System.arraycopy(content, 0, cont, 0, this.tags.length);
         }
         for (String ident : this.playerToLocationMap.keySet()) {
-            Player p = PlayerIdent.getPlayerOf(ident);
+            Player p = IdentUtil.getPlayerOf(ident);
             if (p != null) {
                 for (int index = 0; index < cont.length; index++) {
                     HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], cont[index], index);
@@ -371,9 +369,7 @@ public class HologramImpl implements Hologram {
         String[] cont = content;
         if (cont.length > this.tags.length) {
             cont = new String[this.tags.length];
-            for (int i = 0; i < 30; i++) {
-                cont[i] = content[i];
-            }
+            System.arraycopy(content, 0, cont, 0, 30);
         }
 
         if (observer != null) {
@@ -392,7 +388,7 @@ public class HologramImpl implements Hologram {
         if (!this.isTouchEnabled()) {
             // So that the entities aren't cleared before they're created
             for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
-                final Player p = PlayerIdent.getPlayerOf(entry.getKey());
+                final Player p = IdentUtil.getPlayerOf(entry.getKey());
                 if (p != null) {
                     clearTags(p, this.getAllEntityIds());
                 }
@@ -469,12 +465,54 @@ public class HologramImpl implements Hologram {
         for (int index = 0; index < this.getTagCount(); index++) {
             this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
         }
-        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), new Vector(x, y, z));
+        this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), new Vector(x, y, z));
     }
 
     @Override
     public void show(Player observer, double x, double y, double z) {
         this.show(observer, x, y, z, false);
+    }
+
+    @Override
+    public void showNearby(Location origin, boolean obeyVisibility, int radius) {
+        for (Player player : GeometryUtil.getNearbyPlayers(origin, radius)) {
+            this.show(player, obeyVisibility);
+        }
+    }
+
+    @Override
+    public void showNearby(Location origin, int radius) {
+        this.showNearby(origin, false, radius);
+    }
+
+    @Override
+    public void showNearby(boolean obeyVisibility, int radius) {
+        this.showNearby(getDefaultLocation(), obeyVisibility, radius);
+    }
+
+    @Override
+    public void showNearby(int radius) {
+        this.showNearby(false, radius);
+    }
+
+    @Override
+    public void showNearby(boolean obeyVisibility) {
+        this.showNearby(getDefaultLocation(), obeyVisibility, -1);
+    }
+
+    @Override
+    public void showNearby() {
+        this.showNearby(false);
+    }
+
+    @Override
+    public void showNearby(double x, double y, double z, boolean obeyVisibility, int radius) {
+        this.showNearby(new Location(Bukkit.getWorld(this.getWorldName()), x, y, z), obeyVisibility, radius);
+    }
+
+    @Override
+    public void showNearby(double x, double y, double z, int radius) {
+        this.showNearby(x, y, z, false, radius);
     }
 
     @Override
@@ -494,7 +532,7 @@ public class HologramImpl implements Hologram {
             HoloAPI.getManager().saveToFile(this);
         }
         for (String ident : this.getPlayerViews().keySet()) {
-            Player p = PlayerIdent.getPlayerOf(ident);
+            Player p = IdentUtil.getPlayerOf(ident);
             if (p != null) {
                 this.move(p, to);
             }
@@ -508,13 +546,13 @@ public class HologramImpl implements Hologram {
             this.moveTag(observer, index, loc);
             loc.setY(loc.getY() - HoloAPI.getHologramLineSpacing());
         }
-        this.playerToLocationMap.put(PlayerIdent.getIdentificationForAsString(observer), to);
+        this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), to);
     }
 
     @Override
     public void clear(Player observer) {
         clearTags(observer, this.getAllEntityIds());
-        this.playerToLocationMap.remove(PlayerIdent.getIdentificationForAsString(observer));
+        this.playerToLocationMap.remove(IdentUtil.getIdentificationForAsString(observer));
     }
 
     protected void clearTags(Player observer, int... entityIds) {
@@ -522,26 +560,30 @@ public class HologramImpl implements Hologram {
             WrappedPacket packet = new WrappedPacket(PacketType.Play.Server.ENTITY_DESTROY);
             packet.getIntegerArrays().write(0, entityIds);
 
-            HoloAPI.getCore().getInjectionManager().getInjectorFor(observer).sendPacket(packet.getHandle());
+            HoloAPICore.getInjectionManager().getInjectorFor(observer).sendPacket(packet.getHandle());
         }
     }
 
-    protected void moveTag(Player observer, int index, Vector to) {
+    protected void moveTag(Player observer, Vector to, int... entityIds) {
         WrappedPacket teleportHorse = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
-        teleportHorse.getIntegers().write(0, this.getHorseIndex(index));
+        teleportHorse.getIntegers().write(0, entityIds[0]);
         teleportHorse.getIntegers().write(1, to.getBlockX());
         teleportHorse.getIntegers().write(2, to.getBlockY() + 55);
         teleportHorse.getIntegers().write(3, to.getBlockZ());
 
         WrappedPacket teleportSkull = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
-        teleportSkull.getIntegers().write(0, this.getSkullIndex(index));
+        teleportSkull.getIntegers().write(0, entityIds[1]);
         teleportSkull.getIntegers().write(1, to.getBlockX());
         teleportSkull.getIntegers().write(2, to.getBlockY() + 55);
         teleportSkull.getIntegers().write(3, to.getBlockZ());
 
-        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+        Injector injector = HoloAPICore.getInjectionManager().getInjectorFor(observer);
         injector.sendPacket(teleportHorse.getHandle());
         injector.sendPacket(teleportSkull.getHandle());
+    }
+
+    protected void moveTag(Player observer, int index, Vector to) {
+        this.moveTag(observer, to, getHorseIndex(index), getSkullIndex(index));
 
         if (this.isTouchEnabled()) {
             this.teleportTouchSlime(observer, index, to);
@@ -549,21 +591,7 @@ public class HologramImpl implements Hologram {
     }
 
     protected void teleportTouchSlime(Player observer, int index, Vector to) {
-        WrappedPacket teleportTouchSlime = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
-        teleportTouchSlime.getIntegers().write(0, this.getTouchSlimeIndex(index));
-        teleportTouchSlime.getIntegers().write(1, to.getBlockX());
-        teleportTouchSlime.getIntegers().write(2, to.getBlockY());
-        teleportTouchSlime.getIntegers().write(3, to.getBlockZ());
-
-        WrappedPacket teleportTouchSkull = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
-        teleportTouchSkull.getIntegers().write(0, this.getTouchSkullIndex(index));
-        teleportTouchSkull.getIntegers().write(1, to.getBlockX());
-        teleportTouchSkull.getIntegers().write(2, to.getBlockY());
-        teleportTouchSkull.getIntegers().write(3, to.getBlockZ());
-
-        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
-        injector.sendPacket(teleportTouchSlime.getHandle());
-        injector.sendPacket(teleportTouchSkull.getHandle());
+        this.moveTag(observer, to, getTouchSlimeIndex(index), getTouchSkullIndex(index));
     }
 
     protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
@@ -709,7 +737,7 @@ public class HologramImpl implements Hologram {
         metadata.getIntegers().write(0, this.getHorseIndex(index));
         metadata.getWatchableObjectLists().write(0, dw.getWatchableObjects());
 
-        HoloAPI.getCore().getInjectionManager().getInjectorFor(observer).sendPacket(metadata.getHandle());
+        HoloAPICore.getInjectionManager().getInjectorFor(observer).sendPacket(metadata.getHandle());
     }
 
     protected int getHorseIndex(int index) {

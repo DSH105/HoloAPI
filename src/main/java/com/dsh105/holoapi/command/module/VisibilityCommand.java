@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.visibility.Visibility;
@@ -24,7 +25,6 @@ import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
 
 public class VisibilityCommand extends CommandModule {

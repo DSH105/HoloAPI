@@ -18,14 +18,16 @@
 package com.dsh105.holoapi.command.module;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.GeometryUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.StoredTag;
 import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
-import com.dsh105.holoapi.util.*;
-import com.dsh105.holoapi.util.fanciful.FancyMessage;
+import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.util.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +42,7 @@ public class NearbyCommand extends CommandModule {
     public boolean onCommand(CommandSender sender, String[] args) {
         if (args.length == 2) {
             if (this.getPermission().hasPerm(sender, true, false)) {
-                if (!StringUtil.isInt(args[1])) {
+                if (!GeneralUtil.isInt(args[1])) {
                     Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[1]));
                     return true;
                 }
@@ -97,7 +99,7 @@ public class NearbyCommand extends CommandModule {
                         }
                     }
                 }
-                if (sender instanceof Player && MinecraftReflection.isUsingNetty()) {
+                if (MinecraftReflection.isUsingNetty()) {
                     sender.sendMessage(Lang.TIP_HOVER_PREVIEW.getValue());
                 }
                 return true;

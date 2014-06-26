@@ -17,8 +17,8 @@
 
 package com.dsh105.holoapi.conversation.basic;
 
+import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
@@ -34,7 +34,7 @@ public abstract class LocationFunction extends SimpleInputFunction {
             if (split.length == 4) {
                 if (Bukkit.getWorld(split[0]) != null) {
                     for (int i = 1; i <= 3; i++) {
-                        if (!StringUtil.isInt(split[i])) {
+                        if (!GeneralUtil.isInt(split[i])) {
                             context.setSessionData("fail_int", true);
                             return false;
                         }

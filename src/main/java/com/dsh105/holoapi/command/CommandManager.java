@@ -21,15 +21,9 @@ import com.captainbern.reflection.Reflection;
 import com.captainbern.reflection.accessor.FieldAccessor;
 import com.dsh105.holoapi.HoloAPICore;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class CommandManager {
 

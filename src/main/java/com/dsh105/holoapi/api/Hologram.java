@@ -167,6 +167,7 @@ public interface Hologram {
     public void setTouchEnabled(boolean touchEnabled);
 
     public void setImageTagMap(HashMap<TagSize, String> map);
+
     /**
      * Gets a serialised map of the hologram
      *
@@ -333,6 +334,22 @@ public interface Hologram {
      * @param z        z coordinate of the location the hologram is visible at
      */
     public void show(Player observer, double x, double y, double z);
+
+    public void showNearby(Location origin, boolean obeyVisibility, int radius);
+
+    public void showNearby(Location origin, int radius);
+
+    public void showNearby(boolean obeyVisibility, int radius);
+
+    public void showNearby(int radius);
+
+    public void showNearby(boolean obeyVisibility);
+
+    public void showNearby();
+
+    public void showNearby(double x, double y, double z, boolean obeyVisibility, int radius);
+
+    public void showNearby(double x, double y, double z, int radius);
 
     /**
      * Moves the hologram to a new location

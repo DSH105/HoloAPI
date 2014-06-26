@@ -17,6 +17,8 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.command.CommandHelp;
@@ -26,7 +28,6 @@ import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
@@ -42,7 +43,7 @@ public class EditCommand extends CommandModule {
                 Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
                 return true;
             }
-            if (!StringUtil.isInt(args[2])) {
+            if (!GeneralUtil.isInt(args[2])) {
                 Lang.sendTo(sender, Lang.INT_ONLY.getValue().replace("%string%", args[2]));
                 return true;
             }

@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.conversation.builder.animation;
 
+import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
@@ -25,7 +26,6 @@ import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -60,7 +60,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
             conversationContext.setSessionData("nextFrame", false);
         }
 
-        if ((Boolean) conversationContext.getSessionData("askingForDelay") && !StringUtil.isInt(s)) {
+        if ((Boolean) conversationContext.getSessionData("askingForDelay") && !GeneralUtil.isInt(s)) {
             return false;
         }
         if (this.first && s.equalsIgnoreCase("DONE")) {
@@ -72,7 +72,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
     @Override
     protected Prompt acceptValidatedInput(final ConversationContext context, final String s) {
         if ((Boolean) context.getSessionData("askingForDelay")) {
-            if (StringUtil.isInt(s)) {
+            if (GeneralUtil.isInt(s)) {
                 if (context.getForWhom() instanceof Player) {
                     return new AnimationBuilderInputSuccessPrompt(this.frames, Integer.parseInt(s));
                 } else {

@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.command.CommandHelp;
@@ -25,7 +26,6 @@ import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.MiscUtil;
 import com.dsh105.holoapi.util.Permission;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -75,7 +75,7 @@ public class MoveCommand extends CommandModule {
                 Lang.sendTo(sender, Lang.HOLOGRAM_NOT_FOUND.getValue().replace("%id%", args[1]));
                 return true;
             }
-            Location to = MiscUtil.getLocationFrom(args, 2);
+            Location to = GeneralUtil.readLocation(2, args);
             if (to == null) {
                 Lang.sendTo(sender, Lang.NOT_LOCATION.getValue());
                 return true;

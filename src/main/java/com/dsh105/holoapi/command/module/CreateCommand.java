@@ -17,6 +17,8 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
@@ -32,9 +34,7 @@ import com.dsh105.holoapi.conversation.builder.animation.AnimationBuilderInputPr
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.ImageGenerator;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.MiscUtil;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
@@ -139,7 +139,7 @@ public class CreateCommand extends CommandModule {
                 if (generator == null) {
                     return true;
                 }
-                Location location = MiscUtil.getLocationFrom(args, 3);
+                Location location = GeneralUtil.readLocation(3, args);
                 if (location == null) {
                     Lang.sendTo(sender, Lang.NOT_LOCATION.getValue());
                     return true;
@@ -148,7 +148,7 @@ public class CreateCommand extends CommandModule {
                 Lang.sendTo(sender, Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + ""));
                 return true;
             } else if (args[1].equalsIgnoreCase("animation")) {
-                Location location = MiscUtil.getLocationFrom(args, 3);
+                Location location = GeneralUtil.readLocation(3, args);
                 if (location == null) {
                     Lang.sendTo(sender, Lang.NOT_LOCATION.getValue());
                     return true;
@@ -166,7 +166,7 @@ public class CreateCommand extends CommandModule {
                 return true;
             }
         } else if (args.length >= 6) {
-            Location location = MiscUtil.getLocationFrom(args, 1);
+            Location location = GeneralUtil.readLocation(1, args);
             if (location == null) {
                 Lang.sendTo(sender, Lang.NOT_LOCATION.getValue());
                 return true;

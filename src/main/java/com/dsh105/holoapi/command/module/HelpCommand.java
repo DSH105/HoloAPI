@@ -17,11 +17,11 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.command.CommandHelp;
 import com.dsh105.holoapi.command.CommandModule;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
 
 public class HelpCommand extends CommandModule {
@@ -32,7 +32,7 @@ public class HelpCommand extends CommandModule {
             HoloAPI.getCommandManager().sendHelpTo(sender);
             return true;
         } else if (args.length == 2) {
-            if (StringUtil.isInt(args[1])) {
+            if (GeneralUtil.isInt(args[1])) {
                 HoloAPI.getCommandManager().sendHelpTo(sender, Integer.parseInt(args[1]));
                 return true;
             } else {

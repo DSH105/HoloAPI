@@ -19,9 +19,7 @@ package com.dsh105.holoapi.command;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.util.ItemUtil;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -90,7 +88,7 @@ public class CommandHelp {
                 hasPerm = this.getPermission().hasPerm(sender, false, true);
                 suggest = hasPerm;
             }
-            FancyMessage msg = new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + this.getCommand()).itemTooltip(ItemUtil.getItem(this.generateDescription(sender)));
+            PowerMess msg = new FancyMessage(ChatColor.WHITE + "• " + ChatColor.AQUA + this.getCommand()).itemTooltip(ItemUtil.getItem(this.generateDescription(sender)));
             if (suggest || hasPerm) {
                 msg.suggest(this.getCommand());
             }

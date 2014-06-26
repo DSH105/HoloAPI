@@ -17,10 +17,10 @@
 
 package com.dsh105.holoapi.image;
 
+import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.config.YAMLConfig;
-import com.dsh105.holoapi.util.EnumUtil;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -52,7 +52,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
                 boolean requiresBorder = config.getBoolean(path + "requiresBorder", true);
-                if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
+                if (!GeneralUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
                     HoloAPICore.LOGGER.log(Level.INFO, "Failed to load image: " + key + ". Invalid image type.");
                     continue;
                 }

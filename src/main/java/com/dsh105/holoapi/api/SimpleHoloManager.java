@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.api;
 
+import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.*;
@@ -27,7 +28,6 @@ import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.StringUtil;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -44,13 +44,21 @@ import java.util.logging.Level;
 
 public class SimpleHoloManager implements HoloManager {
 
-    YAMLConfig config;
-    private UpdateDisplayTask updateDisplayTask;
+    private YAMLConfig config;
     private HashMap<Hologram, Plugin> holograms = new HashMap<Hologram, Plugin>();
 
     public SimpleHoloManager() {
         this.config = HoloAPI.getConfig(HoloAPI.ConfigType.DATA);
-        this.updateDisplayTask = new UpdateDisplayTask();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!getAllHolograms().isEmpty()) {
+                    for (Hologram hologram : getAllHolograms().keySet()) {
+                        hologram.updateDisplay();
+                    }
+                }
+            }
+        }.runTaskTimer(HoloAPI.getCore(), 0L, 20 * 60);
     }
 
     @Override
@@ -284,7 +292,7 @@ public class SimpleHoloManager implements HoloManager {
                         //ArrayList<String> lines = new ArrayList<String>();
                         HologramFactory hf = new HologramFactory(HoloAPI.getCore());
                         for (String key1 : cs1.getKeys(false)) {
-                            if (StringUtil.isInt(key1)) {
+                            if (GeneralUtil.isInt(key1)) {
                                 String type = config.getString(path + "lines." + key1 + ".type");
                                 String value = config.getString(path + "lines." + key1 + ".value");
                                 if (type.equalsIgnoreCase("image")) {
@@ -330,7 +338,7 @@ public class SimpleHoloManager implements HoloManager {
             HologramFactory hf = new HologramFactory(HoloAPI.getCore());
             //ArrayList<String> lines = new ArrayList<String>();
             for (String key1 : cs1.getKeys(false)) {
-                if (StringUtil.isInt(key1)) {
+                if (GeneralUtil.isInt(key1)) {
                     String type = config.getString(path + "lines." + key1 + ".type");
                     String value = config.getString(path + "lines." + key1 + ".value");
                     if (type.equalsIgnoreCase("image")) {
@@ -407,7 +415,7 @@ public class SimpleHoloManager implements HoloManager {
         HoloAPI.getManager().clearFromFile(original);
 
         // Oh look, a new hologram!
-        HologramFactory factory = ((HologramFactory) this.buildCopy(original, original.getDefaultLocation())).withSaveId(original.getSaveId()).clearContent().withText(newContent);
+        HologramFactory factory = this.buildCopy(original, original.getDefaultLocation()).withSaveId(original.getSaveId()).clearContent().withText(newContent);
         Hologram copy = factory.build();
         HoloAPI.getManager().saveToFile(copy);
         return copy;
@@ -422,7 +430,7 @@ public class SimpleHoloManager implements HoloManager {
         HoloAPI.getManager().stopTracking(original);
         HoloAPI.getManager().clearFromFile(original);
 
-        HologramFactory factory = ((HologramFactory) this.buildCopy(original, original.getDefaultLocation())).withSaveId(original.getSaveId());
+        HologramFactory factory = this.buildCopy(original, original.getDefaultLocation()).withSaveId(original.getSaveId());
         for (String line : linesToAdd) {
             factory.withText(line);
         }
@@ -526,37 +534,20 @@ public class SimpleHoloManager implements HoloManager {
 
     class HologramRemoveTask extends BukkitRunnable {
 
-        BukkitTask t = null;
+        BukkitTask task = null;
         private Hologram hologram;
 
-        HologramRemoveTask(Hologram hologram, BukkitTask t) {
+        HologramRemoveTask(Hologram hologram, BukkitTask task) {
             this.hologram = hologram;
-            this.t = t;
+            this.task = task;
         }
 
         @Override
         public void run() {
-            if (this.t != null) {
-                t.cancel();
+            if (this.task != null) {
+                task.cancel();
             }
             stopTracking(hologram);
-        }
-    }
-
-    class UpdateDisplayTask extends BukkitRunnable {
-
-        public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getCore(), 0L, 20 * 60);
-        }
-
-        @Override
-        public void run() {
-            if (!getAllHolograms().isEmpty()) {
-                Iterator<Hologram> i = getAllHolograms().keySet().iterator();
-                while (i.hasNext()) {
-                    i.next().updateDisplay();
-                }
-            }
         }
     }
 }

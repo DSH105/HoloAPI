@@ -91,7 +91,7 @@ public interface AnimatedHologram extends Hologram {
      * @param observer Player to update the animation for
      * @param lines    Lines to display
      */
-    public void updateAnimation(Player observer, String[] lines);
+    public void updateAnimation(Player observer, String... lines);
 
     @Override
     public void show(Player observer);
@@ -110,7 +110,7 @@ public interface AnimatedHologram extends Hologram {
      * @param observer Player to show the animation to
      * @param lines    Lines to display
      */
-    public void showAnimation(Player observer, String[] lines);
+    public void showAnimation(Player observer, String... lines);
 
     /**
      * Shows the the animation to an observer at a position
@@ -121,5 +121,5 @@ public interface AnimatedHologram extends Hologram {
      * @param v        Position to show the animation at
      * @param lines    Lines to display
      */
-    public void showAnimation(Player observer, Vector v, String[] lines);
+    public void showAnimation(Player observer, Vector v, String... lines);
 }

@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.Hologram;
@@ -27,7 +28,6 @@ import com.dsh105.holoapi.conversation.basic.SimpleInputFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.util.Lang;
 import com.dsh105.holoapi.util.Permission;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;

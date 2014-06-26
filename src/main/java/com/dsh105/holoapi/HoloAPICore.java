@@ -40,7 +40,6 @@ import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.protocol.InjectionManager;
-import com.dsh105.holoapi.util.ConsoleLogger;
 import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -196,8 +195,8 @@ public class HoloAPICore extends JavaPlugin {
                     updateAvailable = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     if (updateAvailable) {
                         updateName = updater.getLatestName();
-                        ConsoleLogger.sendMessage(ChatColor.DARK_AQUA + "An update is available: " + updateName);
-                        ConsoleLogger.sendMessage(ChatColor.DARK_AQUA + "Type /holo update to update.");
+                        HoloAPI.LOG.console(ChatColor.DARK_AQUA + "An update is available: " + updateName);
+                        HoloAPI.LOG.console(ChatColor.DARK_AQUA + "Type /holo update to update.");
                         if (!updateChecked) {
                             updateChecked = true;
                         }
@@ -273,8 +272,8 @@ public class HoloAPICore extends JavaPlugin {
         for (Lang l : Lang.values()) {
             String[] desc = l.getDescription();
             langConfig.set(l.getPath(), langConfig.getString(l.getPath(), l.getRaw()
-                    .replace("&3", "&" + this.primaryColour.getChar())
-                    .replace("&b", "&" + this.secondaryColour.getChar())),
+                            .replace("&3", "&" + this.primaryColour.getChar())
+                            .replace("&b", "&" + this.secondaryColour.getChar())),
                     desc);
         }
         langConfig.saveConfig();

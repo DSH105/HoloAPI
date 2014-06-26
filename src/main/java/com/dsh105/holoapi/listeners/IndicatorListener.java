@@ -17,11 +17,11 @@
 
 package com.dsh105.holoapi.listeners;
 
+import com.dsh105.commodus.RomanNumeral;
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.config.YAMLConfig;
-import com.dsh105.holoapi.util.RomanNumeral;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

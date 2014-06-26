@@ -64,6 +64,20 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Commodus -->
+        <dependency>
+            <groupId>com.dsh105</groupId>
+            <artifactId>Commodus</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- PowerMessage -->
+        <dependency>
+            <groupId>com.dsh105</groupId>
+            <artifactId>PowerMessage</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Vault -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -127,7 +141,7 @@
             <id>kitteh-repo</id>
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
-        
+
         <!--CaptainBern's Minecraft Reflection-->
         <repository>
             <id>captainbern</id>
@@ -266,11 +280,13 @@
                         <configuration>
                             <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <filters>
-                                <filter>
+                            <artifactSet>
+                                <includes>
                                     <artifact>com.captainbern:Minecraft-Reflection</artifact>
-                                </filter>
-                            </filters>
+                                    <artifact>com.dsh105:Commodus</artifact>
+                                    <artifact>com.dsh105:PowerMessage</artifact>
+                                </includes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>

@@ -150,8 +150,9 @@ public interface HoloManager {
      * @param original   original hologram
      * @param linesToAdd lines to copy to the copied hologram
      * @return copied hologram
-     * @throws IllegalArgumentException if the hologram is an {@link com.dsh105.holoapi.api.AnimatedHologram}. Lines cannot be
-     *                                            dynamically added to animated holograms
+     * @throws IllegalArgumentException if the hologram is an {@link com.dsh105.holoapi.api.AnimatedHologram}. Lines
+     *                                  cannot be
+     *                                  dynamically added to animated holograms
      */
     public Hologram copyAndAddLineTo(Hologram original, String... linesToAdd);
 

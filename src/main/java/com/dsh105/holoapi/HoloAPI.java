@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi;
 
+import com.dsh105.commodus.logging.Log;
 import com.dsh105.holoapi.api.HoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
@@ -32,12 +33,14 @@ import com.dsh105.holoapi.image.ImageLoader;
 public class HoloAPI {
 
     private static HoloAPICore CORE;
+    public static Log LOG;
 
     public static void setCore(HoloAPICore plugin) {
         if (CORE != null) {
             throw new RuntimeException("Core already set!");
         }
         CORE = plugin;
+        LOG = new Log("HoloAPI");
     }
 
     public static HoloAPICore getCore() {

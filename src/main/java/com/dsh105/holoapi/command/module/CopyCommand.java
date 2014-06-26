@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.command.module;
 
+import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.Hologram;
@@ -26,7 +27,6 @@ import com.dsh105.holoapi.conversation.InputFactory;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.util.Lang;
-import com.dsh105.holoapi.util.MiscUtil;
 import com.dsh105.holoapi.util.Permission;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,7 @@ public class CopyCommand extends CommandModule {
             }
             Location location;
             if (args.length == 6) {
-                location = MiscUtil.getLocationFrom(args, 2);
+                location = GeneralUtil.readLocation(2, args);
                 if (location == null) {
                     Lang.sendTo(sender, Lang.NOT_LOCATION.getValue());
                     return true;
