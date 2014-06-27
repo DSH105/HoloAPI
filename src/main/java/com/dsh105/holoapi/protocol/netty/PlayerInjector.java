@@ -17,9 +17,7 @@ import java.util.concurrent.Callable;
 
 public class PlayerInjector extends ChannelDuplexHandler implements Injector {
 
-    // "Cache" the fields to speed up the whole process.
-    private static FieldAccessor<Object> PLAYERCONNECTION_FIELD;
-    private static FieldAccessor<Object> NETWORKMANAGER_FIELD;
+    // "Cache" the field to speed up the whole process.
     private static FieldAccessor<Channel> CHANNEL_FIELD;
 
     protected Player player;
