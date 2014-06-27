@@ -6,6 +6,7 @@ import com.captainbern.minecraft.wrapper.WrappedDataWatcher;
 import com.captainbern.minecraft.wrapper.WrappedPacket;
 import com.captainbern.reflection.Reflection;
 import com.captainbern.reflection.SafeMethod;
+import com.captainbern.reflection.accessor.MethodAccessor;
 import com.dsh105.commodus.GeometryUtil;
 import com.dsh105.commodus.IdentUtil;
 import com.dsh105.holoapi.HoloAPI;
@@ -30,7 +31,7 @@ import java.util.*;
 
 public class HologramImpl implements Hologram {
 
-    private static SafeMethod AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftItemStackClass()).getSafeMethod("asNMSCopy");
+    private static MethodAccessor AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftItemStackClass()).getSafeMethod("asNMSCopy").getAccessor();
 
     protected int firstTagId;
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
@@ -700,7 +701,7 @@ public class HologramImpl implements Hologram {
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
         // Set what item we want to see
-        dw.setObject(10, AS_NMS_ITEM_COPY.getAccessor().invoke(null, stack));
+        dw.setObject(10, AS_NMS_ITEM_COPY.invoke(null, stack));
 
         WrappedPacket meta = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
         meta.getIntegers().write(0, item.getIntegers().read(0));
@@ -729,7 +730,7 @@ public class HologramImpl implements Hologram {
 
         ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
         if (itemMatch != null) {
-            dw.setObject(10, AS_NMS_ITEM_COPY.getAccessor().invoke(null, itemMatch));
+            dw.setObject(10, AS_NMS_ITEM_COPY.invoke(null, itemMatch));
         } else {
             dw.setObject(10, content);
             dw.setObject(11, Byte.valueOf((byte) 1));
