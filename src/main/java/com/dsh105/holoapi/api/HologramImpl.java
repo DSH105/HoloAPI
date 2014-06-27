@@ -1,8 +1,11 @@
 package com.dsh105.holoapi.api;
 
 import com.captainbern.minecraft.protocol.PacketType;
+import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.captainbern.minecraft.wrapper.WrappedDataWatcher;
 import com.captainbern.minecraft.wrapper.WrappedPacket;
+import com.captainbern.reflection.Reflection;
+import com.captainbern.reflection.SafeMethod;
 import com.dsh105.commodus.GeometryUtil;
 import com.dsh105.commodus.IdentUtil;
 import com.dsh105.holoapi.HoloAPI;
@@ -26,6 +29,8 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public class HologramImpl implements Hologram {
+
+    private static SafeMethod AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack")).getSafeMethod("asNMSCopy");
 
     protected int firstTagId;
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
@@ -560,7 +565,7 @@ public class HologramImpl implements Hologram {
             WrappedPacket packet = new WrappedPacket(PacketType.Play.Server.ENTITY_DESTROY);
             packet.getIntegerArrays().write(0, entityIds);
 
-            HoloAPICore.getInjectionManager().getInjectorFor(observer).sendPacket(packet.getHandle());
+            HoloAPI.getCore().getInjectionManager().getInjectorFor(observer).sendPacket(packet.getHandle());
         }
     }
 
@@ -577,7 +582,7 @@ public class HologramImpl implements Hologram {
         teleportSkull.getIntegers().write(2, to.getBlockY() + 55);
         teleportSkull.getIntegers().write(3, to.getBlockZ());
 
-        Injector injector = HoloAPICore.getInjectionManager().getInjectorFor(observer);
+        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
         injector.sendPacket(teleportHorse.getHandle());
         injector.sendPacket(teleportSkull.getHandle());
     }
@@ -616,10 +621,10 @@ public class HologramImpl implements Hologram {
 
             WrappedPacket skull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
             skull.getIntegers().write(0, this.getSkullIndex(index));
-            skull.getIntegers().write(1, (int) EntityType.WITHER_SKULL.getTypeId());
-            skull.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-            skull.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
-            skull.getIntegers().write(4, (int) Math.floor(z * 32.0D));
+            skull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
+            skull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+            skull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
+            skull.getIntegers().write(9, (int) EntityType.WITHER_SKULL.getTypeId());
 
             WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
             attach.getIntegers().write(0, 0);
@@ -653,70 +658,69 @@ public class HologramImpl implements Hologram {
     }
 
     protected void generateTouchScreen(int slimeSize, Player observer, int index, double diffY, double x, double y, double z) {
-        /** WrapperPacketAttachEntity attachTouch = new WrapperPacketAttachEntity();
+        WrappedPacket touchSlime = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
+        touchSlime.getIntegers().write(0, this.getTouchSlimeIndex(index));
+        touchSlime.getIntegers().write(1, (int) EntityType.SLIME.getTypeId());
+        touchSlime.getIntegers().write(2, (int) Math.floor(x * 32.0D));
+        touchSlime.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
+        touchSlime.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
-         WrapperPacketSpawnEntityLiving touchSlime = new WrapperPacketSpawnEntityLiving();
-         touchSlime.setEntityId(this.getTouchSlimeIndex(index));
-         touchSlime.setEntityType(EntityType.SLIME.getTypeId());
-         touchSlime.setX(x);
-         touchSlime.setY(y + diffY);
-         touchSlime.setZ(z);
+        WrappedDataWatcher dw = new WrappedDataWatcher();
+        dw.setObject(0, Byte.valueOf((byte) 32));
+        dw.setObject(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
 
-         WrappedDataWatcher touchDw = new WrappedDataWatcher();
-         touchDw.initiate(0, Byte.valueOf((byte) 32));
-         //int size = (this.calculateMaxLineLength() / (this.getForPartOfImage(index) != null ? 20 : 6));
-         touchDw.initiate(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
-         touchSlime.setMetadata(touchDw);
+        touchSlime.getDataWatchers().write(0, dw);
 
-         WrapperPacketSpawnEntity touchSkull = new WrapperPacketSpawnEntity();
-         touchSkull.setEntityId(this.getTouchSkullIndex(index));
-         touchSkull.setX(x);
-         touchSkull.setY(y + diffY);
-         touchSkull.setZ(z);
-         touchSkull.setEntityType(66);
+        WrappedPacket touchSkull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
+        touchSkull.getIntegers().write(0, this.getTouchSkullIndex(index));
+        touchSlime.getIntegers().write(1, (int) Math.floor(x * 32.0D));
+        touchSlime.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+        touchSlime.getIntegers().write(3, (int) Math.floor(z * 32.0D));
+        touchSlime.getIntegers().write(9, 66);
 
-         attachTouch.setEntityId(touchSlime.getEntityId());
-         attachTouch.setVehicleId(touchSkull.getEntityId());
+        WrappedPacket attachTouch = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
+        attachTouch.getIntegers().write(0, 0);
+        attachTouch.getIntegers().write(1, touchSlime.getIntegers().read(0));
+        attachTouch.getIntegers().write(2, touchSkull.getIntegers().read(0));
 
-         touchSlime.send(observer);
-         touchSkull.send(observer);
-         attachTouch.send(observer); */
+        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+        injector.sendPacket(touchSlime.getHandle());
+        injector.sendPacket(touchSkull.getHandle());
+        injector.sendPacket(attachTouch.getHandle());
     }
 
     protected void generateFloatingItem(Player observer, ItemStack stack, int index, double diffY, double x, double y, double z) {
-        /**     WrapperPacketAttachEntity attachItem = new WrapperPacketAttachEntity();
+        WrappedPacket item = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
+        item.getIntegers().write(0, this.getHorseIndex(index));
+        item.getIntegers().write(1, (int) Math.floor(x * 32.0D));
+        item.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+        item.getIntegers().write(3, (int) Math.floor(z * 32.0D));
+        item.getIntegers().write(9, 2);
+        item.getIntegers().write(10, 1);
 
-         WrapperPacketSpawnEntity item = new WrapperPacketSpawnEntity();
-         item.setEntityId(this.getHorseIndex(index));
-         item.setX(x);
-         item.setY(y + diffY);
-         item.setZ(z);
-         item.setEntityType(2);
-         item.setData(1);
+        WrappedDataWatcher dw = new WrappedDataWatcher();
+        // Set what item we want to see
+        dw.setObject(10, AS_NMS_ITEM_COPY.getAccessor().invoke(null, stack));
 
-         WrappedDataWatcher dw = new WrappedDataWatcher();
-         SafeMethod asNMSCopy = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack")).getSafeMethod("asNMSCopy");
-         dw.initiate(10, asNMSCopy.getAccessor().invoke(null, stack));
-         new Reflection().reflect(MinecraftReflection.getDataWatcherClass()).getSafeMethod(Constants.DATAWATCHER_FUNC_ITEMSTACK.getName()).getAccessor().invoke(dw.getHandle(), 10);
+        WrappedPacket meta = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
+        meta.getIntegers().write(0, item.getIntegers().read(0));
+        meta.getDataWatchers().write(0, dw);
 
-         WrapperPacketEntityMetadata meta = new WrapperPacketEntityMetadata();
-         meta.setEntityId(item.getEntityId());
-         meta.setMetadata(dw);
+        WrappedPacket itemSkull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
+        itemSkull.getIntegers().write(0, this.getHorseIndex(index));
+        itemSkull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
+        itemSkull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+        itemSkull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
 
-         WrapperPacketSpawnEntity itemSkull = new WrapperPacketSpawnEntity();
-         itemSkull.setEntityId(this.getSkullIndex(index));
-         itemSkull.setX(x);
-         itemSkull.setY(y + diffY);
-         itemSkull.setZ(z);
-         itemSkull.setEntityType(66);
+        WrappedPacket attachItem = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
+        attachItem.getIntegers().write(0, item.getIntegers().read(0));
+        attachItem.getIntegers().write(0, itemSkull.getIntegers().read(0));
 
-         attachItem.setEntityId(item.getEntityId());
-         attachItem.setVehicleId(itemSkull.getEntityId());
-
-         item.send(observer);
-         meta.send(observer);
-         itemSkull.send(observer);
-         attachItem.send(observer); */
+        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+        injector.sendPacket(item.getHandle());
+        injector.sendPacket(meta.getHandle());
+        injector.sendPacket(itemSkull.getHandle());
+        injector.sendPacket(attachItem.getHandle());
     }
 
     protected void updateNametag(Player observer, String message, int index) {
@@ -725,8 +729,7 @@ public class HologramImpl implements Hologram {
 
         ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
         if (itemMatch != null) {
-            //  dw.setObject(10, new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack")).getSafeMethod("asNMSCopy").getAccessor().invoke(null, itemMatch));
-            //  new Reflection().reflect(MinecraftReflection.getDataWatcherClass()).getSafeMethods(withArguments(new Class[]{int.class}), withReturnType(Void.class)).get(0).getAccessor().invoke(dw.getHandle(), 10);
+            dw.setObject(10, AS_NMS_ITEM_COPY.getAccessor().invoke(null, itemMatch));
         } else {
             dw.setObject(10, content);
             dw.setObject(11, Byte.valueOf((byte) 1));
@@ -737,7 +740,7 @@ public class HologramImpl implements Hologram {
         metadata.getIntegers().write(0, this.getHorseIndex(index));
         metadata.getWatchableObjectLists().write(0, dw.getWatchableObjects());
 
-        HoloAPICore.getInjectionManager().getInjectorFor(observer).sendPacket(metadata.getHandle());
+        HoloAPI.getCore().getInjectionManager().getInjectorFor(observer).sendPacket(metadata.getHandle());
     }
 
     protected int getHorseIndex(int index) {
