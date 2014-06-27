@@ -701,7 +701,7 @@ public class HologramImpl implements Hologram {
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
         // Set what item we want to see
-        dw.setObject(10, AS_NMS_ITEM_COPY.invoke(null, stack));
+        dw.setObject(10, AS_NMS_ITEM_COPY.invokeStatic(stack));
 
         WrappedPacket meta = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
         meta.getIntegers().write(0, item.getIntegers().read(0));
@@ -730,7 +730,7 @@ public class HologramImpl implements Hologram {
 
         ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
         if (itemMatch != null) {
-            dw.setObject(10, AS_NMS_ITEM_COPY.invoke(null, itemMatch));
+            dw.setObject(10, AS_NMS_ITEM_COPY.invokeStatic(itemMatch));
         } else {
             dw.setObject(10, content);
             dw.setObject(11, Byte.valueOf((byte) 1));
