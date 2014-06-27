@@ -30,7 +30,7 @@ import java.util.*;
 
 public class HologramImpl implements Hologram {
 
-    private static SafeMethod AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftBukkitClass("inventory.CraftItemStack")).getSafeMethod("asNMSCopy");
+    private static SafeMethod AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftItemStackClass()).getSafeMethod("asNMSCopy");
 
     protected int firstTagId;
     protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
