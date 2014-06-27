@@ -1,6 +1,7 @@
 package com.dsh105.holoapi.protocol.netty;
 
 import com.captainbern.minecraft.conversion.BukkitUnwrapper;
+import com.captainbern.minecraft.reflection.MinecraftFields;
 import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.captainbern.reflection.Reflection;
 import com.captainbern.reflection.accessor.FieldAccessor;
@@ -16,9 +17,7 @@ import java.util.concurrent.Callable;
 
 public class PlayerInjector extends ChannelDuplexHandler implements Injector {
 
-    // "Cache" the fields to speed up the whole process.
-    private static FieldAccessor<Object> PLAYERCONNECTION_FIELD;
-    private static FieldAccessor<Object> NETWORKMANAGER_FIELD;
+    // "Cache" the field to speed up the whole process.
     private static FieldAccessor<Channel> CHANNEL_FIELD;
 
     protected Player player;
@@ -126,29 +125,8 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
 
             Reflection reflection = new Reflection();
 
-            if (PLAYERCONNECTION_FIELD == null) {
-                try {
-                    Class<?> type = MinecraftReflection.getPlayerConnectionClass();
-                    PLAYERCONNECTION_FIELD = (FieldAccessor<Object>) reflection.reflect(MinecraftReflection.getEntityPlayerClass()).getSafeFieldByType(type).getAccessor();
-                } catch (Exception e) {
-                    // Oops, something went wrong. Well...
-                    throw new RuntimeException("Failed to get the PlayerConnection accessor!", e);
-                }
-            }
-
-            this.playerConnection = PLAYERCONNECTION_FIELD.get(this.nmsHandle);
-
-            if (NETWORKMANAGER_FIELD == null) {
-                try {
-                    Class<?> type = MinecraftReflection.getNetworkManagerClass();
-                    NETWORKMANAGER_FIELD = (FieldAccessor<Object>) reflection.reflect(MinecraftReflection.getPlayerConnectionClass()).getSafeFieldByType(type).getAccessor();
-                } catch (Exception e) {
-                    // Oops
-                    throw new RuntimeException("Failed to get the NetworkManager accessor!", e);
-                }
-            }
-
-            this.networkManager = NETWORKMANAGER_FIELD.get(this.playerConnection);
+            this.playerConnection = MinecraftFields.getPlayerConnection(player);
+            this.networkManager = MinecraftFields.getNetworkManager(player);
 
             if (CHANNEL_FIELD == null) {
                 try {
