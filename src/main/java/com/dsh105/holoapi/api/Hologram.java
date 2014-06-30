@@ -94,6 +94,24 @@ public interface Hologram {
     public HashMap<String, Vector> getPlayerViews();
 
     /**
+     * Gets whether a Player is able to see the hologram
+     *
+     * @param player player to check
+     * @return true if it can be seen
+     */
+    public boolean canBeSeenBy(Player player);
+
+    /**
+     * Gets the position the hologram is seen from for a certain Player
+     * <p/>
+     * Unless modified externally, this will be identical to the normal hologram position
+     *
+     * @param player player to retrieve the view for
+     * @return a Vector representing the position the hologram is seen from
+     */
+    public Vector getPlayerView(Player player);
+
+    /**
      * Refreshes the display of the hologram
      *
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
