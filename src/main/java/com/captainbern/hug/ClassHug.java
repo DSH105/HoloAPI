@@ -18,6 +18,12 @@ public class ClassHug {
 
     private Constant[] pool;
 
+    private int accessFlags;
+
+    private int thisClass;
+
+    private int superClass;
+
     private byte[] otherCode;
 
     private byte[] code;
@@ -43,6 +49,9 @@ public class ClassHug {
             this.magic = inputStream.readInt();
             this.minor = inputStream.readUnsignedShort();
             this.major = inputStream.readUnsignedShort();
+
+            if (major > 0x34)
+                throw new RuntimeException("Unsupported class file!");
 
             this.poolSize = inputStream.readUnsignedShort();
             this.pool = new Constant[this.poolSize];
@@ -90,6 +99,10 @@ public class ClassHug {
                         throw new RuntimeException("Illegal constant-type: " + type + "!");
                 }
             }
+
+            this.accessFlags = inputStream.readUnsignedShort();
+            this.thisClass = inputStream.readUnsignedShort();
+            this.superClass = inputStream.readUnsignedShort();
 
             // Write the other parts of the class to a byte-array
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
@@ -161,7 +174,7 @@ public class ClassHug {
      * Returns the raw-bytecode representation of this class
      * @return
      */
-    public byte[] getByteCode() {
+    public byte[] getHugCode() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(8192);
         DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(byteArrayOutputStream, 8192));
 
@@ -196,9 +209,89 @@ public class ClassHug {
             }
         }
 
+        codeStream.writeShort(this.accessFlags);
+        codeStream.writeShort(this.thisClass);
+        codeStream.writeShort(this.superClass);
+
         codeStream.write(this.otherCode);
 
         codeStream.flush();
+    }
+
+    public byte[] getUneditedCode() {
+        return this.code;
+    }
+
+    public int getAccessFlags() {
+        return this.accessFlags;
+    }
+
+    public void setAccessFlags(int accessFlags) {
+        this.accessFlags = accessFlags;
+    }
+
+    public String getClassName() {
+        Constant constant = this.pool[this.thisClass];
+
+        if (constant.getType() == CONSTANT_Class) {
+            byte[] val = constant.getRawData();
+            int index = ((val[0] << 8) | (val[1]));
+
+            Constant utf8 = this.pool[index];
+            if (utf8.getType() == CONSTANT_Utf8)
+                return utf8.rawStringValue();
+        }
+
+        throw new RuntimeException("Failed to return the Class-name! Perhaps a corrupted ConstantPool?");
+    }
+
+    public void setClassName(String className) {
+        Constant constant = this.pool[this.thisClass];
+
+        if (constant.getType() == CONSTANT_Class) {
+            byte[] val = constant.getRawData();
+            int index = ((val[0] << 8) | val[1]);
+
+            Constant utf8 = this.pool[index];
+            if (utf8.getType() == CONSTANT_Utf8) {
+                utf8.setRawData(className.getBytes());
+                return;
+            }
+        }
+
+        throw new RuntimeException("Failed to set the Class-name! Perhaps a corrupted ConstantPool?");
+    }
+
+    public String getSuperClassName() {
+        Constant constant = this.pool[this.superClass];
+
+        if (constant.getType() == CONSTANT_Class) {
+            byte[] val = constant.getRawData();
+            int index = ((val[0] << 8) | (val[1]));
+
+            Constant utf8 = this.pool[index];
+            if (utf8.getType() == CONSTANT_Utf8)
+                return utf8.rawStringValue();
+        }
+
+        throw new RuntimeException("Failed to return the SuperClass-name! Perhaps a corrupted ConstantPool?");
+    }
+
+    public void setSuperClassName(String className) {
+        Constant constant = this.pool[this.superClass];
+
+        if (constant.getType() == CONSTANT_Class) {
+            byte[] val = constant.getRawData();
+            int index = ((val[0] << 8) | val[1]);
+
+            Constant utf8 = this.pool[index];
+            if (utf8.getType() == CONSTANT_Utf8) {
+                utf8.setRawData(className.getBytes());
+                return;
+            }
+        }
+
+        throw new RuntimeException("Failed to set the SuperClass-name! Perhaps a corrupted ConstantPool?");
     }
 
     /**
@@ -215,5 +308,13 @@ public class ClassHug {
                 }
             }
         }
+    }
+
+    public Class giveAHug() {
+        return new ClassLoader() {
+            public Class defineClass(String name, byte[] code) {
+                return super.defineClass(name, code, 0, code.length);
+            }
+        }.defineClass(this.getClassName().replace('/', '.'), this.getHugCode());
     }
 }
