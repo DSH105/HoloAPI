@@ -120,6 +120,16 @@ public class HologramImpl implements Hologram {
     }
 
     @Override
+    public boolean canBeSeenBy(Player player) {
+        return getPlayerViews().containsKey(IdentUtil.getIdentificationForAsString(player));
+    }
+
+    @Override
+    public Vector getPlayerView(Player player) {
+        return getPlayerViews().get(IdentUtil.getIdentificationForAsString(player));
+    }
+
+    @Override
     public void refreshDisplay(boolean obeyVisibility) {
         for (Map.Entry<String, Vector> entry : this.getPlayerViews().entrySet()) {
             final Player p = IdentUtil.getPlayerOf(entry.getKey());
