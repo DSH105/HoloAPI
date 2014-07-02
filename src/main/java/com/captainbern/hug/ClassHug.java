@@ -6,26 +6,45 @@ import java.io.*;
 
 import static com.captainbern.hug.Constant.*;
 
+/**
+ * A class used to patch some of our classes to work
+ * with custom servers like Cauldron.
+ *
+ * It's some very basic bytecode editing. Also note that "this class" refers to
+ * the class that is being edited. (It does not refer to <i>this</i> class object.
+ */
 public class ClassHug {
 
+    // The Magic of this class file. I'd better be cafebabe or else the party won't continue
     private int magic;
 
+    // The minor java version of this class file
     private int minor;
 
+    // The major java version of this class
     private int major;
 
+    // The size of the ConstantPool
+    // Note that when adding items to the pool (see below) you also need
+    // to increment this value (same counts for removing)
     private int poolSize;
 
+    // A very, very basic ConstantPool implementation
     private Constant[] pool;
 
+    // The access-flags of this class
     private int accessFlags;
 
+    // The position of the name of our class in the ConstantPool
     private int thisClass;
 
+    // Same as above but with the SuperClass
     private int superClass;
 
+    // All the other code of this class
     private byte[] otherCode;
 
+    // If, for some reason, you need the "old" bytecode, here it is
     private byte[] code;
 
     public ClassHug(byte[] b) {
@@ -50,12 +69,13 @@ public class ClassHug {
             this.minor = inputStream.readUnsignedShort();
             this.major = inputStream.readUnsignedShort();
 
-            if (major > 0x34)
+            if (major > 0x34) // Lolwat, seems like someone compiled this class with JDK 9 or above. (FYI; We're at 8 now)
                 throw new RuntimeException("Unsupported class file!");
 
             this.poolSize = inputStream.readUnsignedShort();
             this.pool = new Constant[this.poolSize];
 
+            // The first item in the pool is reserved by the jvm
             for (int i = 1; i < poolSize; i++) {
                 // The type
                 byte type = inputStream.readByte();
@@ -104,7 +124,12 @@ public class ClassHug {
             this.thisClass = inputStream.readUnsignedShort();
             this.superClass = inputStream.readUnsignedShort();
 
-            // Write the other parts of the class to a byte-array
+            // Interfaces                         <-- Not parsing those because
+            // Fields                                 It's quite a task to do so,
+            // Methods                                and because it would increase
+            // Attributes/Metadata                    the size of this class drastically
+            //                                                         |
+            // So instead we're just writing them to another array   <-
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
             DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(byteStream, 8192));
             byte[] buffer = new byte[inputStream.available()];
@@ -117,20 +142,22 @@ public class ClassHug {
             this.otherCode = byteStream.toByteArray();
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to hug class: " + b + "!");
+            throw new RuntimeException("Failed to hug class: " + b.toString() + "!", e);
         } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                // We'll just swallow this... For now.
             }
         }
     }
 
     /**
      * Constructs a new ClassHug with the given source.
+     * The "source" = the canonical class name.
+     * So for the Object class, this would be java.lang.Object
      * @param classSource
      */
     public ClassHug(String classSource) {
@@ -138,7 +165,7 @@ public class ClassHug {
     }
 
     /**
-     * Converst a given InputStream to a byte-array.
+     * Converts a given InputStream to a byte-array.
      * @param inputStream
      * @param close
      * @return
@@ -171,7 +198,7 @@ public class ClassHug {
     }
 
     /**
-     * Returns the raw-bytecode representation of this class
+     * Returns the raw-bytecode representation of this class.
      * @return
      */
     public byte[] getHugCode() {
@@ -193,7 +220,7 @@ public class ClassHug {
     }
 
     /**
-     * Writes this class to the given OutputStream
+     * Writes this class to the given OutputStream.
      */
     public final void write(DataOutputStream codeStream) throws IOException {
         codeStream.writeInt(this.magic);
@@ -218,18 +245,34 @@ public class ClassHug {
         codeStream.flush();
     }
 
+    /**
+     * Returns the "original" bytecode of this class
+     * @return
+     */
     public byte[] getUneditedCode() {
         return this.code;
     }
 
+    /**
+     * Returns the access flags of this class
+     * @return
+     */
     public int getAccessFlags() {
         return this.accessFlags;
     }
 
+    /**
+     * Allows you to set the access flags of this class
+     * @param accessFlags
+     */
     public void setAccessFlags(int accessFlags) {
         this.accessFlags = accessFlags;
     }
 
+    /**
+     * Returns the name of this class
+     * @return
+     */
     public String getClassName() {
         Constant constant = this.pool[this.thisClass];
 
@@ -245,6 +288,10 @@ public class ClassHug {
         throw new RuntimeException("Failed to return the Class-name! Perhaps a corrupted ConstantPool?");
     }
 
+    /**
+     * Allows you to set the name of this class
+     * @param className
+     */
     public void setClassName(String className) {
         Constant constant = this.pool[this.thisClass];
 
@@ -262,6 +309,10 @@ public class ClassHug {
         throw new RuntimeException("Failed to set the Class-name! Perhaps a corrupted ConstantPool?");
     }
 
+    /**
+     * Returns the name of the super-class of this class
+     * @return
+     */
     public String getSuperClassName() {
         Constant constant = this.pool[this.superClass];
 
@@ -277,6 +328,10 @@ public class ClassHug {
         throw new RuntimeException("Failed to return the SuperClass-name! Perhaps a corrupted ConstantPool?");
     }
 
+    /**
+     * Allows you to set the super class of this class
+     * @param className
+     */
     public void setSuperClassName(String className) {
         Constant constant = this.pool[this.superClass];
 
@@ -310,6 +365,11 @@ public class ClassHug {
         }
     }
 
+    /**
+     * Creates a Class Object of the byte-code of this class. This method
+     * should be fairly safe unless you messed up something.
+     * @return
+     */
     public Class giveAHug() {
         return new ClassLoader() {
             public Class defineClass(String name, byte[] code) {
