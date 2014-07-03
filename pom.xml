@@ -239,8 +239,6 @@
                      <archive>
                          <manifestEntries>
                              <Plugin-Version>${project.version}</Plugin-Version>
-                             <Minecraft-Version>${minecraft.version}</Minecraft-Version>
-                             <CraftBukkit-Version>${craftbukkit.version}</CraftBukkit-Version>
                          </manifestEntries>
                      </archive>
                  </configuration>
