@@ -20,6 +20,7 @@ package com.dsh105.holoapi.conversation.builder.animation;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
+import com.dsh105.holoapi.config.Lang;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import org.bukkit.conversations.ConversationContext;
@@ -52,6 +53,6 @@ public class AnimationBuilderInputSuccessPrompt extends MessagePrompt {
         }
         // If we're here it should be a player
         AnimatedHologram h = new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frames.toArray(new Frame[frames.size()]))).withLocation(((Player) conversationContext.getForWhom()).getLocation()).build();
-        return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
+        return Lang.HOLOGRAM_CREATED.getValue("id", h.getSaveId());
     }
 }

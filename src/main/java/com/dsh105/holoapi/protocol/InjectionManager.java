@@ -1,5 +1,6 @@
 package com.dsh105.holoapi.protocol;
 
+import com.dsh105.commodus.ServerUtil;
 import com.dsh105.holoapi.protocol.netty.PlayerInjector;
 import com.google.common.collect.MapMaker;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class InjectionManager {
         this.plugin = plugin;
         this.isClosed = false;
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : ServerUtil.getOnlinePlayers()) {
             inject(player);
         }
 

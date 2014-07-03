@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.api;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.dsh105.commodus.ServerUtil;
 import com.dsh105.commodus.TimeFormat;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.config.Settings;
@@ -102,7 +103,7 @@ public class TagFormatter {
         this.addFormat("%playercount%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
-                return String.valueOf(Bukkit.getOnlinePlayers().size());
+                return String.valueOf(ServerUtil.getOnlinePlayers().size());
             }
         });
 
