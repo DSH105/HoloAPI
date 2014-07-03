@@ -40,6 +40,15 @@ public interface Hologram {
      */
     public boolean isSimple();
 
+    /**
+     * Sets the simplicity of the hologram
+     * <p/>
+     * Save files will automatically be updated upon calling this method. That is, if setting to true, the hologram
+     * will
+     * be removed from file; if false, it will be saved to file
+     *
+     * @param flag The state of simplicity to set the hologram to
+     */
     public void setSimplicity(boolean flag);
 
     /**
@@ -180,11 +189,26 @@ public interface Hologram {
      */
     public void setSaveId(String saveId);
 
+    /**
+     * Gets whether the hologram is touch enabled
+     * <p/>
+     * If a hologram is touch enabled, it either has active {@link com.dsh105.holoapi.api.touch.TouchAction}s or it has
+     * been set to fire touch events
+     *
+     * @return True if hologram is touch enabled
+     */
     public boolean isTouchEnabled();
 
+    /**
+     * Sets whether the hologram is touch enabled
+     * <p/>
+     * If a hologram has TouchActions, it is automatically considered to be touch-enabled. Setting this to true will
+     * force the touch events to be fired even if the hologram has no active {@link
+     * com.dsh105.holoapi.api.touch.TouchAction}s
+     *
+     * @param touchEnabled
+     */
     public void setTouchEnabled(boolean touchEnabled);
-
-    public void setImageTagMap(HashMap<TagSize, String> map);
 
     /**
      * Gets a serialised map of the hologram
@@ -192,10 +216,6 @@ public interface Hologram {
      * @return serialised map of the hologram
      */
     public ArrayList<StoredTag> serialise();
-
-    public Map.Entry<TagSize, String> getImageIdOfIndex(int index);
-
-    public Map.Entry<TagSize, String> getForPartOfImage(int index);
 
     /**
      * Changes the world the hologram is visible in
@@ -331,6 +351,13 @@ public interface Hologram {
      */
     public void show(Player observer);
 
+    /**
+     * Shows the hologram to a player at a specific location
+     *
+     * @param observer       player to clear the hologram display for
+     * @param location       location to show the hologram at
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     */
     public void show(Player observer, Location location, boolean obeyVisibility);
 
     /**
@@ -341,6 +368,15 @@ public interface Hologram {
      */
     public void show(Player observer, Location location);
 
+    /**
+     * Shows the hologram to a player at a specific location
+     *
+     * @param observer       player to clear the hologram display for
+     * @param x              x coordinate of the location to show the hologram at
+     * @param y              y coordinate of the location to show the hologram at
+     * @param z              z coordinate of the location to show the hologram at
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     */
     public void show(Player observer, double x, double y, double z, boolean obeyVisibility);
 
     /**
@@ -353,20 +389,77 @@ public interface Hologram {
      */
     public void show(Player observer, double x, double y, double z);
 
+    /**
+     * Shows the hologram to all nearby players within the given radius
+     *
+     * @param origin         centre location
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     * @param radius         radius to search for nearby players in
+     */
     public void showNearby(Location origin, boolean obeyVisibility, int radius);
 
+    /**
+     * Shows the hologram to all nearby players within the given radius
+     *
+     * @param origin centre location
+     * @param radius radius to search for nearby players in
+     */
     public void showNearby(Location origin, int radius);
 
+    /**
+     * Shows the hologram to all nearby players within the given radius
+     *
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     * @param radius         radius to search for nearby players in
+     */
     public void showNearby(boolean obeyVisibility, int radius);
 
+    /**
+     * Shows the hologram to all nearby players within the given radius
+     * <p/>
+     * The origin location will be at the default location of the hologram
+     *
+     * @param radius radius to search for nearby players in
+     */
     public void showNearby(int radius);
 
+    /**
+     * Shows the hologram to all in the world of the hologram
+     * <p/>
+     * The origin location will be at the default location of the hologram
+     *
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     */
     public void showNearby(boolean obeyVisibility);
 
+    /**
+     * Shows the hologram to all players in the world of the hologram
+     * <p/>
+     * The origin location will be at the default location of the hologram
+     */
     public void showNearby();
 
+    /**
+     * Shows the hologram to all nearby players within the given radius
+     * <p/>
+     * The origin location will be at the default location of the hologram
+     *
+     * @param x              x coordinate of the centre location (origin)
+     * @param y              y coordinate of the centre location (origin)
+     * @param z              z coordinate of the centre location (origin)
+     * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
+     * @param radius         radius to search for nearby players in
+     */
     public void showNearby(double x, double y, double z, boolean obeyVisibility, int radius);
 
+    /**
+     * Shows the hologram to all nearby players within the given radius
+     *
+     * @param x      x coordinate of the centre location (origin)
+     * @param y      y coordinate of the centre location (origin)
+     * @param z      z coordinate of the centre location (origin)
+     * @param radius radius to search for nearby players in
+     */
     public void showNearby(double x, double y, double z, int radius);
 
     /**
@@ -387,6 +480,12 @@ public interface Hologram {
      */
     public void move(Vector to);
 
+    /**
+     * Moves the hologram to a new location for one player only
+     *
+     * @param observer player to move the hologram display for
+     * @param to       position to move to
+     */
     public void move(Player observer, Vector to);
 
     /**

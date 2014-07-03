@@ -132,7 +132,7 @@ public class HologramFactory extends HoloFactory {
         } else {
             hologram = new HologramImpl(this.saveId, this.worldName, this.locX, this.locY, this.locZ, content);
         }
-        hologram.setImageTagMap(this.imageIdMap);
+        ((HologramImpl) hologram).setImageTagMap(this.imageIdMap);
         return hologram;
     }
 

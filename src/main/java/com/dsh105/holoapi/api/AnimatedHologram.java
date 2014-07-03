@@ -40,8 +40,6 @@ public interface AnimatedHologram extends Hologram {
      */
     public Frame getNext();
 
-    public Frame next();
-
     /**
      * Gets the frame by its index
      *
@@ -66,7 +64,6 @@ public interface AnimatedHologram extends Hologram {
      */
     public void animate();
 
-    public void runAnimation();
 
     /**
      * Gets whether the animated hologram has an active animation

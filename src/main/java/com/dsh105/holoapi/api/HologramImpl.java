@@ -81,6 +81,10 @@ public class HologramImpl implements Hologram {
     @Override
     public void setSimplicity(boolean flag) {
         this.simple = flag;
+        if (!simple) {
+            HoloAPI.getManager().clearFromFile(this);
+        }
+        HoloAPI.getManager().saveToFile(this);
     }
 
     @Override
@@ -219,11 +223,6 @@ public class HologramImpl implements Hologram {
     }
 
     @Override
-    public void setImageTagMap(HashMap<TagSize, String> map) {
-        this.imageIdMap = map;
-    }
-
-    @Override
     public ArrayList<StoredTag> serialise() {
         ArrayList<StoredTag> tagList = new ArrayList<>();
         ArrayList<String> tags = new ArrayList<>();
@@ -239,26 +238,6 @@ public class HologramImpl implements Hologram {
             }
         }
         return tagList;
-    }
-
-    @Override
-    public Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
-        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
-            if (entry.getKey().getFirst() == index) {
-                return entry;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Map.Entry<TagSize, String> getForPartOfImage(int index) {
-        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
-            if (index >= entry.getKey().getFirst() && index <= entry.getKey().getLast()) {
-                return entry;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -570,6 +549,28 @@ public class HologramImpl implements Hologram {
     public void clear(Player observer) {
         clearTags(observer, this.getAllEntityIds());
         this.playerToLocationMap.remove(IdentUtil.getIdentificationForAsString(observer));
+    }
+
+    protected void setImageTagMap(HashMap<TagSize, String> map) {
+        this.imageIdMap = map;
+    }
+
+    protected Map.Entry<TagSize, String> getImageIdOfIndex(int index) {
+        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
+            if (entry.getKey().getFirst() == index) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    protected Map.Entry<TagSize, String> getForPartOfImage(int index) {
+        for (Map.Entry<TagSize, String> entry : this.imageIdMap.entrySet()) {
+            if (index >= entry.getKey().getFirst() && index <= entry.getKey().getLast()) {
+                return entry;
+            }
+        }
+        return null;
     }
 
     protected void clearTags(Player observer, int... entityIds) {

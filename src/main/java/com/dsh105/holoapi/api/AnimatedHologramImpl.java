@@ -64,8 +64,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
         return this.getFrame((this.index + 1) >= this.frames.size() ? 0 : this.index + 1);
     }
 
-    @Override
-    public Frame next() {
+    private Frame next() {
         if (++this.index >= this.frames.size()) {
             this.index = 0;
         }
@@ -105,8 +104,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
         }.runTaskTimer(HoloAPI.getCore(), 0L, currentFrame.getDelay());
     }
 
-    @Override
-    public void runAnimation() {
+    private void runAnimation() {
         for (Map.Entry<String, Vector> entry : getPlayerViews().entrySet()) {
             final Player p = IdentUtil.getPlayerOf(entry.getKey());
             if (p != null) {
