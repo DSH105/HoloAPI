@@ -62,6 +62,7 @@ public class Lang extends Options {
             INVALID_VISIBILITY = new LangSetting("invalid_invisibility", "{c2}%visibility% {c1}is not a registered visibility type."),
             VALID_VISIBILITIES = new LangSetting("valid_invisibilities", "{c1}Valid visibilities are: {c2}%vis%{c1}."),
             READING_TXT = new LangSetting("reading_txt", "{c1}Reading text from {c2}%url%{c1}..."),
+            INVALID_CLEAR_TYPE = new LangSetting("invalid_clear_type", "{c2}%type% {c1}is an invalid clear type. Valid types: {c2}%valid%"),
 
     TOUCH_ACTIONS = new LangSetting("touch_actions", "{c1}Touch actions for hologram of ID {c2}%id%{c1}:"),
             NO_TOUCH_ACTIONS = new LangSetting("no_touch_actions", "{c1}Hologram of ID {c2}%id% {c1}does not have any Touch Actions stored."),
@@ -100,6 +101,9 @@ public class Lang extends Options {
             HOLOGRAM_DUPLICATE_ID = new LangSetting("hologram_duplicate_id", "{c1}Hologram save IDs must be unique. A hologram of ID {c2}%id% {c1}already exists in the HoloAPI data files!"),
             HOLOGRAM_SET_ID = new LangSetting("hologram_set_id", "{c1}Save ID of hologram {c2}%oldid% {c1}set to {c2}%newid%{c1}."),
             NO_NEARBY_HOLOGRAMS = new LangSetting("no_nearby_holograms", "{c1}There are no holograms within a radius of {c2}%radius%{c1}."),
+            COMPLEX_HOLOGRAMS_CLEARED = new LangSetting("complex_holograms_cleared", "{c1}All complex holograms cleared."),
+            SIMPLE_HOLOGRAMS_CLEARED = new LangSetting("simple_holograms_cleared", "{c1}All simple holograms cleared."),
+            ALL_HOLOGRAMS_CLEARED = new LangSetting("all_holograms_cleared", "{c1}All holograms cleared."),
 
     YES_NO_INPUT_INVALID = new LangSetting("yes_no_input_invalid", "{c1}Please enter either {c2}Yes {c1}or {c2}No{c1}."),
             YES_NO_CLEAR_FROM_FILE = new LangSetting("yes_no_clear_from_file", "{c1}Would you like to clear this hologram from the save file? Please enter either {c2}Yes {c1}or {c2}No{c1}."),
