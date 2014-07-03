@@ -21,11 +21,11 @@ import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.AnimatedHologramFactory;
+import com.dsh105.holoapi.config.Lang;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
-import com.dsh105.holoapi.util.Lang;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -41,8 +41,8 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
     private ArrayList<Frame> frames;
 
     public AnimationBuilderInputPrompt() {
-        this.lines = new ArrayList<String>();
-        this.frames = new ArrayList<Frame>();
+        this.lines = new ArrayList<>();
+        this.frames = new ArrayList<>();
     }
 
     public AnimationBuilderInputPrompt(ArrayList<String> lines, ArrayList<Frame> frames) {
@@ -60,13 +60,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
             conversationContext.setSessionData("nextFrame", false);
         }
 
-        if ((Boolean) conversationContext.getSessionData("askingForDelay") && !GeneralUtil.isInt(s)) {
-            return false;
-        }
-        if (this.first && s.equalsIgnoreCase("DONE")) {
-            return false;
-        }
-        return !(s.equalsIgnoreCase("NEXT") && this.lines.isEmpty());
+        return !((Boolean) conversationContext.getSessionData("askingForDelay") && !GeneralUtil.isInt(s)) && !(this.first && s.equalsIgnoreCase("DONE")) && !(s.equalsIgnoreCase("NEXT") && this.lines.isEmpty());
     }
 
     @Override
@@ -83,7 +77,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
                         public void onFunction(ConversationContext context, String input) {
                             context.setSessionData("location", this.getLocation());
 
-                            ArrayList<Frame> frames = new ArrayList<Frame>();
+                            ArrayList<Frame> frames = new ArrayList<>();
                             for (Frame f : frames) {
                                 frames.add(new Frame(Integer.parseInt(s), f.getLines()));
                             }
@@ -96,7 +90,7 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
 
                         @Override
                         public String getSuccessMessage(ConversationContext context, String input) {
-                            return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
+                            return Lang.HOLOGRAM_CREATED.getValue("id", h.getSaveId());
                         }
                     });
                 }
@@ -139,12 +133,12 @@ public class AnimationBuilderInputPrompt extends ValidatingPrompt {
         }
         if ((Boolean) conversationContext.getSessionData("nextFrame")) {
             conversationContext.setSessionData("nextFrame", false);
-            return Lang.PROMPT_NEXT_FRAME.getValue().replace("%num%", (this.frames.size() + 1) + "");
+            return Lang.PROMPT_NEXT_FRAME.getValue("num", (this.frames.size() + 1) + "");
         }
         if (this.first) {
             return Lang.PROMPT_INPUT_FRAMES.getValue();
         } else {
-            return Lang.PROMPT_INPUT_NEXT.getValue().replace("%input%", ChatColor.translateAlternateColorCodes('&', conversationContext.getSessionData("lastAdded") + ""));
+            return Lang.PROMPT_INPUT_NEXT.getValue("input", ChatColor.translateAlternateColorCodes('&', conversationContext.getSessionData("lastAdded") + ""));
         }
     }
 

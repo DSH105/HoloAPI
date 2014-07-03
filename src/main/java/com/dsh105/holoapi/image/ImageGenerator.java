@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.image;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.config.Settings;
 import org.bukkit.ChatColor;
 
 import javax.imageio.ImageIO;
@@ -224,7 +225,7 @@ public class ImageGenerator implements Generator {
             for (ChatColor[] color : colors) {
                 ChatColor colour = color[y];
                 if (colour == null) {
-                    line += border ? HoloAPI.getTransparencyWithBorder() : HoloAPI.getTransparencyWithoutBorder();
+                    line += border ? Settings.TRANSPARENCY_WITH_BORDER.getValue() : Settings.TRANSPARENCY_WITHOUT_BORDER.getValue();
                 } else {
                     line += colour.toString() + imgchar + ChatColor.RESET;
                 }

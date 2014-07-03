@@ -18,7 +18,7 @@
 package com.dsh105.holoapi.conversation.basic;
 
 import com.dsh105.commodus.GeneralUtil;
-import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.config.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
@@ -30,7 +30,7 @@ public abstract class LocationFunction extends SimpleInputFunction {
     @Override
     public boolean isValid(ConversationContext context, String input) {
         if (input.contains(" ")) {
-            String[] split = input.split(" ");
+            String[] split = input.split("\\s");
             if (split.length == 4) {
                 if (Bukkit.getWorld(split[0]) != null) {
                     for (int i = 1; i <= 3; i++) {
@@ -70,7 +70,7 @@ public abstract class LocationFunction extends SimpleInputFunction {
         } else if (failFormat != null && (Boolean) failFormat) {
             return Lang.PROMPT_INPUT_FAIL_FORMAT.getValue();
         } else if (failWorld != null && (Boolean) failWorld) {
-            return Lang.PROMPT_INPUT_FAIL_WORLD.getValue().replace("%world%", invalidInput.split(" ")[0]);
+            return Lang.PROMPT_INPUT_FAIL_WORLD.getValue("world", invalidInput.split("\\s")[0]);
         }
         return "";
     }

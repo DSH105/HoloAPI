@@ -18,10 +18,10 @@
 package com.dsh105.holoapi.image;
 
 import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
-import com.dsh105.holoapi.config.YAMLConfig;
-import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.config.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,8 +32,8 @@ import java.util.logging.Level;
 
 public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
 
-    private final HashMap<String, ImageGenerator> KEY_TO_IMAGE_MAP = new HashMap<String, ImageGenerator>();
-    private final HashMap<String, UnloadedImageStorage> URL_UNLOADED = new HashMap<String, UnloadedImageStorage>();
+    private final HashMap<String, ImageGenerator> KEY_TO_IMAGE_MAP = new HashMap<>();
+    private final HashMap<String, UnloadedImageStorage> URL_UNLOADED = new HashMap<>();
     private boolean loaded;
 
     public void loadImageConfiguration(YAMLConfig config) {
@@ -98,12 +98,12 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
                 if (sender != null) {
-                    Lang.sendTo(sender, Lang.LOADING_URL_IMAGE.getValue().replace("%key%", key));
+                    Lang.LOADING_URL_IMAGE.send(sender, "key", key);
                 }
                 this.prepareUrlGenerator(sender, key);
                 return null;
             } else {
-                Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
+                Lang.FAILED_IMAGE_LOAD.send(sender);
             }
         }
         return g;
@@ -131,7 +131,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
             public void run() {
                 g.loadUrlImage();
                 if (sender != null) {
-                    Lang.sendTo(sender, Lang.IMAGE_LOADED.getValue().replace("%key%", key));
+                    Lang.IMAGE_LOADED.send(sender, "key", key);
                 }
                 HoloAPICore.LOGGER.log(Level.INFO, "Custom URL image '" + key + "' loaded.");
                 KEY_TO_IMAGE_MAP.put(key, g);

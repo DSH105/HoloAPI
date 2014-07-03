@@ -2,6 +2,7 @@ package com.dsh105.holoapi.api;
 
 import com.dsh105.commodus.IdentUtil;
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.config.Settings;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
@@ -21,7 +22,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     private boolean imageGenerated;
     private String animationKey;
 
-    private ArrayList<Frame> frames = new ArrayList<Frame>();
+    private ArrayList<Frame> frames = new ArrayList<>();
     private int index = 0;
     private Frame currentFrame;
 
@@ -81,7 +82,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
 
     @Override
     public ArrayList<Frame> getFrames() {
-        ArrayList<Frame> list = new ArrayList<Frame>();
+        ArrayList<Frame> list = new ArrayList<>();
         list.addAll(this.frames);
         return list;
     }
@@ -168,7 +169,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
 
     private void showAnimation(Player observer, double x, double y, double z, String[] lines) {
         for (int index = 0; index < lines.length; index++) {
-            this.generate(observer, lines[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
+            this.generate(observer, lines[index], index, -index * Settings.VERTICAL_LINE_SPACING.getValue(), x, y, z);
         }
         this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), new Vector(x, y, z));
     }

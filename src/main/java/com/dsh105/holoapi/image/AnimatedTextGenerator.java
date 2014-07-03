@@ -27,7 +27,7 @@ import java.util.Collections;
 public class AnimatedTextGenerator {
 
     private int maxHeight;
-    private ArrayList<Frame> frames = new ArrayList<Frame>();
+    private ArrayList<Frame> frames = new ArrayList<>();
     private Frame largestFrame;
 
     /**
@@ -43,7 +43,7 @@ public class AnimatedTextGenerator {
         for (Frame f : this.frames) {
             int diff = this.maxHeight - f.getLines().length;
             if (diff > 0) {
-                ArrayList<String> lines = new ArrayList<String>();
+                ArrayList<String> lines = new ArrayList<>();
                 Collections.addAll(lines, f.getLines());
                 for (int i = 0; i <= diff; i++) {
                     lines.add(" ");

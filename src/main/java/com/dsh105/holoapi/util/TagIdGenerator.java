@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.HologramImpl;
 
 public class TagIdGenerator {
 
@@ -35,16 +36,15 @@ public class TagIdGenerator {
     private static int nextId(int counter, boolean simple) {
         int firstId = simple ? ++SHARED_SIMPLE_ID : ++SHARED_ID;
         if (simple) {
-            for (int i = 0; i <= (counter * HoloAPI.getTagEntityMultiplier()); i++) {
+            for (int i = 0; i <= (counter * HologramImpl.TAG_ENTITY_MULTIPLIER); i++) {
                 if ((firstId + i) > 0) {
                     SHARED_SIMPLE_ID = Short.MIN_VALUE;
-                    return nextId(counter, simple);
+                    return nextId(counter, true);
                 }
-                continue;
             }
-            SHARED_SIMPLE_ID += counter * HoloAPI.getTagEntityMultiplier();
+            SHARED_SIMPLE_ID += counter * HologramImpl.TAG_ENTITY_MULTIPLIER;
         } else {
-            SHARED_ID += counter * HoloAPI.getTagEntityMultiplier();
+            SHARED_ID += counter * HologramImpl.TAG_ENTITY_MULTIPLIER;
         }
         return firstId;
     }

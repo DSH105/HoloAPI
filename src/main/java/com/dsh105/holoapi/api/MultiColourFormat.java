@@ -18,30 +18,23 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.config.Settings;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
 public class MultiColourFormat extends TagFormat {
 
-    public static ArrayList<Hologram> CACHE = new ArrayList<Hologram>();
+    public static ArrayList<Hologram> CACHE = new ArrayList<>();
 
-    private String[] colours = null;
-
-    private BukkitTask task;
+    private String[] colours;
     private int index;
 
     public MultiColourFormat() {
-        String configColours = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.colours", "&d,&5,&1,&9,&b,&a,&e,&6,&c,&3");
-        if (configColours.contains(",")) {
-            this.colours = configColours.split(",");
-        } else {
-            this.colours = new String[]{configColours};
-        }
+        this.colours = Settings.MULTICOLOR_COLOURS.getValue().split(",");
 
-        this.task = new BukkitRunnable() {
+        new BukkitRunnable() {
             @Override
             public void run() {
                 if (++index >= colours.length) {
@@ -52,7 +45,7 @@ public class MultiColourFormat extends TagFormat {
                     h.updateDisplay();
                 }
             }
-        }.runTaskTimer(HoloAPI.getCore(), 0, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("multicolorFormat.delay", 5));
+        }.runTaskTimer(HoloAPI.getCore(), 0, Settings.MULTICOLOR_DELAY.getValue());
     }
 
     @Override

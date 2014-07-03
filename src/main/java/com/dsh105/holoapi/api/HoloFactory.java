@@ -31,6 +31,9 @@ import org.bukkit.util.Vector;
 
 import java.util.logging.Level;
 
+/**
+ * Represents a factory for building new Holograms
+ */
 public abstract class HoloFactory {
 
     private Plugin owningPlugin;

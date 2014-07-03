@@ -5,16 +5,16 @@ import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.captainbern.minecraft.wrapper.WrappedDataWatcher;
 import com.captainbern.minecraft.wrapper.WrappedPacket;
 import com.captainbern.reflection.Reflection;
-import com.captainbern.reflection.SafeMethod;
 import com.captainbern.reflection.accessor.MethodAccessor;
 import com.dsh105.commodus.GeometryUtil;
 import com.dsh105.commodus.IdentUtil;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityDefault;
+import com.dsh105.holoapi.config.ConfigType;
+import com.dsh105.holoapi.config.Settings;
 import com.dsh105.holoapi.exceptions.DuplicateSaveIdException;
 import com.dsh105.holoapi.protocol.Injector;
 import com.dsh105.holoapi.util.TagIdGenerator;
@@ -32,11 +32,12 @@ import java.util.*;
 public class HologramImpl implements Hologram {
 
     private static MethodAccessor AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftItemStackClass()).getSafeMethod("asNMSCopy").getAccessor();
+    public static int TAG_ENTITY_MULTIPLIER = 4;
 
     protected int firstTagId;
-    protected HashMap<String, Vector> playerToLocationMap = new HashMap<String, Vector>();
-    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
-    protected ArrayList<TouchAction> touchActions = new ArrayList<TouchAction>();
+    protected HashMap<String, Vector> playerToLocationMap = new HashMap<>();
+    protected HashMap<TagSize, String> imageIdMap = new HashMap<>();
+    protected ArrayList<TouchAction> touchActions = new ArrayList<>();
 
     private String saveId;
     private String worldName;
@@ -114,7 +115,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public HashMap<String, Vector> getPlayerViews() {
-        HashMap<String, Vector> map = new HashMap<String, Vector>();
+        HashMap<String, Vector> map = new HashMap<>();
         map.putAll(this.playerToLocationMap);
         return map;
     }
@@ -187,7 +188,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void setSaveId(String saveId) {
-        if (HoloAPI.getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
+        if (HoloAPI.getConfig(ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
             throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID " + saveId + " already exists in the HoloAPI data files!");
         }
 
@@ -224,8 +225,8 @@ public class HologramImpl implements Hologram {
 
     @Override
     public ArrayList<StoredTag> serialise() {
-        ArrayList<StoredTag> tagList = new ArrayList<StoredTag>();
-        ArrayList<String> tags = new ArrayList<String>();
+        ArrayList<StoredTag> tagList = new ArrayList<>();
+        ArrayList<String> tags = new ArrayList<>();
         tags.addAll(Arrays.asList(this.tags));
         for (int index = 0; index < tags.size(); index++) {
             String tag = tags.get(index);
@@ -432,14 +433,14 @@ public class HologramImpl implements Hologram {
 
     @Override
     public ArrayList<TouchAction> getAllTouchActions() {
-        return new ArrayList<TouchAction>(this.touchActions);
+        return new ArrayList<>(this.touchActions);
     }
 
     @Override
     public int[] getAllEntityIds() {
-        ArrayList<Integer> entityIdList = new ArrayList<Integer>();
+        ArrayList<Integer> entityIdList = new ArrayList<>();
         for (int index = 0; index < this.getTagCount(); index++) {
-            for (int i = 0; i < HoloAPI.getTagEntityMultiplier(); i++) {
+            for (int i = 0; i < TAG_ENTITY_MULTIPLIER; i++) {
                 entityIdList.add(this.getHorseIndex(index) + i);
             }
         }
@@ -479,7 +480,7 @@ public class HologramImpl implements Hologram {
             return;
         }
         for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, this.tags[index], index, -index * HoloAPI.getHologramLineSpacing(), x, y, z);
+            this.generate(observer, this.tags[index], index, -index * Settings.VERTICAL_LINE_SPACING.getValue(), x, y, z);
         }
         this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), new Vector(x, y, z));
     }
@@ -560,7 +561,7 @@ public class HologramImpl implements Hologram {
         Vector loc = to.clone();
         for (int index = 0; index < this.getTagCount(); index++) {
             this.moveTag(observer, index, loc);
-            loc.setY(loc.getY() - HoloAPI.getHologramLineSpacing());
+            loc.setY(loc.getY() - Settings.VERTICAL_LINE_SPACING.getValue());
         }
         this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), to);
     }
@@ -755,7 +756,7 @@ public class HologramImpl implements Hologram {
     }
 
     protected int getHorseIndex(int index) {
-        return firstTagId + (index * HoloAPI.getTagEntityMultiplier());
+        return firstTagId + (index * TAG_ENTITY_MULTIPLIER);
     }
 
     protected int getSkullIndex(int index) {

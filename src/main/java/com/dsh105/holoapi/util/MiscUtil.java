@@ -17,7 +17,13 @@
 
 package com.dsh105.holoapi.util;
 
+import com.dsh105.command.CommandEvent;
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.holoapi.config.Lang;
 import net.minecraft.util.io.netty.buffer.ByteBuf;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -57,5 +63,20 @@ public class MiscUtil {
         byte[] bytes = str.getBytes(Charset.forName("UTF8"));
         buf.writeShort(bytes.length);
         buf.writeBytes(bytes);
+    }
+
+    public static Location getLocation(CommandEvent event) {
+        Location location;
+        try {
+            World world = Bukkit.getWorld(event.variable("world"));
+            if (world == null) {
+                throw new IllegalArgumentException();
+            }
+            location = new Location(world, GeneralUtil.toInteger(event.variable("x")), GeneralUtil.toInteger(event.variable("y")), GeneralUtil.toInteger(event.variable("z")));
+        } catch (IllegalArgumentException e) {
+            event.respond(Lang.NOT_LOCATION.getValue());
+            return null;
+        }
+        return location;
     }
 }

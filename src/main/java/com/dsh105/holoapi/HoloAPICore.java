@@ -17,19 +17,22 @@
 
 package com.dsh105.holoapi;
 
+import com.dsh105.command.CommandListener;
+import com.dsh105.command.CommandManager;
+import com.dsh105.commodus.config.Options;
+import com.dsh105.commodus.config.YAMLConfig;
+import com.dsh105.commodus.config.YAMLConfigManager;
+import com.dsh105.commodus.data.Metrics;
+import com.dsh105.commodus.data.Updater;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
-import com.dsh105.holoapi.command.CommandManager;
-import com.dsh105.holoapi.command.CommandModuleManager;
-import com.dsh105.holoapi.command.DynamicPluginCommand;
-import com.dsh105.holoapi.command.HoloDebugCommand;
-import com.dsh105.holoapi.config.YAMLConfig;
-import com.dsh105.holoapi.config.YAMLConfigManager;
-import com.dsh105.holoapi.config.options.ConfigOptions;
+import com.dsh105.holoapi.command2.*;
+import com.dsh105.holoapi.command2.sub.*;
+import com.dsh105.holoapi.config.ConfigType;
+import com.dsh105.holoapi.config.Lang;
+import com.dsh105.holoapi.config.Settings;
 import com.dsh105.holoapi.data.DependencyGraphUtil;
-import com.dsh105.holoapi.data.Metrics;
-import com.dsh105.holoapi.data.Updater;
 import com.dsh105.holoapi.hook.BungeeProvider;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
@@ -40,7 +43,6 @@ import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.protocol.InjectionManager;
-import com.dsh105.holoapi.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -51,25 +53,24 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class HoloAPICore extends JavaPlugin {
 
-    protected static CommandManager commandManager;
-    protected static CommandModuleManager commandModuleManager;
-    protected static SimpleHoloManager holoManager;
-    protected static SimpleImageLoader imageLoader;
-    protected static SimpleAnimationLoader animationLoader;
-    protected static TagFormatter tagFormatter;
-    protected static VisibilityMatcher visibilityMatcher;
-    protected ConfigOptions options;
+    protected static CommandManager COMMAND_MANAGER;
+    protected static SimpleHoloManager HOLO_MANAGER;
+    protected static SimpleImageLoader IMAGE_LOADER;
+    protected static SimpleAnimationLoader ANIMATION_LOADER;
+    protected static TagFormatter TAG_FORMATTER;
+    protected static VisibilityMatcher VISIBILITY_MATCHER;
 
-    protected static InjectionManager injectionManager;
+    protected static InjectionManager INJECTION_MANAGER;
 
     protected YAMLConfigManager configManager;
-    protected YAMLConfig config;
-    protected YAMLConfig dataConfig;
-    protected YAMLConfig langConfig;
+    private HashMap<ConfigType, YAMLConfig> CONFIG_FILES = new HashMap<>();
+    private HashMap<ConfigType, Options> SETTINGS = new HashMap<>();
 
     protected VaultProvider vaultProvider;
     protected VanishProvider vanishProvider;
@@ -81,11 +82,6 @@ public class HoloAPICore extends JavaPlugin {
     public boolean updateChecked = false;
     public File file;
 
-    protected static double LINE_SPACING = 0.25D;
-    protected static int TAG_ENTITY_MULTIPLIER = 4;
-    protected static String TRANSPARENCY_NO_BORDER = " ";
-    protected static String TRANSPARENCY_WITH_BORDER = " &r ";
-
     private ChatColor primaryColour = ChatColor.DARK_AQUA;
     private ChatColor secondaryColour = ChatColor.AQUA;
     protected String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
@@ -94,29 +90,31 @@ public class HoloAPICore extends JavaPlugin {
     public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
 
     @Override
+    public void onDisable() {
+        HOLO_MANAGER.clearAll();
+        if (INJECTION_MANAGER != null) {
+            INJECTION_MANAGER.close();
+            INJECTION_MANAGER = null;
+        }
+        this.getServer().getScheduler().cancelTasks(this);
+    }
+
+    @Override
     public void onEnable() {
         HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
         this.loadConfiguration();
 
-        injectionManager = new InjectionManager(this);
+        INJECTION_MANAGER = new InjectionManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        tagFormatter = new TagFormatter();
-        visibilityMatcher = new VisibilityMatcher();
-        holoManager = new SimpleHoloManager();
-        imageLoader = new SimpleImageLoader();
-        animationLoader = new SimpleAnimationLoader();
+        TAG_FORMATTER = new TagFormatter();
+        VISIBILITY_MATCHER = new VisibilityMatcher();
+        HOLO_MANAGER = new SimpleHoloManager();
+        IMAGE_LOADER = new SimpleImageLoader();
+        ANIMATION_LOADER = new SimpleAnimationLoader();
 
-        commandManager = new CommandManager(this);
-        commandModuleManager = new CommandModuleManager();
-        commandModuleManager.registerDefaults();
-        DynamicPluginCommand holoCommand = new DynamicPluginCommand(HoloAPI.getCommandLabel(), new String[0], "Create, remove and view information on Holographic displays", "Use &b/" + HoloAPI.getCommandLabel() + " help &3for help.", commandModuleManager, this);
-        DynamicPluginCommand debugCommand = new DynamicPluginCommand("holodebug", new String[0], "Smashing bugs and coloring books", "You shouldn't be using this", new HoloDebugCommand(), this);
-        holoCommand.setPermission("holoapi.holo");
-        debugCommand.setPermission("holoapi.debug");
-        commandManager.register(holoCommand);
-        commandManager.register(debugCommand);
+        this.loadCommands();
 
         manager.registerEvents(new HoloListener(), this);
         manager.registerEvents(new WorldListener(), this);
@@ -174,20 +172,43 @@ public class HoloAPICore extends JavaPlugin {
 
     }
 
-    @Override
-    public void onDisable() {
-        holoManager.clearAll();
-        if (injectionManager != null) {
-            injectionManager.close();
-            injectionManager = null;
-        }
-        this.getServer().getScheduler().cancelTasks(this);
+    private void loadCommands() {
+        COMMAND_MANAGER = new CommandManager(this, HoloAPI.getPrefix());
+        COMMAND_MANAGER.setSuggestCommands(true);
+        COMMAND_MANAGER.setFormatColour(ChatColor.getByChar(Settings.BASE_CHAT_COLOUR.getValue()));
+        COMMAND_MANAGER.setHighlightColour(ChatColor.getByChar(Settings.HIGHLIGHT_CHAT_COLOUR.getValue()));
+
+        CommandListener parent = new HoloCommand();
+        COMMAND_MANAGER.register(parent);
+        // TODO: A way to do this dynamically
+        COMMAND_MANAGER.registerSubCommands(parent, new AddLineCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new BuildCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new CopyCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new CreateCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new EditCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new HelpCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new HideCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new IdCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new InfoCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new MoveCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new NearbyCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new ReadTxtCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new RefreshCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new ReloadCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new RemoveCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new ShowCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new TeleportCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new TouchCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new UpdateCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new VisibilityCommand());
+
+        COMMAND_MANAGER.register(new HoloDebugCommand());
     }
 
     protected void checkUpdates() {
-        if (config.getBoolean("checkForUpdates", true)) {
+        if (Settings.CHECK_FOR_UPDATES.getValue()) {
             file = this.getFile();
-            final Updater.UpdateType updateType = config.getBoolean("autoUpdate", false) ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
+            final Updater.UpdateType updateType = Settings.CHECK_FOR_UPDATES.getValue() ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
                 public void run() {
@@ -207,24 +228,24 @@ public class HoloAPICore extends JavaPlugin {
     }
 
     public void loadHolograms() {
-        holoManager.clearAll();
+        HOLO_MANAGER.clearAll();
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                imageLoader.loadImageConfiguration(config);
-                animationLoader.loadAnimationConfiguration(config);
+                IMAGE_LOADER.loadImageConfiguration(getConfig(ConfigType.MAIN));
+                ANIMATION_LOADER.loadAnimationConfiguration(getConfig(ConfigType.MAIN));
             }
         }.runTaskAsynchronously(this);
 
-        final ArrayList<String> unprepared = holoManager.loadFileData();
+        final ArrayList<String> unprepared = HOLO_MANAGER.loadFileData();
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (HoloAPI.getImageLoader().isLoaded()) {
                     for (String s : unprepared) {
-                        holoManager.loadFromFile(s);
+                        HOLO_MANAGER.loadFromFile(s);
                     }
                     LOGGER.log(Level.INFO, "Holograms loaded");
                     this.cancel();
@@ -234,56 +255,59 @@ public class HoloAPICore extends JavaPlugin {
     }
 
     public void loadConfiguration() {
-        this.configManager = new YAMLConfigManager(this);
-        String[] header = {
+        configManager = new YAMLConfigManager(this);
+        YAMLConfig config,
+                dataConfig,
+                langConfig;
+
+        config = configManager.getNewConfig("config.yml", new String[]{
                 "HoloAPI",
                 "---------------------",
                 "Configuration File",
                 "",
                 "See the HoloAPI Wiki before editing this file",
                 "(https://github.com/DSH105/HoloAPI/wiki)"
-        };
-        config = this.configManager.getNewConfig("config.yml", header);
-        options = new ConfigOptions(config);
-        config.reloadConfig();
+        });
+        langConfig = configManager.getNewConfig("messages.yml", new String[]{"HoloAPI", "---------------------", "Language Configuration File"});
+        dataConfig = configManager.getNewConfig("data.yml");
 
-        ChatColor colour1 = ChatColor.getByChar(config.getString("primaryChatColour", "3"));
-        if (colour1 != null) {
-            this.primaryColour = colour1;
-        }
-        ChatColor colour2 = ChatColor.getByChar(config.getString("secondaryChatColour", "b"));
-        if (colour2 != null) {
-            this.secondaryColour = colour2;
+        CONFIG_FILES.put(ConfigType.MAIN, config);
+        CONFIG_FILES.put(ConfigType.LANG, langConfig);
+        CONFIG_FILES.put(ConfigType.DATA, dataConfig);
+
+        for (YAMLConfig yamlConfig : CONFIG_FILES.values()) {
+            yamlConfig.reloadConfig();
         }
 
-        LINE_SPACING = config.getDouble("verticalLineSpacing", 0.25D);
-        TRANSPARENCY_WITH_BORDER = config.getString("transparency.withBorder", TRANSPARENCY_WITH_BORDER);
-        TRANSPARENCY_NO_BORDER = config.getString("transparency.noBorder", TRANSPARENCY_NO_BORDER);
-
-        dataConfig = this.configManager.getNewConfig("data.yml");
-        dataConfig.reloadConfig();
-
-        String[] langHeader = {
-                "HoloAPI",
-                "---------------------",
-                "Language Configuration File"
-        };
-        langConfig = this.configManager.getNewConfig("language.yml", langHeader);
-        for (Lang l : Lang.values()) {
-            String[] desc = l.getDescription();
-            langConfig.set(l.getPath(), langConfig.getString(l.getPath(), l.getRaw()
-                            .replace("&3", "&" + this.primaryColour.getChar())
-                            .replace("&b", "&" + this.secondaryColour.getChar())),
-                    desc);
-        }
-        langConfig.saveConfig();
-        langConfig.reloadConfig();
-        //this.prefix = Lang.PREFIX.getValue();
+        SETTINGS.put(ConfigType.MAIN, new Settings(config));
+        SETTINGS.put(ConfigType.LANG, new Lang(langConfig));
     }
 
     public static InjectionManager getInjectionManager() {
-        if (injectionManager == null)
+        if (INJECTION_MANAGER == null)
             throw new RuntimeException("InjectionManager is NULL!");
-        return injectionManager;
+        return INJECTION_MANAGER;
+    }
+
+    public <T extends Options> T getSettings(Class<T> settingsClass) {
+        for (Options options : SETTINGS.values()) {
+            if (options.getClass().equals(settingsClass)) {
+                return (T) options;
+            }
+        }
+        return null;
+    }
+
+    public Options getSettings(ConfigType configType) {
+        for (Map.Entry<ConfigType, Options> entry : SETTINGS.entrySet()) {
+            if (entry.getKey() == configType) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    public YAMLConfig getConfig(ConfigType configType) {
+        return CONFIG_FILES.get(configType);
     }
 }

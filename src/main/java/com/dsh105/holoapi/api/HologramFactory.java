@@ -25,6 +25,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -37,8 +38,8 @@ import java.util.HashMap;
 
 public class HologramFactory extends HoloFactory {
 
-    private ArrayList<String> tags = new ArrayList<String>();
-    protected HashMap<TagSize, String> imageIdMap = new HashMap<TagSize, String>();
+    private ArrayList<String> tags = new ArrayList<>();
+    protected HashMap<TagSize, String> imageIdMap = new HashMap<>();
 
     /**
      * Constructs a HologramFactory
@@ -76,9 +77,7 @@ public class HologramFactory extends HoloFactory {
      * @return This object
      */
     public HologramFactory withText(String... text) {
-        for (String tag : text) {
-            this.tags.add(tag);
-        }
+        Collections.addAll(this.tags, text);
         return this;
     }
 

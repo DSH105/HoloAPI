@@ -18,10 +18,10 @@
 package com.dsh105.holoapi.image;
 
 import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
-import com.dsh105.holoapi.config.YAMLConfig;
-import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.config.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -36,8 +36,8 @@ import java.util.logging.Level;
 
 public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator> {
 
-    private final HashMap<String, AnimatedImageGenerator> KEY_TO_IMAGE_MAP = new HashMap<String, AnimatedImageGenerator>();
-    private final HashMap<String, UnloadedImageStorage> URL_UNLOADED = new HashMap<String, UnloadedImageStorage>();
+    private final HashMap<String, AnimatedImageGenerator> KEY_TO_IMAGE_MAP = new HashMap<>();
+    private final HashMap<String, UnloadedImageStorage> URL_UNLOADED = new HashMap<>();
     private boolean loaded;
 
     public void loadAnimationConfiguration(YAMLConfig config) {
@@ -67,7 +67,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                 }
                 AnimationLoadType type = AnimationLoadType.valueOf(imageType.toUpperCase());
 
-                AnimatedImageGenerator generator = findGenerator(config, type, key, imagePath, frameRate, imageHeight, imageChar, requiresBorder);
+                AnimatedImageGenerator generator = findGenerator(type, key, imagePath, frameRate, imageHeight, imageChar, requiresBorder);
                 if (generator != null) {
                     this.KEY_TO_IMAGE_MAP.put(key, generator);
                 }
@@ -79,7 +79,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         }
     }
 
-    private AnimatedImageGenerator findGenerator(YAMLConfig config, AnimationLoadType type, String key, String imagePath, int frameRate, int imageHeight, String imageCharType, boolean requiresBorder) {
+    private AnimatedImageGenerator findGenerator(AnimationLoadType type, String key, String imagePath, int frameRate, int imageHeight, String imageCharType, boolean requiresBorder) {
         try {
             ImageChar c = ImageChar.fromHumanName(imageCharType);
             if (c == null) {
@@ -111,13 +111,13 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
                 HoloAPICore.LOGGER.log(Level.INFO, "Loading custom URL animation of key " + key);
-                Lang.sendTo(sender, Lang.LOADING_URL_ANIMATION.getValue().replace("%key%", key));
+                Lang.LOADING_URL_ANIMATION.send(sender, "key", key);
                 if (sender != null) {
                     this.prepareUrlGenerator(sender, key);
                 }
                 return null;
             } else {
-                Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
+                Lang.FAILED_ANIMATION_LOAD.send(sender);
             }
         }
         return g;
@@ -158,7 +158,7 @@ public class SimpleAnimationLoader implements ImageLoader<AnimatedImageGenerator
                         generator.prepareFrameRate(data.getFrameRate());
                     }
                     if (sender != null) {
-                        Lang.sendTo(sender, Lang.IMAGE_LOADED.getValue().replace("%key%", key));
+                        Lang.ANIMATION_LOADED.send(sender, "key", key);
                     }
                     HoloAPICore.LOGGER.log(Level.INFO, "Custom URL animation '" + key + "' loaded.");
                     KEY_TO_IMAGE_MAP.put(key, generator);
