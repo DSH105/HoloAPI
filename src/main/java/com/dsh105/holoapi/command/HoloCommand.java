@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command2;
+package com.dsh105.holoapi.command;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.command.*;

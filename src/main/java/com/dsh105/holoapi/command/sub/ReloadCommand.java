@@ -15,27 +15,14 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command2.sub;
+package com.dsh105.holoapi.command.sub;
 
-import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.command.Command;
 import com.dsh105.command.CommandEvent;
 import com.dsh105.command.CommandListener;
-import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.api.AnimatedHologram;
-import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.StoredTag;
 import com.dsh105.holoapi.config.ConfigType;
 import com.dsh105.holoapi.config.Lang;
-import com.dsh105.powermessage.core.PowerMessage;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
 
 public class ReloadCommand implements CommandListener {
 

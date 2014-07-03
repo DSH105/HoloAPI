@@ -15,30 +15,28 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command2.sub;
+package com.dsh105.holoapi.command.sub;
 
 import com.dsh105.command.Command;
 import com.dsh105.command.CommandEvent;
 import com.dsh105.command.CommandListener;
+import com.dsh105.commodus.data.Updater;
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.config.Lang;
-import com.dsh105.holoapi.conversation.InputFactory;
-import com.dsh105.holoapi.conversation.builder.BuilderInputPrompt;
-import org.bukkit.conversations.Conversable;
 
-public class BuildCommand implements CommandListener {
+public class UpdateCommand implements CommandListener {
 
     @Command(
-            command = "build",
-            description = "Dynamically build a combined hologram of both text and images",
-            permission = "holoapi.holo.build",
-            help = ""
+            command = "update",
+            description = "Update the plugin if a new release is available",
+            permission = "holoapi.update"
     )
     public boolean command(CommandEvent event) {
-        if (!(event.sender() instanceof Conversable)) {
-            event.respond(Lang.NOT_CONVERSABLE.getValue());
-            return true;
+        if (HoloAPI.getCore().updateChecked) {
+            new Updater(HoloAPI.getCore(), 74914, HoloAPI.getCore().file, Updater.UpdateType.NO_VERSION_CHECK, true);
+        } else {
+            event.respond(Lang.UPDATE_NOT_AVAILABLE.getValue());
         }
-        InputFactory.buildBasicConversation().withFirstPrompt(new BuilderInputPrompt()).buildConversation((Conversable) event.sender()).begin();
         return true;
     }
 }

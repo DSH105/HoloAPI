@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command2.sub;
+package com.dsh105.holoapi.command.sub;
 
 import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.command.Command;
@@ -32,13 +32,10 @@ import com.dsh105.powermessage.core.PowerMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 
 public class InfoCommand implements CommandListener {
 

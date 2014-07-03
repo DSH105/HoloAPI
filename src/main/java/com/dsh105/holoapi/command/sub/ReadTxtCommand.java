@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command2.sub;
+package com.dsh105.holoapi.command.sub;
 
 import com.dsh105.command.Command;
 import com.dsh105.command.CommandEvent;
@@ -29,7 +29,6 @@ import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.util.MiscUtil;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;

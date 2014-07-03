@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command2.sub;
+package com.dsh105.holoapi.command.sub;
 
 import com.dsh105.command.Command;
 import com.dsh105.command.CommandEvent;
@@ -23,36 +23,48 @@ import com.dsh105.command.CommandListener;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.config.Lang;
-import org.bukkit.Bukkit;
+import com.dsh105.holoapi.util.MiscUtil;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class HideCommand implements CommandListener {
+public class MoveCommand implements CommandListener {
 
     @Command(
-            command = "hide <id> <player>",
-            description = "Hide a hologram from a player's view",
-            permission = "holoapi.holo.hide"
+            command = "move <id>",
+            description = "Move a hologram to your current position",
+            permission = "holoapi.holo.move"
     )
-    public boolean command(CommandEvent event) {
+    public boolean command(CommandEvent<Player> event) {
         final Hologram hologram = HoloAPI.getManager().getHologram(event.variable("id"));
         if (hologram == null) {
             event.respond(Lang.HOLOGRAM_NOT_FOUND.getValue("id", event.variable("id")));
             return true;
         }
 
-        Player target = Bukkit.getPlayer(event.variable("player"));
-        if (target == null) {
-            event.respond(Lang.NULL_PLAYER.getValue("player", event.variable("player")));
+        hologram.move(event.sender().getLocation());
+        event.respond(Lang.HOLOGRAM_MOVED.getValue());
+        return true;
+    }
+
+    @Command(
+            command = "move <id> <world> <x> <y> <z>",
+            description = "Move a hologram to your current position",
+            permission = "holoapi.holo.move"
+    )
+    public boolean moveLocation(CommandEvent<Player> event) {
+        Hologram hologram = HoloAPI.getManager().getHologram(event.variable("id"));
+        if (hologram == null) {
+            event.respond(Lang.HOLOGRAM_NOT_FOUND.getValue("id", event.variable("id")));
             return true;
         }
 
-        if (!hologram.canBeSeenBy(target)) {
-            event.respond(Lang.HOLOGRAM_ALREADY_NOT_SEE.getValue("id", event.variable("id"), "player", event.variable("player")));
+        Location location = MiscUtil.getLocation(event);
+        if (location == null) {
             return true;
         }
 
-        hologram.clear(target);
-        event.respond(Lang.HOLOGRAM_HIDE.getValue("id", event.variable("id"), "player", event.variable("player")));
+        hologram.move(location);
+        event.respond(Lang.HOLOGRAM_MOVED.getValue());
         return true;
     }
 }

@@ -15,7 +15,7 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.command2.sub;
+package com.dsh105.holoapi.command.sub;
 
 import com.dsh105.command.Command;
 import com.dsh105.command.CommandEvent;
@@ -24,7 +24,6 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.config.Lang;
 
-import java.util.List;
 import java.util.Set;
 
 public class RefreshCommand implements CommandListener {
