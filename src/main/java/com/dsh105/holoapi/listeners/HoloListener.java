@@ -20,7 +20,6 @@ package com.dsh105.holoapi.listeners;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.MultiColourFormat;
 import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
 import com.dsh105.holoapi.config.Settings;
 import org.bukkit.entity.Entity;
@@ -39,8 +38,12 @@ public class HoloListener implements Listener {
 
     @EventHandler
     public void onHoloLineUpdate(HoloLineUpdateEvent event) {
-        if (!MultiColourFormat.CACHE.contains(event.getHologram()) && event.getNewLineContent().contains(Settings.MULTICOLOR_CHARACTER.getValue())) {
-            MultiColourFormat.CACHE.add(event.getHologram());
+        if (HoloAPI.getHoloUpdater().getTrackedHolograms().contains(event.getHologram())) {
+            if (!HoloAPI.getHoloUpdater().shouldTrack(event.getNewLineContent())) {
+                HoloAPI.getHoloUpdater().track(event.getHologram(), false);
+            }
+        } else {
+            HoloAPI.getHoloUpdater().track(event.getHologram());
         }
     }
 

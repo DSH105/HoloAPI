@@ -110,7 +110,7 @@ public class Lang extends Options {
             YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE = new LangSetting("yes_no_command_touch_action_as_console", "{c1}Should this command be executed as the console? Please enter either {c2}Yes {c1}or {c2}No{c1}."),
 
     PROMPT_UPDATE_LINE = new LangSetting("prompt_update_line", "{c1}What do you want to set this line to?"),
-            PROMPT_DELAY = new LangSetting("prompt_delay", "{c1}Enter the desired delay  = new LangSetting(in ticks) of the frames in the new animated hologram."),
+            PROMPT_DELAY = new LangSetting("prompt_delay", "{c1}Enter the desired delay((in ticks) of the frames in the new animated hologram."),
             PROMPT_INPUT = new LangSetting("prompt_input", "{c1}Enter the desired lines of the new hologram. Enter {c2}Done {c1}when finished."),
             PROMPT_INPUT_FRAMES = new LangSetting("prompt_input_frames", "{c1}Enter the desired lines of the new animated hologram. Enter {c2}Done {c1}when finished or {c2}Next {c1}to start building the next frame."),
             PROMPT_INPUT_NEXT = new LangSetting("prompt_input_next", "{c1}Added new line: &r%input%{c1}. Enter next line."),
@@ -124,8 +124,8 @@ public class Lang extends Options {
             PROMPT_ENTER_NEW_LINE = new LangSetting("prompt_enter_new_line", "{c1}Enter the new line for the hologram."),
 
     BUILDER_EMPTY_LINES = new LangSetting("hologram_not_created", "{c1}The hologram was not created as it was empty."),
-            BUILDER_INPUT_FAIL_TEXT_IMAGE = new LangSetting("builder_input_fail_text_image", "{c1}Enter a valid line type  = new LangSetting({c2}Text {c1}or {c2}Image{c1})."),
-            BUILDER_INPUT_FIRST = new LangSetting("builder_input_fail_text_image", "{c1}Enter type for next line  = new LangSetting({c2}Text {c1}or {c2}Image{c1})."),
+            BUILDER_INPUT_FAIL_TEXT_IMAGE = new LangSetting("builder_input_fail_text_image", "{c1}Enter a valid line type ({c2}Text {c1}or {c2}Image{c1})."),
+            BUILDER_INPUT_FIRST = new LangSetting("builder_input_fail_text_image", "{c1}Enter type for next line(({c2}Text {c1}or {c2}Image{c1})."),
             BUILDER_INPUT_LINE_DATA = new LangSetting("builder_input_line_data", "{c1}What would you like this line to say?"),
             BUILDER_INPUT_IMAGE_PATH = new LangSetting("builder_input_image_path", "{c1}What image do you want to add?"),
             BUILDER_INPUT_NEXT_WITH_NUMBER = new LangSetting("builder_input_next_with_number", "{c1}Added %line% line. Enter type for next line ({c2}Text {c1} or {c2}Image).");

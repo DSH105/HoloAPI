@@ -36,7 +36,7 @@ public class WorldListener implements Listener {
     public void onWorldLoad(WorldLoadEvent event) {
         for (Map.Entry<String, String> entry : new HashMap<>(UNLOADED_HOLOGRAMS).entrySet()) {
             if (entry.getValue().equals(event.getWorld().getName())) {
-                HoloAPICore.LOGGER.log(Level.INFO, "Loading hologram " + entry.getKey() + " into world " + entry.getValue() + ".");
+                HoloAPI.LOG.info("Loading hologram " + entry.getKey() + " into world " + entry.getValue() + ".");
                 if (((SimpleHoloManager) HoloAPI.getManager()).loadFromFile(entry.getKey()) != null) {
                     UNLOADED_HOLOGRAMS.remove(entry.getKey());
                 }

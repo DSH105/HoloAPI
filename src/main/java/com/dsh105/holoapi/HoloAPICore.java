@@ -19,11 +19,13 @@ package com.dsh105.holoapi;
 
 import com.dsh105.command.CommandListener;
 import com.dsh105.command.CommandManager;
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.commodus.config.Options;
 import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.commodus.config.YAMLConfigManager;
 import com.dsh105.commodus.data.Metrics;
 import com.dsh105.commodus.data.Updater;
+import com.dsh105.holoapi.api.HoloUpdater;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
@@ -65,6 +67,7 @@ public class HoloAPICore extends JavaPlugin {
     protected static SimpleAnimationLoader ANIMATION_LOADER;
     protected static TagFormatter TAG_FORMATTER;
     protected static VisibilityMatcher VISIBILITY_MATCHER;
+    protected static HoloUpdater HOLO_UPDATER;
 
     protected static InjectionManager INJECTION_MANAGER;
 
@@ -82,16 +85,13 @@ public class HoloAPICore extends JavaPlugin {
     public boolean updateChecked = false;
     public File file;
 
-    private ChatColor primaryColour = ChatColor.DARK_AQUA;
-    private ChatColor secondaryColour = ChatColor.AQUA;
     protected String prefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "%text%" + ChatColor.WHITE + "]" + ChatColor.RESET + " ";
-
-    public static final ModuleLogger LOGGER = new ModuleLogger("HoloAPI");
-    public static final ModuleLogger LOGGER_REFLECTION = LOGGER.getModule("Reflection");
 
     @Override
     public void onDisable() {
-        HOLO_MANAGER.clearAll();
+        if (HOLO_MANAGER != null) {
+            HOLO_MANAGER.clearAll();
+        }
         if (INJECTION_MANAGER != null) {
             INJECTION_MANAGER.close();
             INJECTION_MANAGER = null;
@@ -108,6 +108,7 @@ public class HoloAPICore extends JavaPlugin {
         INJECTION_MANAGER = new InjectionManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
+        HOLO_UPDATER = new HoloUpdater();
         TAG_FORMATTER = new TagFormatter();
         VISIBILITY_MATCHER = new VisibilityMatcher();
         HOLO_MANAGER = new SimpleHoloManager();
@@ -164,7 +165,7 @@ public class HoloAPICore extends JavaPlugin {
 
             metrics.addGraph(dependingPlugins);
         } catch (IOException e) {
-            LOGGER.warning("Plugin Metrics (MCStats) has failed to start.");
+            HoloAPI.LOG.warning("Plugin Metrics (MCStats) has failed to start.");
             e.printStackTrace();
         }
 
@@ -174,10 +175,8 @@ public class HoloAPICore extends JavaPlugin {
 
     private void loadCommands() {
         COMMAND_MANAGER = new CommandManager(this, HoloAPI.getPrefix());
-        COMMAND_MANAGER.setSuggestCommands(true);
         COMMAND_MANAGER.setFormatColour(ChatColor.getByChar(Settings.BASE_CHAT_COLOUR.getValue()));
         COMMAND_MANAGER.setHighlightColour(ChatColor.getByChar(Settings.HIGHLIGHT_CHAT_COLOUR.getValue()));
-
         CommandListener parent = new HoloCommand();
         COMMAND_MANAGER.register(parent);
         // TODO: A way to do this dynamically
@@ -201,8 +200,6 @@ public class HoloAPICore extends JavaPlugin {
         COMMAND_MANAGER.registerSubCommands(parent, new TouchCommand());
         COMMAND_MANAGER.registerSubCommands(parent, new UpdateCommand());
         COMMAND_MANAGER.registerSubCommands(parent, new VisibilityCommand());
-
-        COMMAND_MANAGER.register(new HoloDebugCommand());
     }
 
     protected void checkUpdates() {
@@ -247,7 +244,7 @@ public class HoloAPICore extends JavaPlugin {
                     for (String s : unprepared) {
                         HOLO_MANAGER.loadFromFile(s);
                     }
-                    LOGGER.log(Level.INFO, "Holograms loaded");
+                    HoloAPI.LOG.info("Holograms loaded");
                     this.cancel();
                 }
             }

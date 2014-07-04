@@ -40,9 +40,6 @@ public class ReloadCommand implements CommandListener {
         event.respond(Lang.CONFIGS_RELOADED.getValue());
         event.respond(Lang.HOLOGRAM_RELOAD.getValue());
 
-        // Reload all configuration values
-        HoloAPI.getCore().loadConfiguration();
-
         // Load all holograms
         HoloAPI.getCore().loadHolograms();
         return true;

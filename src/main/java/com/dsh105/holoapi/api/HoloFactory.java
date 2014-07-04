@@ -145,7 +145,7 @@ public abstract class HoloFactory {
         }
 
         if (Bukkit.getWorld(this.worldName) == null) {
-            HoloAPICore.LOGGER.log(Level.WARNING, "Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + ". Maybe the world isn't loaded yet?");
+            HoloAPI.LOG.warning("Could not find valid world (" + this.worldName + ") for Hologram of ID " + this.saveId + ". Maybe the world isn't loaded yet?");
             WorldListener.store(this.saveId, this.worldName);
             return null;
         }

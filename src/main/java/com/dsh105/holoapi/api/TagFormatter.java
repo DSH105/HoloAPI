@@ -132,7 +132,12 @@ public class TagFormatter {
             }
         });
 
-        this.addFormat(Settings.MULTICOLOR_CHARACTER.getValue(), new MultiColourFormat());
+        this.addFormat(Settings.MULTICOLOR_CHARACTER.getValue(), new TagFormat() {
+            @Override
+            public String getValue(Player observer) {
+                return HoloAPI.getHoloUpdater().getCurrentMultiColorFormat();
+            }
+        });
     }
 
     /**

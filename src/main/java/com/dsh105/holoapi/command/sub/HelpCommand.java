@@ -17,12 +17,14 @@
 
 package com.dsh105.holoapi.command.sub;
 
+import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.dsh105.command.Command;
 import com.dsh105.command.CommandEvent;
 import com.dsh105.command.CommandListener;
 import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.config.Lang;
+import org.bukkit.entity.Player;
 
 public class HelpCommand implements CommandListener {
 
@@ -32,6 +34,9 @@ public class HelpCommand implements CommandListener {
     )
     public boolean help(CommandEvent event) {
         HoloAPI.getCommandManager().getHelpService().sendPage(event.sender(), 1);
+        if (MinecraftReflection.isUsingNetty() && event.sender() instanceof Player) {
+            event.respond(Lang.TIP_HOVER_COMMANDS.getValue());
+        }
         return true;
     }
 
@@ -42,6 +47,9 @@ public class HelpCommand implements CommandListener {
     public boolean helpPage(CommandEvent event) {
         try {
             HoloAPI.getCommandManager().getHelpService().sendPage(event.sender(), GeneralUtil.toInteger(event.variable("index")));
+            if (MinecraftReflection.isUsingNetty() && event.sender() instanceof Player) {
+                event.respond(Lang.TIP_HOVER_COMMANDS.getValue());
+            }
         } catch (NumberFormatException e) {
             event.respond(Lang.HELP_INDEX_TOO_BIG.getValue("index", event.variable("index")));
         }

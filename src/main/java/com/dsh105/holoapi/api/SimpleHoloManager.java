@@ -20,7 +20,6 @@ package com.dsh105.holoapi.api;
 import com.dsh105.commodus.GeneralUtil;
 import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.*;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
@@ -42,7 +41,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.logging.Level;
 
 public class SimpleHoloManager implements HoloManager {
 
@@ -134,11 +132,7 @@ public class SimpleHoloManager implements HoloManager {
         }
         HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloCreateEvent(hologram));
 
-        for (String s : hologram.getLines()) {
-            if (s.contains(Settings.MULTICOLOR_CHARACTER.getValue())) {
-                MultiColourFormat.CACHE.add(hologram);
-            }
-        }
+        HoloAPI.getHoloUpdater().track(hologram);
     }
 
     @Override
@@ -161,9 +155,7 @@ public class SimpleHoloManager implements HoloManager {
         HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloDeleteEvent(hologram));
         //this.clearFromFile(hologram);
 
-        if (MultiColourFormat.CACHE.contains(hologram)) {
-            MultiColourFormat.CACHE.remove(hologram);
-        }
+        HoloAPI.getHoloUpdater().remove(hologram);
     }
 
     @Override
@@ -314,7 +306,7 @@ public class SimpleHoloManager implements HoloManager {
                                 }
 
                             } else {
-                                HoloAPICore.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                                HoloAPI.LOG.warning("Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
                             }
                         }
                         if (containsImage) {
@@ -361,7 +353,7 @@ public class SimpleHoloManager implements HoloManager {
                         hf.withText(value);
                     }
                 } else {
-                    HoloAPICore.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
+                    HoloAPI.LOG.warning("Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
                 }
             }
             if (!hf.isEmpty()) {

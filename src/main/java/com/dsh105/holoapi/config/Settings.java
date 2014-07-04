@@ -32,6 +32,7 @@ public class Settings extends Options {
     }
 
     private void prepareSpecialCharacters() {
+        specialCharacters = new HashMap<>();
         String[] codes = {"x", "xx", "xxx", "xxxx", "/", "<3", ":)", ":(", "s", "*", "|"};
         String[] characters = {"2591", "2592", "2593", "2588", "26A1", "2764", "263A", "2639", "2600", "2605", "23B9"};
 

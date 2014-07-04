@@ -22,6 +22,7 @@ import com.dsh105.commodus.config.Options;
 import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.commodus.logging.Log;
 import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.HoloUpdater;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
 import com.dsh105.holoapi.config.ConfigType;
@@ -111,9 +112,12 @@ public class HoloAPI {
      *
      * @return VisibilityMatcher that stores all registrations of hologram visibilities
      */
-
     public static VisibilityMatcher getVisibilityMatcher() {
         return getCore().VISIBILITY_MATCHER;
+    }
+
+    public static HoloUpdater getHoloUpdater() {
+        return getCore().HOLO_UPDATER;
     }
 
     public static CommandManager getCommandManager() {

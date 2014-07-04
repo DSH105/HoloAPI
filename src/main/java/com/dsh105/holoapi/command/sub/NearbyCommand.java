@@ -58,6 +58,7 @@ public class NearbyCommand implements CommandListener {
             return true;
         }
 
+        event.respond(Lang.HOLOGRAM_NEARBY.getValue("radius", radius));
         InfoCommand.info(event.sender(), nearby);
         if (MinecraftReflection.isUsingNetty()) {
             event.respond(Lang.TIP_HOVER_PREVIEW.getValue());
