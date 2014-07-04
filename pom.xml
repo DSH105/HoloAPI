@@ -79,7 +79,7 @@
          <dependency>
              <groupId>com.dsh105</groupId>
              <artifactId>CommandManager</artifactId>
-             <version>1.0.1-SNAPSHOT</version>
+             <version>1.0.2-SNAPSHOT</version>
          </dependency>
 
          <!-- Vault -->
