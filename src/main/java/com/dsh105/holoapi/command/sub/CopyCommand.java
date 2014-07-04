@@ -54,9 +54,9 @@ public class CopyCommand implements CommandListener {
         if (event.sender() instanceof Player) {
             Hologram copy = HoloAPI.getManager().copy(hologram, ((Player) event.sender()).getLocation());
             if (copy instanceof AnimatedHologram) {
-                event.respond(Lang.HOLOGRAM_ANIMATED_COPIED.getValue("id", copy.getSaveId()));
+                event.respond(Lang.HOLOGRAM_ANIMATED_COPIED.getValue("id", hologram.getSaveId()));
             } else {
-                event.respond(Lang.HOLOGRAM_COPIED.getValue("id", copy.getSaveId()));
+                event.respond(Lang.HOLOGRAM_COPIED.getValue("id", hologram.getSaveId()));
             }
             return true;
         }
@@ -70,9 +70,9 @@ public class CopyCommand implements CommandListener {
             @Override
             public String getSuccessMessage(ConversationContext context, String input) {
                 if (copy instanceof AnimatedHologram) {
-                    return Lang.HOLOGRAM_ANIMATED_COPIED.getValue("id", copy.getSaveId());
+                    return Lang.HOLOGRAM_ANIMATED_COPIED.getValue("id", hologram.getSaveId());
                 }
-                return Lang.HOLOGRAM_COPIED.getValue("id", copy.getSaveId());
+                return Lang.HOLOGRAM_COPIED.getValue("id", hologram.getSaveId());
             }
         })).buildConversation((Conversable) event.sender()).begin();
         return true;
@@ -96,9 +96,9 @@ public class CopyCommand implements CommandListener {
         }
         Hologram copy = HoloAPI.getManager().copy(hologram, location);
         if (copy instanceof AnimatedHologram) {
-            event.respond(Lang.HOLOGRAM_ANIMATED_COPIED.getValue("id", copy.getSaveId()));
+            event.respond(Lang.HOLOGRAM_ANIMATED_COPIED.getValue("id", hologram.getSaveId()));
         } else {
-            event.respond(Lang.HOLOGRAM_COPIED.getValue("id", copy.getSaveId()));
+            event.respond(Lang.HOLOGRAM_COPIED.getValue("id", hologram.getSaveId()));
         }
         return true;
     }
