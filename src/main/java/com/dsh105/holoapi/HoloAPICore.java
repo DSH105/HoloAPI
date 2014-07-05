@@ -183,6 +183,7 @@ public class HoloAPICore extends JavaPlugin {
         COMMAND_MANAGER.registerSubCommands(parent, new AddLineCommand());
         COMMAND_MANAGER.registerSubCommands(parent, new BuildCommand());
         COMMAND_MANAGER.registerSubCommands(parent, new CopyCommand());
+        COMMAND_MANAGER.registerSubCommands(parent, new ClearCommand());
         COMMAND_MANAGER.registerSubCommands(parent, new CreateCommand());
         COMMAND_MANAGER.registerSubCommands(parent, new EditCommand());
         COMMAND_MANAGER.registerSubCommands(parent, new HelpCommand());
