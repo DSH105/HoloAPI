@@ -133,9 +133,9 @@
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
         
-        <!--CaptainBern's Minecraft Reflection-->
+        <!--CaptainBern's and DSH105's repo location-->
         <repository>
-            <id>captainbern</id>
+            <id>captainbern-dsh105</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
     </repositories>
