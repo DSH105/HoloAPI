@@ -30,8 +30,7 @@ public class BuildCommand implements CommandListener {
     @Command(
             command = "build",
             description = "Dynamically build a combined hologram of both text and images",
-            permission = "holoapi.holo.build",
-            help = ""
+            permission = "holoapi.holo.build"
     )
     public boolean command(CommandEvent event) {
         if (!(event.sender() instanceof Conversable)) {
