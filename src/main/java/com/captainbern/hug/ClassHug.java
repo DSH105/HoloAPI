@@ -111,9 +111,9 @@ public class ClassHug {
                         break;
                     case CONSTANT_Integer:
                     case CONSTANT_Float:
-                    case CONSTANT_Fieldref:
-                    case CONSTANT_Methodref:
-                    case CONSTANT_InterfaceMethodref:
+                    case CONSTANT_FieldRef:
+                    case CONSTANT_MethodRef:
+                    case CONSTANT_InterfaceMethodRef:
                     case CONSTANT_NameAndType:
                     case CONSTANT_InvokeDynamic:
                         data = new byte[4];
