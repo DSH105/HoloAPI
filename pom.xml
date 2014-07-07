@@ -61,19 +61,6 @@
             <version>1.0.0</version>
         </dependency>
 
-         <dependency>
-            <groupId>com.dsh105</groupId>
-            <artifactId>CommandManager</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-        </dependency>
-
-         <!-- CaptainBern's Reflection -->
-         <dependency>
-             <groupId>com.captainbern</groupId>
-             <artifactId>Minecraft-Reflection</artifactId>
-             <version>1.0.0</version>
-         </dependency>
-
          <!-- Commodus -->
          <dependency>
              <groupId>com.dsh105</groupId>
