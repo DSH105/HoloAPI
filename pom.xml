@@ -56,10 +56,10 @@
 
          <!-- CaptainBern's Reflection -->
          <dependency>
-             <groupId>com.captainbern</groupId>
-             <artifactId>Minecraft-Reflection</artifactId>
-             <version>1.0.0</version>
-         </dependency>
+            <groupId>com.captainbern</groupId>
+            <artifactId>Minecraft-Reflection</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
          <!-- Commodus -->
          <dependency>
@@ -135,23 +135,18 @@
              <url>http://repo.daboross.net/</url>
          </repository>
 
-         <repository>
-             <id>vault-repo</id>
-             <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
-         </repository>
-
-         <!-- VanishNoPacket -->
-         <repository>
-             <id>kitteh-repo</id>
-             <url>http://repo.kitteh.org/content/groups/public</url>
-         </repository>
-
-         <!-- Hawk Repo - for a bunch of stuff -->
-         <repository>
-             <id>hawk-repo</id>
-             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
-         </repository>
-     </repositories>
+        <!-- VanishNoPacket -->
+        <repository>
+            <id>kitteh-repo</id>
+            <url>http://repo.kitteh.org/content/groups/public</url>
+        </repository>
+        
+        <!-- CaptainBern & DSH105 - for a bunch of cool stuff -->
+        <repository>
+            <id>captainbern-dsh105</id>
+            <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+        </repository>
+    </repositories>
 
      <!-- Build -->
      <build>
@@ -165,7 +160,6 @@
                  <directory>${basedir}/src/main/resources/</directory>
                  <includes>
                      <include>*.yml</include>
-                     <include>*.xml</include>
                  </includes>
              </resource>
          </resources>

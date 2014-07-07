@@ -138,9 +138,9 @@ public interface HoloManager {
 
     /**
      * Sets the new line content for an existing hologram, accounting for new lines added.
-     * </p>
+     * <p/>
      * This method is more expensive IF there are more lines in the new content then already present in the hologram
-     * </p>
+     * <p/>
      * If the above condition is met, the original hologram will be copied and new lines added
      *
      * @param original   Hologram to set the content of
