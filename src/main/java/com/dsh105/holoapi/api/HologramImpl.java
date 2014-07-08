@@ -686,10 +686,10 @@ public class HologramImpl implements Hologram {
 
         WrappedPacket touchSkull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
         touchSkull.getIntegers().write(0, this.getTouchSkullIndex(index));
-        touchSlime.getIntegers().write(1, (int) Math.floor(x * 32.0D));
-        touchSlime.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
-        touchSlime.getIntegers().write(3, (int) Math.floor(z * 32.0D));
-        touchSlime.getIntegers().write(9, 66);
+        touchSkull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
+        touchSkull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+        touchSkull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
+        touchSkull.getIntegers().write(9, 66);
 
         WrappedPacket attachTouch = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
         attachTouch.getIntegers().write(0, 0);
