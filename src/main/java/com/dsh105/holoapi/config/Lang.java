@@ -35,18 +35,11 @@ public class Lang extends Options {
 
     public static LangSetting
             UPDATE_NOT_AVAILABLE = new LangSetting("update_not_available", "{c1}An update is not available."),
-            NO_PERMISSION = new LangSetting("no_permission", "{c1}You are not permitted to do that."),
-            COMMAND_ERROR = new LangSetting("cmd_error", "{c1}Error for input string: {c2}%cmd%{c1}. Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
-            COMMAND_DOESNOT_EXIST = new LangSetting("cmd_doesnotexist", "{c1}Command does not exist: {c2}%cmd%{c1}. Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
-            COMMAND_HELP = new LangSetting("cmd_help", "{c1}Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
             HELP_INDEX_TOO_BIG = new LangSetting("help_index_too_big", "{c1}Page {c2}%index% {c1}does not exist."),
-            IN_GAME_ONLY = new LangSetting("in_game_only", "{c1}Please log in to do that."),
             NOT_CONVERSABLE = new LangSetting("not_conversable", "{c1}Command Sender cannot be conversed with. Please use an alternate command with more arguments."),
             NOT_LOCATION = new LangSetting("not_location", "{c1}Could not create Location. Please revise command arguments."),
-            STRING_ERROR = new LangSetting("string_error", "{c1}Error parsing {c2}%string%{c1}. Please revise command arguments."),
             NULL_PLAYER = new LangSetting("null_player", "{c2}%player% {c1}is not online. Please try a different Player."),
             INT_ONLY = new LangSetting("int_only", "{c2}%string% {c1}must to be an integer."),
-            WHUPS = new LangSetting("whups", "{c1}Whups. Something bad happened."),
             CONFIGS_RELOADED = new LangSetting("configs_reloaded", "{c1}Configuration files reloaded."),
             PLUGIN_INFORMATION = new LangSetting("plugin_information", "{c1}Running HoloAPI v{c2}%version%{c1}. Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
 
@@ -110,7 +103,7 @@ public class Lang extends Options {
             YES_NO_COMMAND_TOUCH_ACTION_AS_CONSOLE = new LangSetting("yes_no_command_touch_action_as_console", "{c1}Should this command be executed as the console? Please enter either {c2}Yes {c1}or {c2}No{c1}."),
 
     PROMPT_UPDATE_LINE = new LangSetting("prompt_update_line", "{c1}What do you want to set this line to?"),
-            PROMPT_DELAY = new LangSetting("prompt_delay", "{c1}Enter the desired delay((in ticks) of the frames in the new animated hologram."),
+            PROMPT_DELAY = new LangSetting("prompt_delay", "{c1}Enter the desired delay (in ticks) of the frames in the new animated hologram."),
             PROMPT_INPUT = new LangSetting("prompt_input", "{c1}Enter the desired lines of the new hologram. Enter {c2}Done {c1}when finished."),
             PROMPT_INPUT_FRAMES = new LangSetting("prompt_input_frames", "{c1}Enter the desired lines of the new animated hologram. Enter {c2}Done {c1}when finished or {c2}Next {c1}to start building the next frame."),
             PROMPT_INPUT_NEXT = new LangSetting("prompt_input_next", "{c1}Added new line: &r%input%{c1}. Enter next line."),
@@ -125,7 +118,7 @@ public class Lang extends Options {
 
     BUILDER_EMPTY_LINES = new LangSetting("hologram_not_created", "{c1}The hologram was not created as it was empty."),
             BUILDER_INPUT_FAIL_TEXT_IMAGE = new LangSetting("builder_input_fail_text_image", "{c1}Enter a valid line type ({c2}Text {c1}or {c2}Image{c1})."),
-            BUILDER_INPUT_FIRST = new LangSetting("builder_input_fail_text_image", "{c1}Enter type for next line(({c2}Text {c1}or {c2}Image{c1})."),
+            BUILDER_INPUT_FIRST = new LangSetting("builder_input_fail_text_image", "{c1}Enter type for next line ({c2}Text {c1}or {c2}Image{c1})."),
             BUILDER_INPUT_LINE_DATA = new LangSetting("builder_input_line_data", "{c1}What would you like this line to say?"),
             BUILDER_INPUT_IMAGE_PATH = new LangSetting("builder_input_image_path", "{c1}What image do you want to add?"),
             BUILDER_INPUT_NEXT_WITH_NUMBER = new LangSetting("builder_input_next_with_number", "{c1}Added %line% line. Enter type for next line ({c2}Text {c1} or {c2}Image).");

@@ -46,7 +46,7 @@ public class LangSetting extends Setting<String> {
         if (message == null || message.isEmpty() || message.equalsIgnoreCase("NONE")) {
             return null;
         }
-        return HoloAPI.getCommandManager().formatResponse(message);
+        return ChatColor.translateAlternateColorCodes('&', HoloAPI.getCommandManager().formatResponse(message));
     }
 
     public void send(Player player, String... pairedReplacements) {

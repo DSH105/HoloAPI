@@ -72,9 +72,8 @@ public class ClearCommand implements CommandListener {
     }
 
     private void clear(String type) {
-        Iterator<Hologram> i = HoloAPI.getManager().getAllComplexHolograms().keySet().iterator();
-        while (i.hasNext()) {
-            Hologram h = i.next();
+        ArrayList<Hologram> toClear = new ArrayList<>();
+        for (Hologram h : HoloAPI.getManager().getAllComplexHolograms().keySet()) {
             if (type.equalsIgnoreCase("COMPLEX") && h.isSimple()) {
                 continue;
             }
@@ -86,7 +85,12 @@ public class ClearCommand implements CommandListener {
                 HoloAPI.getManager().saveToFile(h);
             }
             h.clearAllPlayerViews();
-            i.remove();
+            toClear.add(h);
+        }
+
+        for (Hologram hologram : toClear) {
+            HoloAPI.getManager().remove(hologram);
+            HoloAPI.getManager().clearFromFile(hologram);
         }
     }
 }
