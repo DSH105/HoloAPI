@@ -28,7 +28,7 @@ import org.bukkit.Bukkit;
         command = "holo",
         description = "Manage your own holograms.",
         permission = "holoapi.holo",
-        usage = "Use &b/holo help &3for help."
+        usage = "Use \"/holo help\" for help."
 )
 public class HoloCommand implements CommandListener {
 

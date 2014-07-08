@@ -36,7 +36,7 @@ import java.util.List;
 
 public class ClearCommand implements CommandListener {
 
-    private static final List<String> VALID_TYPES = Arrays.asList("ALL", "COMPLEX", "SIMPLE");
+    private static final List<String> VALID_TYPES = Arrays.asList("all", "complex", "simple");
 
     @Command(
             command = "clear",
@@ -56,7 +56,7 @@ public class ClearCommand implements CommandListener {
             help = "Valid types are: COMPLEX, SIMPLE, ALL"
     )
     public boolean clearType(CommandEvent event) {
-        if (!VALID_TYPES.contains(event.variable("type"))) {
+        if (!VALID_TYPES.contains(event.variable("type").toLowerCase())) {
             event.respond(Lang.INVALID_CLEAR_TYPE.getValue("type", event.variable("type"), "valid", StringUtil.combine(", ", VALID_TYPES)));
             return true;
         }
