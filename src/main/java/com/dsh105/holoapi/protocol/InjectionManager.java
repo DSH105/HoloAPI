@@ -84,7 +84,7 @@ public class InjectionManager {
                 ClassHug hug = new ClassHug("com.dsh105.holoapi.protocol.netty.PlayerInjector");
 
                 if (version.contains("Cauldron") || version.contains("MCPC+")) {
-                   hug.replace("net/minecraft/server/io/netty", "net/minecraft/util/io/netty");
+                   hug.replace("net/minecraft/util/io/netty", "io/netty");
                 }
 
                 Class<?> changed = hug.giveAHug();
