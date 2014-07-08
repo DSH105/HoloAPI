@@ -198,7 +198,7 @@ public class TagFormatter {
         return content;
     }
 
-    public String formatTags(com.dsh105.holoapi.api.Hologram h, Player observer, String content) {
+    public String formatTags(Hologram h, Player observer, String content) {
         for (Map.Entry<String, TagFormat> entry : this.tagFormats.entrySet()) {
             if (entry.getKey() != null && entry.getValue() != null) {
                 String replacement = entry.getValue().getValue(h, observer);
