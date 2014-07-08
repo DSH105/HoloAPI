@@ -32,7 +32,7 @@ import static com.captainbern.hug.Constant.*;
  */
 public class ClassHug {
 
-    // The Magic of this class file. I'd better be cafebabe or else the party won't continue
+    // The Magic of this class file. It'd better be cafebabe or else the party won't continue
     private int magic;
 
     // The minor java version of this class file
