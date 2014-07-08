@@ -35,18 +35,11 @@ public class Lang extends Options {
 
     public static LangSetting
             UPDATE_NOT_AVAILABLE = new LangSetting("update_not_available", "{c1}An update is not available."),
-            NO_PERMISSION = new LangSetting("no_permission", "{c1}You are not permitted to do that."),
-            COMMAND_ERROR = new LangSetting("cmd_error", "{c1}Error for input string: {c2}%cmd%{c1}. Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
-            COMMAND_DOESNOT_EXIST = new LangSetting("cmd_doesnotexist", "{c1}Command does not exist: {c2}%cmd%{c1}. Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
-            COMMAND_HELP = new LangSetting("cmd_help", "{c1}Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
             HELP_INDEX_TOO_BIG = new LangSetting("help_index_too_big", "{c1}Page {c2}%index% {c1}does not exist."),
-            IN_GAME_ONLY = new LangSetting("in_game_only", "{c1}Please log in to do that."),
             NOT_CONVERSABLE = new LangSetting("not_conversable", "{c1}Command Sender cannot be conversed with. Please use an alternate command with more arguments."),
             NOT_LOCATION = new LangSetting("not_location", "{c1}Could not create Location. Please revise command arguments."),
-            STRING_ERROR = new LangSetting("string_error", "{c1}Error parsing {c2}%string%{c1}. Please revise command arguments."),
             NULL_PLAYER = new LangSetting("null_player", "{c2}%player% {c1}is not online. Please try a different Player."),
             INT_ONLY = new LangSetting("int_only", "{c2}%string% {c1}must to be an integer."),
-            WHUPS = new LangSetting("whups", "{c1}Whups. Something bad happened."),
             CONFIGS_RELOADED = new LangSetting("configs_reloaded", "{c1}Configuration files reloaded."),
             PLUGIN_INFORMATION = new LangSetting("plugin_information", "{c1}Running HoloAPI v{c2}%version%{c1}. Use {c2}/" + Settings.COMMAND.getValue() + " help {c1}for help."),
 
