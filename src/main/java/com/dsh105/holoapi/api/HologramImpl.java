@@ -637,7 +637,7 @@ public class HologramImpl implements Hologram {
             skull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
             skull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
             skull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
-            skull.getIntegers().write(9, (int) EntityType.WITHER_SKULL.getTypeId());
+            skull.getIntegers().write(9, 66);
 
             WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
             attach.getIntegers().write(0, 0);
