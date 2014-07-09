@@ -26,8 +26,8 @@ public class Setting<T> extends Option<T> {
 
     private ConfigType configType;
 
-    public Setting(ConfigType configType, String path, Class<T> returnType, String... comments) {
-        super(HoloAPI.getConfig(configType).config(), path, returnType, comments);
+    public Setting(ConfigType configType, String path, String... comments) {
+        super(HoloAPI.getConfig(configType).config(), path, comments);
         this.configType = configType;
     }
 

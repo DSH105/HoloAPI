@@ -21,6 +21,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
 
@@ -32,7 +33,7 @@ public class WorldListener implements Listener {
 
     private static HashMap<String, String> UNLOADED_HOLOGRAMS = new HashMap<String, String>();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWorldLoad(WorldLoadEvent event) {
         for (Map.Entry<String, String> entry : new HashMap<>(UNLOADED_HOLOGRAMS).entrySet()) {
             if (entry.getValue().equals(event.getWorld().getName())) {
