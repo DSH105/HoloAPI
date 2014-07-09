@@ -23,6 +23,11 @@ import com.captainbern.minecraft.wrapper.WrappedPacket;
 import com.captainbern.reflection.ClassTemplate;
 import com.captainbern.reflection.Reflection;
 import com.dsh105.commodus.ServerUtil;
+import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.api.events.HoloTouchEvent;
+import com.dsh105.holoapi.api.touch.Action;
+import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.protocol.netty.PlayerInjector;
 import com.google.common.collect.MapMaker;
 import org.bukkit.Bukkit;
@@ -149,6 +154,19 @@ public class InjectionManager {
     public void handlePacket(WrappedPacket packet, PlayerInjector injector) {
         EnumWrappers.EntityUseAction useAction = packet.getEntityUseActions().read(0);
 
-        // Fire Holo-touch with: useAction + injector.getPlayer();
+        for (Hologram hologram : HoloAPI.getManager().getAllHolograms().keySet()) {
+            for (int entityId : hologram.getAllEntityIds()) {
+                if (entityId == packet.getIntegers().read(0)) {
+                    for (TouchAction touchAction : hologram.getAllTouchActions()) {
+                        Action action = useAction == EnumWrappers.EntityUseAction.INTERACT ? Action.RIGHT_CLICK : Action.LEFT_CLICK;
+                        HoloTouchEvent touchEvent = new HoloTouchEvent(hologram, injector.getPlayer(), touchAction, action);
+                        HoloAPI.getCore().getServer().getPluginManager().callEvent(touchEvent);
+                        if (!touchEvent.isCancelled()) {
+                            touchAction.onTouch(injector.getPlayer(), action);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
