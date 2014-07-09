@@ -45,7 +45,7 @@ public class HoloUpdater extends BukkitRunnable {
         this.colours = Settings.MULTICOLOR_COLOURS.getValue().split(",");
         UPDATE_TAGS = new String[]{"%time%", "%date:", Settings.MULTICOLOR_CHARACTER.getValue()};
 
-        this.runTaskTimer(HoloAPI.getCore(), 0, Settings.MULTICOLOR_DELAY.getValue());
+        this.runTaskTimer(HoloAPI.getCore(), 0, (long) Settings.MULTICOLOR_DELAY.getValue());
     }
 
     @Override
