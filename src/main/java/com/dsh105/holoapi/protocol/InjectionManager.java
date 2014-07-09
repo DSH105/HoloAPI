@@ -17,11 +17,8 @@
 
 package com.dsh105.holoapi.protocol;
 
-import com.captainbern.hug.ClassHug;
 import com.captainbern.minecraft.wrapper.EnumWrappers;
 import com.captainbern.minecraft.wrapper.WrappedPacket;
-import com.captainbern.reflection.ClassTemplate;
-import com.captainbern.reflection.Reflection;
 import com.dsh105.commodus.ServerUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
@@ -30,7 +27,6 @@ import com.dsh105.holoapi.api.touch.Action;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.protocol.netty.PlayerInjector;
 import com.google.common.collect.MapMaker;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,8 +44,6 @@ public class InjectionManager {
     protected static ConcurrentMap<Player, Injector> injections = new MapMaker().weakKeys().makeMap();
 
     private boolean isClosed = false;
-
-    private ClassTemplate<Injector> injectorClass;
 
     public InjectionManager(Plugin plugin) {
         if (plugin == null)
@@ -100,23 +94,7 @@ public class InjectionManager {
 
         } else {
 
-            if (this.injectorClass == null) {
-                if (Bukkit.getServer() == null)
-                    throw new RuntimeException("Bukkit server not running!");
-
-                String version = Bukkit.getServer().getVersion();
-                ClassHug hug = new ClassHug("com.dsh105.holoapi.protocol.netty.PlayerInjector");
-
-                if (version.contains("Cauldron") || version.contains("MCPC+")) {
-                   hug.replace("net/minecraft/util/io/netty", "io/netty");
-                }
-
-                Class<?> changed = hug.giveAHug();
-                this.injectorClass = (ClassTemplate<Injector>) new Reflection().reflect(changed);
-            }
-
-
-            injector = this.injectorClass.getSafeConstructor(Player.class, InjectionManager.class).getAccessor().invoke(player, this);
+            injector = new PlayerInjector(player, this);
             injector.inject();
 
             injections.put(player, injector);

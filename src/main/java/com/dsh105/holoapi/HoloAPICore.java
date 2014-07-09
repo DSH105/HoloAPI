@@ -19,7 +19,6 @@ package com.dsh105.holoapi;
 
 import com.dsh105.command.CommandListener;
 import com.dsh105.command.CommandManager;
-import com.dsh105.commodus.StringUtil;
 import com.dsh105.commodus.config.Options;
 import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.commodus.config.YAMLConfigManager;
@@ -29,7 +28,7 @@ import com.dsh105.holoapi.api.HoloUpdater;
 import com.dsh105.holoapi.api.SimpleHoloManager;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
-import com.dsh105.holoapi.command.*;
+import com.dsh105.holoapi.command.HoloCommand;
 import com.dsh105.holoapi.command.sub.*;
 import com.dsh105.holoapi.config.ConfigType;
 import com.dsh105.holoapi.config.Lang;
@@ -57,7 +56,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class HoloAPICore extends JavaPlugin {
 
