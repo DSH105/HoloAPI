@@ -108,15 +108,6 @@ public class HoloListener implements Listener {
     }
 
     @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event) {
-        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
