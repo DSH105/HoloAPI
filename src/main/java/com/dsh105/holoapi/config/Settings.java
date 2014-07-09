@@ -102,7 +102,7 @@ public class Settings extends Options {
 
     public static final Setting<String> MULTICOLOR_CHARACTER = new Setting<>("multicolorFormat.character", "&s");
     public static final Setting<String> MULTICOLOR_COLOURS = new Setting<>("multicolorFormat.colours", "&d,&5,&1,&9,&b,&a,&e,&6,&c,&3");
-    public static final Setting<Long> MULTICOLOR_DELAY = new Setting<>("multicolorFormat.delay", 5L);
+    public static final Setting<Integer> MULTICOLOR_DELAY = new Setting<>("multicolorFormat.delay", 5);
 
     public static final Setting<Boolean> CHATBUBBLES_SHOW = new Setting<>("chatBubbles.show", false);
     public static final Setting<Boolean> CHATBUBBLES_RISE = new Setting<>("chatBubbles.rise", true);
