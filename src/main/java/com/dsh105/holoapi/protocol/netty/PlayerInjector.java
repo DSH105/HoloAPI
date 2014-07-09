@@ -1,16 +1,37 @@
+/*
+ * This file is part of HoloAPI.
+ *
+ * HoloAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * HoloAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dsh105.holoapi.protocol.netty;
 
 import com.captainbern.minecraft.conversion.BukkitUnwrapper;
+import com.captainbern.minecraft.protocol.PacketType;
 import com.captainbern.minecraft.reflection.MinecraftFields;
 import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.captainbern.minecraft.wrapper.WrappedPacket;
 import com.captainbern.reflection.Reflection;
 import com.captainbern.reflection.accessor.FieldAccessor;
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.protocol.InjectionManager;
 import com.dsh105.holoapi.protocol.Injector;
 import com.google.common.base.Preconditions;
 import net.minecraft.util.io.netty.channel.Channel;
 import net.minecraft.util.io.netty.channel.ChannelDuplexHandler;
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.Callable;
@@ -22,7 +43,7 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
 
     protected Player player;
 
-    protected InjectionManager injectionManager;
+    protected volatile InjectionManager injectionManager;
 
     protected Object nmsHandle;
 
@@ -155,6 +176,16 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // Handle the packet
+        final WrappedPacket packet = new WrappedPacket(msg);
+
+        if (packet.getPacketType().equals(PacketType.Play.Client.USE_ENTITY))
+            Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new Runnable() {
+                @Override
+                public void run() {
+                    PlayerInjector.this.injectionManager.handlePacket(packet, PlayerInjector.this);
+                }
+            });
+
         super.channelRead(ctx, msg);
     }
 }
