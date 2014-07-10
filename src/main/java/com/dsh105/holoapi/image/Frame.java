@@ -58,9 +58,7 @@ public class Frame {
 
     protected void setLines(String[] lines) {
         if (lines != null) {
-            for (int i = 0; i < lines.length; i++) {
-                lines[i] = lines[i];
-            }
+            System.arraycopy(lines, 0, lines, 0, lines.length);
             this.lines = lines;
         }
     }

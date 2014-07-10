@@ -1,131 +1,139 @@
 <!--
-  ~ This file is part of HoloAPI.
-  ~
-  ~ HoloAPI is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ HoloAPI is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+   ~ This file is part of HoloAPI.
+   ~
+   ~ HoloAPI is free software: you can redistribute it and/or modify
+   ~ it under the terms of the GNU General Public License as published by
+   ~ the Free Software Foundation, either version 3 of the License, or
+   ~ (at your option) any later version.
+   ~
+   ~ HoloAPI is distributed in the hope that it will be useful,
+   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   ~ GNU General Public License for more details.
+   ~
+   ~ You should have received a copy of the GNU General Public License
+   ~ along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
+   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.dsh105</groupId>
-    <artifactId>HoloAPI</artifactId>
-    <name>HoloAPI</name>
-    <version>1.2.4</version>
-    <url>http://dev.bukkit.org/bukkit-plugins/holoapi/</url>
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <groupId>com.dsh105</groupId>
+     <artifactId>HoloAPI</artifactId>
+     <name>HoloAPI</name>
+     <version>2.0.0-SNAPSHOT</version>
+     <url>http://dev.bukkit.org/bukkit-plugins/holoapi/</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <fanciful.version>0.1.3-RC2</fanciful.version>
-        <minecraft.version>1.7.8</minecraft.version>
-        <craftbukkit.version>R0.1</craftbukkit.version>
-    </properties>
+     <properties>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     </properties>
 
-    <distributionManagement>
-        <repository>
-            <id>hawk-repo</id>
-            <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
-        </repository>
-    </distributionManagement>
+     <distributionManagement>
+         <repository>
+             <id>hawk-repo</id>
+             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+         </repository>
+     </distributionManagement>
 
-    <!-- Dependencies -->
-    <dependencies>
+     <!-- Dependencies -->
+     <dependencies>
 
-        <!-- CaptainBern's Reflection -->
-        <dependency>
+         <!-- Bukkit -->
+         <dependency>
+             <groupId>org.bukkit</groupId>
+             <artifactId>bukkit</artifactId>
+             <version>1.7.9-R0.3-SNAPSHOT</version>
+             <scope>provided</scope>
+         </dependency>
+
+         <!-- CraftBukkit -->
+         <dependency>
+             <groupId>org.bukkit</groupId>
+             <artifactId>craftbukkit</artifactId>
+             <version>1.7.9-R0.3-SNAPSHOT</version>
+             <scope>provided</scope>
+         </dependency>
+
+         <!-- CaptainBern's Reflection -->
+         <dependency>
             <groupId>com.captainbern</groupId>
             <artifactId>Minecraft-Reflection</artifactId>
             <version>1.0.0</version>
         </dependency>
-        
-        <dependency>
-            <groupId>com.dsh105</groupId>
-            <artifactId>CommandManager</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-        </dependency>
 
-        <!-- Bukkit -->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>${minecraft.version}-${craftbukkit.version}-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
+         <!-- Commodus -->
+         <dependency>
+             <groupId>com.dsh105</groupId>
+             <artifactId>Commodus</artifactId>
+             <version>1.0.1-SNAPSHOT</version>
+         </dependency>
 
-        <!-- CraftBukkit -->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>${minecraft.version}-${craftbukkit.version}-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
+         <!-- PowerMessage -->
+         <dependency>
+             <groupId>com.dsh105</groupId>
+             <artifactId>PowerMessage</artifactId>
+             <version>1.0.0-SNAPSHOT</version>
+         </dependency>
 
-        <!-- Vault -->
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>Vault</artifactId>
-            <version>1.2.32</version>
-            <scope>provided</scope>
-        </dependency>
+         <!-- CommandManager -->
+         <dependency>
+             <groupId>com.dsh105</groupId>
+             <artifactId>CommandManager</artifactId>
+             <version>1.0.2-SNAPSHOT</version>
+         </dependency>
 
-        <!-- VanishNoPacket -->
-        <dependency>
-            <groupId>org.kitteh</groupId>
-            <artifactId>VanishNoPacket</artifactId>
-            <version>LATEST</version>
-        </dependency>
+         <!-- Vault -->
+         <dependency>
+             <groupId>net.milkbowl.vault</groupId>
+             <artifactId>Vault</artifactId>
+             <version>1.2.32</version>
+             <scope>provided</scope>
+         </dependency>
 
-        <!-- Netty -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>5.0.0.Alpha1</version>
-        </dependency>
+         <!-- VanishNoPacket -->
+         <dependency>
+             <groupId>org.kitteh</groupId>
+             <artifactId>VanishNoPacket</artifactId>
+             <version>LATEST</version>
+             <scope>provided</scope>
+         </dependency>
 
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-            <scope>test</scope>
-        </dependency>
+         <!-- Netty -->
+         <dependency>
+             <groupId>io.netty</groupId>
+             <artifactId>netty-all</artifactId>
+             <version>5.0.0.Alpha1</version>
+         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+         <dependency>
+             <groupId>org.mockito</groupId>
+             <artifactId>mockito-all</artifactId>
+             <version>1.9.5</version>
+             <scope>test</scope>
+         </dependency>
 
-    <!-- Repositories -->
-    <repositories>
+         <dependency>
+             <groupId>junit</groupId>
+             <artifactId>junit</artifactId>
+             <version>4.11</version>
+             <scope>test</scope>
+         </dependency>
+          </dependencies>
 
-        <!-- Bukkit -->
-        <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public/</url>
-        </repository>
+     <!-- Repositories -->
+     <repositories>
 
-        <!-- Vault -->
-        <repository>
-            <id>repo-daboross-net</id>
-            <url>http://repo.daboross.net/</url>
-        </repository>
+         <!-- Bukkit -->
+         <repository>
+             <id>bukkit-repo</id>
+             <url>http://repo.bukkit.org/content/groups/public/</url>
+         </repository>
 
-        <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
-        </repository>
+         <!-- Vault -->
+         <repository>
+             <id>repo-daboross-net</id>
+             <url>http://repo.daboross.net/</url>
+         </repository>
 
         <!-- VanishNoPacket -->
         <repository>
@@ -133,155 +141,154 @@
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
         
-        <!--CaptainBern's and DSH105's repo location-->
+        <!-- CaptainBern & DSH105 - for a bunch of cool stuff -->
         <repository>
             <id>captainbern-dsh105</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
-    <!-- Build -->
-    <build>
-        <defaultGoal>clean package install</defaultGoal>
-        <finalName>${project.name}</finalName>
-        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>*.yml</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
+     <!-- Build -->
+     <build>
+         <defaultGoal>clean package install</defaultGoal>
+         <finalName>${project.name}</finalName>
+         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+         <resources>
+             <resource>
+                 <targetPath>.</targetPath>
+                 <filtering>true</filtering>
+                 <directory>${basedir}/src/main/resources/</directory>
+                 <includes>
+                     <include>*.yml</include>
+                     <include>*.xml</include>
+                 </includes>
+             </resource>
+         </resources>
+         <plugins>
 
-            <!--clean up-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.4.1</version>
-                <executions>
-                    <execution>
-                        <id>auto-clean</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                        <configuration>
-                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
-                            <filesets>
-                                <fileset>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>original-*.jar</include>
-                                        <include>*-shaded.jar</include>
-                                    </includes>
-                                    <followSymlinks>false</followSymlinks>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+             <!--clean up-->
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-clean-plugin</artifactId>
+                 <version>2.4.1</version>
+                 <executions>
+                     <execution>
+                         <id>auto-clean</id>
+                         <phase>install</phase>
+                         <goals>
+                             <goal>clean</goal>
+                         </goals>
+                         <configuration>
+                             <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                             <filesets>
+                                 <fileset>
+                                     <directory>${project.build.directory}</directory>
+                                     <includes>
+                                         <include>original-*.jar</include>
+                                         <include>*-shaded.jar</include>
+                                     </includes>
+                                     <followSymlinks>false</followSymlinks>
+                                 </fileset>
+                             </filesets>
+                         </configuration>
+                     </execution>
+                 </executions>
+             </plugin>
 
-            <!-- Compiler -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
+             <!-- Compiler -->
+             <plugin>
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <version>2.3.2</version>
+                 <configuration>
+                     <source>1.7</source>
+                     <target>1.7</target>
+                 </configuration>
+             </plugin>
 
-            <!-- JRebel -->
-            <plugin>
-                <groupId>org.zeroturnaround</groupId>
-                <artifactId>jrebel-maven-plugin</artifactId>
-                <configuration>
-                    <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
-                    <alwaysGenerate>true</alwaysGenerate>
-                    <showGenerated>true</showGenerated>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-rebel-xml</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+             <!-- JRebel -->
+             <plugin>
+                 <groupId>org.zeroturnaround</groupId>
+                 <artifactId>jrebel-maven-plugin</artifactId>
+                 <configuration>
+                     <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
+                     <alwaysGenerate>true</alwaysGenerate>
+                     <showGenerated>true</showGenerated>
+                 </configuration>
+                 <executions>
+                     <execution>
+                         <id>generate-rebel-xml</id>
+                         <phase>process-resources</phase>
+                         <goals>
+                             <goal>generate</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+             </plugin>
 
-            <!-- Jar-Filler -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Plugin-Version>${project.version}</Plugin-Version>
-                            <Minecraft-Version>${minecraft.version}</Minecraft-Version>
-                            <CraftBukkit-Version>${craftbukkit.version}</CraftBukkit-Version>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
+             <!-- Jar-Filler -->
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-jar-plugin</artifactId>
+                 <version>2.1</version>
+                 <configuration>
+                     <archive>
+                         <manifestEntries>
+                             <Plugin-Version>${project.version}</Plugin-Version>
+                         </manifestEntries>
+                     </archive>
+                 </configuration>
+             </plugin>
 
-            <!-- Replacer -->
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>maven-replacer-plugin</artifactId>
-                <version>1.3.8</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <file>target/classes/plugin.yml</file>
-                    <replacements>
-                        <replacement>
-                            <token>jenkins-build-number</token>
-                            <value>${BUILD_NUMBER}</value>
-                        </replacement>
-                    </replacements>
-                </configuration>
-            </plugin>
+             <!-- Replacer -->
+             <plugin>
+                 <groupId>com.google.code.maven-replacer-plugin</groupId>
+                 <artifactId>maven-replacer-plugin</artifactId>
+                 <version>1.3.8</version>
+                 <executions>
+                     <execution>
+                         <phase>prepare-package</phase>
+                         <goals>
+                             <goal>replace</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+                 <configuration>
+                     <file>target/classes/plugin.yml</file>
+                     <replacements>
+                         <replacement>
+                             <token>jenkins-build-number</token>
+                             <value>${BUILD_NUMBER}</value>
+                         </replacement>
+                     </replacements>
+                 </configuration>
+             </plugin>
 
-            <!-- Shade -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <artifactSet>
-                                <includes>
-                                    <artifact>com.captainbern.minecraft:Minecraft-Reflection</artifact>
-                                </includes>
-                            </artifactSet>
-                            <relocations>
-                                <!-- None...For now... -->
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+             <!-- Shade -->
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-shade-plugin</artifactId>
+                 <version>2.1</version>
+                 <executions>
+                     <execution>
+                         <phase>package</phase>
+                         <goals>
+                             <goal>shade</goal>
+                         </goals>
+                         <configuration>
+                             <minimizeJar>true</minimizeJar>
+                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                             <artifactSet>
+                                 <includes>
+                                     <artifact>com.captainbern:Minecraft-Reflection</artifact>
+                                     <artifact>com.dsh105:Commodus</artifact>
+                                     <artifact>com.dsh105:CommandManager</artifact>
+                                     <artifact>com.dsh105:PowerMessage</artifact>
+                                 </includes>
+                             </artifactSet>
+                         </configuration>
+                     </execution>
+                 </executions>
+             </plugin>
+         </plugins>
+     </build>
+ </project>

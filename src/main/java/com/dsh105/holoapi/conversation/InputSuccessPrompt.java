@@ -20,7 +20,7 @@ package com.dsh105.holoapi.conversation;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
-import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.config.Lang;
 import org.bukkit.Location;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
@@ -38,6 +38,6 @@ public class InputSuccessPrompt extends MessagePrompt {
         String[] lines = (String[]) conversationContext.getSessionData("lines");
         Location location = (Location) conversationContext.getSessionData("location");
         Hologram h = new HologramFactory(HoloAPI.getCore()).withText(lines).withLocation(location).build();
-        return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
+        return Lang.HOLOGRAM_CREATED.getValue("id", h.getSaveId());
     }
 }

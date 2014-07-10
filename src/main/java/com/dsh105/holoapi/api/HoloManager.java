@@ -24,6 +24,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface HoloManager {
 
@@ -34,14 +35,14 @@ public interface HoloManager {
      *
      * @return all stored holograms
      */
-    public HashMap<Hologram, Plugin> getAllHolograms();
+    public Map<Hologram, Plugin> getAllHolograms();
 
     /**
      * Gets all the stored holograms which are not simple
      *
      * @return all stored holograms
      */
-    public HashMap<Hologram, Plugin> getAllComplexHolograms();
+    public Map<Hologram, Plugin> getAllComplexHolograms();
 
     /**
      * Gets all the stored holograms which are simple
@@ -50,7 +51,7 @@ public interface HoloManager {
      *
      * @return all stored holograms
      */
-    public HashMap<Hologram, Plugin> getAllSimpleHolograms();
+    public Map<Hologram, Plugin> getAllSimpleHolograms();
 
     /**
      * Gets all stored holograms for a plugin
@@ -58,7 +59,7 @@ public interface HoloManager {
      * @param owningPlugin plugin to retrieve holograms for
      * @return holograms registered under a plugin
      */
-    public ArrayList<Hologram> getHologramsFor(Plugin owningPlugin);
+    public List<Hologram> getHologramsFor(Plugin owningPlugin);
 
     /**
      * Gets a hologram of an ID
@@ -75,6 +76,10 @@ public interface HoloManager {
      * @param owningPlugin plugin to register hologram under
      */
     public void track(Hologram hologram, Plugin owningPlugin);
+
+    void remove(Hologram hologram);
+
+    void remove(String hologramId);
 
     /**
      * Stops tracking a hologram and clears all player views
@@ -133,9 +138,9 @@ public interface HoloManager {
 
     /**
      * Sets the new line content for an existing hologram, accounting for new lines added.
-     * </p>
+     * <p/>
      * This method is more expensive IF there are more lines in the new content then already present in the hologram
-     * </p>
+     * <p/>
      * If the above condition is met, the original hologram will be copied and new lines added
      *
      * @param original   Hologram to set the content of
@@ -150,8 +155,9 @@ public interface HoloManager {
      * @param original   original hologram
      * @param linesToAdd lines to copy to the copied hologram
      * @return copied hologram
-     * @throws java.lang.IllegalArgumentException if the hologram is an {@link AnimatedHologram}. Lines cannot be
-     *                                            dynamically added to animated holograms
+     * @throws IllegalArgumentException if the hologram is an {@link com.dsh105.holoapi.api.AnimatedHologram}. Lines
+     *                                  cannot be
+     *                                  dynamically added to animated holograms
      */
     public Hologram copyAndAddLineTo(Hologram original, String... linesToAdd);
 

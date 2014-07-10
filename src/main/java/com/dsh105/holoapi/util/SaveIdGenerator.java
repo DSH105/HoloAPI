@@ -18,6 +18,7 @@
 package com.dsh105.holoapi.util;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.config.ConfigType;
 
 public class SaveIdGenerator {
 
@@ -25,7 +26,7 @@ public class SaveIdGenerator {
 
     public static int nextId() {
         int i = ++nextId;
-        if (HoloAPI.getConfig(HoloAPI.ConfigType.DATA).getConfigurationSection("holograms." + i) != null) {
+        if (HoloAPI.getConfig(ConfigType.DATA).getConfigurationSection("holograms." + i) != null) {
             return nextId();
         }
         return i;

@@ -18,8 +18,8 @@
 package com.dsh105.holoapi.api.events;
 
 import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.api.touch.Action;
 import com.dsh105.holoapi.api.touch.TouchAction;
-import com.dsh105.holoapi.protocol.Action;
 import org.bukkit.entity.Player;
 
 /**

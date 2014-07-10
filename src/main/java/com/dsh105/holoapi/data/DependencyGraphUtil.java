@@ -1,7 +1,7 @@
 package com.dsh105.holoapi.data;
 
-import com.dsh105.holoapi.reflection.FieldAccessor;
-import com.dsh105.holoapi.reflection.SafeField;
+import com.captainbern.reflection.Reflection;
+import com.captainbern.reflection.accessor.FieldAccessor;
 import com.dsh105.holoapi.util.LogicUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DependencyGraphUtil {
 
-    private static final FieldAccessor<Collection<Plugin>> pluginsField = new SafeField<Collection<Plugin>>(SimplePluginManager.class, "plugins");
+    private static final FieldAccessor<Collection> pluginsField = new Reflection().reflect(SimplePluginManager.class).getSafeFieldByNameAndType("plugins", Collection.class).getAccessor();
 
     public static Collection<Plugin> getPluginsUnsafe() {
         final PluginManager man = Bukkit.getPluginManager();

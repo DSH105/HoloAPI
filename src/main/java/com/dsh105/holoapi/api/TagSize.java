@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.api;
 
-class TagSize {
+public class TagSize {
 
     private int first;
     private int last;

@@ -17,17 +17,18 @@
 
 package com.dsh105.holoapi.api;
 
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.events.*;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.api.visibility.Visibility;
-import com.dsh105.holoapi.config.YAMLConfig;
+import com.dsh105.holoapi.config.ConfigType;
+import com.dsh105.holoapi.config.Settings;
 import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.StringUtil;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -40,68 +41,74 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.logging.Level;
 
 public class SimpleHoloManager implements HoloManager {
 
-    YAMLConfig config;
-    private UpdateDisplayTask updateDisplayTask;
-    private HashMap<Hologram, Plugin> holograms = new HashMap<Hologram, Plugin>();
+    private YAMLConfig config;
+    private HashMap<Hologram, Plugin> holograms = new HashMap<>();
 
     public SimpleHoloManager() {
-        this.config = HoloAPI.getConfig(HoloAPI.ConfigType.DATA);
-        this.updateDisplayTask = new UpdateDisplayTask();
+        this.config = HoloAPI.getConfig(ConfigType.DATA);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!getAllHolograms().isEmpty()) {
+                    for (Hologram hologram : getAllHolograms().keySet()) {
+                        hologram.updateDisplay();
+                    }
+                }
+            }
+        }.runTaskTimer(HoloAPI.getCore(), 0L, 20 * 60);
     }
 
     @Override
-    public HashMap<Hologram, Plugin> getAllHolograms() {
-        HashMap<Hologram, Plugin> map = new HashMap<Hologram, Plugin>();
-        map.putAll(this.holograms);
-        return map;
+    public Map<Hologram, Plugin> getAllHolograms() {
+        return Collections.unmodifiableMap(this.holograms);
     }
 
     @Override
-    public HashMap<Hologram, Plugin> getAllComplexHolograms() {
-        HashMap<Hologram, Plugin> map = new HashMap<Hologram, Plugin>();
+    public Map<Hologram, Plugin> getAllComplexHolograms() {
+        HashMap<Hologram, Plugin> map = new HashMap<>();
         for (Map.Entry<Hologram, Plugin> entry : this.holograms.entrySet()) {
             if (!entry.getKey().isSimple()) {
                 map.put(entry.getKey(), entry.getValue());
             }
         }
-        return map;
+        return Collections.unmodifiableMap(map);
     }
 
     @Override
-    public HashMap<Hologram, Plugin> getAllSimpleHolograms() {
-        HashMap<Hologram, Plugin> map = new HashMap<Hologram, Plugin>();
+    public Map<Hologram, Plugin> getAllSimpleHolograms() {
+        HashMap<Hologram, Plugin> map = new HashMap<>();
         for (Map.Entry<Hologram, Plugin> entry : this.holograms.entrySet()) {
             if (entry.getKey().isSimple()) {
                 map.put(entry.getKey(), entry.getValue());
             }
         }
-        return map;
+        return Collections.unmodifiableMap(map);
     }
 
     public void clearAll() {
         Iterator<Hologram> i = holograms.keySet().iterator();
         while (i.hasNext()) {
             Hologram h = i.next();
-            if (!h.isSimple())
+            if (!h.isSimple()) {
                 this.saveToFile(h);
+            }
             h.clearAllPlayerViews();
             i.remove();
         }
     }
 
     @Override
-    public ArrayList<Hologram> getHologramsFor(Plugin owningPlugin) {
-        ArrayList<Hologram> list = new ArrayList<Hologram>();
+    public List<Hologram> getHologramsFor(Plugin owningPlugin) {
+        ArrayList<Hologram> list = new ArrayList<>();
         for (Map.Entry<Hologram, Plugin> entry : this.holograms.entrySet()) {
             if (entry.getValue().equals(owningPlugin)) {
                 list.add(entry.getKey());
             }
         }
-        return list;
+        return Collections.unmodifiableList(list);
     }
 
     @Override
@@ -125,11 +132,17 @@ public class SimpleHoloManager implements HoloManager {
         }
         HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloCreateEvent(hologram));
 
-        for (String s : hologram.getLines()) {
-            if (s.contains(HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.character", "&s"))) {
-                MultiColourFormat.CACHE.add(hologram);
-            }
-        }
+        HoloAPI.getHoloUpdater().track(hologram);
+    }
+
+    @Override
+    public void remove(Hologram hologram) {
+        stopTracking(hologram);
+    }
+
+    @Override
+    public void remove(String hologramId) {
+        stopTracking(hologramId);
     }
 
     @Override
@@ -142,9 +155,7 @@ public class SimpleHoloManager implements HoloManager {
         HoloAPI.getCore().getServer().getPluginManager().callEvent(new HoloDeleteEvent(hologram));
         //this.clearFromFile(hologram);
 
-        if (MultiColourFormat.CACHE.contains(hologram)) {
-            MultiColourFormat.CACHE.remove(hologram);
-        }
+        HoloAPI.getHoloUpdater().remove(hologram);
     }
 
     @Override
@@ -235,7 +246,7 @@ public class SimpleHoloManager implements HoloManager {
     }
 
     public ArrayList<String> loadFileData() {
-        ArrayList<String> unprepared = new ArrayList<String>();
+        ArrayList<String> unprepared = new ArrayList<>();
         ConfigurationSection cs = config.getConfigurationSection("holograms");
         if (cs != null) {
             for (String key : cs.getKeys(false)) {
@@ -248,13 +259,13 @@ public class SimpleHoloManager implements HoloManager {
                     if (config.getBoolean(path + "animatedImage.image")) {
                         unprepared.add(key);
                     } else {
-                        ArrayList<Frame> frameList = new ArrayList<Frame>();
+                        ArrayList<Frame> frameList = new ArrayList<>();
                         ConfigurationSection frames = config.getConfigurationSection("holograms." + key + ".animatedImage.frames");
                         if (frames != null) {
                             for (String frameKey : frames.getKeys(false)) {
                                 ConfigurationSection lines = config.getConfigurationSection("holograms." + key + ".animatedImage.frames." + frameKey);
                                 if (lines != null) {
-                                    ArrayList<String> tagList = new ArrayList<String>();
+                                    ArrayList<String> tagList = new ArrayList<>();
                                     int delay = config.getInt("holograms." + key + ".animatedImage.frames." + frameKey + ".delay", 5);
                                     for (String tagKey : lines.getKeys(false)) {
                                         if (!tagKey.equalsIgnoreCase("delay")) {
@@ -267,8 +278,14 @@ public class SimpleHoloManager implements HoloManager {
                                 }
                             }
                         }
+
                         if (!frameList.isEmpty()) {
-                            this.loadExtraData(new AnimatedHologramFactory(HoloAPI.getCore()).withText(new AnimatedTextGenerator(frameList.toArray(new Frame[frameList.size()]))).withSaveId(key).withLocation(new Vector(x, y, z), worldName).build(), key);
+                            this.loadExtraData(new AnimatedHologramFactory(HoloAPI.getCore())
+                                            .withSaveId(key)
+                                            .withText(new AnimatedTextGenerator(frameList.toArray(new Frame[frameList.size()])))
+                                            .withLocation(new Vector(x, y, z), worldName)
+                                            .build(),
+                                    key);
                         }
                     }
                 } else {
@@ -278,7 +295,7 @@ public class SimpleHoloManager implements HoloManager {
                         //ArrayList<String> lines = new ArrayList<String>();
                         HologramFactory hf = new HologramFactory(HoloAPI.getCore());
                         for (String key1 : cs1.getKeys(false)) {
-                            if (StringUtil.isInt(key1)) {
+                            if (GeneralUtil.isInt(key1)) {
                                 String type = config.getString(path + "lines." + key1 + ".type");
                                 String value = config.getString(path + "lines." + key1 + ".value");
                                 if (type.equalsIgnoreCase("image")) {
@@ -289,7 +306,7 @@ public class SimpleHoloManager implements HoloManager {
                                 }
 
                             } else {
-                                HoloAPICore.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
+                                HoloAPI.LOG.warning("Failed to load line section of " + key1 + " for Hologram of ID " + key + ".");
                             }
                         }
                         if (containsImage) {
@@ -316,7 +333,7 @@ public class SimpleHoloManager implements HoloManager {
             if (config.getBoolean(path + "animatedImage.image")) {
                 AnimatedImageGenerator generator = HoloAPI.getAnimationLoader().getGenerator(config.getString(path + "animatedImage.key"));
                 if (generator != null) {
-                    finalHologram = new AnimatedHologramFactory(HoloAPI.getCore()).withImage(generator).withSaveId(hologramId).withLocation(new Vector(x, y, z), worldName).build();
+                    finalHologram = new AnimatedHologramFactory(HoloAPI.getCore()).withSaveId(hologramId).withImage(generator).withLocation(new Vector(x, y, z), worldName).build();
                 }
             }
         } else {
@@ -324,7 +341,7 @@ public class SimpleHoloManager implements HoloManager {
             HologramFactory hf = new HologramFactory(HoloAPI.getCore());
             //ArrayList<String> lines = new ArrayList<String>();
             for (String key1 : cs1.getKeys(false)) {
-                if (StringUtil.isInt(key1)) {
+                if (GeneralUtil.isInt(key1)) {
                     String type = config.getString(path + "lines." + key1 + ".type");
                     String value = config.getString(path + "lines." + key1 + ".value");
                     if (type.equalsIgnoreCase("image")) {
@@ -336,7 +353,7 @@ public class SimpleHoloManager implements HoloManager {
                         hf.withText(value);
                     }
                 } else {
-                    HoloAPICore.LOGGER.log(Level.WARNING, "Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
+                    HoloAPI.LOG.warning("Failed to load line section of " + key1 + " for Hologram of ID " + hologramId + ".");
                 }
             }
             if (!hf.isEmpty()) {
@@ -355,7 +372,7 @@ public class SimpleHoloManager implements HoloManager {
             ConfigurationSection section = this.config.getConfigurationSection("holograms." + hologramKey + "." + sectionKey);
             if (section != null) {
                 for (String objKey : section.getKeys(true)) {
-                    LinkedHashMap<String, Object> configMap = new LinkedHashMap<String, Object>();
+                    LinkedHashMap<String, Object> configMap = new LinkedHashMap<>();
                     ConfigurationSection objKeySection = this.config.getConfigurationSection("holograms." + hologramKey + "." + sectionKey + "." + objKey);
                     if (objKeySection != null) {
                         for (String fullKey : objKeySection.getKeys(true)) {
@@ -520,37 +537,20 @@ public class SimpleHoloManager implements HoloManager {
 
     class HologramRemoveTask extends BukkitRunnable {
 
-        BukkitTask t = null;
+        BukkitTask task = null;
         private Hologram hologram;
 
-        HologramRemoveTask(Hologram hologram, BukkitTask t) {
+        HologramRemoveTask(Hologram hologram, BukkitTask task) {
             this.hologram = hologram;
-            this.t = t;
+            this.task = task;
         }
 
         @Override
         public void run() {
-            if (this.t != null) {
-                t.cancel();
+            if (this.task != null) {
+                task.cancel();
             }
             stopTracking(hologram);
-        }
-    }
-
-    class UpdateDisplayTask extends BukkitRunnable {
-
-        public UpdateDisplayTask() {
-            this.runTaskTimer(HoloAPI.getCore(), 0L, 20 * 60);
-        }
-
-        @Override
-        public void run() {
-            if (!getAllHolograms().isEmpty()) {
-                Iterator<Hologram> i = getAllHolograms().keySet().iterator();
-                while (i.hasNext()) {
-                    i.next().updateDisplay();
-                }
-            }
         }
     }
 }

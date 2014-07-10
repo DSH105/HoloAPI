@@ -17,15 +17,16 @@
 
 package com.dsh105.holoapi.util;
 
+import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.config.YAMLConfig;
+import com.dsh105.holoapi.config.ConfigType;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class UnicodeFormatter {
 
     public static String replaceAll(String s) {
-        YAMLConfig config = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN);
+        YAMLConfig config = HoloAPI.getConfig(ConfigType.MAIN);
         ConfigurationSection cs = config.getConfigurationSection("specialCharacters");
         if (cs != null) {
             for (String key : cs.getKeys(false)) {

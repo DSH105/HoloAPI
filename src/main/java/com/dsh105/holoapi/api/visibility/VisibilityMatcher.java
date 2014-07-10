@@ -17,12 +17,13 @@
 
 package com.dsh105.holoapi.api.visibility;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class VisibilityMatcher {
 
-    private HashMap<String, Visibility> visibilities = new HashMap<String, Visibility>();
+    private HashMap<String, Visibility> visibilities = new HashMap<>();
 
     public VisibilityMatcher() {
         Visibility def = new VisibilityDefault();
@@ -33,8 +34,8 @@ public class VisibilityMatcher {
         this.visibilities.put("permission", perm);
     }
 
-    public HashMap<String, Visibility> getValidVisibilities() {
-        return new HashMap<String, Visibility>(this.visibilities);
+    public Map<String, Visibility> getValidVisibilities() {
+        return Collections.unmodifiableMap(this.visibilities);
     }
 
     /**

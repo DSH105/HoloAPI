@@ -17,9 +17,8 @@
 
 package com.dsh105.holoapi.api.touch;
 
+import com.dsh105.commodus.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.protocol.Action;
-import com.dsh105.holoapi.util.StringUtil;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
@@ -81,7 +80,7 @@ public class CommandTouchAction implements TouchAction {
                 out.writeUTF(serverName);
                 who.sendPluginMessage(HoloAPI.getCore(), "BungeeCord", byteOutput.toByteArray());
                 return;
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
 

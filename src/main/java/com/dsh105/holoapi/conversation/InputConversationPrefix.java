@@ -25,6 +25,6 @@ public class InputConversationPrefix implements ConversationPrefix {
 
     @Override
     public String getPrefix(ConversationContext conversationContext) {
-        return HoloAPI.getPrefix("HoloAPI") + HoloAPI.getPrefix("Builder") + "••• ";
+        return HoloAPI.getPrefix("HoloAPI") + "••• ";
     }
 }
