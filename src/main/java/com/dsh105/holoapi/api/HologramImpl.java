@@ -585,15 +585,15 @@ public class HologramImpl implements Hologram {
     protected void moveTag(Player observer, Vector to, int... entityIds) {
         WrappedPacket teleportHorse = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
         teleportHorse.getIntegers().write(0, entityIds[0]);
-        teleportHorse.getIntegers().write(1, to.getBlockX());
-        teleportHorse.getIntegers().write(2, to.getBlockY() + 55);
-        teleportHorse.getIntegers().write(3, to.getBlockZ());
+        teleportHorse.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
+	    teleportHorse.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
+	    teleportHorse.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
 
         WrappedPacket teleportSkull = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
         teleportSkull.getIntegers().write(0, entityIds[1]);
-        teleportSkull.getIntegers().write(1, to.getBlockX());
-        teleportSkull.getIntegers().write(2, to.getBlockY() + 55);
-        teleportSkull.getIntegers().write(3, to.getBlockZ());
+        teleportSkull.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
+	    teleportSkull.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
+	    teleportSkull.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
 
         Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
         injector.sendPacket(teleportHorse.getHandle());
