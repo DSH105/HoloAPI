@@ -175,6 +175,8 @@ public class HoloAPICore extends JavaPlugin {
         COMMAND_MANAGER = new CommandManager(this, HoloAPI.getPrefix());
         COMMAND_MANAGER.setFormatColour(ChatColor.getByChar(Settings.BASE_CHAT_COLOUR.getValue()));
         COMMAND_MANAGER.setHighlightColour(ChatColor.getByChar(Settings.HIGHLIGHT_CHAT_COLOUR.getValue()));
+        COMMAND_MANAGER.getHelpService().setIgnoreCommandAccess(false);
+        COMMAND_MANAGER.getHelpService().setIncludePermissionListing(false);
         CommandListener parent = new HoloCommand();
         COMMAND_MANAGER.register(parent);
         // TODO: A way to do this dynamically
