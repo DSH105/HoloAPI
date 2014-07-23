@@ -483,7 +483,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, boolean rise, String... lines) {
-        int simpleId = TagIdGenerator.nextSimpleId(lines.length);
+        int simpleId = TagIdGenerator.next(lines.length);
         final Hologram hologram = new HologramFactory(HoloAPI.getCore()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {
@@ -514,7 +514,7 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public Hologram createSimpleHologram(Location location, int secondsUntilRemoved, final Vector velocity, String... lines) {
-        int simpleId = TagIdGenerator.nextSimpleId(lines.length);
+        int simpleId = TagIdGenerator.next(lines.length);
         final Hologram hologram = new HologramFactory(HoloAPI.getCore()).withFirstTagId(simpleId).withSaveId(simpleId + "").withText(lines).withLocation(location).withSimplicity(true).build();
         for (Entity e : hologram.getDefaultLocation().getWorld().getEntities()) {
             if (e instanceof Player) {

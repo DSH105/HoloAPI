@@ -27,7 +27,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     private Frame currentFrame;
 
     protected AnimatedHologramImpl(String saveId, String worldName, double x, double y, double z, AnimatedImageGenerator animatedImage) {
-        super(TagIdGenerator.nextId(animatedImage.getLargestFrame().getImageGenerator().getLines().length * animatedImage.getFrames().size()),
+        super(TagIdGenerator.next(animatedImage.getLargestFrame().getImageGenerator().getLines().length * animatedImage.getFrames().size()),
                 saveId, worldName, x, y, z, animatedImage.getLargestFrame().getImageGenerator().getLines());
         this.frames.addAll(animatedImage.getFrames());
         this.currentFrame = this.getCurrent();
@@ -37,7 +37,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     }
 
     protected AnimatedHologramImpl(String saveId, String worldName, double x, double y, double z, AnimatedTextGenerator textGenerator) {
-        super(TagIdGenerator.nextId(textGenerator.getLargestFrame().getLines().length * textGenerator.getFrames().size()),
+        super(TagIdGenerator.next(textGenerator.getLargestFrame().getLines().length * textGenerator.getFrames().size()),
                 saveId, worldName, x, y, z, textGenerator.getLargestFrame().getLines());
         this.frames.addAll(textGenerator.getFrames());
         this.currentFrame = this.getCurrent();

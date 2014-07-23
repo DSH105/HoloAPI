@@ -22,30 +22,10 @@ import com.dsh105.holoapi.api.HologramImpl;
 
 public class TagIdGenerator {
 
-    private volatile static int SHARED_ID = Short.MAX_VALUE;
-    private volatile static int SHARED_SIMPLE_ID = Short.MIN_VALUE;
+    // yay, negative IDs
+    private volatile static int SHARED_HOLO_ID = 0;
 
-    public static int nextId(int counter) {
-        return nextId(counter, false);
-    }
-
-    public static int nextSimpleId(int counter) {
-        return nextId(counter, true);
-    }
-
-    private static int nextId(int counter, boolean simple) {
-        int firstId = simple ? ++SHARED_SIMPLE_ID : ++SHARED_ID;
-        if (simple) {
-            for (int i = 0; i <= (counter * HologramImpl.TAG_ENTITY_MULTIPLIER); i++) {
-                if ((firstId + i) > 0) {
-                    SHARED_SIMPLE_ID = Short.MIN_VALUE;
-                    return nextId(counter, true);
-                }
-            }
-            SHARED_SIMPLE_ID += counter * HologramImpl.TAG_ENTITY_MULTIPLIER;
-        } else {
-            SHARED_ID += counter * HologramImpl.TAG_ENTITY_MULTIPLIER;
-        }
-        return firstId;
+    public static int next(int counter) {
+        return SHARED_HOLO_ID -= counter * HologramImpl.TAG_ENTITY_MULTIPLIER;
     }
 }

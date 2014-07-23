@@ -63,7 +63,7 @@ public class HologramImpl implements Hologram {
     }
 
     protected HologramImpl(String saveId, String worldName, double x, double y, double z, String... lines) {
-        this(TagIdGenerator.nextId(lines.length > 30 ? 30 : lines.length), saveId, worldName, x, y, z, lines);
+        this(TagIdGenerator.next(lines.length > 30 ? 30 : lines.length), saveId, worldName, x, y, z, lines);
     }
 
     private HologramImpl(String worldName, double x, double y, double z) {
