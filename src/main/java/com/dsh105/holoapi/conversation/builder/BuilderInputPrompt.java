@@ -20,10 +20,10 @@ package com.dsh105.holoapi.conversation.builder;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.config.Lang;
 import com.dsh105.holoapi.conversation.basic.LocationFunction;
 import com.dsh105.holoapi.conversation.basic.SimpleInputPrompt;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.Lang;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
@@ -105,7 +105,7 @@ public class BuilderInputPrompt extends ValidatingPrompt {
 
                     @Override
                     public String getSuccessMessage(ConversationContext context, String input) {
-                        return success ? Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId()) : Lang.BUILDER_EMPTY_LINES.getValue();
+                        return success ? Lang.HOLOGRAM_CREATED.getValue("id", h.getSaveId()) : Lang.BUILDER_EMPTY_LINES.getValue();
                     }
                 });
             }
@@ -148,7 +148,7 @@ public class BuilderInputPrompt extends ValidatingPrompt {
             } else {
                 if (b) {
                     int size = this.builders.size();
-                    return Lang.BUILDER_INPUT_NEXT_WITH_NUMBER.getValue().replace("%line%", size + (size == 1 ? "st" : (size == 2 ? "nd" : (size == 3 ? "rd" : "4th"))));
+                    return Lang.BUILDER_INPUT_NEXT_WITH_NUMBER.getValue("line", size + (size == 1 ? "st" : (size == 2 ? "nd" : (size == 3 ? "rd" : "4th"))));
                 } else {
                     return Lang.IMAGE_NOT_FOUND.getValue();
                 }

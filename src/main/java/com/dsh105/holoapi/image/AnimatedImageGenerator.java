@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Represents a generator used to produce animated image frames from either a GIF or set of images
@@ -369,7 +370,7 @@ public class AnimatedImageGenerator implements Generator {
 
     // Source: https://stackoverflow.com/questions/8933893/convert-animated-gif-frames-to-separate-bufferedimages-java
     private GIFFrame[] readGIF(ImageReader reader) throws IOException {
-        ArrayList<GIFFrame> frames = new ArrayList<GIFFrame>(2);
+        ArrayList<GIFFrame> frames = new ArrayList<>(2);
 
         int width = -1;
         int height = -1;
@@ -465,8 +466,8 @@ public class AnimatedImageGenerator implements Generator {
      *
      * @return frames of the generator
      */
-    public ArrayList<GIFFrame> getFrames() {
-        return new ArrayList<GIFFrame>(this.frames);
+    public ImmutableList<GIFFrame> getFrames() {
+        return this.frames;
     }
 
     /**

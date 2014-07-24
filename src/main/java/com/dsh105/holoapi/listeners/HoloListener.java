@@ -20,11 +20,12 @@ package com.dsh105.holoapi.listeners;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.AnimatedHologram;
 import com.dsh105.holoapi.api.Hologram;
-import com.dsh105.holoapi.api.MultiColourFormat;
 import com.dsh105.holoapi.api.events.HoloLineUpdateEvent;
+import com.dsh105.holoapi.config.Settings;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -36,18 +37,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class HoloListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHoloLineUpdate(HoloLineUpdateEvent event) {
-        String key = HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.character", "&s");
-        if (MultiColourFormat.CACHE.contains(event.getHologram()) && event.getOldLineContent().contains(key)) {
-
-        }
-        if (!MultiColourFormat.CACHE.contains(event.getHologram()) && event.getNewLineContent().contains(key)) {
-            MultiColourFormat.CACHE.add(event.getHologram());
+        if (HoloAPI.getHoloUpdater().getTrackedHolograms().contains(event.getHologram())) {
+            if (!HoloAPI.getHoloUpdater().shouldTrack(event.getNewLineContent())) {
+                HoloAPI.getHoloUpdater().track(event.getHologram(), false);
+            }
+        } else {
+            HoloAPI.getHoloUpdater().track(event.getHologram());
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
@@ -59,7 +60,7 @@ public class HoloListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
@@ -69,7 +70,7 @@ public class HoloListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         for (final Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
@@ -87,7 +88,7 @@ public class HoloListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWorldChange(PlayerChangedWorldEvent event) {
         final Player player = event.getPlayer();
         for (final Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
@@ -107,16 +108,7 @@ public class HoloListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event) {
-        for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
-            if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
         for (Hologram h : HoloAPI.getManager().getAllHolograms().keySet()) {
             if (h.getDefaultLocation().getChunk().equals(event.getChunk())) {

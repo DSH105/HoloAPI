@@ -17,7 +17,7 @@
 
 package com.dsh105.holoapi.conversation;
 
-import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.config.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -30,18 +30,16 @@ import java.util.ArrayList;
 
 public class InputPrompt extends ValidatingPrompt {
 
-    private ArrayList<String> lines;
+    private ArrayList<String> lines = new ArrayList<>();
     private String lastAdded;
     private boolean first = true;
     private InputSuccessPrompt successPrompt = new InputSuccessPrompt();
 
     public InputPrompt() {
-        this.lines = new ArrayList<String>();
     }
 
     public InputPrompt(InputSuccessPrompt successPrompt) {
         this.successPrompt = successPrompt;
-        this.lines = new ArrayList<String>();
     }
 
     public InputPrompt(ArrayList<String> lines, InputSuccessPrompt successPrompt, String lastAdded) {
@@ -61,7 +59,7 @@ public class InputPrompt extends ValidatingPrompt {
         Object findLoc = conversationContext.getSessionData("findloc");
         if (findLoc != null && ((Boolean) findLoc)) {
             if (s.contains(" ")) {
-                String[] split = s.split(" ");
+                String[] split = s.split("\\s");
                 if (split.length == 4) {
                     if (Bukkit.getWorld(split[0]) != null) {
                         try {
@@ -106,7 +104,7 @@ public class InputPrompt extends ValidatingPrompt {
         if (this.first) {
             return Lang.PROMPT_INPUT.getValue();
         } else
-            return Lang.PROMPT_INPUT_NEXT.getValue().replace("%input%", ChatColor.translateAlternateColorCodes('&', this.lastAdded));
+            return Lang.PROMPT_INPUT_NEXT.getValue("input", ChatColor.translateAlternateColorCodes('&', this.lastAdded));
     }
 
     @Override
@@ -119,7 +117,7 @@ public class InputPrompt extends ValidatingPrompt {
         } else if (failFormat != null && (Boolean) failFormat) {
             return Lang.PROMPT_INPUT_FAIL_FORMAT.getValue();
         } else if (failWorld != null && (Boolean) failWorld) {
-            return Lang.PROMPT_INPUT_FAIL_WORLD.getValue().replace("%world%", invalidInput.split(" ")[0]);
+            return Lang.PROMPT_INPUT_FAIL_WORLD.getValue("world", invalidInput.split(" ")[0]);
         }
         return Lang.PROMPT_INPUT_FAIL.getValue();
     }

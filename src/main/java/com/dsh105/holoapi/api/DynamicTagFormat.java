@@ -21,6 +21,9 @@ import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
 
+/**
+ * Represents a regex supported tag format for use in the {@link com.dsh105.holoapi.api.TagFormatter}
+ */
 public abstract class DynamicTagFormat extends TagFormat {
 
     public abstract String match(Matcher matcher, String lineContent, Hologram h, Player observer);

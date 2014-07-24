@@ -17,11 +17,15 @@
 
 package com.dsh105.holoapi;
 
+import com.dsh105.command.CommandManager;
+import com.dsh105.commodus.config.Options;
+import com.dsh105.commodus.config.YAMLConfig;
+import com.dsh105.commodus.logging.Log;
 import com.dsh105.holoapi.api.HoloManager;
+import com.dsh105.holoapi.api.HoloUpdater;
 import com.dsh105.holoapi.api.TagFormatter;
 import com.dsh105.holoapi.api.visibility.VisibilityMatcher;
-import com.dsh105.holoapi.command.CommandModuleManager;
-import com.dsh105.holoapi.config.YAMLConfig;
+import com.dsh105.holoapi.config.ConfigType;
 import com.dsh105.holoapi.hook.BungeeProvider;
 import com.dsh105.holoapi.hook.VanishProvider;
 import com.dsh105.holoapi.hook.VaultProvider;
@@ -32,12 +36,14 @@ import com.dsh105.holoapi.image.ImageLoader;
 public class HoloAPI {
 
     private static HoloAPICore CORE;
+    public static Log LOG;
 
     public static void setCore(HoloAPICore plugin) {
         if (CORE != null) {
             throw new RuntimeException("Core already set!");
         }
         CORE = plugin;
+        LOG = new Log("HoloAPI");
     }
 
     public static HoloAPICore getCore() {
@@ -61,7 +67,7 @@ public class HoloAPI {
      * @return {@link com.dsh105.holoapi.api.HoloManager} that manages and controls registration of holograms
      */
     public static HoloManager getManager() {
-        return getCore().MANAGER;
+        return getCore().HOLO_MANAGER;
     }
 
     /**
@@ -106,49 +112,28 @@ public class HoloAPI {
      *
      * @return VisibilityMatcher that stores all registrations of hologram visibilities
      */
-
     public static VisibilityMatcher getVisibilityMatcher() {
         return getCore().VISIBILITY_MATCHER;
     }
 
-    /**
-     * Gets the spacing between hologram lines
-     *
-     * @return line spacing between holograms
-     */
-    public static double getHologramLineSpacing() {
-        return getCore().LINE_SPACING;
+    public static HoloUpdater getHoloUpdater() {
+        return getCore().HOLO_UPDATER;
     }
 
-    public static int getTagEntityMultiplier() {
-        return getCore().TAG_ENTITY_MULTIPLIER;
+    public static CommandManager getCommandManager() {
+        return getCore().COMMAND_MANAGER;
     }
 
-    public static String getTransparencyWithBorder() {
-        return getCore().TRANSPARENCY_WITH_BORDER;
+    public static <T extends Options> T getSettings(Class<T> settingsClass) {
+        return getCore().getSettings(settingsClass);
     }
 
-    public static String getTransparencyWithoutBorder() {
-        return getCore().TRANSPARENCY_NO_BORDER;
-    }
-
-    public static CommandModuleManager getCommandManager() {
-        return getCore().COMMAND_MODULE_MANAGER;
-    }
-
-    public static String getCommandLabel() {
-        return getCore().OPTIONS.getConfig().getString("command", "holo");
+    public static Options getSettings(ConfigType configType) {
+        return getCore().getSettings(configType);
     }
 
     public static YAMLConfig getConfig(ConfigType type) {
-        if (type == ConfigType.MAIN) {
-            return getCore().config;
-        } else if (type == ConfigType.DATA) {
-            return getCore().dataConfig;
-        } else if (type == ConfigType.LANG) {
-            return getCore().langConfig;
-        }
-        return null;
+        return getCore().getConfig(type);
     }
 
     public static VaultProvider getVaultProvider() {
@@ -167,9 +152,5 @@ public class HoloAPI {
 
     public static BungeeProvider getBungeeProvider() {
         return getCore().bungeeProvider;
-    }
-
-    public enum ConfigType {
-        MAIN, DATA, LANG
     }
 }

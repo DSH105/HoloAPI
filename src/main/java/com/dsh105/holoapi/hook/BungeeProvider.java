@@ -1,5 +1,7 @@
 package com.dsh105.holoapi.hook;
 
+import com.dsh105.commodus.ServerUtil;
+import com.dsh105.holoapi.config.Settings;
 import com.dsh105.holoapi.util.MiscUtil;
 import net.minecraft.util.io.netty.buffer.ByteBuf;
 import net.minecraft.util.io.netty.buffer.Unpooled;
@@ -18,7 +20,7 @@ public class BungeeProvider implements PluginMessageListener, Runnable {
     public BungeeProvider(Plugin plugin) {
         this.plugin = plugin;
 
-        if (!plugin.getConfig().getBoolean("bungeecord", false)) {
+        if (!Settings.USE_BUNGEE.getValue()) {
             disabled = true;
             return; // BungeeCord is disabled
         }
@@ -52,7 +54,7 @@ public class BungeeProvider implements PluginMessageListener, Runnable {
     }
 
     private void requestPlayerCount(String serverName) {
-        if (plugin.getServer().getOnlinePlayers().length == 0) {
+        if (ServerUtil.getOnlinePlayers().size() == 0) {
             return; // No players online; we can't send this request yet.
         }
 
@@ -62,7 +64,7 @@ public class BungeeProvider implements PluginMessageListener, Runnable {
 
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
-        plugin.getServer().getOnlinePlayers()[0].sendPluginMessage(plugin, "BungeeCord", bytes);
+        ServerUtil.getOnlinePlayer(0).sendPluginMessage(plugin, "BungeeCord", bytes);
 
         buf.release();
     }
@@ -71,7 +73,7 @@ public class BungeeProvider implements PluginMessageListener, Runnable {
     // Receiving the server list will trigger player count requests
     @Override
     public void run() {
-        if (plugin.getServer().getOnlinePlayers().length == 0) {
+        if (ServerUtil.getOnlinePlayers().size() == 0) {
             return;
         }
 
@@ -80,7 +82,7 @@ public class BungeeProvider implements PluginMessageListener, Runnable {
 
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
-        plugin.getServer().getOnlinePlayers()[0].sendPluginMessage(plugin, "BungeeCord", bytes);
+        ServerUtil.getOnlinePlayer(0).sendPluginMessage(plugin, "BungeeCord", bytes);
 
         buf.release();
     }

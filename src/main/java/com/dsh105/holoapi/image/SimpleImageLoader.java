@@ -17,11 +17,11 @@
 
 package com.dsh105.holoapi.image;
 
+import com.dsh105.commodus.GeneralUtil;
+import com.dsh105.commodus.config.YAMLConfig;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
-import com.dsh105.holoapi.config.YAMLConfig;
-import com.dsh105.holoapi.util.EnumUtil;
-import com.dsh105.holoapi.util.Lang;
+import com.dsh105.holoapi.config.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,8 +32,8 @@ import java.util.logging.Level;
 
 public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
 
-    private final HashMap<String, ImageGenerator> KEY_TO_IMAGE_MAP = new HashMap<String, ImageGenerator>();
-    private final HashMap<String, UnloadedImageStorage> URL_UNLOADED = new HashMap<String, UnloadedImageStorage>();
+    private final HashMap<String, ImageGenerator> KEY_TO_IMAGE_MAP = new HashMap<>();
+    private final HashMap<String, UnloadedImageStorage> URL_UNLOADED = new HashMap<>();
     private boolean loaded;
 
     public void loadImageConfiguration(YAMLConfig config) {
@@ -52,8 +52,8 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
                 String imageChar = config.getString(path + "characterType", ImageChar.BLOCK.getHumanName());
                 String imageType = config.getString(path + "type", "FILE");
                 boolean requiresBorder = config.getBoolean(path + "requiresBorder", true);
-                if (!EnumUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
-                    HoloAPICore.LOGGER.log(Level.INFO, "Failed to load image: " + key + ". Invalid image type.");
+                if (!GeneralUtil.isEnumType(ImageLoader.ImageLoadType.class, imageType.toUpperCase())) {
+                    HoloAPI.LOG.info("Failed to load image: " + key + ". Invalid image type.");
                     continue;
                 }
                 ImageLoader.ImageLoadType type = ImageLoader.ImageLoadType.valueOf(imageType.toUpperCase());
@@ -66,7 +66,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
         }
         loaded = true;
         if (!KEY_TO_IMAGE_MAP.isEmpty() || !URL_UNLOADED.isEmpty()) {
-            HoloAPICore.LOGGER.log(Level.INFO, "Images loaded.");
+            HoloAPI.LOG.info("Images loaded.");
         }
     }
 
@@ -74,7 +74,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
         try {
             ImageChar c = ImageChar.fromHumanName(imageCharType);
             if (c == null) {
-                HoloAPICore.LOGGER.log(Level.INFO, "Invalid image char type for " + key + ". Using default.");
+                HoloAPI.LOG.info("Invalid image char type for " + key + ". Using default.");
                 c = ImageChar.BLOCK;
             }
             switch (type) {
@@ -98,12 +98,12 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
         if (g == null) {
             if (this.URL_UNLOADED.get(key) != null) {
                 if (sender != null) {
-                    Lang.sendTo(sender, Lang.LOADING_URL_IMAGE.getValue().replace("%key%", key));
+                    Lang.LOADING_URL_IMAGE.send(sender, "key", key);
                 }
                 this.prepareUrlGenerator(sender, key);
                 return null;
             } else {
-                Lang.sendTo(sender, Lang.FAILED_IMAGE_LOAD.getValue());
+                Lang.FAILED_IMAGE_LOAD.send(sender);
             }
         }
         return g;
@@ -123,7 +123,7 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
 
     private ImageGenerator prepareUrlGenerator(final CommandSender sender, final String key) {
         UnloadedImageStorage data = this.URL_UNLOADED.get(key);
-        HoloAPICore.LOGGER.log(Level.INFO, "Loading custom URL image of key " + key);
+        HoloAPI.LOG.info("Loading custom URL image of key " + key);
         this.URL_UNLOADED.remove(key);
         final ImageGenerator g = new ImageGenerator(key, data.getImagePath(), data.getImageHeight(), data.getCharType(), false, data.requiresBorder());
         new BukkitRunnable() {
@@ -131,9 +131,9 @@ public class SimpleImageLoader implements ImageLoader<ImageGenerator> {
             public void run() {
                 g.loadUrlImage();
                 if (sender != null) {
-                    Lang.sendTo(sender, Lang.IMAGE_LOADED.getValue().replace("%key%", key));
+                    Lang.IMAGE_LOADED.send(sender, "key", key);
                 }
-                HoloAPICore.LOGGER.log(Level.INFO, "Custom URL image '" + key + "' loaded.");
+                HoloAPI.LOG.info("Custom URL image '" + key + "' loaded.");
                 KEY_TO_IMAGE_MAP.put(key, g);
             }
         }.runTaskAsynchronously(HoloAPI.getCore());

@@ -20,8 +20,8 @@ package com.dsh105.holoapi.conversation.builder;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.config.Lang;
 import com.dsh105.holoapi.image.ImageGenerator;
-import com.dsh105.holoapi.util.Lang;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
@@ -60,6 +60,6 @@ public class BuilderInputSuccessPrompt extends MessagePrompt {
         }
         hf.withLocation(((Player) conversationContext.getForWhom()).getLocation());
         Hologram h = hf.build();
-        return Lang.HOLOGRAM_CREATED.getValue().replace("%id%", h.getSaveId() + "");
+        return Lang.HOLOGRAM_CREATED.getValue("id", h.getSaveId());
     }
 }

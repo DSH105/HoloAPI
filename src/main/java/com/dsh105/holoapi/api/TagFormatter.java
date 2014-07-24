@@ -17,9 +17,11 @@
 
 package com.dsh105.holoapi.api;
 
+import com.captainbern.minecraft.reflection.MinecraftReflection;
+import com.dsh105.commodus.ServerUtil;
+import com.dsh105.commodus.TimeUtil;
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.reflection.utility.CommonReflection;
-import com.dsh105.holoapi.util.TimeFormat;
+import com.dsh105.holoapi.config.Settings;
 import com.dsh105.holoapi.util.UnicodeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,23 +38,23 @@ import java.util.regex.Pattern;
 
 public class TagFormatter {
 
-    private HashMap<String, TagFormat> tagFormats = new HashMap<String, TagFormat>();
-    private HashMap<Pattern, DynamicTagFormat> dynamicTagFormats = new HashMap<Pattern, DynamicTagFormat>();
+    private HashMap<String, TagFormat> tagFormats = new HashMap<>();
+    private HashMap<Pattern, DynamicTagFormat> dynamicTagFormats = new HashMap<>();
 
     public TagFormatter() {
         this.addFormat("%time%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
                 Calendar c = Calendar.getInstance();
-                c.add(Calendar.HOUR_OF_DAY, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
-                return new SimpleDateFormat("h:mm a" + (HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getBoolean("timezone.showZoneMarker") ? " z" : "")).format(c.getTime());
+                c.add(Calendar.HOUR_OF_DAY, Settings.TIMEZONE_OFFSET.getValue());
+                return new SimpleDateFormat("h:mm a" + (Settings.TIMEZONE_SHOW_ZONE_MARKER.getValue() ? " z" : "")).format(c.getTime());
             }
         });
 
         this.addFormat("%mctime%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
-                return TimeFormat.format12(observer.getWorld().getTime());
+                return TimeUtil.format12(observer.getWorld().getTime());
             }
         });
 
@@ -101,7 +103,7 @@ public class TagFormatter {
         this.addFormat("%playercount%", new TagFormat() {
             @Override
             public String getValue(Player observer) {
-                return String.valueOf(Bukkit.getOnlinePlayers().length);
+                return String.valueOf(ServerUtil.getOnlinePlayers().size());
             }
         });
 
@@ -114,23 +116,28 @@ public class TagFormatter {
 
         this.addFormat(Pattern.compile("%date:(.+?)%"), new DynamicTagFormat() {
             @Override
-            public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
+            public String match(Matcher matcher, String lineContent, com.dsh105.holoapi.api.Hologram h, Player observer) {
                 SimpleDateFormat format = new SimpleDateFormat(matcher.group(1));
 
                 Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.HOUR_OF_DAY, HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getInt("timezone.offset", 0));
+                calendar.add(Calendar.HOUR_OF_DAY, Settings.TIMEZONE_OFFSET.getValue());
                 return format.format(calendar.getTime());
             }
         });
 
         this.addFormat(Pattern.compile("%serveronline:(.+?)%"), new DynamicTagFormat() {
             @Override
-            public String match(Matcher matcher, String lineContent, Hologram h, Player observer) {
+            public String match(Matcher matcher, String lineContent, com.dsh105.holoapi.api.Hologram h, Player observer) {
                 return String.valueOf(HoloAPI.getBungeeProvider().getPlayerCount(matcher.group(1)));
             }
         });
 
-        this.addFormat(HoloAPI.getConfig(HoloAPI.ConfigType.MAIN).getString("multicolorFormat.character", "&s"), new MultiColourFormat());
+        this.addFormat(Settings.MULTICOLOR_CHARACTER.getValue(), new TagFormat() {
+            @Override
+            public String getValue(Player observer) {
+                return HoloAPI.getHoloUpdater().getCurrentMultiColorFormat();
+            }
+        });
     }
 
     /**
@@ -173,7 +180,7 @@ public class TagFormatter {
 
     public String formatForOldClient(String content) {
         int limit = 64;
-        if (content.length() > limit && !CommonReflection.isUsingNetty()) {
+        if (content.length() > limit && !MinecraftReflection.isUsingNetty()) {
             // 1.6.x client crashes if a name tag is longer than 64 characters
             // Unfortunate, but it must be accounted for
             content = content.substring(limit / 4, limit - (limit / 4));
@@ -221,22 +228,17 @@ public class TagFormatter {
         return content;
     }
 
-    protected ItemStack matchItem(String content) {
-        Matcher matcher = Pattern.compile("%item:([0-9]+?)(,(([0-9]+?))%|%)").matcher(content);
+    public ItemStack matchItem(String content) {
+        Matcher matcher = Pattern.compile("%item:([0-9]+)(?:,([0-9]+))?%").matcher(content);
         while (matcher.find()) {
             try {
                 int id = Integer.parseInt(matcher.group(1));
-                int durability = 0;
-                try {
-                    durability = Integer.parseInt(matcher.group(4));
-                } catch (IndexOutOfBoundsException e) {
-                }
+                int durability = matcher.group(2) == null ? 0 : Integer.parseInt(matcher.group(2));
                 return new ItemStack(id, 1, (short) durability);
-            } catch (NumberFormatException e) {
-                continue;
+            } catch (NumberFormatException ignored) {
             }
         }
-        Matcher matcherStr = Pattern.compile("%item:(.+?)%").matcher(content);
+        Matcher matcherStr = Pattern.compile("%item:([^0-9%]+)%").matcher(content);
         while (matcherStr.find()) {
             Material m = Material.matchMaterial(matcherStr.group(1));
             if (m != null) {

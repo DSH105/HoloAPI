@@ -17,6 +17,7 @@
 
 package com.dsh105.holoapi.hook;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.HoloAPICore;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -50,10 +51,10 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
                 if (this.dependency != null && this.dependency.isEnabled()) {
                     this.hooked = true;
                     onHook();
-                    HoloAPICore.LOGGER.info("[" + this.dependency.getName() + "] Successfully hooked");
+                    HoloAPI.LOG.info("[" + this.dependency.getName() + "] Successfully hooked");
                 }
             } catch (Exception e) {
-                HoloAPICore.LOGGER_REFLECTION.warning("Could not create a PluginDependencyProvider for: " + getDependencyName() + "! (Are you sure the type is valid?)");
+                HoloAPI.LOG.warning("Could not create a PluginDependencyProvider for: " + getDependencyName() + "! (Are you sure the type is valid?)");
             }
         }
 
@@ -66,7 +67,7 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
                         dependency = (T) event.getPlugin();
                         hooked = true;
                         onHook();
-                        HoloAPICore.LOGGER.info("[" + getDependencyName() + "] Successfully hooked");
+                        HoloAPI.LOG.info("[" + getDependencyName() + "] Successfully hooked");
                     } catch (Exception e) {
                         throw new RuntimeException("Failed to hook plugin: " + event.getPlugin().getName());
                     }
@@ -79,7 +80,7 @@ public abstract class PluginDependencyProvider<T extends Plugin> {
                     dependency = null;
                     hooked = false;
                     onUnhook();
-                    HoloAPICore.LOGGER.info("[" + getDependencyName() + "] Successfully unhooked");
+                    HoloAPI.LOG.info("[" + getDependencyName() + "] Successfully unhooked");
                 }
             }
 
