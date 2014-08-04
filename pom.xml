@@ -137,7 +137,7 @@
         <!-- CaptainBern & DSH105 - for a bunch of cool stuff -->
         <repository>
             <id>captainbern-dsh105</id>
-            <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+            <url>http://repo.dsh105.com/</url>
         </repository>
     </repositories>
 
