@@ -324,7 +324,6 @@
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
-                        <phase>deploy</phase>
                         <goals>
                             <goal>aggregate-jar</goal>
                         </goals>
