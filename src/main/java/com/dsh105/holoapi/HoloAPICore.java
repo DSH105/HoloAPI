@@ -173,34 +173,34 @@ public class HoloAPICore extends JavaPlugin {
 
     private void loadCommands() {
         COMMAND_MANAGER = new CommandManager(this, HoloAPI.getPrefix());
-        COMMAND_MANAGER.setFormatColour(ChatColor.getByChar(Settings.BASE_CHAT_COLOUR.getValue()));
-        COMMAND_MANAGER.setHighlightColour(ChatColor.getByChar(Settings.HIGHLIGHT_CHAT_COLOUR.getValue()));
+        COMMAND_MANAGER.getMessenger().setFormatColour(ChatColor.getByChar(Settings.BASE_CHAT_COLOUR.getValue()));
+        COMMAND_MANAGER.getMessenger().setHighlightColour(ChatColor.getByChar(Settings.HIGHLIGHT_CHAT_COLOUR.getValue()));
         COMMAND_MANAGER.getHelpService().setIgnoreCommandAccess(false);
         COMMAND_MANAGER.getHelpService().setIncludePermissionListing(false);
         CommandListener parent = new HoloCommand();
         COMMAND_MANAGER.register(parent);
         // TODO: A way to do this dynamically
-        COMMAND_MANAGER.registerSubCommands(parent, new AddLineCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new BuildCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new CopyCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new ClearCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new CreateCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new EditCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new HelpCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new HideCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new IdCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new InfoCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new MoveCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new NearbyCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new ReadTxtCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new RefreshCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new ReloadCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new RemoveCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new ShowCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new TeleportCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new TouchCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new UpdateCommand());
-        COMMAND_MANAGER.registerSubCommands(parent, new VisibilityCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new AddLineCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new BuildCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new CopyCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new ClearCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new CreateCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new EditCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new HelpCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new HideCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new IdCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new InfoCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new MoveCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new NearbyCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new ReadTxtCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new RefreshCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new ReloadCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new RemoveCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new ShowCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new TeleportCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new TouchCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new UpdateCommand());
+        COMMAND_MANAGER.nestCommandsIn(parent, new VisibilityCommand());
     }
 
     protected void checkUpdates() {

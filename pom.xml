@@ -35,7 +35,7 @@
          <dependency>
              <groupId>org.bukkit</groupId>
              <artifactId>bukkit</artifactId>
-             <version>1.7.9-R0.3-SNAPSHOT</version>
+             <version>1.7.10-R0.1-SNAPSHOT</version>
              <scope>provided</scope>
          </dependency>
 
@@ -43,7 +43,7 @@
          <dependency>
              <groupId>org.bukkit</groupId>
              <artifactId>craftbukkit</artifactId>
-             <version>1.7.9-R0.3-SNAPSHOT</version>
+             <version>1.7.10-R0.1-SNAPSHOT</version>
              <scope>provided</scope>
          </dependency>
 
@@ -58,21 +58,21 @@
          <dependency>
              <groupId>com.dsh105</groupId>
              <artifactId>Commodus</artifactId>
-             <version>1.0.1-SNAPSHOT</version>
+             <version>1.0.2-SNAPSHOT</version>
          </dependency>
 
          <!-- PowerMessage -->
          <dependency>
              <groupId>com.dsh105</groupId>
              <artifactId>PowerMessage</artifactId>
-             <version>1.0.0-SNAPSHOT</version>
+             <version>1.0.1-SNAPSHOT</version>
          </dependency>
 
          <!-- CommandManager -->
          <dependency>
              <groupId>com.dsh105</groupId>
              <artifactId>CommandManager</artifactId>
-             <version>1.0.2-SNAPSHOT</version>
+             <version>2.0.0-SNAPSHOT</version>
          </dependency>
 
          <!-- Vault -->
@@ -133,10 +133,16 @@
             <id>kitteh-repo</id>
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
-        
-        <!-- CaptainBern & DSH105 - for a bunch of cool stuff -->
+
+         <!-- DSH's repo -->
+         <repository>
+             <id>dsh-repo</id>
+             <url>http://repo.dsh105.com/</url>
+         </repository>
+
+        <!-- Hawk's repo - for a bunch of cool stuff -->
         <repository>
-            <id>captainbern-dsh105</id>
+            <id>hawk-repo</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
     </repositories>
