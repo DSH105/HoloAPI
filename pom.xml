@@ -79,7 +79,7 @@
          <dependency>
              <groupId>net.milkbowl.vault</groupId>
              <artifactId>Vault</artifactId>
-             <version>1.2.32</version>
+             <version>1.4.1</version>
              <scope>provided</scope>
          </dependency>
 
@@ -144,6 +144,12 @@
         <repository>
             <id>hawk-repo</id>
             <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+        </repository>
+        
+        <!-- Vault Repo -->
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
     </repositories>
 
