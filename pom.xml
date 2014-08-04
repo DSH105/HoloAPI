@@ -278,6 +278,24 @@
                                      <artifact>com.dsh105:PowerMessage</artifact>
                                  </includes>
                              </artifactSet>
+                             <relocations>
+                                 <relocation>
+                                     <pattern>com.dsh105.commodus</pattern>
+                                     <shadedPattern>com.dsh105.holoapi.libs.commodus</shadedPattern>
+                                 </relocation>
+                                 <relocation>
+                                     <pattern>com.dsh105.command</pattern>
+                                     <shadedPattern>com.dsh105.holoapi.libs.command</shadedPattern>
+                                 </relocation>
+                                 <relocation>
+                                     <pattern>com.dsh105.powermessage</pattern>
+                                     <shadedPattern>com.dsh105.holoapi.libs.powermessage</shadedPattern>
+                                 </relocation>
+                                 <relocation>
+                                     <pattern>com.captainbern*</pattern>
+                                     <shadedPattern>com.dsh105.holoapi.libs.captainbern</shadedPattern>
+                                 </relocation>
+                             </relocations>
                          </configuration>
                      </execution>
                  </executions>
