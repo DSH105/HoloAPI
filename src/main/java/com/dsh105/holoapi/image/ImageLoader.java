@@ -30,7 +30,7 @@ public interface ImageLoader<T extends Generator> {
     /**
      * Gets a loaded generator. If the generator found has a URL type and has not yet been loaded, the loading process
      * will be started and the method will return null
-     * <p/>
+     * <p>
      * Also sends a message to the {@link org.bukkit.command.CommandSender} if the URL image is being loaded
      *
      * @param sender sender to send the URL loading message to

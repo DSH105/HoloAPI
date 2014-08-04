@@ -25,9 +25,9 @@ public interface ITagFormat {
      * Gets the value to use in the hologram instead of the registered key
      *
      * @param observer player viewing the hologram
-     * @return
      * @deprecated use {@link com.dsh105.holoapi.api.ITagFormat#getValue(com.dsh105.holoapi.api.Hologram,
      * org.bukkit.entity.Player)}
+     * @return Value to use in Hologram
      */
     @Deprecated
     public String getValue(Player observer);
@@ -38,7 +38,7 @@ public interface ITagFormat {
      *
      * @param hologram hologram using this function
      * @param observer player viewing the hologram
-     * @return
+     * @return Value to use in Hologram
      */
     public String getValue(Hologram hologram, Player observer);
 }

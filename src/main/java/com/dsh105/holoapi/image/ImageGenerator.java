@@ -32,7 +32,7 @@ import java.net.URI;
 
 /**
  * Represents a generator used to produce images
- * <p/>
+ * <p>
  * Original code by @bobacadodl
  * https://forums.bukkit.org/threads/204902/
  */

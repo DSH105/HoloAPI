@@ -42,7 +42,7 @@ public interface Hologram {
 
     /**
      * Sets the simplicity of the hologram
-     * <p/>
+     * <p>
      * Save files will automatically be updated upon calling this method. That is, if setting to true, the hologram
      * will
      * be removed from file; if false, it will be saved to file
@@ -95,7 +95,7 @@ public interface Hologram {
 
     /**
      * Gets a map of all players who are viewing the hologram
-     * <p/>
+     * <p>
      * Positions the hologram is viewed from may be different according to different players
      *
      * @return player name to {@link org.bukkit.util.Vector} map of all viewed positions
@@ -112,7 +112,7 @@ public interface Hologram {
 
     /**
      * Gets the position the hologram is seen from for a certain Player
-     * <p/>
+     * <p>
      * Unless modified externally, this will be identical to the normal hologram position
      *
      * @param player player to retrieve the view for
@@ -149,7 +149,7 @@ public interface Hologram {
 
     /**
      * Gets the lines that the hologram consists of
-     * <p/>
+     * <p>
      * Important: Images will be returned as block characters in amidst the text characters
      *
      * @return lines of the hologram
@@ -172,7 +172,7 @@ public interface Hologram {
 
     /**
      * Gets the save id of the hologram
-     * <p/>
+     * <p>
      * Used to save the hologram to the HoloAPI save files
      *
      * @return key the represents the hologram in save files
@@ -181,7 +181,7 @@ public interface Hologram {
 
     /**
      * Sets the save id of the hologram
-     * <p/>
+     * <p>
      * Any existing save data will be cleared and overwritten with the new assigned id
      *
      * @param saveId save id to be assigned to this hologram
@@ -191,7 +191,7 @@ public interface Hologram {
 
     /**
      * Gets whether the hologram is touch enabled
-     * <p/>
+     * <p>
      * If a hologram is touch enabled, it either has active {@link com.dsh105.holoapi.api.touch.TouchAction}s or it has
      * been set to fire touch events
      *
@@ -201,12 +201,12 @@ public interface Hologram {
 
     /**
      * Sets whether the hologram is touch enabled
-     * <p/>
+     * <p>
      * If a hologram has TouchActions, it is automatically considered to be touch-enabled. Setting this to true will
      * force the touch events to be fired even if the hologram has no active {@link
      * com.dsh105.holoapi.api.touch.TouchAction}s
      *
-     * @param touchEnabled
+     * @param touchEnabled boolean
      */
     public void setTouchEnabled(boolean touchEnabled);
 
@@ -219,7 +219,7 @@ public interface Hologram {
 
     /**
      * Changes the world the hologram is visible in
-     * <p/>
+     * <p>
      * Hologram coordinates will remain the same if the world is changed
      *
      * @param worldName      name of of the destination world
@@ -229,7 +229,7 @@ public interface Hologram {
 
     /**
      * Changes the world the hologram is visible in
-     * <p/>
+     * <p>
      * Hologram coordinates will remain the same if the world is changed
      *
      * @param worldName name of of the destination world
@@ -270,7 +270,7 @@ public interface Hologram {
 
     /**
      * Updates the current display of the hologram
-     * <p/>
+     * <p>
      * This method simply sends the existing display to the specified player. It is most appropriate for updating new
      * tag formats that have been recently applied using the TagFormatter API (see {@link
      * com.dsh105.holoapi.api.TagFormatter}
@@ -281,7 +281,7 @@ public interface Hologram {
 
     /**
      * Updates the current display of the hologram
-     * <p/>
+     * <p>
      * This method simply sends the existing display to all players that can currently see the hologram. It is most
      * appropriate for updating new tag formats that have been recently applied using the TagFormatter API (see {@link
      * com.dsh105.holoapi.api.TagFormatter}
@@ -416,7 +416,7 @@ public interface Hologram {
 
     /**
      * Shows the hologram to all nearby players within the given radius
-     * <p/>
+     * <p>
      * The origin location will be at the default location of the hologram
      *
      * @param radius radius to search for nearby players in
@@ -425,7 +425,7 @@ public interface Hologram {
 
     /**
      * Shows the hologram to all in the world of the hologram
-     * <p/>
+     * <p>
      * The origin location will be at the default location of the hologram
      *
      * @param obeyVisibility whether to obey the assigned {@link com.dsh105.holoapi.api.visibility.Visibility}
@@ -434,14 +434,14 @@ public interface Hologram {
 
     /**
      * Shows the hologram to all players in the world of the hologram
-     * <p/>
+     * <p>
      * The origin location will be at the default location of the hologram
      */
     public void showNearby();
 
     /**
      * Shows the hologram to all nearby players within the given radius
-     * <p/>
+     * <p>
      * The origin location will be at the default location of the hologram
      *
      * @param x              x coordinate of the centre location (origin)
@@ -464,7 +464,7 @@ public interface Hologram {
 
     /**
      * Moves the hologram to a new location
-     * <p/>
+     * <p>
      * Also moves the hologram position for all players currently viewing the hologram
      *
      * @param to position to move to
@@ -473,7 +473,7 @@ public interface Hologram {
 
     /**
      * Moves the hologram to a new location
-     * <p/>
+     * <p>
      * Also moves the hologram position for all players currently viewing the hologram
      *
      * @param to position to move to

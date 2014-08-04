@@ -31,6 +31,7 @@ public interface Visibility {
      * Gets whether a hologram can be shown to a certain player
      *
      * @param player player in question
+     * @param hologramId Hologram ID
      * @return true if hologram can be shown to the player, false if it should be kept hidden
      */
     public boolean isVisibleTo(Player player, String hologramId);
@@ -45,7 +46,7 @@ public interface Visibility {
 
     /**
      * Gets a map of the Visibility data to save to file.
-     * <p/>
+     * <p>
      * HoloAPI uses this data for saving Hologram Visibility data to file so that it can be loaded again when the
      * hologram is recreated from the save file. See {@link com.dsh105.holoapi.api.events.HoloVisibilityLoadEvent} for
      * information on how to load TouchAction data back into holograms

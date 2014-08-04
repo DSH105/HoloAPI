@@ -106,6 +106,7 @@ public abstract class HoloFactory {
      *
      * @param saveId save id to be assigned to constructed Holograms
      * @throws com.dsh105.holoapi.exceptions.DuplicateSaveIdException if the save ID is already registered
+     * @return return save id
      */
     public HoloFactory withSaveId(String saveId) {
         this.saveId = saveId;

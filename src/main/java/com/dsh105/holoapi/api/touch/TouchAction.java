@@ -30,6 +30,7 @@ public interface TouchAction {
      * Action to perform when a Hologram that the action is attached to is touched
      *
      * @param who Player interacting with the Hologram
+     * @param action Action to perform
      */
     public void onTouch(Player who, Action action);
 
@@ -43,7 +44,7 @@ public interface TouchAction {
 
     /**
      * Gets a map of the TouchAction data to save to file.
-     * <p/>
+     * <p>
      * HoloAPI uses this data for saving Hologram TouchAction data to file so that it can be loaded again when the
      * hologram is recreated from the save file. See {@link com.dsh105.holoapi.api.events.HoloTouchActionLoadEvent} for
      * information on how to load TouchAction data back into holograms

@@ -28,7 +28,7 @@ import org.bukkit.util.Vector;
 /**
  * An AnimatedHologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.AnimatedHologram} which can
  * be managed by HoloAPI
- * <p/>
+ * <p>
  * The AnimatedHologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to
  * the
  * constructor
@@ -52,7 +52,7 @@ public class AnimatedHologramFactory extends HoloFactory {
 
     /**
      * Adds frames of text to constructed AnimatedHolograms
-     * <p/>
+     * <p>
      *
      * @param textGenerator text generator used to prepare AnimatedHolograms
      * @return This object
@@ -66,7 +66,7 @@ public class AnimatedHologramFactory extends HoloFactory {
 
     /**
      * Adds image frames to constructed AnimatedHolograms
-     * <p/>
+     * <p>
      *
      * @param animatedImage animation generator used to prepare AnimatedHolograms
      * @return This object
@@ -79,7 +79,7 @@ public class AnimatedHologramFactory extends HoloFactory {
     }
 
     /**
-     * /**
+     * 
      * Adds image frames to constructed AnimatedHolograms
      *
      * @param animatedImageKey key of the animation generator to search for. If a generator is not found, the animation

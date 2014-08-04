@@ -31,7 +31,7 @@ import java.util.HashMap;
 /**
  * A HologramFactory is responsible for creating an {@link com.dsh105.holoapi.api.Hologram} which can be managed by
  * HoloAPI
- * <p/>
+ * <p>
  * The HologramFactory implements a fluid hologram builder, allowing parameters to be set as an extension to the
  * constructor
  */
@@ -83,7 +83,7 @@ public class HologramFactory extends HoloFactory {
 
     /**
      * Adds an image to constructed Holograms
-     * <p/>
+     * <p>
      *
      * @param imageGenerator image generator used to prepare Holograms
      * @return This object

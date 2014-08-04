@@ -18,7 +18,7 @@ public interface AnimatedHologram extends Hologram {
 
     /**
      * Gets the animation key of the hologram
-     * <p/>
+     * <p>
      * If the hologram is image based, the animation will have an animation key, as defined by the {@link
      * com.dsh105.holoapi.image.AnimatedImageGenerator} used to create it
      *
@@ -82,7 +82,7 @@ public interface AnimatedHologram extends Hologram {
 
     /**
      * Updates the animation for an observer
-     * <p/>
+     * <p>
      * Important to note: This method may yield unexpected results if not used properly
      *
      * @param observer Player to update the animation for
@@ -101,7 +101,7 @@ public interface AnimatedHologram extends Hologram {
 
     /**
      * Shows the the animation to an observer
-     * <p/>
+     * <p>
      * Important to note: This method may yield unexpected results if not used properly
      *
      * @param observer Player to show the animation to
@@ -111,7 +111,7 @@ public interface AnimatedHologram extends Hologram {
 
     /**
      * Shows the the animation to an observer at a position
-     * <p/>
+     * <p>
      * Important to note: This method may yield unexpected results if not used properly
      *
      * @param observer Player to show the animation to

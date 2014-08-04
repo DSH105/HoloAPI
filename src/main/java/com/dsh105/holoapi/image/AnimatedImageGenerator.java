@@ -234,7 +234,7 @@ public class AnimatedImageGenerator implements Generator {
      * @param gifFile GIF file used to generate the display
      * @param height  height of the display
      * @param imgChar {@link com.dsh105.holoapi.image.ImageChar} of the display
-     * @throws java.lang.RuntimeException If an input exception occurred or the image could not be found
+     * @throws java.io.IOException If an input exception occurred or the image could not be found
      */
     public AnimatedImageGenerator(String key, File gifFile, int height, ImageChar imgChar) throws IOException {
         this(key, gifFile, height, imgChar, false);

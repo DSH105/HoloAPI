@@ -30,7 +30,7 @@ public interface HoloManager {
 
     /**
      * Gets all the stored holograms, including simple holograms
-     * <p/>
+     * <p>
      * Simple holograms include chat bubbles and indicators if the server has them enabled
      *
      * @return all stored holograms
@@ -46,7 +46,7 @@ public interface HoloManager {
 
     /**
      * Gets all the stored holograms which are simple
-     * <p/>
+     * <p>
      * Simple holograms include chat bubbles and indicators if the server has them enabled
      *
      * @return all stored holograms
@@ -83,7 +83,7 @@ public interface HoloManager {
 
     /**
      * Stops tracking a hologram and clears all player views
-     * <p/>
+     * <p>
      * This does not clear the hologram data from file
      *
      * @param hologram hologram to stop tracking
@@ -92,7 +92,7 @@ public interface HoloManager {
 
     /**
      * Stops tracking a hologram and clears all player views
-     * <p/>
+     * <p>
      * This does not clear the hologram data from file
      *
      * @param hologramId ID of hologram to stop tracking
@@ -138,9 +138,9 @@ public interface HoloManager {
 
     /**
      * Sets the new line content for an existing hologram, accounting for new lines added.
-     * <p/>
+     * <p>
      * This method is more expensive IF there are more lines in the new content then already present in the hologram
-     * <p/>
+     * <p>
      * If the above condition is met, the original hologram will be copied and new lines added
      *
      * @param original   Hologram to set the content of
