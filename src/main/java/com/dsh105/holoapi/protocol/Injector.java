@@ -31,7 +31,7 @@ public interface Injector {
 
     public void sendPacket(Object packet);
 
-    public void recievePacket(Object packet);
+    public void receivePacket(Object packet);
 
     public Player getPlayer();
 
