@@ -76,7 +76,7 @@ public class TouchCommand implements CommandListener {
     }
 
     @Command(
-            command = "touch add <id> <r:true|false|yes|no,n:as_console> <command...>",
+            command = "touch add <id> <r:(?i)\"true|false|yes|no\",n:as_console> <command...>",
             description = "Add an action to perform when a certain hologram is touched",
             permission = "holoapi.holo.touch.add"
     )
