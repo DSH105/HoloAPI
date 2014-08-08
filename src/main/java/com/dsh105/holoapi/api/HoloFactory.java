@@ -18,7 +18,6 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
@@ -28,8 +27,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
-
-import java.util.logging.Level;
 
 /**
  * Represents a factory for building new Holograms
@@ -130,13 +127,23 @@ public abstract class HoloFactory {
     public abstract Hologram prepareHologram();
 
     /**
+     * Constructs and physically tracks a {@link Hologram} based on the settings stored in the factory.
+     * 
+     * @return The constructor Holograms
+     */
+    public Hologram build() {
+        return build(true);
+    }
+
+    /**
      * Constructs a {@link com.dsh105.holoapi.api.Hologram} based on the settings stored in the factory
      *
+     * @param track whether to track and show the hologram physically.
      * @return The constructed Holograms
      * @throws com.dsh105.holoapi.exceptions.HologramNotPreparedException if the animation is empty or the location is
      *                                                                    not initialised
      */
-    public Hologram build() {
+    public Hologram build(boolean track) {
         if (!this.canBuild() || !this.prepared) {
             throw new HologramNotPreparedException("Hologram is not prepared correctly!");
         }
@@ -154,8 +161,10 @@ public abstract class HoloFactory {
         Hologram hologram = prepareHologram();
         hologram.setVisibility(this.visibility);
         hologram.setSimplicity(this.simple);
-        hologram.showNearby();
-        HoloAPI.getManager().track(hologram, this.owningPlugin);
+        if (track) {
+            hologram.showNearby();
+            HoloAPI.getManager().track(hologram, this.owningPlugin);
+        }
         return hologram;
     }
 
