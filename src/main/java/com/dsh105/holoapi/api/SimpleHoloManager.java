@@ -147,8 +147,10 @@ public class SimpleHoloManager implements HoloManager {
 
     @Override
     public void stopTracking(Hologram hologram) {
+        boolean removed = this.holograms.remove(hologram) != null;
+        if(!removed) return; // No need to go on if we weren't already tracking it...
+        
         hologram.clearAllPlayerViews();
-        this.holograms.remove(hologram);
         if (hologram instanceof AnimatedHologram && ((AnimatedHologram) hologram).isAnimating()) {
             ((AnimatedHologram) hologram).cancelAnimation();
         }
