@@ -18,7 +18,6 @@
 package com.dsh105.holoapi.api;
 
 import com.dsh105.holoapi.HoloAPI;
-import com.dsh105.holoapi.HoloAPICore;
 import com.dsh105.holoapi.api.visibility.Visibility;
 import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.exceptions.HologramNotPreparedException;
@@ -28,8 +27,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
-
-import java.util.logging.Level;
 
 /**
  * Represents a factory for building new Holograms
@@ -152,8 +149,8 @@ public abstract class HoloFactory {
         }
 
         Hologram hologram = prepareHologram();
-        hologram.setVisibility(this.visibility);
         hologram.setSimplicity(this.simple);
+        hologram.setVisibility(this.visibility);
         hologram.showNearby();
         HoloAPI.getManager().track(hologram, this.owningPlugin);
         return hologram;
