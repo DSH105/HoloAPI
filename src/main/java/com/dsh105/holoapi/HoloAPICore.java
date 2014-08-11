@@ -44,6 +44,7 @@ import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.protocol.InjectionManager;
+import com.dsh105.holoapi.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -102,6 +103,10 @@ public class HoloAPICore extends JavaPlugin {
         HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
         this.loadConfiguration();
+
+        Debugger.getInstance().setOutput(getServer().getConsoleSender());
+        Debugger.getInstance().setEnabled(true); // TODO: add config option
+        Debugger.getInstance().setLevel(10);     // TODO: add config option
 
         INJECTION_MANAGER = new InjectionManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
