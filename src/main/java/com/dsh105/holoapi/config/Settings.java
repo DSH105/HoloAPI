@@ -84,6 +84,9 @@ public class Settings extends Options {
         set(INDICATOR_FORMAT.getPath("potion", "godapple"), "&e&l+ %effect% II");
     }
 
+    public static final Setting<Boolean> DEBUGGING_ENABLED = new Setting<Boolean>("debugging.enabled", false);
+    public static final Setting<Integer> DEBUGGING_LEVEL = new Setting<Integer>("debugging.level", 10);
+
     public static final Setting<String> COMMAND = new Setting<>("command", "holo");
     public static final Setting<Boolean> USE_BUNGEE = new Setting<>("bungecord", false);
     public static final Setting<Boolean> AUTO_UPDATE = new Setting<>("autoUpdate", false);

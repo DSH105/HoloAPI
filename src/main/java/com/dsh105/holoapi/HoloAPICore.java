@@ -105,8 +105,8 @@ public class HoloAPICore extends JavaPlugin {
         this.loadConfiguration();
 
         Debugger.getInstance().setOutput(getServer().getConsoleSender());
-        Debugger.getInstance().setEnabled(true); // TODO: add config option
-        Debugger.getInstance().setLevel(10);     // TODO: add config option
+        Debugger.getInstance().setEnabled(Settings.DEBUGGING_ENABLED.getValue());
+        Debugger.getInstance().setLevel(Settings.DEBUGGING_LEVEL.getValue(10));
 
         INJECTION_MANAGER = new InjectionManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
