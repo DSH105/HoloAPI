@@ -675,7 +675,7 @@ public class HologramImpl implements Hologram {
         touchSlime.getIntegers().write(0, this.getTouchSlimeIndex(index));
         touchSlime.getIntegers().write(1, (int) EntityType.SLIME.getTypeId());
         touchSlime.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-        touchSlime.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
+        touchSlime.getIntegers().write(3, (int) Math.floor((y + diffY) * 32.0D));
         touchSlime.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
@@ -687,7 +687,7 @@ public class HologramImpl implements Hologram {
         WrappedPacket touchSkull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
         touchSkull.getIntegers().write(0, this.getTouchSkullIndex(index));
         touchSkull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
-        touchSkull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+        touchSkull.getIntegers().write(2, (int) Math.floor((y + diffY) * 32.0D));
         touchSkull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
         touchSkull.getIntegers().write(9, 66);
 
