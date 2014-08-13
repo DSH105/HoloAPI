@@ -44,6 +44,8 @@ import com.dsh105.holoapi.listeners.HoloListener;
 import com.dsh105.holoapi.listeners.IndicatorListener;
 import com.dsh105.holoapi.listeners.WorldListener;
 import com.dsh105.holoapi.protocol.InjectionManager;
+import com.dsh105.holoapi.script.ScriptLoader;
+import com.dsh105.holoapi.script.ScriptManager;
 import com.dsh105.holoapi.util.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -69,6 +71,7 @@ public class HoloAPICore extends JavaPlugin {
     protected static HoloUpdater HOLO_UPDATER;
 
     protected static InjectionManager INJECTION_MANAGER;
+    protected static ScriptManager SCRIPT_MANAGER;
 
     protected YAMLConfigManager configManager;
     private HashMap<ConfigType, YAMLConfig> CONFIG_FILES = new HashMap<>();
@@ -110,6 +113,13 @@ public class HoloAPICore extends JavaPlugin {
 
         INJECTION_MANAGER = new InjectionManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        try {
+            SCRIPT_MANAGER = new ScriptManager(this);
+        } catch (IOException e) {
+            HoloAPI.LOG.warning("Failed to create the ScriptManager!");
+            ScriptLoader.SCRIPTING_ENABLED = false;
+        }
 
         HOLO_UPDATER = new HoloUpdater();
         TAG_FORMATTER = new TagFormatter();
@@ -290,6 +300,12 @@ public class HoloAPICore extends JavaPlugin {
         if (INJECTION_MANAGER == null)
             throw new RuntimeException("InjectionManager is NULL!");
         return INJECTION_MANAGER;
+    }
+
+    public static ScriptManager getScriptManager() {
+        if (SCRIPT_MANAGER == null || !ScriptLoader.SCRIPTING_ENABLED)
+            throw new RuntimeException("ScriptManager is NULL or scripting is disabled due to an error!");
+        return SCRIPT_MANAGER;
     }
 
     public <T extends Options> T getSettings(Class<T> settingsClass) {
