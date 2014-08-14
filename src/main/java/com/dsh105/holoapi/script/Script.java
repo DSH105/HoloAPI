@@ -23,11 +23,8 @@ import org.bukkit.entity.Player;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
-public class Script<T> {
+public abstract class Script<T> {
 
     protected String name;
     protected String code;
@@ -45,20 +42,9 @@ public class Script<T> {
         return this.code;
     }
 
-    public T eval(ScriptEngine engine, Hologram hologram, Player player) throws ScriptException {
+    public abstract String getSignature();
 
-        this.compile(engine);
-
-        try {
-
-            Object result = ((Invocable) engine).invokeFunction(this.name, hologram, player);
-
-            return (T) result;
-
-        } catch (NoSuchMethodException e) {
-            throw new IllegalStateException("Failed to compile " + this.name + " into the ScriptEngine!", e);
-        }
-    }
+    public abstract T eval(ScriptEngine engine, Object... args) throws ScriptException;
 
     protected void compile(ScriptEngine engine) throws ScriptException {
         if (engine.get(this.name) == null) {
@@ -70,7 +56,7 @@ public class Script<T> {
         engine.put(this.name, null);
     }
 
-    public void saveToFile(File file) throws FileNotFoundException {
+  /**  public void saveToFile(File file) throws FileNotFoundException {
         if (file.isDirectory() || !file.exists())
             throw new IllegalArgumentException("File is a directory or doesn't exist!");
 
@@ -87,5 +73,5 @@ public class Script<T> {
         byte[] encoded = Files.readAllBytes(file.toPath());
         String code = new String(encoded, StandardCharsets.UTF_8);
         return new Script(file.getName(), code);
-    }
+    } */
 }

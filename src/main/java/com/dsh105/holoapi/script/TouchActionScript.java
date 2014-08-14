@@ -17,16 +17,29 @@
 
 package com.dsh105.holoapi.script;
 
+import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.touch.Action;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import org.bukkit.entity.Player;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import java.util.LinkedHashMap;
 
 public class TouchActionScript extends Script<Boolean> implements TouchAction {
 
     public TouchActionScript(String name, String code) {
         super(name, code);
+    }
+
+    @Override
+    public String getSignature() {
+        return "hologram,player,action";
+    }
+
+    @Override
+    public Boolean eval(ScriptEngine engine, Object... args) throws ScriptException {
+        return null;
     }
 
     @Override

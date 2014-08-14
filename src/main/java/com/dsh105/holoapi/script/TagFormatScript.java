@@ -21,6 +21,7 @@ import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.ITagFormat;
 import org.bukkit.entity.Player;
 
+import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -48,6 +49,27 @@ public class TagFormatScript extends Script<String> implements ITagFormat {
             return eval(this.scriptEngine, hologram, observer);
         } catch (ScriptException e) {
             return null; // TODO: even better error handling?
+        }
+    }
+
+    @Override
+    public String getSignature() {
+        return "hologram,player";
+    }
+
+    @Override
+    public String eval(ScriptEngine engine, Object... args) throws ScriptException {
+
+        this.compile(engine);
+
+        try {
+
+            Object result = ((Invocable) engine).invokeFunction(this.name, args);
+
+            return (String) result;
+
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException("Failed to compile " + this.name + " into the ScriptEngine!", e);
         }
     }
 }

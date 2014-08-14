@@ -67,7 +67,7 @@ public class ScriptLoader {
             }
         })
                 ) {
-            scripts.add(Script.readFromFile(file));
+          //  scripts.add(Script.readFromFile(file));
         }
     }
 
