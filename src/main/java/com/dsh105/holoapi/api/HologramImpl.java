@@ -287,12 +287,7 @@ public class HologramImpl implements Hologram {
             return;
         }
         this.tags[index] = lineUpdateEvent.getNewLineContent();
-        for (String ident : this.playerToLocationMap.keySet()) {
-            Player p = IdentUtil.getPlayerOf(ident);
-            if (p != null) {
-                this.updateNametag(p, this.tags[index], index);
-            }
-        }
+        this.updateDisplay();
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
         }
