@@ -36,11 +36,12 @@ public class TouchActionScript extends Script<Boolean> implements TouchAction {
 
     @Override
     public String getSaveKey() {
-        return null;
+        return getName();
     }
 
     @Override
     public LinkedHashMap<String, Object> getDataToSave() {
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         return null;
     }
 }
