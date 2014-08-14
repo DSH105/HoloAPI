@@ -10,10 +10,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-public class Script {
+public class Script<T> {
 
-    private String name;
-    private String code;
+    protected String name;
+    protected String code;
 
     public Script(String name, String code) {
         this.name = name;
@@ -28,7 +28,7 @@ public class Script {
         return this.code;
     }
 
-    public String eval(ScriptEngine engine, Hologram hologram, Player player) throws ScriptException {
+    public T eval(ScriptEngine engine, Hologram hologram, Player player) throws ScriptException {
 
         this.compile(engine);
 
@@ -36,18 +36,14 @@ public class Script {
 
             Object result = ((Invocable) engine).invokeFunction(this.name, hologram, player);
 
-            if (result instanceof String) {
-                return (String) result;
-            } else {
-                throw new ScriptException("Script didn't return a String, result: " + result);
-            }
+            return (T) result;
 
         } catch (NoSuchMethodException e) {
             throw new IllegalStateException("Failed to compile " + this.name + " into the ScriptEngine!", e);
         }
     }
 
-    private void compile(ScriptEngine engine) throws ScriptException {
+    protected void compile(ScriptEngine engine) throws ScriptException {
         if (engine.get(this.name) == null) {
             engine.eval("var " + this.name + " = function(hologram, player) {\n" + this.code + "\n}");
         }
