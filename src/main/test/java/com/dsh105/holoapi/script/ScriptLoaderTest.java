@@ -28,7 +28,7 @@ public class ScriptLoaderTest {
 
                     Object result = ((Invocable) engine).invokeFunction(this.name, args);
 
-                    return (String) result;
+                    return result;
 
                 } catch (NoSuchMethodException e) {
                     throw new IllegalStateException("Failed to compile " + this.name + " into the ScriptEngine!", e);
