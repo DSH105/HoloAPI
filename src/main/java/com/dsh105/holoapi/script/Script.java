@@ -17,10 +17,6 @@
 
 package com.dsh105.holoapi.script;
 
-import com.dsh105.holoapi.api.Hologram;
-import org.bukkit.entity.Player;
-
-import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
