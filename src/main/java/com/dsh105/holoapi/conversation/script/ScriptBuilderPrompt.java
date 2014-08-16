@@ -60,7 +60,7 @@ public class ScriptBuilderPrompt extends StringPrompt {
     public Prompt acceptInput(ConversationContext context, String input) {
         if (input.equalsIgnoreCase("DONE")) {
             LangSetting.send(context.getForWhom(), "}");
-            return new ScriptBuilderSuccess(this.lines);
+            return new ScriptBuilderSuccess(this.lines, this.scriptName);
         }
 
         this.lines.add(currentlyEditing, input);
