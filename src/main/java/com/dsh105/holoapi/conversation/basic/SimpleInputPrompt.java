@@ -42,7 +42,10 @@ public class SimpleInputPrompt extends ValidatingPrompt {
 
     @Override
     protected Prompt acceptValidatedInput(ConversationContext context, String input) {
-        this.function.function(context, input);
+        Prompt next = this.function.function(context, input);
+        if (next != null) {
+            return next;
+        }
         return this.successPrompt != null ? this.successPrompt : new SimpleInputSuccessPrompt(this.function.getSuccessMessage(context, input));
     }
 

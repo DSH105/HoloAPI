@@ -63,12 +63,22 @@ public class LangSetting extends Setting<String> {
     }
 
     public void send(Conversable conversable, String... pairedReplacements) {
+        send(conversable, getValue(pairedReplacements));
+    }
+
+    public static void send(CommandSender sender, String message) {
+        if (message == null) {
+            return;
+        }
+        new MarkupBuilder().withText(HoloAPI.getPrefix() + ChatColor.translateAlternateColorCodes('&', message)).build().send(sender);
+    }
+
+    public static void send(Conversable conversable, String message) {
         if (conversable instanceof CommandSender) {
-            send((CommandSender) conversable, pairedReplacements);
+            send((CommandSender) conversable, message);
             return;
         }
 
-        String message = getValue(pairedReplacements);
         if (message != null) {
             conversable.sendRawMessage(HoloAPI.getPrefix() + ChatColor.translateAlternateColorCodes('&', message));
         }

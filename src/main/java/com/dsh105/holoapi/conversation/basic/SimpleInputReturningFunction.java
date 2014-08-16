@@ -20,29 +20,20 @@ package com.dsh105.holoapi.conversation.basic;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 
-public abstract class SimpleInputFunction {
+public abstract class SimpleInputReturningFunction extends SimpleInputFunction {
 
     private String input;
 
+    @Override
     public String getInput() {
         return input;
     }
 
+    @Override
     protected Prompt function(ConversationContext context, String input) {
         this.input = input;
-        this.onFunction(context, input);
-        return null;
+        return this.onFunctionRequest(context, input);
     }
 
-    public abstract void onFunction(ConversationContext context, String input);
-
-    public abstract String getSuccessMessage(ConversationContext context, String input);
-
-    public abstract String getPromptText(ConversationContext context);
-
-    public abstract String getFailedText(ConversationContext context, String invalidInput);
-
-    public boolean isValid(ConversationContext conversationContext, String s) {
-        return true;
-    }
+    public abstract Prompt onFunctionRequest(ConversationContext context, String input);
 }

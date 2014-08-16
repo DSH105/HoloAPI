@@ -15,34 +15,32 @@
  * along with HoloAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.dsh105.holoapi.conversation.basic;
+package com.dsh105.holoapi.conversation.script;
 
 import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
 
-public abstract class SimpleInputFunction {
+import java.util.List;
 
-    private String input;
+public class ScriptBuilderSuccess extends MessagePrompt {
 
-    public String getInput() {
-        return input;
+    private List<String> lines;
+    private String scriptName;
+
+    public ScriptBuilderSuccess(List<String> lines, String scriptName) {
+        this.lines = lines;
+        this.scriptName = scriptName;
     }
 
-    protected Prompt function(ConversationContext context, String input) {
-        this.input = input;
-        this.onFunction(context, input);
+    @Override
+    protected Prompt getNextPrompt(ConversationContext context) {
+        return END_OF_CONVERSATION;
+    }
+
+    @Override
+    public String getPromptText(ConversationContext context) {
+        // TODO: Apply scripting stuff here
         return null;
-    }
-
-    public abstract void onFunction(ConversationContext context, String input);
-
-    public abstract String getSuccessMessage(ConversationContext context, String input);
-
-    public abstract String getPromptText(ConversationContext context);
-
-    public abstract String getFailedText(ConversationContext context, String invalidInput);
-
-    public boolean isValid(ConversationContext conversationContext, String s) {
-        return true;
     }
 }

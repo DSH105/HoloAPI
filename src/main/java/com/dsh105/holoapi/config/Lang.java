@@ -115,6 +115,11 @@ public class Lang extends Options {
             PROMPT_INPUT_FAIL_WORLD = new LangSetting("prompt_input_fail_world", "{c2}%world% {c1}world doesn't exist. Please re-enter the location."),
             PROMPT_INPUT_FAIL_FORMAT = new LangSetting("prompt_input_fail_format", "{c1}Please use the following format: {c2}world x y z{c1}."),
             PROMPT_ENTER_NEW_LINE = new LangSetting("prompt_enter_new_line", "{c1}Enter the new line for the hologram."),
+            PROMPT_SCRIPT_TYPE = new LangSetting("prompt_script_type", "{c1}What type of script would you like to build? ({c2}touch {c1} or {c2}format{c1})."),
+            PROMPT_SCRIPT_VALID_TYPE = new LangSetting("prompt_script_valid_type", "{c1}Please specify a {c2}valid {c1}script type ({c2}touch {c1} or {c2}format{c1})."),
+            PROMPT_SCRIPT_ENTER = new LangSetting("prompt_script_enter", "{c1}Begin defining your script:"),
+            PROMPT_SCRIPT_LINE_CHANGE = new LangSetting("prompt_script_line_change", "{c1}Now editing line {c2}%line%{c1}."),
+            PROMPT_SCRIPT_NOT_EDITING = new LangSetting("prompt_script_not_editing", "{c1}You are not currently editing a script!"),
 
     BUILDER_EMPTY_LINES = new LangSetting("hologram_not_created", "{c1}The hologram was not created as it was empty."),
             BUILDER_INPUT_FAIL_TEXT_IMAGE = new LangSetting("builder_input_fail_text_image", "{c1}Enter a valid line type ({c2}Text {c1}or {c2}Image{c1})."),
