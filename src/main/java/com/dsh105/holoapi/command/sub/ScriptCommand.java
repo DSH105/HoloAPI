@@ -27,6 +27,11 @@ public class ScriptCommand implements CommandListener {
             permission = "holoapi.holo.script.add"
     )
     public boolean addScript(CommandEvent event) {
+        final Hologram hologram = HoloAPI.getManager().getHologram(event.variable("id"));
+        if (hologram == null) {
+            event.respond(Lang.HOLOGRAM_NOT_FOUND.getValue("id", event.variable("id")));
+            return true;
+        }
         return false;
     }
 
@@ -45,12 +50,6 @@ public class ScriptCommand implements CommandListener {
             permission = "holoapi.holo.script.create"
     )
     public boolean createScript(final CommandEvent event) {
-        Hologram hologram = HoloAPI.getManager().getHologram(event.variable("id"));
-        if (hologram == null) {
-            event.respond(Lang.HOLOGRAM_NOT_FOUND.getValue("id", event.variable("id")));
-            return true;
-        }
-
         if (!(event.sender() instanceof Player) && !(event.sender() instanceof ConsoleCommandSender)) {
             event.respond(Lang.NOT_CONVERSABLE.getValue());
             return true;
