@@ -33,7 +33,7 @@ public class ScriptCommand implements CommandListener {
     @Command(
             command = "script remove <id> <script_name>",
             description = "Removes a script from the given hologram",
-            permission = "holoapi.holo.script.add"
+            permission = "holoapi.holo.script.remove"
     )
     public boolean removeScript(CommandEvent event) {
         return false;
