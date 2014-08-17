@@ -7,6 +7,8 @@ import com.dsh105.holoapi.image.AnimatedImageGenerator;
 import com.dsh105.holoapi.image.AnimatedTextGenerator;
 import com.dsh105.holoapi.image.Frame;
 import com.dsh105.holoapi.util.TagIdGenerator;
+
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -75,6 +77,8 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     public Frame getFrame(int index) {
         if (index >= this.frames.size()) {
             throw new IndexOutOfBoundsException("Frame " + index + "doesn't exist.");
+        }else if(index < 0){
+        	throw new IndexOutOfBoundsException("Index cannot be less than 0");
         }
         return this.frames.get(index);
     }
@@ -135,6 +139,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
 
     @Override
     public void updateAnimation(Player observer, String... lines) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#updateAnimation(...)");
         for (int index = 0; index < lines.length; index++) {
             this.updateNametag(observer, lines[index], index);
         }
@@ -142,30 +147,39 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
 
     @Override
     public void show(Player observer) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#show(Player)");
         this.showAnimation(observer, currentFrame.getLines());
     }
 
     @Override
     public void show(Player observer, Location location) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#show(Player, Observer)");
+    	Validate.notNull(location, "The Location object is null in AnimatedHologramImpl#show(Player, Observer)");
         this.showAnimation(observer, location.toVector(), currentFrame.getLines());
     }
 
     @Override
     public void show(Player observer, double x, double y, double z) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#show(Player, double, double, double)");
         this.showAnimation(observer, x, y, z, currentFrame.getLines());
     }
 
     @Override
     public void showAnimation(Player observer, String... lines) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#showAnimation(Player, String...)");
         this.showAnimation(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), lines);
     }
 
     @Override
     public void showAnimation(Player observer, Vector v, String... lines) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#showAnimation(Player, Vector, String...)");
+    	Validate.notNull(v, "The Vector object is null in AnimatedHologramImpl#showAnimation(Player, Vector, String...)");
         this.showAnimation(observer, v.getBlockX(), v.getBlockY(), v.getBlockZ(), lines);
     }
 
     private void showAnimation(Player observer, double x, double y, double z, String[] lines) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#showAnimation(Player, double, double, double, String[])");
+    	Validate.notNull(lines, "The String[] object is null in AnimatedHologramImpl#showAnimation(Player, double, double, double, String[])");
         for (int index = 0; index < lines.length; index++) {
             this.generate(observer, lines[index], index, -index * Settings.VERTICAL_LINE_SPACING.getValue(), x, y, z);
         }
@@ -174,6 +188,8 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
 
     @Override
     public void move(Player observer, Vector to) {
+    	Validate.notNull(observer, "The Player object is null in AnimatedHologramImpl#move(Player, Vector)");
+    	Validate.notNull(to, "The Vector object is null in AnimatedHologramImpl#move(Player, Vector)");
         this.cancelAnimation();
         super.move(observer, to);
         this.animate();
