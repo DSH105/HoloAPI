@@ -128,13 +128,13 @@ public class HologramImpl implements Hologram {
 
     @Override
     public boolean canBeSeenBy(Player player) {
-    	Validate.notNull(player, "The Player object is null in HologramImpl#canBeSeenBy(Player)");
+        Validate.notNull(player, "The Player object is null in HologramImpl#canBeSeenBy(Player)");
         return getPlayerViews().containsKey(IdentUtil.getIdentificationForAsString(player));
     }
 
     @Override
     public Vector getPlayerView(Player player) {
-    	Validate.notNull(player, "The Player object is null in HologramImpl#getPlayerView(Player)");
+        Validate.notNull(player, "The Player object is null in HologramImpl#getPlayerView(Player)");
         return getPlayerViews().get(IdentUtil.getIdentificationForAsString(player));
     }
 
@@ -162,7 +162,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void refreshDisplay(Player observer) {
-    	Validate.notNull(observer, "The Player object is null in HologramImpl#refreshDisplay(Player)");
+        Validate.notNull(observer, "The Player object is null in HologramImpl#refreshDisplay(Player)");
         this.refreshDisplay(false, observer);
     }
 
@@ -183,7 +183,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void setVisibility(Visibility visibility) {
-    	Validate.notNull(visibility, "The Visibilty object is null in HologramImpl#setVisibility(Visibility)");
+        Validate.notNull(visibility, "The Visibilty object is null in HologramImpl#setVisibility(Visibility)");
         this.visibility = visibility;
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
@@ -197,7 +197,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void setSaveId(String saveId) {
-    	Validate.isTrue(saveId != "", "The saveId String in HologramImpl#setSaveId(String) cannot be empty");
+        Validate.isTrue(saveId != "", "The saveId String in HologramImpl#setSaveId(String) cannot be empty");
         if (HoloAPI.getConfig(ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
             throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID " + saveId + " already exists in the HoloAPI data files!");
         }
@@ -289,7 +289,7 @@ public class HologramImpl implements Hologram {
         if (index >= this.tags.length) {
             throw new IllegalArgumentException("Tag index doesn't exist!");
         }else if(index < 0){
-        	throw new IllegalArgumentException("Tag indicies cannot be less than 0!");
+            throw new IllegalArgumentException("Tag indicies cannot be less than 0!");
         }
         HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], content, index);
         Bukkit.getServer().getPluginManager().callEvent(lineUpdateEvent);
@@ -308,7 +308,7 @@ public class HologramImpl implements Hologram {
         if (index >= this.tags.length) {
             throw new IllegalArgumentException("Tag index doesn't exist!");
         }else if(index < 0){
-        	throw new IllegalArgumentException("Tag indicies cannot be less than 0!");
+            throw new IllegalArgumentException("Tag indicies cannot be less than 0!");
         }
         Validate.notNull(observer, "The Player object in HologramImpl#updateLine(int, String, Player) is null");
         this.updateNametag(observer, content, index);
@@ -316,7 +316,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void updateDisplay(Player observer) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#updateDisplay(Player) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#updateDisplay(Player) is null");
         for (int index = 0; index < this.tags.length; index++) {
             this.updateNametag(observer, this.tags[index], index);
         }
@@ -365,7 +365,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void updateLines(Player observer, String... content) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#updateLines(Player, String...) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#updateLines(Player, String...) is null");
         if (content.length <= 0) {
             throw new IllegalArgumentException("New hologram content cannot be empty!");
         }
@@ -385,7 +385,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void addTouchAction(TouchAction action) {
-    	Validate.notNull(action, "The TouchAction object in HologramImpl#addTouchAction(TouchAction) is null");
+        Validate.notNull(action, "The TouchAction object in HologramImpl#addTouchAction(TouchAction) is null");
         this.touchActions.add(action);
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
@@ -405,7 +405,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void removeTouchAction(TouchAction action) {
-    	Validate.notNull(action, "The TouchAction object in HologramImpl#removeTouchAction(TouchAction) is null");
+        Validate.notNull(action, "The TouchAction object in HologramImpl#removeTouchAction(TouchAction) is null");
         this.touchActions.remove(action);
         if (!this.isSimple()) {
             HoloAPI.getManager().saveToFile(this);
@@ -445,33 +445,33 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void show(Player observer, boolean obeyVisibility) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#show(Player, boolean) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#show(Player, boolean) is null");
         this.show(observer, this.getDefaultX(), this.getDefaultY(), this.getDefaultZ(), obeyVisibility);
     }
 
     @Override
     public void show(Player observer) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#show(Player) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#show(Player) is null");
         this.show(observer, false);
     }
 
     @Override
     public void show(Player observer, Location location, boolean obeyVisibility) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#show(Player, Location, boolean) is null");
-    	Validate.notNull(location, "The Location object in HologramImpl#show(Player, Location, boolean) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#show(Player, Location, boolean) is null");
+        Validate.notNull(location, "The Location object in HologramImpl#show(Player, Location, boolean) is null");
         this.show(observer, location.getBlockX(), location.getBlockY(), location.getBlockZ(), obeyVisibility);
     }
 
     @Override
     public void show(Player observer, Location location) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#show(Player, Location) is null");
-    	Validate.notNull(location, "The Location object in HologramImpl#show(Player, Location) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#show(Player, Location) is null");
+        Validate.notNull(location, "The Location object in HologramImpl#show(Player, Location) is null");
         this.show(observer, location, false);
     }
 
     @Override
     public void show(Player observer, double x, double y, double z, boolean obeyVisibility) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#show(Player, double, double, double, boolean) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#show(Player, double, double, double, boolean) is null");
         if (obeyVisibility && !this.getVisibility().isVisibleTo(observer, this.getSaveId())) {
             return;
         }
@@ -483,13 +483,13 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void show(Player observer, double x, double y, double z) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#show(Player, double, double, double) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#show(Player, double, double, double) is null");
         this.show(observer, x, y, z, false);
     }
 
     @Override
     public void showNearby(Location origin, boolean obeyVisibility, int radius) {
-    	Validate.notNull(origin, "The Location object in HologramImpl#showNearby(Location, boolean, int) is null");
+        Validate.notNull(origin, "The Location object in HologramImpl#showNearby(Location, boolean, int) is null");
         for (Player player : GeometryUtil.getNearbyPlayers(origin, radius)) {
             this.show(player, obeyVisibility);
         }
@@ -497,7 +497,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void showNearby(Location origin, int radius) {
-    	Validate.notNull(origin, "The Location object in HologramImpl#showNearby(Location, int) is null");
+        Validate.notNull(origin, "The Location object in HologramImpl#showNearby(Location, int) is null");
         this.showNearby(origin, false, radius);
     }
 
@@ -533,7 +533,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void move(Location to) {
-    	Validate.notNull(to, "The Location object in HologramImpl#move(Location) is null");
+        Validate.notNull(to, "The Location object in HologramImpl#move(Location) is null");
         if (!this.worldName.equals(to.getWorld().getName())) {
             this.changeWorld(to.getWorld().getName());
         }
@@ -542,7 +542,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void move(Vector to) {
-    	Validate.notNull(to, "The Vector object in HologramImpl#move(Vector) is null");
+        Validate.notNull(to, "The Vector object in HologramImpl#move(Vector) is null");
         this.defX = to.getX();
         this.defY = to.getY();
         this.defZ = to.getZ();
@@ -559,8 +559,8 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void move(Player observer, Vector to) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#move(Player, Vector) is null");
-    	Validate.notNull(to, "The Vector object in HologramImpl#move(Player, Vector) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#move(Player, Vector) is null");
+        Validate.notNull(to, "The Vector object in HologramImpl#move(Player, Vector) is null");
         Vector loc = to.clone();
         for (int index = 0; index < this.getTagCount(); index++) {
             this.moveTag(observer, index, loc);
@@ -571,13 +571,13 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void clear(Player observer) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#clear(Player) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#clear(Player) is null");
         clearTags(observer, this.getAllEntityIds());
         this.playerToLocationMap.remove(IdentUtil.getIdentificationForAsString(observer));
     }
 
     protected void setImageTagMap(HashMap<TagSize, String> map) {
-    	Validate.notNull(map, "The HashMap object in HologramImpl#setImageTagMap(HashMap) is null");
+        Validate.notNull(map, "The HashMap object in HologramImpl#setImageTagMap(HashMap) is null");
         this.imageIdMap = map;
     }
 
@@ -600,7 +600,7 @@ public class HologramImpl implements Hologram {
     }
 
     protected void clearTags(Player observer, int... entityIds) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#clearTags(Player, int...) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#clearTags(Player, int...) is null");
         if (entityIds.length > 0) {
             WrappedPacket packet = new WrappedPacket(PacketType.Play.Server.ENTITY_DESTROY);
             packet.getIntegerArrays().write(0, entityIds);
@@ -610,19 +610,19 @@ public class HologramImpl implements Hologram {
     }
 
     protected void moveTag(Player observer, Vector to, int... entityIds) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#moveTag(Player, Vector, int...) is null");
-    	Validate.notNull(to, "The Vector object in HologramImpl#moveTag(Player, Vector, int...) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#moveTag(Player, Vector, int...) is null");
+        Validate.notNull(to, "The Vector object in HologramImpl#moveTag(Player, Vector, int...) is null");
         WrappedPacket teleportHorse = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
         teleportHorse.getIntegers().write(0, entityIds[0]);
         teleportHorse.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
-	    teleportHorse.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
-	    teleportHorse.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
+        teleportHorse.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
+        teleportHorse.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
 
         WrappedPacket teleportSkull = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
         teleportSkull.getIntegers().write(0, entityIds[1]);
         teleportSkull.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
-	    teleportSkull.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
-	    teleportSkull.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
+        teleportSkull.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
+        teleportSkull.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
 
         Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
         injector.sendPacket(teleportHorse.getHandle());
@@ -630,8 +630,8 @@ public class HologramImpl implements Hologram {
     }
 
     protected void moveTag(Player observer, int index, Vector to) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#moveTag(Player, int, Vector) is null");
-    	Validate.notNull(to, "The Vector object in HologramImpl#moveTag(Player, int, Vector) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#moveTag(Player, int, Vector) is null");
+        Validate.notNull(to, "The Vector object in HologramImpl#moveTag(Player, int, Vector) is null");
         this.moveTag(observer, to, getHorseIndex(index), getSkullIndex(index));
 
         if (this.isTouchEnabled()) {
@@ -640,13 +640,13 @@ public class HologramImpl implements Hologram {
     }
 
     protected void teleportTouchSlime(Player observer, int index, Vector to) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#teleportTouchSlime(Player, int, Vector) is null");
-    	Validate.notNull(to, "The Vector object in HologramImpl#teleportTouchSlime(Player, int, Vector) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#teleportTouchSlime(Player, int, Vector) is null");
+        Validate.notNull(to, "The Vector object in HologramImpl#teleportTouchSlime(Player, int, Vector) is null");
         this.moveTag(observer, to, getTouchSlimeIndex(index), getTouchSkullIndex(index));
     }
 
     protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#generate(Player, String, int, double, double, double, double) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#generate(Player, String, int, double, double, double, double) is null");
         String content = HoloAPI.getTagFormatter().format(this, observer, message);
         ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
         if (itemMatch != null) {
@@ -690,7 +690,7 @@ public class HologramImpl implements Hologram {
     }
 
     protected void prepareTouchScreen(Player observer, int index, double diffY, double x, double y, double z) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#prepareTouchScreen(Player, int, double, double, double, double) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#prepareTouchScreen(Player, int, double, double, double, double) is null");
         int size = (this.calculateMaxLineLength() / 2);
         Map.Entry<TagSize, String> imagePart = this.getForPartOfImage(index);
         if (imagePart != null) {
@@ -706,7 +706,7 @@ public class HologramImpl implements Hologram {
     }
 
     protected void generateTouchScreen(int slimeSize, Player observer, int index, double diffY, double x, double y, double z) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#generateTouchScreen(int, Player, int, double, double, double, double) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#generateTouchScreen(int, Player, int, double, double, double, double) is null");
         WrappedPacket touchSlime = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
         touchSlime.getIntegers().write(0, this.getTouchSlimeIndex(index));
         touchSlime.getIntegers().write(1, (int) EntityType.SLIME.getTypeId());
@@ -739,8 +739,8 @@ public class HologramImpl implements Hologram {
     }
 
     protected void generateFloatingItem(Player observer, ItemStack stack, int index, double diffY, double x, double y, double z) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#generateFloatingItem(Player, ItemStack, int, double, double, double, double) is null");
-    	Validate.notNull(stack, "The ItemStack object in HologramImpl#generateFloatingItem(Player, ItemStack, int, double, double, double, double) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#generateFloatingItem(Player, ItemStack, int, double, double, double, double) is null");
+        Validate.notNull(stack, "The ItemStack object in HologramImpl#generateFloatingItem(Player, ItemStack, int, double, double, double, double) is null");
         WrappedPacket item = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
         item.getIntegers().write(0, this.getHorseIndex(index));
         item.getIntegers().write(1, (int) Math.floor(x * 32.0D));
@@ -775,7 +775,7 @@ public class HologramImpl implements Hologram {
     }
 
     protected void updateNametag(Player observer, String message, int index) {
-    	Validate.notNull(observer, "The Player object in HologramImpl#updateNametag(Player, String, int) is null");
+        Validate.notNull(observer, "The Player object in HologramImpl#updateNametag(Player, String, int) is null");
         WrappedDataWatcher dw = new WrappedDataWatcher();
         String content = HoloAPI.getTagFormatter().format(this, observer, message);
 
@@ -798,7 +798,7 @@ public class HologramImpl implements Hologram {
     protected int getHorseIndex(int index) {
         return firstTagId + (index * TAG_ENTITY_MULTIPLIER);
     }
-
+        
     protected int getSkullIndex(int index) {
         return this.getHorseIndex(index) + 1;
     }
