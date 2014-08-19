@@ -77,7 +77,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
     public Frame getFrame(int index) {
         if (index >= this.frames.size()) {
             throw new IndexOutOfBoundsException("Frame " + index + "doesn't exist.");
-        }else if(index < 0){
+        } else if(index < 0) {
             throw new IndexOutOfBoundsException("Index cannot be less than 0");
         }
         return this.frames.get(index);

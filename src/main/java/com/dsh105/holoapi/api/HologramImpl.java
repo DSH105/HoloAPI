@@ -288,7 +288,7 @@ public class HologramImpl implements Hologram {
     public void updateLine(int index, String content) {
         if (index >= this.tags.length) {
             throw new IllegalArgumentException("Tag index doesn't exist!");
-        }else if(index < 0){
+        } else if(index < 0) {
             throw new IllegalArgumentException("Tag indicies cannot be less than 0!");
         }
         HoloLineUpdateEvent lineUpdateEvent = new HoloLineUpdateEvent(this, this.tags[index], content, index);
@@ -307,7 +307,7 @@ public class HologramImpl implements Hologram {
     public void updateLine(int index, String content, Player observer) {
         if (index >= this.tags.length) {
             throw new IllegalArgumentException("Tag index doesn't exist!");
-        }else if(index < 0){
+        } else if(index < 0) {
             throw new IllegalArgumentException("Tag indicies cannot be less than 0!");
         }
         Validate.notNull(observer, "The Player object in HologramImpl#updateLine(int, String, Player) is null");
