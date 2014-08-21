@@ -198,7 +198,7 @@ public class HologramImpl implements Hologram {
 
     @Override
     public void setSaveId(String saveId) {
-        checkArgument(saveId != "", "The saveId String in HologramImpl#setSaveId(String) cannot be empty");
+        checkArgument(!saveId.isEmpty(), "The saveId String in HologramImpl#setSaveId(String) cannot be empty");
         if (HoloAPI.getConfig(ConfigType.DATA).getConfigurationSection("holograms." + saveId) != null) {
             throw new DuplicateSaveIdException("Hologram Save IDs must be unique. A Hologram of ID " + saveId + " already exists in the HoloAPI data files!");
         }
