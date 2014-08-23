@@ -114,12 +114,12 @@ public class HoloAPICore extends JavaPlugin {
         INJECTION_MANAGER = new InjectionManager(this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        try {
-            SCRIPT_MANAGER = new ScriptManager(this);
+       /* try {
+           SCRIPT_MANAGER = new ScriptManager(this);
         } catch (IOException e) {
             HoloAPI.LOG.warning("Failed to create the ScriptManager!");
             ScriptLoader.SCRIPTING_ENABLED = false;
-        }
+        } */
 
         HOLO_UPDATER = new HoloUpdater();
         TAG_FORMATTER = new TagFormatter();
