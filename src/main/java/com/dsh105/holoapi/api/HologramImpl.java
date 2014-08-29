@@ -34,6 +34,8 @@ import static com.google.common.base.Preconditions.*;
 
 public class HologramImpl implements Hologram {
 
+    private static final List<UUID> PLAYERS = new ArrayList<>(); // FIXME: PLEASE I AM PART OF THE UGLY FIX, SEND HELP
+
     private static MethodAccessor AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftItemStackClass()).getSafeMethod("asNMSCopy").getAccessor();
     public static int TAG_ENTITY_MULTIPLIER = 4;
 
@@ -654,36 +656,51 @@ public class HologramImpl implements Hologram {
         if (itemMatch != null) {
             this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
         } else {
-            WrappedPacket horse = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
-            horse.getIntegers().write(0, this.getHorseIndex(index));
-            horse.getIntegers().write(1, (int) EntityType.HORSE.getTypeId());
-            horse.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-            horse.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
-            horse.getIntegers().write(4, (int) Math.floor(z * 32.0D));
+            if (!PLAYERS.contains(observer.getUniqueId())) {  // FIXME: UGLY FIX MAKE PRETTY PLEASE
+                WrappedPacket horse = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
+                horse.getIntegers().write(0, this.getHorseIndex(index));
+                horse.getIntegers().write(1, (int) EntityType.HORSE.getTypeId());
+                horse.getIntegers().write(2, (int) Math.floor(x * 32.0D));
+                horse.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
+                horse.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
-            WrappedDataWatcher dw = new WrappedDataWatcher();
-            dw.setObject(10, content);
-            dw.setObject(11, Byte.valueOf((byte) 1));
-            dw.setObject(12, Integer.valueOf(-1700000));
+                WrappedDataWatcher dw = new WrappedDataWatcher();
+                dw.setObject(10, content);
+                dw.setObject(11, Byte.valueOf((byte) 1));
+                dw.setObject(12, Integer.valueOf(-1700000));
 
-            horse.getDataWatchers().write(0, dw);
+                horse.getDataWatchers().write(0, dw);
 
-            WrappedPacket skull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
-            skull.getIntegers().write(0, this.getSkullIndex(index));
-            skull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
-            skull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
-            skull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
-            skull.getIntegers().write(9, 66);
+                WrappedPacket skull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
+                skull.getIntegers().write(0, this.getSkullIndex(index));
+                skull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
+                skull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+                skull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
+                skull.getIntegers().write(9, 66);
 
-            WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
-            attach.getIntegers().write(0, 0);
-            attach.getIntegers().write(1, horse.getIntegers().read(0));
-            attach.getIntegers().write(2, skull.getIntegers().read(0));
+                WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
+                attach.getIntegers().write(0, 0);
+                attach.getIntegers().write(1, horse.getIntegers().read(0));
+                attach.getIntegers().write(2, skull.getIntegers().read(0));
 
-            Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
-            injector.sendPacket(horse.getHandle());
-            injector.sendPacket(skull.getHandle());
-            injector.sendPacket(attach.getHandle());
+                Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+                injector.sendPacket(horse.getHandle());
+                injector.sendPacket(skull.getHandle());
+                injector.sendPacket(attach.getHandle());
+
+                PLAYERS.add(observer.getUniqueId());
+            } else {
+                WrappedDataWatcher dw = new WrappedDataWatcher();
+                dw.setObject(10, content);
+                dw.setObject(11, Byte.valueOf(((byte) 1)));
+                dw.setObject(12, Integer.valueOf(-1700000));
+
+                WrappedPacket metaData = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
+                metaData.getIntegers().write(0, this.getSkullIndex(index));
+                metaData.getDataWatchers().write(0, dw);
+
+                HoloAPI.getCore().getInjectionManager().getInjectorFor(observer).sendPacket(metaData.getHandle());
+            }
         }
 
         if (this.isTouchEnabled()) {
