@@ -86,6 +86,7 @@ public class HologramImpl implements Hologram {
         this.simple = flag;
         if (!simple) {
             HoloAPI.getManager().clearFromFile(this);
+            return;
         }
         HoloAPI.getManager().saveToFile(this);
     }
