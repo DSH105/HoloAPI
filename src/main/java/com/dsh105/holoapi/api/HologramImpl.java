@@ -34,8 +34,6 @@ import static com.google.common.base.Preconditions.*;
 
 public class HologramImpl implements Hologram {
 
-    private static final List<UUID> PLAYERS = new ArrayList<>(); // FIXME: PLEASE I AM PART OF THE UGLY FIX, SEND HELP
-
     private static MethodAccessor AS_NMS_ITEM_COPY  = new Reflection().reflect(MinecraftReflection.getCraftItemStackClass()).getSafeMethod("asNMSCopy").getAccessor();
     public static int TAG_ENTITY_MULTIPLIER = 4;
 
@@ -88,7 +86,6 @@ public class HologramImpl implements Hologram {
         this.simple = flag;
         if (!simple) {
             HoloAPI.getManager().clearFromFile(this);
-            return;
         }
         HoloAPI.getManager().saveToFile(this);
     }
@@ -656,7 +653,6 @@ public class HologramImpl implements Hologram {
         if (itemMatch != null) {
             this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
         } else {
-            if (!PLAYERS.contains(observer.getUniqueId())) {  // FIXME: UGLY FIX MAKE PRETTY PLEASE
                 WrappedPacket horse = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
                 horse.getIntegers().write(0, this.getHorseIndex(index));
                 horse.getIntegers().write(1, (int) EntityType.HORSE.getTypeId());
@@ -687,20 +683,6 @@ public class HologramImpl implements Hologram {
                 injector.sendPacket(horse.getHandle());
                 injector.sendPacket(skull.getHandle());
                 injector.sendPacket(attach.getHandle());
-
-                PLAYERS.add(observer.getUniqueId());
-            } else {
-                WrappedDataWatcher dw = new WrappedDataWatcher();
-                dw.setObject(10, content);
-                dw.setObject(11, Byte.valueOf(((byte) 1)));
-                dw.setObject(12, Integer.valueOf(-1700000));
-
-                WrappedPacket metaData = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
-                metaData.getIntegers().write(0, this.getSkullIndex(index));
-                metaData.getDataWatchers().write(0, dw);
-
-                HoloAPI.getCore().getInjectionManager().getInjectorFor(observer).sendPacket(metaData.getHandle());
-            }
         }
 
         if (this.isTouchEnabled()) {
