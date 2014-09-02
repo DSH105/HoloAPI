@@ -17,8 +17,10 @@
 
 package com.dsh105.holoapi.protocol;
 
+import com.captainbern.minecraft.reflection.MinecraftReflection;
 import com.captainbern.minecraft.wrapper.EnumWrappers;
 import com.captainbern.minecraft.wrapper.WrappedPacket;
+import com.captainbern.reflection.Reflection;
 import com.dsh105.commodus.ServerUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
@@ -27,6 +29,7 @@ import com.dsh105.holoapi.api.touch.Action;
 import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.protocol.netty.PlayerInjector;
 import com.google.common.collect.MapMaker;
+import net.minecraft.server.v1_7_R4.EnumEntityUseAction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,6 +37,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
@@ -129,7 +133,20 @@ public class InjectionManager {
         return this.isClosed;
     }
 
+    // FIXME: We need a "HoloAPI.getManager().hasId(int id);" method to bypass all this...
     public void handlePacket(WrappedPacket packet, PlayerInjector injector) {
+        // Hack start
+        /**
+         * Spigot's 1.8 hack allows the action to be NULL
+         * see: https://github.com/SpigotMC/Spigot-Server/blob/master/src/main/java/net/minecraft/server/PacketPlayInUseEntity.java#L19
+         *
+         * (Thanks Thinkofdeath <3 )
+         */
+        Class<?> entityUseAction = MinecraftReflection.getMinecraftClass("EnumEntityUseAction");
+        if (packet.getAccessor().withType(entityUseAction).read(0) == null)
+            return;
+        // Hack end
+
         EnumWrappers.EntityUseAction useAction = packet.getEntityUseActions().read(0);
 
         for (Hologram hologram : HoloAPI.getManager().getAllHolograms().keySet()) {

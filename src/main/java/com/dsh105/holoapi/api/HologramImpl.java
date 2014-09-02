@@ -477,7 +477,7 @@ public class HologramImpl implements Hologram {
             return;
         }
         for (int index = 0; index < this.getTagCount(); index++) {
-            this.generate(observer, this.tags[index], index, -index * Settings.VERTICAL_LINE_SPACING.getValue(), x, y, z);
+            this.generate_1_8(observer, this.tags[index], index, -index * Settings.VERTICAL_LINE_SPACING.getValue(), x, y, z);
         }
         this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), new Vector(x, y, z));
     }
@@ -610,26 +610,6 @@ public class HologramImpl implements Hologram {
         }
     }
 
-    protected void moveTag(Player observer, Vector to, int... entityIds) {
-        checkNotNull(observer, "The Player object in HologramImpl#moveTag(Player, Vector, int...) is null");
-        checkNotNull(to, "The Vector object in HologramImpl#moveTag(Player, Vector, int...) is null");
-        WrappedPacket teleportHorse = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
-        teleportHorse.getIntegers().write(0, entityIds[0]);
-        teleportHorse.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
-        teleportHorse.getIntegers().write(2, (int) Math.floor((to.getBlockY() + 55)* 32.0D));
-        teleportHorse.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
-
-        WrappedPacket teleportSkull = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
-        teleportSkull.getIntegers().write(0, entityIds[1]);
-        teleportSkull.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
-        teleportSkull.getIntegers().write(2, (int) Math.floor((to.getBlockY() + 55)* 32.0D));
-        teleportSkull.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
-
-        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
-        injector.sendPacket(teleportHorse.getHandle());
-        injector.sendPacket(teleportSkull.getHandle());
-    }
-
     // TODO: implement properly
     protected void moveTag_1_8(Player observer, Vector to, int... entityIds) {
         checkNotNull(observer, "The Player object in HologramImpl#moveTag(Player, Vector, int...) is null");
@@ -648,7 +628,7 @@ public class HologramImpl implements Hologram {
     protected void moveTag(Player observer, int index, Vector to) {
         checkNotNull(observer, "The Player object in HologramImpl#moveTag(Player, int, Vector) is null");
         checkNotNull(to, "The Vector object in HologramImpl#moveTag(Player, int, Vector) is null");
-        this.moveTag(observer, to, getHorseIndex(index), getSkullIndex(index));
+        this.moveTag_1_8(observer, to, getHorseIndex(index), getSkullIndex(index));
 
         if (this.isTouchEnabled()) {
             this.teleportTouchSlime(observer, index, to);
@@ -658,51 +638,7 @@ public class HologramImpl implements Hologram {
     protected void teleportTouchSlime(Player observer, int index, Vector to) {
         checkNotNull(observer, "The Player object in HologramImpl#teleportTouchSlime(Player, int, Vector) is null");
         checkNotNull(to, "The Vector object in HologramImpl#teleportTouchSlime(Player, int, Vector) is null");
-        this.moveTag(observer, to, getTouchSlimeIndex(index), getTouchSkullIndex(index));
-    }
-
-    protected void generate(Player observer, String message, int index, double diffY, double x, double y, double z) {
-        checkNotNull(observer, "The Player object in HologramImpl#generate(Player, String, int, double, double, double, double) is null");
-        String content = HoloAPI.getTagFormatter().format(this, observer, message);
-        ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
-        if (itemMatch != null) {
-            this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
-        } else {
-            WrappedPacket horse = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
-            horse.getIntegers().write(0, this.getHorseIndex(index));
-            horse.getIntegers().write(1, (int) EntityType.HORSE.getTypeId());
-            horse.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-            horse.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
-            horse.getIntegers().write(4, (int) Math.floor(z * 32.0D));
-
-            WrappedDataWatcher dw = new WrappedDataWatcher();
-            dw.setObject(10, content);
-            dw.setObject(11, Byte.valueOf((byte) 1));
-            dw.setObject(12, Integer.valueOf(-1700000));
-
-            horse.getDataWatchers().write(0, dw);
-
-            WrappedPacket skull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
-            skull.getIntegers().write(0, this.getSkullIndex(index));
-            skull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
-            skull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
-            skull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
-            skull.getIntegers().write(9, 66);
-
-            WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
-            attach.getIntegers().write(0, 0);
-            attach.getIntegers().write(1, horse.getIntegers().read(0));
-            attach.getIntegers().write(2, skull.getIntegers().read(0));
-
-            Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
-            injector.sendPacket(horse.getHandle());
-            injector.sendPacket(skull.getHandle());
-            injector.sendPacket(attach.getHandle());
-        }
-
-        if (this.isTouchEnabled()) {
-            this.prepareTouchScreen(observer, index, diffY, x, y, z);
-        }
+        this.moveTag_1_8(observer, to, getTouchSlimeIndex(index), getTouchSkullIndex(index));
     }
 
     // TODO: Implement properly
@@ -730,6 +666,10 @@ public class HologramImpl implements Hologram {
             Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
             injector.sendPacket(armorStand.getHandle());
         }
+
+        if (this.isTouchEnabled()) {
+            this.prepareTouchScreen(observer, index, diffY, x, y, z);
+        }
     }
 
     protected void prepareTouchScreen(Player observer, int index, double diffY, double x, double y, double z) {
@@ -738,51 +678,18 @@ public class HologramImpl implements Hologram {
         Map.Entry<TagSize, String> imagePart = this.getForPartOfImage(index);
         if (imagePart != null) {
             if (index == imagePart.getKey().getLast() || index == ((imagePart.getKey().getLast() - size / 4) + 1)) {
-                this.generateTouchScreen(size / 10, observer, index, diffY, x, y, z);
+                this.generateTouchScreen_1_8(observer, index, diffY, x, y, z);
             }
         } else if (index % (size < 1 ? 1 : size) == 0 || index >= (this.tags.length - 1)) {
             if (tags.length > 1 && index == 0) {
                 return;
             }
-            this.generateTouchScreen(size / 3, observer, index, diffY, x, y, z);
+            this.generateTouchScreen_1_8(observer, index, diffY, x, y, z);
         }
     }
 
-    protected void generateTouchScreen(int slimeSize, Player observer, int index, double diffY, double x, double y, double z) {
-        checkNotNull(observer, "The Player object in HologramImpl#generateTouchScreen(int, Player, int, double, double, double, double) is null");
-        WrappedPacket touchSlime = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
-        touchSlime.getIntegers().write(0, this.getTouchSlimeIndex(index));
-        touchSlime.getIntegers().write(1, (int) EntityType.SLIME.getTypeId());
-        touchSlime.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-        touchSlime.getIntegers().write(3, (int) Math.floor((y + diffY) * 32.0D));
-        touchSlime.getIntegers().write(4, (int) Math.floor(z * 32.0D));
-
-        WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.setObject(0, Byte.valueOf((byte) 32));
-        dw.setObject(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
-
-        touchSlime.getDataWatchers().write(0, dw);
-
-        WrappedPacket touchSkull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
-        touchSkull.getIntegers().write(0, this.getTouchSkullIndex(index));
-        touchSkull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
-        touchSkull.getIntegers().write(2, (int) Math.floor((y + diffY) * 32.0D));
-        touchSkull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
-        touchSkull.getIntegers().write(9, 66);
-
-        WrappedPacket attachTouch = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
-        attachTouch.getIntegers().write(0, 0);
-        attachTouch.getIntegers().write(1, touchSlime.getIntegers().read(0));
-        attachTouch.getIntegers().write(2, touchSkull.getIntegers().read(0));
-
-        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
-        injector.sendPacket(touchSlime.getHandle());
-        injector.sendPacket(touchSkull.getHandle());
-        injector.sendPacket(attachTouch.getHandle());
-    }
-
     // TODO: Check if this actually works + is it something we should be doing? (Alternatives?)
-    protected void generateTouchScreen_1_8(int slimeSize, Player observer, int index, double diffY, double x, double y, double z) {
+    protected void generateTouchScreen_1_8(Player observer, int index, double diffY, double x, double y, double z) {
         checkNotNull(observer, "The Player object in HologramImpl#generateTouchScreen(int, Player, int, double, double, double, double) is null");
 
         WrappedPacket armorStand = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);

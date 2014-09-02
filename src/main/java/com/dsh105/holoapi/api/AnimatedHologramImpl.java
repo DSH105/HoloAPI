@@ -182,7 +182,7 @@ public class AnimatedHologramImpl extends HologramImpl implements AnimatedHologr
         checkNotNull(observer, "The Player object is null in AnimatedHologramImpl#showAnimation(Player, double, double, double, String[])");
         checkNotNull(lines, "The String[] object is null in AnimatedHologramImpl#showAnimation(Player, double, double, double, String[])");
         for (int index = 0; index < lines.length; index++) {
-            this.generate(observer, lines[index], index, -index * Settings.VERTICAL_LINE_SPACING.getValue(), x, y, z);
+            this.generate_1_8(observer, lines[index], index, -index * Settings.VERTICAL_LINE_SPACING.getValue(), x, y, z);
         }
         this.playerToLocationMap.put(IdentUtil.getIdentificationForAsString(observer), new Vector(x, y, z));
     }
