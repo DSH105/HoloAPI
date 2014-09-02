@@ -158,7 +158,7 @@ public class HologramImpl implements Hologram {
             public void run() {
                 show(observer, obeyVisibility);
             }
-         }.runTaskLater(HoloAPI.getCore(), 1L);
+        }.runTaskLater(HoloAPI.getCore(), 1L);
     }
 
     @Override
@@ -616,18 +616,33 @@ public class HologramImpl implements Hologram {
         WrappedPacket teleportHorse = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
         teleportHorse.getIntegers().write(0, entityIds[0]);
         teleportHorse.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
-        teleportHorse.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
+        teleportHorse.getIntegers().write(2, (int) Math.floor((to.getBlockY() + 55)* 32.0D));
         teleportHorse.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
 
         WrappedPacket teleportSkull = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
         teleportSkull.getIntegers().write(0, entityIds[1]);
         teleportSkull.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
-        teleportSkull.getIntegers().write(2, (int) Math.floor((to.getBlockY()+55)* 32.0D));
+        teleportSkull.getIntegers().write(2, (int) Math.floor((to.getBlockY() + 55)* 32.0D));
         teleportSkull.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
 
         Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
         injector.sendPacket(teleportHorse.getHandle());
         injector.sendPacket(teleportSkull.getHandle());
+    }
+
+    // TODO: implement properly
+    protected void moveTag_1_8(Player observer, Vector to, int... entityIds) {
+        checkNotNull(observer, "The Player object in HologramImpl#moveTag(Player, Vector, int...) is null");
+        checkNotNull(to, "The Vector object in HologramImpl#moveTag(Player, Vector, int...) is null");
+
+        WrappedPacket teleportArmorStand = new WrappedPacket(PacketType.Play.Server.ENTITY_TELEPORT);
+        teleportArmorStand.getIntegers().write(0, entityIds[1]);
+        teleportArmorStand.getIntegers().write(1, (int) Math.floor( to.getBlockX()* 32.0D));
+        teleportArmorStand.getIntegers().write(2, (int) Math.floor((to.getBlockY())* 32.0D));
+        teleportArmorStand.getIntegers().write(3,(int) Math.floor( to.getBlockZ() * 32.0D));
+
+        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+        injector.sendPacket(teleportArmorStand.getHandle());
     }
 
     protected void moveTag(Player observer, int index, Vector to) {
@@ -653,40 +668,67 @@ public class HologramImpl implements Hologram {
         if (itemMatch != null) {
             this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
         } else {
-                WrappedPacket horse = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
-                horse.getIntegers().write(0, this.getHorseIndex(index));
-                horse.getIntegers().write(1, (int) EntityType.HORSE.getTypeId());
-                horse.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-                horse.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
-                horse.getIntegers().write(4, (int) Math.floor(z * 32.0D));
+            WrappedPacket horse = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
+            horse.getIntegers().write(0, this.getHorseIndex(index));
+            horse.getIntegers().write(1, (int) EntityType.HORSE.getTypeId());
+            horse.getIntegers().write(2, (int) Math.floor(x * 32.0D));
+            horse.getIntegers().write(3, (int) Math.floor((y + diffY + 55) * 32.0D));
+            horse.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
-                WrappedDataWatcher dw = new WrappedDataWatcher();
-                dw.setObject(10, content);
-                dw.setObject(11, Byte.valueOf((byte) 1));
-                dw.setObject(12, Integer.valueOf(-1700000));
+            WrappedDataWatcher dw = new WrappedDataWatcher();
+            dw.setObject(10, content);
+            dw.setObject(11, Byte.valueOf((byte) 1));
+            dw.setObject(12, Integer.valueOf(-1700000));
 
-                horse.getDataWatchers().write(0, dw);
+            horse.getDataWatchers().write(0, dw);
 
-                WrappedPacket skull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
-                skull.getIntegers().write(0, this.getSkullIndex(index));
-                skull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
-                skull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
-                skull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
-                skull.getIntegers().write(9, 66);
+            WrappedPacket skull = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY);
+            skull.getIntegers().write(0, this.getSkullIndex(index));
+            skull.getIntegers().write(1, (int) Math.floor(x * 32.0D));
+            skull.getIntegers().write(2, (int) Math.floor((y + diffY + 55) * 32.0D));
+            skull.getIntegers().write(3, (int) Math.floor(z * 32.0D));
+            skull.getIntegers().write(9, 66);
 
-                WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
-                attach.getIntegers().write(0, 0);
-                attach.getIntegers().write(1, horse.getIntegers().read(0));
-                attach.getIntegers().write(2, skull.getIntegers().read(0));
+            WrappedPacket attach = new WrappedPacket(PacketType.Play.Server.ATTACH_ENTITY);
+            attach.getIntegers().write(0, 0);
+            attach.getIntegers().write(1, horse.getIntegers().read(0));
+            attach.getIntegers().write(2, skull.getIntegers().read(0));
 
-                Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
-                injector.sendPacket(horse.getHandle());
-                injector.sendPacket(skull.getHandle());
-                injector.sendPacket(attach.getHandle());
+            Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+            injector.sendPacket(horse.getHandle());
+            injector.sendPacket(skull.getHandle());
+            injector.sendPacket(attach.getHandle());
         }
 
         if (this.isTouchEnabled()) {
             this.prepareTouchScreen(observer, index, diffY, x, y, z);
+        }
+    }
+
+    // TODO: Implement properly
+    protected void generate_1_8(Player observer, String message, int index, double diffY, double x, double y, double z) {
+        checkNotNull(observer, "The Player object in HologramImpl#generate(Player, String, int, double, double, double, double) is null");
+        String content = HoloAPI.getTagFormatter().format(this, observer, message);
+        ItemStack itemMatch = HoloAPI.getTagFormatter().matchItem(content);
+        if (itemMatch != null) {
+            this.generateFloatingItem(observer, itemMatch, index, diffY, x, y, z);
+        } else {
+            WrappedPacket armorStand = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
+            armorStand.getIntegers().write(0, this.getSkullIndex(index));
+            armorStand.getIntegers().write(1, 30);
+            armorStand.getIntegers().write(2, (int) Math.floor(x * 32.0D));
+            armorStand.getIntegers().write(3, (int) Math.floor((y + diffY) * 32.0D));
+            armorStand.getIntegers().write(4, (int) Math.floor(z * 32.0D));
+
+            WrappedDataWatcher watcher = new WrappedDataWatcher();
+            watcher.setObject(0, (byte) 32);
+            watcher.setObject(2, content);
+            watcher.setObject(3, (byte) 1);
+
+            armorStand.getDataWatchers().write(0, watcher);
+
+            Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+            injector.sendPacket(armorStand.getHandle());
         }
     }
 
@@ -737,6 +779,27 @@ public class HologramImpl implements Hologram {
         injector.sendPacket(touchSlime.getHandle());
         injector.sendPacket(touchSkull.getHandle());
         injector.sendPacket(attachTouch.getHandle());
+    }
+
+    // TODO: Check if this actually works + is it something we should be doing? (Alternatives?)
+    protected void generateTouchScreen_1_8(int slimeSize, Player observer, int index, double diffY, double x, double y, double z) {
+        checkNotNull(observer, "The Player object in HologramImpl#generateTouchScreen(int, Player, int, double, double, double, double) is null");
+
+        WrappedPacket armorStand = new WrappedPacket(PacketType.Play.Server.SPAWN_ENTITY_LIVING);
+        armorStand.getIntegers().write(0, this.getSkullIndex(index));
+        armorStand.getIntegers().write(1, 30);
+        armorStand.getIntegers().write(2, (int) Math.floor(x * 32.0D));
+        armorStand.getIntegers().write(3, (int) Math.floor((y + diffY) * 32.0D));
+        armorStand.getIntegers().write(4, (int) Math.floor(z * 32.0D));
+
+        WrappedDataWatcher watcher = new WrappedDataWatcher();
+        watcher.setObject(0, (byte) 0x20);
+        watcher.setObject(3, (byte) 1);
+
+        armorStand.getDataWatchers().write(0, watcher);
+
+        Injector injector = HoloAPI.getCore().getInjectionManager().getInjectorFor(observer);
+        injector.sendPacket(armorStand.getHandle());
     }
 
     protected void generateFloatingItem(Player observer, ItemStack stack, int index, double diffY, double x, double y, double z) {
@@ -799,7 +862,7 @@ public class HologramImpl implements Hologram {
     protected int getHorseIndex(int index) {
         return firstTagId + (index * TAG_ENTITY_MULTIPLIER);
     }
-        
+
     protected int getSkullIndex(int index) {
         return this.getHorseIndex(index) + 1;
     }
