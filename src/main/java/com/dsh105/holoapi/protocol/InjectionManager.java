@@ -30,14 +30,19 @@ import com.dsh105.holoapi.api.touch.TouchAction;
 import com.dsh105.holoapi.protocol.netty.PlayerInjector;
 import com.google.common.collect.MapMaker;
 import net.minecraft.server.v1_7_R4.EnumEntityUseAction;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
 public class InjectionManager {
@@ -48,6 +53,8 @@ public class InjectionManager {
     protected static ConcurrentMap<Player, Injector> injections = new MapMaker().weakKeys().makeMap();
 
     private boolean isClosed = false;
+
+    private static Map<String, Boolean> oneEightPeople = new HashMap();
 
     public InjectionManager(Plugin plugin) {
         if (plugin == null)
@@ -67,10 +74,25 @@ public class InjectionManager {
                 inject(event.getPlayer());
             }
         }, plugin);
+
+        // Spigot only
+        plugin.getServer().getPluginManager().registerEvents(new Listener() {
+            @EventHandler(priority = EventPriority.MONITOR)
+            public void onLeave(PlayerQuitEvent event) {
+                oneEightPeople.remove(event.getPlayer().getName()); // People might reconnect with a new version!
+            }
+        }, plugin);
     }
 
     public Plugin getPlugin() {
         return this.plugin;
+    }
+
+    // This is Spigot only...
+    public boolean is1_8(Player player) {
+        if (!this.oneEightPeople.containsKey(player.getName()))
+            this.oneEightPeople.put(player.getName(), ((CraftPlayer) player).getHandle().playerConnection.networkManager.getVersion() > 28);
+        return this.oneEightPeople.get(player.getName());
     }
 
     public Injector getInjectorFor(Player player) {

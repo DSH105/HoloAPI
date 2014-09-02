@@ -103,8 +103,8 @@ public class HoloAPICore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("**** WARNING: This version of HoloAPI is only compatible with 1.8+! It will *NOT* work " +
-                "with any lower versions!");
+        getLogger().info("**** WARNING: This version of HoloAPI is only compatible with the Spigot 1.8 Protocol Hack! It will *NOT* work " +
+                "with any other versions!");
 
         HoloAPI.setCore(this);
         PluginManager manager = getServer().getPluginManager();
