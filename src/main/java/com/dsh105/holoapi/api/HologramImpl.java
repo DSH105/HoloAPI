@@ -777,7 +777,7 @@ public class HologramImpl implements Hologram {
         armorStand.getIntegers().write(0, this.getSkullIndex(index));
         armorStand.getIntegers().write(1, 30);
         armorStand.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-        armorStand.getIntegers().write(3, (int) Math.floor((y + diffY - 1.62) * 32.0D));
+        armorStand.getIntegers().write(3, (int) Math.floor((y + diffY) * 32.0D));
         armorStand.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
         WrappedDataWatcher watcher = new WrappedDataWatcher();
