@@ -20,7 +20,7 @@
      <modelVersion>4.0.0</modelVersion>
      <groupId>com.dsh105</groupId>
      <artifactId>HoloAPI</artifactId>
-     <name>HoloAPI-1.8-SPIGOT-PATCH</name>
+     <name>HoloAPI</name>
      <version>2.0.0-SNAPSHOT</version>
      <url>http://dev.bukkit.org/bukkit-plugins/holoapi/</url>
 
