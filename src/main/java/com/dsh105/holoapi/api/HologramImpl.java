@@ -686,7 +686,7 @@ public class HologramImpl implements Hologram {
             armorStand.getIntegers().write(0, this.getSkullIndex(index));
             armorStand.getIntegers().write(1, 30);
             armorStand.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-            armorStand.getIntegers().write(3, (int) Math.floor((y + diffY) * 32.0D));
+            armorStand.getIntegers().write(3, (int) Math.floor((y + diffY - 1.62) * 32.0D));
             armorStand.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
             WrappedDataWatcher watcher = new WrappedDataWatcher();
@@ -777,7 +777,7 @@ public class HologramImpl implements Hologram {
         armorStand.getIntegers().write(0, this.getSkullIndex(index));
         armorStand.getIntegers().write(1, 30);
         armorStand.getIntegers().write(2, (int) Math.floor(x * 32.0D));
-        armorStand.getIntegers().write(3, (int) Math.floor((y + diffY) * 32.0D));
+        armorStand.getIntegers().write(3, (int) Math.floor((y + diffY - 1.62) * 32.0D));
         armorStand.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
         WrappedDataWatcher watcher = new WrappedDataWatcher();
@@ -800,7 +800,7 @@ public class HologramImpl implements Hologram {
         touchSlime.getIntegers().write(4, (int) Math.floor(z * 32.0D));
 
         WrappedDataWatcher dw = new WrappedDataWatcher();
-        dw.setObject(0, Byte.valueOf((byte) 32));
+        dw.setObject(0, Byte.valueOf((byte) 0x20));
         dw.setObject(16, new Byte((byte) (slimeSize < 1 ? 1 : (slimeSize > 100 ? 100 : slimeSize))));
 
         touchSlime.getDataWatchers().write(0, dw);
@@ -868,9 +868,15 @@ public class HologramImpl implements Hologram {
         if (itemMatch != null) {
             dw.setObject(10, AS_NMS_ITEM_COPY.invokeStatic(itemMatch));
         } else {
-            dw.setObject(10, content);
-            dw.setObject(11, Byte.valueOf((byte) 1));
-            dw.setObject(12, Integer.valueOf(-1700000));
+            if (HoloAPI.getCore().getInjectionManager().is1_8(observer)) {
+                dw.setObject(0, (byte) 0x20);
+                dw.setObject(2, content);
+                dw.setObject(3, (byte) 1);
+            } else {
+                dw.setObject(10, content);
+                dw.setObject(11, Byte.valueOf((byte) 1));
+                dw.setObject(12, Integer.valueOf(-1700000));
+            }
         }
 
         WrappedPacket metadata = new WrappedPacket(PacketType.Play.Server.ENTITY_METADATA);
