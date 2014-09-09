@@ -32,6 +32,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.ConcurrentMap;
@@ -61,6 +62,13 @@ public class InjectionManager {
             @EventHandler(priority = EventPriority.MONITOR)
             public void onJoin(PlayerJoinEvent event) {
                 inject(event.getPlayer());
+            }
+        }, plugin);
+
+        plugin.getServer().getPluginManager().registerEvents(new Listener() {
+            @EventHandler(priority = EventPriority.MONITOR)
+            public void onQuit(PlayerQuitEvent event) {
+                unInject(event.getPlayer());
             }
         }, plugin);
     }
@@ -112,6 +120,8 @@ public class InjectionManager {
 
         if (injector.isInjected())
             injector.close();
+
+        injections.remove(player); // To make sure there are no left-overs
     }
 
     public void close() {
