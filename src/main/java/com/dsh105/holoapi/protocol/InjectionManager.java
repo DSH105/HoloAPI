@@ -80,6 +80,7 @@ public class InjectionManager {
             @EventHandler(priority = EventPriority.MONITOR)
             public void onLeave(PlayerQuitEvent event) {
                 oneEightPeople.remove(event.getPlayer().getName()); // People might reconnect with a new version!
+                unInject(event.getPlayer());
             }
         }, plugin);
     }
@@ -138,6 +139,8 @@ public class InjectionManager {
 
         if (injector.isInjected())
             injector.close();
+
+        injections.remove(player);
     }
 
     public void close() {
