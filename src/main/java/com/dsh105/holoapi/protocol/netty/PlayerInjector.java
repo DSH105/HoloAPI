@@ -179,7 +179,7 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
         final WrappedPacket packet = new WrappedPacket(msg);
 
         if (packet.getPacketType().equals(PacketType.Play.Client.USE_ENTITY))
-            Bukkit.getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new Runnable() {
+            Bukkit.getScheduler().runTask(HoloAPI.getCore(), new Runnable() {
                 @Override
                 public void run() {
                     PlayerInjector.this.injectionManager.handlePacket(packet, PlayerInjector.this);
