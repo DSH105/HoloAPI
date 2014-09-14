@@ -192,7 +192,7 @@ public class IndicatorListener implements Listener {
             if (!HoloAPI.getVanishProvider().isVanished(p)) {
                 final String msg = event.getMessage();
                 if (event.isAsynchronous()) {
-                    HoloAPI.getCore().getServer().getScheduler().scheduleSyncDelayedTask(HoloAPI.getCore(), new BukkitRunnable() {
+                    HoloAPI.getCore().getServer().getScheduler().runTask(HoloAPI.getCore(), new BukkitRunnable() {
                         @Override
                         public void run() {
                             showChatHologram(p, msg);
