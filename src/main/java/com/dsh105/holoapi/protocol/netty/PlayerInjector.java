@@ -35,6 +35,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.Callable;
+import java.util.NoSuchElementException;
 
 public class PlayerInjector extends ChannelDuplexHandler implements Injector {
 
@@ -70,9 +71,12 @@ public class PlayerInjector extends ChannelDuplexHandler implements Injector {
 
             if (this.channel == null)
                 throw new IllegalStateException("Channel is NULL! Perhaps we failed to find it?");
-
-            this.channel.pipeline().addBefore("packet_handler", "holoapi_packet_handler", this);
-
+            
+            try {
+                this.channel.pipeline().addBefore("packet_handler", "holoapi_packet_handler", this);
+            } catch (NoSuchElementException e){
+                //ignore exception, we know about it, so remove spam ;)
+            }
             this.isInjected = true;
         }
     }
